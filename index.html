@@ -1,13 +1,82 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronRight, ArrowLeft, ExternalLink, RefreshCw, ShieldCheck, Droplets, HeartPulse } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  ChevronRight, 
+  ArrowLeft, 
+  ExternalLink, 
+  RefreshCw, 
+  ShieldCheck, 
+  Droplets, 
+  HeartPulse, 
+  Sparkles, 
+  Send, 
+  Bot, 
+  AlertTriangle 
+} from 'lucide-react';
+
+/**
+ * Hair Identity Professional - Production Ready Version
+ * * デプロイ時の注意:
+ * 1. 本コードは単一ファイルで動作するように設計されています。
+ * 2. Netlify等で環境変数を使用する場合は、const apiKey = import.meta.env.VITE_GEMINI_API_KEY || ""; 
+ * のように書き換えることでセキュリティを強化できます。
+ */
 
 const App = () => {
+  // --- State Management ---
   const [step, setStep] = useState('start');
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
+  const [aiAnalysis, setAiAnalysis] = useState("");
+  const [chatInput, setChatInput] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isAiLoading, setIsAiLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // --- 診断データ設定 ---
+  const chatEndRef = useRef(null);
+  const apiKey = ""; // Runtime provides the key or use env var
+
+  // Auto-scroll chat
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatHistory]);
+
+  // --- API Call Helper with Exponential Backoff (6.1 Implementation) ---
+  const callGemini = async (prompt, systemPrompt = "", retryCount = 0) => {
+    if (!apiKey) {
+      console.warn("API Key is missing. AI features will be limited.");
+      return "現在AI機能はデモモードです。APIキーを設定すると詳細なアドバイスが生成されます。";
+    }
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] }
+        })
+      });
+
+      if (!response.ok) {
+        if (response.status === 429 && retryCount < 5) {
+          const delay = Math.pow(2, retryCount) * 1000;
+          await new Promise(resolve => setTimeout(resolve, delay));
+          return callGemini(prompt, systemPrompt, retryCount + 1);
+        }
+        throw new Error(`API Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      return text || "回答を取得できませんでした。";
+    } catch (err) {
+      console.error("Gemini API Error:", err);
+      return "接続エラーが発生しました。時間を置いて再度お試しください。";
+    }
+  };
+
+  // --- Diagnosis Questions ---
   const questions = [
     {
       id: 'scalp',
@@ -72,17 +141,17 @@ const App = () => {
     }
   ];
 
-  // --- 診断ロジック ---
-  const calculateResult = () => {
+  // --- Diagnosis Logic ---
+  const calculateResult = async () => {
     const { scalp, texture, damage, heat, goal } = answers;
-    let finalDamage = parseInt(damage);
-    
-    // 熱器具によるダメージ補正（潤い系以外は+1）
+    let finalDamage = parseInt(damage || 0);
     if (heat === 'normal-heat' && finalDamage < 6) finalDamage += 1;
 
-    // 頭皮が赤い場合はドクターストップ（皮膚科推奨）
+    let diag = null;
+
+    // Logic Tree
     if (scalp === 'sensitive') {
-      setResult({
+      diag = {
         name: 'レッド・セーフティ（医療連携）',
         nickname: 'Safety First Profile',
         desc: '頭皮に赤みや湿疹が見受けられます。この状態では化粧品での解決よりも、まずは皮膚科専門医の診断を受けることを強く推奨します。',
@@ -91,13 +160,9 @@ const App = () => {
         link: 'https://www.daiichisankyo-hc.co.jp/site_minon/',
         advice: '地肌の炎症が治まるまで、洗浄力の強いシャンプーや熱すぎるお湯での洗髪は避けてください。',
         badgeColor: 'bg-red-50 text-red-600'
-      });
-      return;
-    }
-
-    // 診断タイプ判定
-    if (finalDamage >= 5) {
-      setResult({
+      };
+    } else if (finalDamage >= 5) {
+      diag = {
         name: 'リバイブ・アルケミスト（再生の錬金術師）',
         nickname: `Damage Level: ${finalDamage}`,
         desc: '深刻なダメージで髪の骨格が崩れています。熱を味方にする「トステア」配合の処方で、髪の結合をサポートし、チリつきを補修する必要があります。',
@@ -106,9 +171,9 @@ const App = () => {
         link: 'https://www.cosme.net/products/10255860/',
         advice: '熱を味方にする成分が入っています。高品質なアイロン等で最後にスルーすることで形状が安定します。',
         badgeColor: 'bg-indigo-50 text-indigo-600'
-      });
+      };
     } else if (scalp === 'oily') {
-      setResult({
+      diag = {
         name: 'ミント・エグゼクティブ（清廉なる指導者）',
         nickname: `Damage Level: ${finalDamage}`,
         desc: '地肌の皮脂バランスが脂性に傾いています。強すぎないが確実な洗浄力を持つタウリン系などを選び、酸化皮脂を効率よく取り除く必要があります。',
@@ -117,9 +182,9 @@ const App = () => {
         link: 'https://www.cota.co.jp/products/i-care/',
         advice: 'シャンプー前の予洗いを2分間行うだけで、洗浄成分の働きが最大化され地肌がスッキリします。',
         badgeColor: 'bg-teal-50 text-teal-600'
-      });
+      };
     } else if (finalDamage >= 2 && goal === 'moist') {
-      setResult({
+      diag = {
         name: '琥珀のガーディアン（潤いの守護者）',
         nickname: `Damage Level: ${finalDamage}`,
         desc: 'カラー等の履歴により乾燥が進んでいます。ラウロイルメチルアラニンNaベースの適度な洗浄力と、補修成分セラムの相乗効果で潤いを守ります。',
@@ -128,9 +193,9 @@ const App = () => {
         link: 'https://www.cosme.net/products/10252874/',
         advice: '疎水性を高める成分が配合されています。使い続けることで湿気に強い髪質へと導きます。',
         badgeColor: 'bg-amber-50 text-amber-600'
-      });
+      };
     } else if (texture === 'thin' || goal === 'volume') {
-      setResult({
+      diag = {
         name: 'シルク・エール（絹の息吹）',
         nickname: `Damage Level: ${finalDamage}`,
         desc: '軟毛でペタンとしやすい髪質です。ベタイン系を主軸に、軽やかなシルク由来成分でコーティングすることで、重さを出さずにふんわり仕上げます。',
@@ -139,9 +204,9 @@ const App = () => {
         link: 'https://www.lebel.co.jp/products/series/seesaw/',
         advice: '根元を立ち上げるようにドライヤーの風を当てると、成分の特性をより活かせます。',
         badgeColor: 'bg-blue-50 text-blue-600'
-      });
-    } else if (finalDamage <= 1 && heat === 'care-heat') {
-      setResult({
+      };
+    } else {
+      diag = {
         name: 'ピュア・イノセント（純真なる光）',
         nickname: `Damage Level: ${finalDamage}`,
         desc: '非常に良好な状態です。高機能ドライヤーをご使用のため物理的ダメージも最小限です。過剰な補修は不要。優しいベタイン系で素髪の美しさを保ちましょう。',
@@ -150,73 +215,108 @@ const App = () => {
         link: 'https://www.demi.nicca.co.jp/products/halemao/',
         advice: 'ナノイー等の高機能ドライヤーを継続してください。今のマイルドなケアが5年後の髪を作ります。',
         badgeColor: 'bg-green-50 text-green-600'
-      });
-    } else {
-      setResult({
-        name: 'ベルベット・スムーサー（至高の滑らかさ）',
-        nickname: `Damage Level: ${finalDamage}`,
-        desc: '水分保持力が低下し始めた混合肌・標準毛タイプです。アミノ酸系洗浄成分の中でも保湿力の高い処方で、ベルベットのような指通りを目指します。',
-        shampoo: 'ミルボン オージュア クエンチ',
-        ingredients: 'ラウロイルアスパラギン酸Na / オリーブ油',
-        link: 'https://www.aujua.com/products/quench.php',
-        advice: '髪の水分が抜けないよう、お風呂上がりは10分以内にドライヤーを開始するのがベストです。',
-        badgeColor: 'bg-purple-50 text-purple-600'
-      });
+      };
+    }
+
+    setResult(diag);
+    setStep('result');
+    
+    // Trigger AI deep dive
+    if (apiKey) {
+      setIsAiLoading(true);
+      const systemPrompt = "あなたはプロの毛髪診断士です。診断結果に基づき、最適なケア方法を150文字程度で論理的にアドバイスしてください。専門用語（トステア、疎水化など）を適切に混ぜてください。";
+      const userPrompt = `診断タイプ: ${diag.name}, シャンプー: ${diag.shampoo}, ダメージ: ${diag.nickname}, ドライヤー: ${answers.heat}`;
+      const analysis = await callGemini(userPrompt, systemPrompt);
+      setAiAnalysis(analysis);
+      setIsAiLoading(false);
     }
   };
 
-  const handleNext = (val) => {
+  const handleAnswerSelect = (val) => {
     const qId = questions[currentQ].id;
-    setAnswers({ ...answers, [qId]: val });
+    const newAnswers = { ...answers, [qId]: val };
+    setAnswers(newAnswers);
+
     if (currentQ < questions.length - 1) {
       setCurrentQ(currentQ + 1);
     } else {
       setStep('loading');
       setTimeout(() => {
         calculateResult();
-        setStep('result');
       }, 2000);
     }
   };
 
+  const handleChatSubmit = async () => {
+    if (!chatInput.trim() || isAiLoading) return;
+    
+    const userMsg = { role: 'user', text: chatInput };
+    setChatHistory(prev => [...prev, userMsg]);
+    setChatInput("");
+    setIsAiLoading(true);
+
+    const systemPrompt = "あなたはヘアケアの専門AIです。診断結果とユーザーの質問に基づき、簡潔で実践的なアドバイスをしてください。";
+    const chatPrompt = `これまでの診断結果: ${result?.name}. ユーザーの質問: ${chatInput}`;
+    
+    const botText = await callGemini(chatPrompt, systemPrompt);
+    setChatHistory(prev => [...prev, { role: 'bot', text: botText }]);
+    setIsAiLoading(false);
+  };
+
+  // --- Render Helpers ---
+  const renderProgressBar = () => (
+    <div className="flex space-x-1 mb-8">
+      {questions.map((_, i) => (
+        <div 
+          key={i} 
+          className={`h-1 flex-grow rounded-full transition-all duration-500 ${i <= currentQ ? 'bg-[#9a8478]' : 'bg-gray-100'}`} 
+        />
+      ))}
+    </div>
+  );
+
   return (
-    <div className="min-h-screen bg-[#fdfbf9] text-[#4a4a4a] flex items-center justify-center p-4 font-sans">
-      <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[700px] flex flex-col relative border border-[#f0ece9]">
+    <div className="min-h-screen bg-[#fdfbf9] text-[#4a4a4a] flex items-center justify-center p-4 font-sans selection:bg-[#9a8478]/10">
+      <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[750px] flex flex-col relative border border-[#f0ece9]">
         
+        {/* Start Screen */}
         {step === 'start' && (
-          <div className="p-10 flex flex-col items-center justify-center flex-grow text-center">
+          <div className="p-10 flex flex-col items-center justify-center flex-grow text-center animate-in fade-in duration-700">
             <div className="w-32 h-32 border-t-2 border-[#d4af37] rounded-full flex items-center justify-center mb-8 rotate-45">
               <div className="w-24 h-24 bg-[#f5f0ed] rounded-full flex items-center justify-center -rotate-45">
                 <span className="text-4xl font-serif text-[#9a8478] italic">H</span>
               </div>
             </div>
-            <h1 className="text-3xl font-bold mb-4 tracking-tighter text-gray-800 italic font-serif">Hair Identity<br/><span className="not-italic text-2xl">Professional Analysis</span></h1>
+            <h1 className="text-3xl font-bold mb-4 tracking-tighter text-gray-800 italic font-serif">Hair Identity</h1>
+            <div className="flex items-center justify-center space-x-2 mb-8 bg-indigo-50 px-3 py-1 rounded-full">
+              <Sparkles size={14} className="text-indigo-500" />
+              <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Powered by AI Analysis</span>
+            </div>
             <p className="text-sm text-gray-400 mb-10 leading-relaxed px-4">
-              界面活性剤の化学的アプローチと、<br/>
-              美容師の視点から「真に適合する」<br/>
-              ケア・ソリューションを特定します。
+              現役美容師の知見とAIの解析で、<br/>
+              あなたの髪と地肌に「真に適合する」<br/>
+              パーソナライズ・ケアを特定します。
             </p>
             <button 
               onClick={() => setStep('quiz')}
-              className="w-full py-5 bg-[#9a8478] text-white rounded-full font-bold shadow-xl hover:bg-[#857166] transition-all"
+              className="w-full py-5 bg-[#9a8478] text-white rounded-full font-bold shadow-xl hover:bg-[#857166] active:scale-[0.98] transition-all"
             >
-              診断を開始する
+              無料診断をはじめる
             </button>
           </div>
         )}
 
+        {/* Quiz Screen */}
         {step === 'quiz' && (
-          <div className="flex flex-col flex-grow p-8">
-            <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-col flex-grow p-8 animate-in slide-in-from-bottom-4 duration-500">
+            <div className="flex justify-between items-center mb-4">
               <button onClick={() => currentQ > 0 ? setCurrentQ(currentQ - 1) : setStep('start')}>
-                <ArrowLeft size={20} className="text-gray-300 hover:text-gray-600" />
+                <ArrowLeft size={20} className="text-gray-300 hover:text-gray-600 transition-colors" />
               </button>
-              <div className="flex space-x-1">
-                {questions.map((_, i) => (
-                  <div key={i} className={`h-1 w-4 rounded-full transition-all ${i <= currentQ ? 'bg-[#9a8478]' : 'bg-gray-100'}`} />
-                ))}
-              </div>
+              <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Step {currentQ + 1} / {questions.length}</span>
             </div>
+            
+            {renderProgressBar()}
             
             <div className="flex-grow">
               <span className="text-[10px] font-bold text-[#d4af37] tracking-[0.3em] uppercase block mb-2">{questions[currentQ].category}</span>
@@ -225,11 +325,11 @@ const App = () => {
                 {questions[currentQ].options.map((opt, i) => (
                   <button
                     key={i}
-                    onClick={() => handleNext(opt.value)}
-                    className="w-full py-5 px-6 text-left border border-[#f0ece9] rounded-2xl hover:bg-[#faf9f8] hover:border-[#9a8478] transition-all text-sm font-medium flex justify-between items-center group"
+                    onClick={() => handleAnswerSelect(opt.value)}
+                    className="w-full py-5 px-6 text-left border border-[#f0ece9] rounded-2xl bg-white hover:bg-[#faf9f8] hover:border-[#9a8478] active:bg-[#f5f0ed] transition-all text-sm font-medium flex justify-between items-center group"
                   >
                     <span>{opt.text}</span>
-                    <ChevronRight size={16} className="text-gray-200 group-hover:text-[#9a8478]" />
+                    <ChevronRight size={16} className="text-gray-200 group-hover:text-[#9a8478] transition-transform group-hover:translate-x-1" />
                   </button>
                 ))}
               </div>
@@ -237,28 +337,56 @@ const App = () => {
           </div>
         )}
 
+        {/* Loading Screen */}
         {step === 'loading' && (
-          <div className="flex-grow flex flex-col items-center justify-center p-10 text-center">
-            <RefreshCw className="w-12 h-12 text-[#9a8478] animate-spin mb-6" />
-            <p className="font-serif italic text-[#9a8478] tracking-widest">Identifying DNA...</p>
-            <p className="text-[10px] text-gray-400 mt-2 uppercase tracking-widest">界面活性剤の配列を照合中</p>
+          <div className="flex-grow flex flex-col items-center justify-center p-10 text-center animate-in fade-in duration-500">
+            <div className="relative mb-8">
+              <RefreshCw className="w-16 h-16 text-[#9a8478] animate-spin" />
+              <Sparkles className="absolute -top-1 -right-1 text-indigo-400 animate-pulse" />
+            </div>
+            <p className="font-serif italic text-[#9a8478] text-xl tracking-widest">Analyzing DNA...</p>
+            <p className="text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em]">界面活性剤の配列と相性を照合中</p>
           </div>
         )}
 
+        {/* Result Screen */}
         {step === 'result' && result && (
-          <div className="flex flex-col flex-grow p-8 animate-fadeIn overflow-y-auto">
+          <div className="flex flex-col flex-grow p-8 animate-in fade-in duration-1000 overflow-y-auto custom-scrollbar">
             <div className="text-center mb-8">
               <div className={`inline-block px-4 py-1 ${result.badgeColor || 'bg-[#f5f0ed] text-[#9a8478]'} text-[10px] font-bold rounded-full mb-2 uppercase tracking-widest`}>
-                Analysis Result
+                Analysis Complete
               </div>
               <h2 className="text-2xl font-bold text-gray-800 tracking-tight leading-tight">{result.name}</h2>
               <p className="text-[10px] text-gray-400 mt-1 font-bold">{result.nickname}</p>
             </div>
 
-            <div className="bg-gray-50 rounded-[2rem] p-6 mb-6 border border-white">
+            {/* AI Deep Insight */}
+            {apiKey && (
+              <div className="bg-indigo-50 rounded-[1.5rem] p-5 mb-6 border border-indigo-100 relative overflow-hidden">
+                <div className="flex items-center mb-3 relative z-10">
+                  <Sparkles size={14} className="text-indigo-500 mr-2" />
+                  <h4 className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">AI Expert Insight</h4>
+                </div>
+                {isAiLoading && !aiAnalysis ? (
+                  <div className="flex space-x-1 py-2">
+                    <div className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce" />
+                    <div className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce [animation-delay:0.2s]" />
+                    <div className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce [animation-delay:0.4s]" />
+                  </div>
+                ) : (
+                  <p className="text-[11px] text-indigo-800 leading-relaxed font-medium relative z-10 animate-in fade-in duration-500">
+                    {aiAnalysis}
+                  </p>
+                )}
+                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-full -translate-y-16 translate-x-16 blur-2xl" />
+              </div>
+            )}
+
+            {/* Main Prescription */}
+            <div className="bg-gray-50 rounded-[1.5rem] p-5 mb-6 border border-white shadow-sm">
               <div className="flex items-center mb-3">
                 <ShieldCheck size={16} className="text-[#9a8478] mr-2" />
-                <h4 className="text-xs font-bold text-gray-700 uppercase">Professional Opinion</h4>
+                <h4 className="text-xs font-bold text-gray-700 uppercase">Selected Care</h4>
               </div>
               <p className="text-xs text-gray-500 leading-relaxed mb-4">{result.desc}</p>
               
@@ -266,43 +394,95 @@ const App = () => {
                 <div className="flex items-start">
                   <Droplets size={16} className="text-[#9a8478] mr-3 mt-1" />
                   <div>
-                    <h5 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Prescription</h5>
-                    <p className="text-sm font-bold text-gray-800">{result.shampoo}</p>
+                    <h5 className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Best Match</h5>
+                    <p className="text-sm font-bold text-gray-800 leading-tight">{result.shampoo}</p>
                     <p className="text-[9px] text-[#d4af37] font-bold mt-1 tracking-tight">{result.ingredients}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white border border-[#f0ece9] rounded-2xl p-6 mb-8">
-              <h4 className="text-[10px] font-bold text-gray-800 mb-3 uppercase tracking-widest flex items-center">
-                <HeartPulse size={12} className="mr-2 text-red-400" /> Daily Advice
-              </h4>
-              <p className="text-[11px] text-gray-500 leading-relaxed mb-6 italic">「{result.advice}」</p>
+            {/* Chatbot Section */}
+            {apiKey && (
+              <div className="bg-white border border-gray-100 rounded-2xl mb-8 shadow-sm">
+                <div className="p-3 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Bot size={14} className="text-indigo-500 mr-2" />
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400">AI Concierge</span>
+                  </div>
+                  {isAiLoading && chatHistory.length > 0 && <RefreshCw size={10} className="animate-spin text-gray-300" />}
+                </div>
+                
+                <div className="max-h-40 overflow-y-auto p-4 space-y-3 custom-scrollbar">
+                  {chatHistory.length === 0 && (
+                    <p className="text-[10px] text-gray-300 italic text-center">正しい洗い方や、併用すべきケアを質問できます。</p>
+                  )}
+                  {chatHistory.map((msg, idx) => (
+                    <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`max-w-[85%] rounded-2xl p-3 text-[10px] leading-relaxed ${
+                        msg.role === 'user' 
+                          ? 'bg-[#9a8478] text-white rounded-tr-none' 
+                          : 'bg-gray-100 text-gray-700 rounded-tl-none'
+                      }`}>
+                        {msg.text}
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={chatEndRef} />
+                </div>
+
+                <div className="p-2 flex space-x-2">
+                  <input 
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleChatSubmit()}
+                    placeholder="例: ナノイーの効果的な使い方は？"
+                    className="flex-grow bg-gray-50 rounded-xl px-4 py-2 text-[10px] focus:outline-none focus:ring-1 focus:ring-indigo-100 transition-all"
+                  />
+                  <button 
+                    onClick={handleChatSubmit}
+                    disabled={isAiLoading || !chatInput.trim()}
+                    className="bg-gray-900 text-white p-2.5 rounded-xl hover:bg-black transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+                  >
+                    <Send size={14} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Actions */}
+            <div className="space-y-3 pb-4">
               <a 
                 href={result.link} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="flex items-center justify-center w-full py-4 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all shadow-lg"
+                className="flex items-center justify-center w-full py-4 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all shadow-lg active:scale-[0.98]"
               >
                 商品販売ページを見る <ExternalLink size={14} className="ml-2" />
               </a>
+              <button 
+                onClick={() => window.location.reload()}
+                className="w-full text-[10px] text-gray-400 font-bold tracking-widest uppercase hover:text-[#9a8478] py-4 transition-colors"
+              >
+                ← Back to Home
+              </button>
             </div>
-
-            <button 
-              onClick={() => { setStep('start'); setCurrentQ(0); setAnswers({}); }}
-              className="text-[10px] text-gray-400 font-bold tracking-widest uppercase hover:text-[#9a8478] mb-4 text-center"
-            >
-              ← 再診断する
-            </button>
           </div>
         )}
 
       </div>
 
       <style>{`
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .animate-fadeIn { animation: fadeIn 0.8s ease-out; }
+        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #f0ece9; border-radius: 10px; }
+        
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slide-in-bottom { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .animate-in { animation-fill-mode: forwards; }
+        .fade-in { animation-name: fade-in; }
+        .slide-in-from-bottom-4 { animation-name: slide-in-bottom; }
       `}</style>
     </div>
   );
