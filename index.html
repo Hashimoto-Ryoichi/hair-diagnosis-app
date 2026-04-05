@@ -2,11 +2,23 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hair Diagnosis</title>
+  <title>髪質診断</title>
 </head>
 <body>
-  <h1>髪質診断アプリ（テスト）</h1>
-  <p>ここに今後アプリが表示されます</p>
+
+<h1>髪質診断</h1>
+<p>あなたの頭皮タイプは？</p>
+
+<button onclick="result('乾燥タイプ')">乾燥</button>
+<button onclick="result('脂性タイプ')">脂性</button>
+
+<p id="answer"></p>
+
+<script>
+function result(type){
+  document.getElementById("answer").innerText = "あなたは「" + type + "」です";
+}
+</script>
+
 </body>
 </html>
