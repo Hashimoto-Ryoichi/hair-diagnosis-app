@@ -1,24 +1,311 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <title>髪質診断</title>
-</head>
-<body>
+import React, { useState, useEffect } from 'react';
+import { ChevronRight, ArrowLeft, ExternalLink, RefreshCw, ShieldCheck, Droplets, HeartPulse } from 'lucide-react';
 
-<h1>髪質診断</h1>
-<p>あなたの頭皮タイプは？</p>
+const App = () => {
+  const [step, setStep] = useState('start');
+  const [currentQ, setCurrentQ] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [result, setResult] = useState(null);
 
-<button onclick="result('乾燥タイプ')">乾燥</button>
-<button onclick="result('脂性タイプ')">脂性</button>
+  // --- 診断データ設定 ---
+  const questions = [
+    {
+      id: 'scalp',
+      category: 'Scalp Environment',
+      text: '頭皮の「地肌の状態」に最も近いものは？',
+      options: [
+        { text: '乾燥しやすく、カサつきやフケが気になる', value: 'dry' },
+        { text: '夕方にはベタつきやニオイが気になる', value: 'oily' },
+        { text: 'Tゾーンはベタつくが、他は乾燥する', value: 'mixed' },
+        { text: '赤みや湿疹、かゆみがある', value: 'sensitive' }
+      ]
+    },
+    {
+      id: 'texture',
+      category: 'Hair Texture',
+      text: '「毛質」と「太さ」について教えてください',
+      options: [
+        { text: '細くて柔らかい（軟毛・猫っ毛）', value: 'thin' },
+        { text: '太くてしっかりした（剛毛・硬毛）', value: 'thick' },
+        { text: '標準的な毛質', value: 'natural' }
+      ]
+    },
+    {
+      id: 'type',
+      category: 'Hair Type',
+      text: '「クセ」や「親和性」はどうですか？',
+      options: [
+        { text: '直毛で、水を弾きやすい（疎水性）', value: 'straight-hydrophobic' },
+        { text: 'クセがあり、湿気で広がりやすい（親水性）', value: 'curly-hydrophilic' },
+        { text: '標準的、または扱いやすい', value: 'natural' }
+      ]
+    },
+    {
+      id: 'damage',
+      category: 'Damage Level',
+      text: '現在の「ダメージ状態」を教えてください',
+      options: [
+        { text: 'レベル0：バージン毛（薬剤処理なし）', value: 0 },
+        { text: 'レベル2：カラー等で艶がなくパサつく', value: 2 },
+        { text: 'レベル4：ブリーチ・矯正・枝毛がある', value: 4 },
+        { text: 'レベル6：チリつきがありデザインが作れない', value: 6 }
+      ]
+    },
+    {
+      id: 'heat',
+      category: 'Thermal Care',
+      text: '普段、どのアイロン・ドライヤーを使っていますか？',
+      options: [
+        { text: 'リファ / ヘアビューロン / レプロナイザー / ナノイー', value: 'care-heat' },
+        { text: '特に機能性のない一般的なもの', value: 'normal-heat' }
+      ]
+    },
+    {
+      id: 'goal',
+      category: 'Ideal Finish',
+      text: 'どのような「仕上がり」を求めていますか？',
+      options: [
+        { text: 'しっとり・重めのまとまり', value: 'moist' },
+        { text: 'サラサラ・軽やかな指通り', value: 'smooth' },
+        { text: '根元をふんわり立ち上げたい', value: 'volume' }
+      ]
+    }
+  ];
 
-<p id="answer"></p>
+  // --- 診断ロジック ---
+  const calculateResult = () => {
+    const { scalp, texture, damage, heat, goal } = answers;
+    let finalDamage = parseInt(damage);
+    
+    // 熱器具によるダメージ補正（潤い系以外は+1）
+    if (heat === 'normal-heat' && finalDamage < 6) finalDamage += 1;
 
-<script>
-function result(type){
-  document.getElementById("answer").innerText = "あなたは「" + type + "」です";
-}
-</script>
+    // 頭皮が赤い場合はドクターストップ（皮膚科推奨）
+    if (scalp === 'sensitive') {
+      setResult({
+        name: 'レッド・セーフティ（医療連携）',
+        nickname: 'Safety First Profile',
+        desc: '頭皮に赤みや湿疹が見受けられます。この状態では化粧品での解決よりも、まずは皮膚科専門医の診断を受けることを強く推奨します。',
+        shampoo: 'ミノン 全身シャンプー（しっとり）',
+        ingredients: '植物性アミノ酸系洗浄成分 / 低刺激処方',
+        link: 'https://www.daiichisankyo-hc.co.jp/site_minon/',
+        advice: '地肌の炎症が治まるまで、洗浄力の強いシャンプーや熱すぎるお湯での洗髪は避けてください。',
+        badgeColor: 'bg-red-50 text-red-600'
+      });
+      return;
+    }
 
-</body>
-</html>
+    // 診断タイプ判定
+    if (finalDamage >= 5) {
+      setResult({
+        name: 'リバイブ・アルケミスト（再生の錬金術師）',
+        nickname: `Damage Level: ${finalDamage}`,
+        desc: '深刻なダメージで髪の骨格が崩れています。熱を味方にする「トステア」配合の処方で、髪の結合をサポートし、チリつきを補修する必要があります。',
+        shampoo: 'ストレイン (Strain) シャンプー',
+        ingredients: 'トステア / ラウロイルメチルアラニンNa',
+        link: 'https://www.cosme.net/products/10255860/',
+        advice: '熱を味方にする成分が入っています。高品質なアイロン等で最後にスルーすることで形状が安定します。',
+        badgeColor: 'bg-indigo-50 text-indigo-600'
+      });
+    } else if (scalp === 'oily') {
+      setResult({
+        name: 'ミント・エグゼクティブ（清廉なる指導者）',
+        nickname: `Damage Level: ${finalDamage}`,
+        desc: '地肌の皮脂バランスが脂性に傾いています。強すぎないが確実な洗浄力を持つタウリン系などを選び、酸化皮脂を効率よく取り除く必要があります。',
+        shampoo: 'コタ アイ ケア シャンプー 9',
+        ingredients: 'ココイルメチルタウリンNa / ダマスクバラ花油',
+        link: 'https://www.cota.co.jp/products/i-care/',
+        advice: 'シャンプー前の予洗いを2分間行うだけで、洗浄成分の働きが最大化され地肌がスッキリします。',
+        badgeColor: 'bg-teal-50 text-teal-600'
+      });
+    } else if (finalDamage >= 2 && goal === 'moist') {
+      setResult({
+        name: '琥珀のガーディアン（潤いの守護者）',
+        nickname: `Damage Level: ${finalDamage}`,
+        desc: 'カラー等の履歴により乾燥が進んでいます。ラウロイルメチルアラニンNaベースの適度な洗浄力と、補修成分セラムの相乗効果で潤いを守ります。',
+        shampoo: 'セラムイン シャンプー',
+        ingredients: 'トステア / ヘマチン / メドウフォーム-δ-ラクトン',
+        link: 'https://www.cosme.net/products/10252874/',
+        advice: '疎水性を高める成分が配合されています。使い続けることで湿気に強い髪質へと導きます。',
+        badgeColor: 'bg-amber-50 text-amber-600'
+      });
+    } else if (texture === 'thin' || goal === 'volume') {
+      setResult({
+        name: 'シルク・エール（絹の息吹）',
+        nickname: `Damage Level: ${finalDamage}`,
+        desc: '軟毛でペタンとしやすい髪質です。ベタイン系を主軸に、軽やかなシルク由来成分でコーティングすることで、重さを出さずにふんわり仕上げます。',
+        shampoo: 'ルベル シーソー シャンプー B (BALANCE)',
+        ingredients: 'ココイルメチルタウリンNa / シルク由来成分',
+        link: 'https://www.lebel.co.jp/products/series/seesaw/',
+        advice: '根元を立ち上げるようにドライヤーの風を当てると、成分の特性をより活かせます。',
+        badgeColor: 'bg-blue-50 text-blue-600'
+      });
+    } else if (finalDamage <= 1 && heat === 'care-heat') {
+      setResult({
+        name: 'ピュア・イノセント（純真なる光）',
+        nickname: `Damage Level: ${finalDamage}`,
+        desc: '非常に良好な状態です。高機能ドライヤーをご使用のため物理的ダメージも最小限です。過剰な補修は不要。優しいベタイン系で素髪の美しさを保ちましょう。',
+        shampoo: 'ハレマオ シャンプー 3',
+        ingredients: 'コカミドプロピルベタイン / リンゴ酸',
+        link: 'https://www.demi.nicca.co.jp/products/halemao/',
+        advice: 'ナノイー等の高機能ドライヤーを継続してください。今のマイルドなケアが5年後の髪を作ります。',
+        badgeColor: 'bg-green-50 text-green-600'
+      });
+    } else {
+      setResult({
+        name: 'ベルベット・スムーサー（至高の滑らかさ）',
+        nickname: `Damage Level: ${finalDamage}`,
+        desc: '水分保持力が低下し始めた混合肌・標準毛タイプです。アミノ酸系洗浄成分の中でも保湿力の高い処方で、ベルベットのような指通りを目指します。',
+        shampoo: 'ミルボン オージュア クエンチ',
+        ingredients: 'ラウロイルアスパラギン酸Na / オリーブ油',
+        link: 'https://www.aujua.com/products/quench.php',
+        advice: '髪の水分が抜けないよう、お風呂上がりは10分以内にドライヤーを開始するのがベストです。',
+        badgeColor: 'bg-purple-50 text-purple-600'
+      });
+    }
+  };
+
+  const handleNext = (val) => {
+    const qId = questions[currentQ].id;
+    setAnswers({ ...answers, [qId]: val });
+    if (currentQ < questions.length - 1) {
+      setCurrentQ(currentQ + 1);
+    } else {
+      setStep('loading');
+      setTimeout(() => {
+        calculateResult();
+        setStep('result');
+      }, 2000);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#fdfbf9] text-[#4a4a4a] flex items-center justify-center p-4 font-sans">
+      <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[700px] flex flex-col relative border border-[#f0ece9]">
+        
+        {step === 'start' && (
+          <div className="p-10 flex flex-col items-center justify-center flex-grow text-center">
+            <div className="w-32 h-32 border-t-2 border-[#d4af37] rounded-full flex items-center justify-center mb-8 rotate-45">
+              <div className="w-24 h-24 bg-[#f5f0ed] rounded-full flex items-center justify-center -rotate-45">
+                <span className="text-4xl font-serif text-[#9a8478] italic">H</span>
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold mb-4 tracking-tighter text-gray-800 italic font-serif">Hair Identity<br/><span className="not-italic text-2xl">Professional Analysis</span></h1>
+            <p className="text-sm text-gray-400 mb-10 leading-relaxed px-4">
+              界面活性剤の化学的アプローチと、<br/>
+              美容師の視点から「真に適合する」<br/>
+              ケア・ソリューションを特定します。
+            </p>
+            <button 
+              onClick={() => setStep('quiz')}
+              className="w-full py-5 bg-[#9a8478] text-white rounded-full font-bold shadow-xl hover:bg-[#857166] transition-all"
+            >
+              診断を開始する
+            </button>
+          </div>
+        )}
+
+        {step === 'quiz' && (
+          <div className="flex flex-col flex-grow p-8">
+            <div className="flex justify-between items-center mb-8">
+              <button onClick={() => currentQ > 0 ? setCurrentQ(currentQ - 1) : setStep('start')}>
+                <ArrowLeft size={20} className="text-gray-300 hover:text-gray-600" />
+              </button>
+              <div className="flex space-x-1">
+                {questions.map((_, i) => (
+                  <div key={i} className={`h-1 w-4 rounded-full transition-all ${i <= currentQ ? 'bg-[#9a8478]' : 'bg-gray-100'}`} />
+                ))}
+              </div>
+            </div>
+            
+            <div className="flex-grow">
+              <span className="text-[10px] font-bold text-[#d4af37] tracking-[0.3em] uppercase block mb-2">{questions[currentQ].category}</span>
+              <h2 className="text-xl font-bold text-gray-800 mb-8 leading-snug">{questions[currentQ].text}</h2>
+              <div className="space-y-3">
+                {questions[currentQ].options.map((opt, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleNext(opt.value)}
+                    className="w-full py-5 px-6 text-left border border-[#f0ece9] rounded-2xl hover:bg-[#faf9f8] hover:border-[#9a8478] transition-all text-sm font-medium flex justify-between items-center group"
+                  >
+                    <span>{opt.text}</span>
+                    <ChevronRight size={16} className="text-gray-200 group-hover:text-[#9a8478]" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 'loading' && (
+          <div className="flex-grow flex flex-col items-center justify-center p-10 text-center">
+            <RefreshCw className="w-12 h-12 text-[#9a8478] animate-spin mb-6" />
+            <p className="font-serif italic text-[#9a8478] tracking-widest">Identifying DNA...</p>
+            <p className="text-[10px] text-gray-400 mt-2 uppercase tracking-widest">界面活性剤の配列を照合中</p>
+          </div>
+        )}
+
+        {step === 'result' && result && (
+          <div className="flex flex-col flex-grow p-8 animate-fadeIn overflow-y-auto">
+            <div className="text-center mb-8">
+              <div className={`inline-block px-4 py-1 ${result.badgeColor || 'bg-[#f5f0ed] text-[#9a8478]'} text-[10px] font-bold rounded-full mb-2 uppercase tracking-widest`}>
+                Analysis Result
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800 tracking-tight leading-tight">{result.name}</h2>
+              <p className="text-[10px] text-gray-400 mt-1 font-bold">{result.nickname}</p>
+            </div>
+
+            <div className="bg-gray-50 rounded-[2rem] p-6 mb-6 border border-white">
+              <div className="flex items-center mb-3">
+                <ShieldCheck size={16} className="text-[#9a8478] mr-2" />
+                <h4 className="text-xs font-bold text-gray-700 uppercase">Professional Opinion</h4>
+              </div>
+              <p className="text-xs text-gray-500 leading-relaxed mb-4">{result.desc}</p>
+              
+              <div className="space-y-4 border-t border-gray-100 pt-4">
+                <div className="flex items-start">
+                  <Droplets size={16} className="text-[#9a8478] mr-3 mt-1" />
+                  <div>
+                    <h5 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Prescription</h5>
+                    <p className="text-sm font-bold text-gray-800">{result.shampoo}</p>
+                    <p className="text-[9px] text-[#d4af37] font-bold mt-1 tracking-tight">{result.ingredients}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border border-[#f0ece9] rounded-2xl p-6 mb-8">
+              <h4 className="text-[10px] font-bold text-gray-800 mb-3 uppercase tracking-widest flex items-center">
+                <HeartPulse size={12} className="mr-2 text-red-400" /> Daily Advice
+              </h4>
+              <p className="text-[11px] text-gray-500 leading-relaxed mb-6 italic">「{result.advice}」</p>
+              <a 
+                href={result.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center justify-center w-full py-4 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all shadow-lg"
+              >
+                商品販売ページを見る <ExternalLink size={14} className="ml-2" />
+              </a>
+            </div>
+
+            <button 
+              onClick={() => { setStep('start'); setCurrentQ(0); setAnswers({}); }}
+              className="text-[10px] text-gray-400 font-bold tracking-widest uppercase hover:text-[#9a8478] mb-4 text-center"
+            >
+              ← 再診断する
+            </button>
+          </div>
+        )}
+
+      </div>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .animate-fadeIn { animation: fadeIn 0.8s ease-out; }
+      `}</style>
+    </div>
+  );
+};
+
+export default App;
