@@ -1,82 +1,461 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  ChevronRight, 
-  ArrowLeft, 
-  ExternalLink, 
-  RefreshCw, 
-  ShieldCheck, 
-  Droplets, 
-  HeartPulse, 
-  Sparkles, 
-  Send, 
-  Bot, 
-  AlertTriangle 
-} from 'lucide-react';
+<!DOCTYPE html>
 
-/**
- * Hair Identity Professional - Production Ready Version
- * * デプロイ時の注意:
- * 1. 本コードは単一ファイルで動作するように設計されています。
- * 2. Netlify等で環境変数を使用する場合は、const apiKey = import.meta.env.VITE_GEMINI_API_KEY || ""; 
- * のように書き換えることでセキュリティを強化できます。
- */
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hair Identity | シャンプー診断</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-const App = () => {
-  // --- State Management ---
-  const [step, setStep] = useState('start');
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [result, setResult] = useState(null);
-  const [aiAnalysis, setAiAnalysis] = useState("");
-  const [chatInput, setChatInput] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
-  const [isAiLoading, setIsAiLoading] = useState(false);
-  const [error, setError] = useState(null);
+```
+:root {
+  --cream: #fdfbf8;
+  --warm: #9a8478;
+  --warm-dark: #6e5f55;
+  --gold: #c9a84c;
+  --slate: #3a3530;
+  --light: #f4f0ec;
+  --border: #e8e0d8;
+}
 
-  const chatEndRef = useRef(null);
-  const apiKey = ""; // Runtime provides the key or use env var
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--cream);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  color: var(--slate);
+}
 
-  // Auto-scroll chat
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatHistory]);
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 20%, rgba(154,132,120,0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
 
-  // --- API Call Helper with Exponential Backoff (6.1 Implementation) ---
-  const callGemini = async (prompt, systemPrompt = "", retryCount = 0) => {
-    if (!apiKey) {
-      console.warn("API Key is missing. AI features will be limited.");
-      return "現在AI機能はデモモードです。APIキーを設定すると詳細なアドバイスが生成されます。";
-    }
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 2rem;
+  box-shadow: 0 8px 48px rgba(58,53,48,0.10);
+  overflow: hidden;
+  min-height: 580px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  position: relative;
+}
 
-    try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }],
-          systemInstruction: { parts: [{ text: systemPrompt }] }
-        })
-      });
+/* ===== START ===== */
+.screen { display: none; flex-direction: column; flex-grow: 1; }
+.screen.active { display: flex; }
 
-      if (!response.ok) {
-        if (response.status === 429 && retryCount < 5) {
-          const delay = Math.pow(2, retryCount) * 1000;
-          await new Promise(resolve => setTimeout(resolve, delay));
-          return callGemini(prompt, systemPrompt, retryCount + 1);
-        }
-        throw new Error(`API Error: ${response.status}`);
-      }
+#screen-start {
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2.5rem;
+  text-align: center;
+}
 
-      const data = await response.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      return text || "回答を取得できませんでした。";
-    } catch (err) {
-      console.error("Gemini API Error:", err);
-      return "接続エラーが発生しました。時間を置いて再度お試しください。";
-    }
-  };
+.logo-ring {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1.5rem;
+  background: var(--light);
+  position: relative;
+}
+.logo-ring::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px dashed var(--border);
+  animation: spin 20s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  // --- Diagnosis Questions ---
+.logo-icon { font-size: 2rem; }
+
+h1.brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+  color: var(--slate);
+}
+.brand-sub {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 1.5rem;
+}
+.start-desc {
+  font-size: 0.8rem;
+  color: #888;
+  line-height: 1.9;
+  margin-bottom: 2.5rem;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 1rem;
+  background: var(--slate);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+.btn-primary:hover { background: var(--warm-dark); }
+.btn-primary:active { transform: scale(0.98); }
+
+/* ===== QUIZ ===== */
+#screen-quiz { padding: 2rem; }
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+.back-btn {
+  background: none; border: none; cursor: pointer;
+  color: #ccc; font-size: 1.2rem; padding: 0.2rem;
+  transition: color 0.2s;
+}
+.back-btn:hover { color: var(--warm); }
+
+.progress-dots {
+  display: flex; gap: 6px; flex-grow: 1; justify-content: center;
+}
+.dot {
+  height: 4px; width: 28px; border-radius: 999px;
+  background: var(--light);
+  transition: background 0.3s;
+}
+.dot.active { background: var(--warm); }
+
+.q-category {
+  font-size: 0.6rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.q-text {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.options { display: flex; flex-direction: column; gap: 0.75rem; flex-grow: 1; }
+
+.option-btn {
+  width: 100%;
+  padding: 1rem 1.2rem;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: 'Noto Sans JP', sans-serif;
+}
+.option-btn:hover {
+  border-color: var(--warm);
+  background: var(--light);
+}
+.option-text { font-size: 0.82rem; color: var(--slate); }
+.option-arrow { color: #ddd; font-size: 0.9rem; transition: color 0.2s; }
+.option-btn:hover .option-arrow { color: var(--warm); }
+
+/* ===== LOADING ===== */
+#screen-loading {
+  align-items: center; justify-content: center;
+  padding: 3rem;
+  text-align: center;
+}
+.spinner {
+  width: 48px; height: 48px;
+  border: 2px solid var(--border);
+  border-top-color: var(--warm);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+.loading-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+/* ===== RESULT ===== */
+#screen-result { padding: 2rem; overflow-y: auto; }
+
+.result-header { text-align: center; margin-bottom: 1.5rem; }
+.result-badge {
+  display: inline-block;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  margin-bottom: 0.6rem;
+}
+.badge-purple { background: #f3f0ff; color: #7c5cbf; }
+.badge-red    { background: #fff0f0; color: #c0392b; }
+.badge-indigo { background: #eef2ff; color: #4f46e5; }
+
+.result-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--slate);
+}
+
+.advice-box {
+  background: #f0f4ff;
+  border: 1px solid #d8e0ff;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.advice-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #6366f1;
+  margin-bottom: 0.4rem;
+}
+.advice-text {
+  font-size: 0.78rem;
+  line-height: 1.8;
+  color: #3730a3;
+}
+
+.product-box {
+  background: var(--light);
+  border-radius: 1rem;
+  padding: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.product-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+.product-icon {
+  width: 40px; height: 40px;
+  background: #fff;
+  border-radius: 0.75rem;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.product-label { font-size: 0.6rem; font-weight: 700; color: #aaa; letter-spacing: 0.15em; text-transform: uppercase; }
+.product-name { font-size: 0.9rem; font-weight: 500; color: var(--slate); }
+.product-desc { font-size: 0.75rem; color: #777; line-height: 1.7; margin-bottom: 1rem; }
+
+.btn-amazon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  width: 100%;
+  padding: 0.85rem;
+  background: var(--slate);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn-amazon:hover { background: var(--warm-dark); }
+
+/* チャット */
+.chat-box {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+.chat-messages {
+  height: 120px;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #fafafa;
+}
+.chat-empty { font-size: 0.7rem; color: #ccc; text-align: center; margin-top: 2rem; font-style: italic; }
+.msg { display: flex; }
+.msg.user { justify-content: flex-end; }
+.msg-bubble {
+  max-width: 80%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1.6;
+}
+.msg.user .msg-bubble { background: var(--warm); color: #fff; }
+.msg.bot  .msg-bubble { background: #eee; color: var(--slate); }
+
+.chat-input-row {
+  display: flex;
+  border-top: 1px solid var(--border);
+  background: #fff;
+}
+.chat-input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  padding: 0.7rem 1rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  background: transparent;
+}
+.chat-send {
+  padding: 0.7rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--warm);
+  font-size: 1rem;
+  transition: color 0.2s;
+}
+.chat-send:hover { color: var(--warm-dark); }
+
+.restart-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #ccc;
+  width: 100%;
+  padding: 0.5rem;
+  transition: color 0.2s;
+}
+.restart-btn:hover { color: var(--warm); }
+
+/* フェードイン */
+.fade-in { animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+```
+
+  </style>
+</head>
+<body>
+<div class="card">
+
+  <!-- START -->
+
+  <div id="screen-start" class="screen active fade-in">
+    <div class="logo-ring"><span class="logo-icon">✦</span></div>
+    <h1 class="brand">Hair Identity</h1>
+    <p class="brand-sub">by Ryoichi Hashimoto</p>
+    <p class="start-desc">
+      あなたの髪質・地肌・ダメージに合わせた<br>
+      最適なシャンプーをプロが診断します。<br>
+      3つの質問に答えるだけ。
+    </p>
+    <button class="btn-primary" onclick="startQuiz()">診断をはじめる →</button>
+  </div>
+
+  <!-- QUIZ -->
+
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-header">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <div class="progress-dots" id="progress-dots"></div>
+    </div>
+    <p class="q-category" id="q-category"></p>
+    <h2 class="q-text" id="q-text"></h2>
+    <div class="options" id="options"></div>
+  </div>
+
+  <!-- LOADING -->
+
+  <div id="screen-loading" class="screen">
+    <div class="spinner"></div>
+    <p class="loading-text">Analyzing your hair profile...</p>
+  </div>
+
+  <!-- RESULT -->
+
+  <div id="screen-result" class="screen">
+    <div class="result-header">
+      <div><span class="result-badge" id="result-badge">DIAGNOSIS</span></div>
+      <div class="result-name" id="result-name"></div>
+    </div>
+
+```
+<div class="advice-box">
+  <div class="advice-label">✦ AI Advice</div>
+  <div class="advice-text" id="advice-text">解析中...</div>
+</div>
+
+<div class="product-box">
+  <div class="product-header">
+    <div class="product-icon">💧</div>
+    <div>
+      <div class="product-label">Recommended Item</div>
+      <div class="product-name" id="product-name"></div>
+    </div>
+  </div>
+  <p class="product-desc" id="product-desc"></p>
+  <a id="product-link" href="#" target="_blank" rel="noreferrer" class="btn-amazon">
+    Amazon で詳細を見る ↗
+  </a>
+</div>
+
+<div class="chat-box">
+  <div class="chat-messages" id="chat-messages">
+    <p class="chat-empty">ケアの悩みをなんでも聞いてください</p>
+  </div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chat-input" placeholder="例：洗い方のコツは？" onkeydown="if(event.key==='Enter') sendChat()" />
+    <button class="chat-send" onclick="sendChat()">▶</button>
+  </div>
+</div>
+
+<button class="restart-btn" onclick="location.reload()">Restart Diagnosis</button>
+```
+
+  </div>
+
+</div>
+
+<script>
+  // ===== 設定 =====
+  // ★ Gemini APIキーをここに入力してください
+  const GEMINI_API_KEY = "";
+
   const questions = [
     {
       id: 'scalp',
@@ -90,43 +469,14 @@ const App = () => {
       ]
     },
     {
-      id: 'texture',
-      category: 'Hair Texture',
-      text: '「毛質」と「太さ」について教えてください',
-      options: [
-        { text: '細くて柔らかい（軟毛・猫っ毛）', value: 'thin' },
-        { text: '太くてしっかりした（剛毛・硬毛）', value: 'thick' },
-        { text: '標準的な毛質', value: 'natural' }
-      ]
-    },
-    {
-      id: 'type',
-      category: 'Hair Type',
-      text: '「クセ」や「親和性」はどうですか？',
-      options: [
-        { text: '直毛で、水を弾きやすい（疎水性）', value: 'straight-hydrophobic' },
-        { text: 'クセがあり、湿気で広がりやすい（親水性）', value: 'curly-hydrophilic' },
-        { text: '標準的、または扱いやすい', value: 'natural' }
-      ]
-    },
-    {
       id: 'damage',
       category: 'Damage Level',
       text: '現在の「ダメージ状態」を教えてください',
       options: [
-        { text: 'レベル0：バージン毛（薬剤処理なし）', value: 0 },
-        { text: 'レベル2：カラー等で艶がなくパサつく', value: 2 },
-        { text: 'レベル4：ブリーチ・矯正・枝毛がある', value: 4 },
-        { text: 'レベル6：チリつきがありデザインが作れない', value: 6 }
-      ]
-    },
-    {
-      id: 'heat',
-      category: 'Thermal Care',
-      text: '普段、どのアイロン・ドライヤーを使っていますか？',
-      options: [
-        { text: 'リファ / ヘアビューロン / レプロナイザー / ナノイー', value: 'care-heat' },
-        { text: '特に機能性のない一般的なもの', value: 'normal-heat' }
+        { text: 'レベル0：ほぼダメージなし（バージン毛）', value: 0 },
+        { text: 'レベル2：カラーでパサつきを感じる', value: 2 },
+        { text: 'レベル4：ブリーチ・枝毛がある', value: 4 },
+        { text: 'レベル6：深刻な傷みがある', value: 6 }
       ]
     },
     {
@@ -134,358 +484,191 @@ const App = () => {
       category: 'Ideal Finish',
       text: 'どのような「仕上がり」を求めていますか？',
       options: [
-        { text: 'しっとり・重めのまとまり', value: 'moist' },
-        { text: 'サラサラ・軽やかな指通り', value: 'smooth' },
-        { text: '根元をふんわり立ち上げたい', value: 'volume' }
+        { text: 'しっとり・重めのまとまり感', value: 'moist' },
+        { text: 'サラサラ・軽やかな指通り', value: 'smooth' }
       ]
     }
   ];
 
-  // --- Diagnosis Logic ---
-  const calculateResult = async () => {
-    const { scalp, texture, damage, heat, goal } = answers;
-    let finalDamage = parseInt(damage || 0);
-    if (heat === 'normal-heat' && finalDamage < 6) finalDamage += 1;
-
-    let diag = null;
-
-    // Logic Tree
-    if (scalp === 'sensitive') {
-      diag = {
-        name: 'レッド・セーフティ（医療連携）',
-        nickname: 'Safety First Profile',
-        desc: '頭皮に赤みや湿疹が見受けられます。この状態では化粧品での解決よりも、まずは皮膚科専門医の診断を受けることを強く推奨します。',
-        shampoo: 'ミノン 全身シャンプー（しっとり）',
-        ingredients: '植物性アミノ酸系洗浄成分 / 低刺激処方',
-        link: 'https://www.daiichisankyo-hc.co.jp/site_minon/',
-        advice: '地肌の炎症が治まるまで、洗浄力の強いシャンプーや熱すぎるお湯での洗髪は避けてください。',
-        badgeColor: 'bg-red-50 text-red-600'
-      };
-    } else if (finalDamage >= 5) {
-      diag = {
-        name: 'リバイブ・アルケミスト（再生の錬金術師）',
-        nickname: `Damage Level: ${finalDamage}`,
-        desc: '深刻なダメージで髪の骨格が崩れています。熱を味方にする「トステア」配合の処方で、髪の結合をサポートし、チリつきを補修する必要があります。',
-        shampoo: 'ストレイン (Strain) シャンプー',
-        ingredients: 'トステア / ラウロイルメチルアラニンNa',
-        link: 'https://www.cosme.net/products/10255860/',
-        advice: '熱を味方にする成分が入っています。高品質なアイロン等で最後にスルーすることで形状が安定します。',
-        badgeColor: 'bg-indigo-50 text-indigo-600'
-      };
-    } else if (scalp === 'oily') {
-      diag = {
-        name: 'ミント・エグゼクティブ（清廉なる指導者）',
-        nickname: `Damage Level: ${finalDamage}`,
-        desc: '地肌の皮脂バランスが脂性に傾いています。強すぎないが確実な洗浄力を持つタウリン系などを選び、酸化皮脂を効率よく取り除く必要があります。',
-        shampoo: 'コタ アイ ケア シャンプー 9',
-        ingredients: 'ココイルメチルタウリンNa / ダマスクバラ花油',
-        link: 'https://www.cota.co.jp/products/i-care/',
-        advice: 'シャンプー前の予洗いを2分間行うだけで、洗浄成分の働きが最大化され地肌がスッキリします。',
-        badgeColor: 'bg-teal-50 text-teal-600'
-      };
-    } else if (finalDamage >= 2 && goal === 'moist') {
-      diag = {
-        name: '琥珀のガーディアン（潤いの守護者）',
-        nickname: `Damage Level: ${finalDamage}`,
-        desc: 'カラー等の履歴により乾燥が進んでいます。ラウロイルメチルアラニンNaベースの適度な洗浄力と、補修成分セラムの相乗効果で潤いを守ります。',
-        shampoo: 'セラムイン シャンプー',
-        ingredients: 'トステア / ヘマチン / メドウフォーム-δ-ラクトン',
-        link: 'https://www.cosme.net/products/10252874/',
-        advice: '疎水性を高める成分が配合されています。使い続けることで湿気に強い髪質へと導きます。',
-        badgeColor: 'bg-amber-50 text-amber-600'
-      };
-    } else if (texture === 'thin' || goal === 'volume') {
-      diag = {
-        name: 'シルク・エール（絹の息吹）',
-        nickname: `Damage Level: ${finalDamage}`,
-        desc: '軟毛でペタンとしやすい髪質です。ベタイン系を主軸に、軽やかなシルク由来成分でコーティングすることで、重さを出さずにふんわり仕上げます。',
-        shampoo: 'ルベル シーソー シャンプー B (BALANCE)',
-        ingredients: 'ココイルメチルタウリンNa / シルク由来成分',
-        link: 'https://www.lebel.co.jp/products/series/seesaw/',
-        advice: '根元を立ち上げるようにドライヤーの風を当てると、成分の特性をより活かせます。',
-        badgeColor: 'bg-blue-50 text-blue-600'
-      };
-    } else {
-      diag = {
-        name: 'ピュア・イノセント（純真なる光）',
-        nickname: `Damage Level: ${finalDamage}`,
-        desc: '非常に良好な状態です。高機能ドライヤーをご使用のため物理的ダメージも最小限です。過剰な補修は不要。優しいベタイン系で素髪の美しさを保ちましょう。',
-        shampoo: 'ハレマオ シャンプー 3',
-        ingredients: 'コカミドプロピルベタイン / リンゴ酸',
-        link: 'https://www.demi.nicca.co.jp/products/halemao/',
-        advice: 'ナノイー等の高機能ドライヤーを継続してください。今のマイルドなケアが5年後の髪を作ります。',
-        badgeColor: 'bg-green-50 text-green-600'
-      };
-    }
-
-    setResult(diag);
-    setStep('result');
-    
-    // Trigger AI deep dive
-    if (apiKey) {
-      setIsAiLoading(true);
-      const systemPrompt = "あなたはプロの毛髪診断士です。診断結果に基づき、最適なケア方法を150文字程度で論理的にアドバイスしてください。専門用語（トステア、疎水化など）を適切に混ぜてください。";
-      const userPrompt = `診断タイプ: ${diag.name}, シャンプー: ${diag.shampoo}, ダメージ: ${diag.nickname}, ドライヤー: ${answers.heat}`;
-      const analysis = await callGemini(userPrompt, systemPrompt);
-      setAiAnalysis(analysis);
-      setIsAiLoading(false);
+  // ===== シャンプーデータ（Amazon アフィリエイトリンクを後で設定） =====
+  // ★ link の部分を Amazonアソシエイトのリンクに差し替えてください
+  const results = {
+    sensitive: {
+      name: 'レッド・セーフティ',
+      badge: 'SENSITIVE',
+      badgeClass: 'badge-red',
+      shampoo: 'ミノン 全身シャンプー',
+      desc: '敏感な地肌に最適。低刺激アミノ酸処方で、赤みやかゆみをケアしながら優しく洗い上げます。',
+      link: 'https://www.amazon.co.jp/'
+    },
+    highDamage: {
+      name: 'リバイブ・アルケミスト',
+      badge: 'HIGH DAMAGE',
+      badgeClass: 'badge-indigo',
+      shampoo: 'ミルボン オージュア イミュライズ',
+      desc: 'ダメージが深刻な髪に。毛髪内部を集中補修し、枝毛・切れ毛を防ぎながら芯から強い髪へ導きます。',
+      link: 'https://www.amazon.co.jp/'
+    },
+    default: {
+      name: 'スタンダード・ケア',
+      badge: 'BALANCED',
+      badgeClass: 'badge-purple',
+      shampoo: 'ミルボン オージュア クエンチ',
+      desc: '季節の変わり目に乾燥しやすい髪に。保湿成分とアミノ酸の力で、しなやかでまとまりやすい髪へ。',
+      link: 'https://www.amazon.co.jp/'
     }
   };
 
-  const handleAnswerSelect = (val) => {
-    const qId = questions[currentQ].id;
-    const newAnswers = { ...answers, [qId]: val };
-    setAnswers(newAnswers);
+  // ===== 状態 =====
+  let currentQ = 0;
+  let answers = {};
+  let currentResult = null;
 
+  // ===== 画面切替 =====
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(id);
+    el.classList.add('active', 'fade-in');
+    setTimeout(() => el.classList.remove('fade-in'), 500);
+  }
+
+  // ===== クイズ =====
+  function startQuiz() {
+    currentQ = 0;
+    answers = {};
+    renderQuestion();
+    showScreen('screen-quiz');
+  }
+
+  function renderQuestion() {
+    const q = questions[currentQ];
+    document.getElementById('q-category').textContent = q.category;
+    document.getElementById('q-text').textContent = q.text;
+
+    // プログレスドット
+    const dots = document.getElementById('progress-dots');
+    dots.innerHTML = questions.map((_, i) =>
+      `<div class="dot ${i <= currentQ ? 'active' : ''}"></div>`
+    ).join('');
+
+    // 選択肢
+    const opts = document.getElementById('options');
+    opts.innerHTML = q.options.map(opt =>
+      `<button class="option-btn" onclick="handleAnswer(${JSON.stringify(opt.value)})">
+        <span class="option-text">${opt.text}</span>
+        <span class="option-arrow">›</span>
+      </button>`
+    ).join('');
+  }
+
+  function goBack() {
+    if (currentQ > 0) { currentQ--; renderQuestion(); }
+    else showScreen('screen-start');
+  }
+
+  function handleAnswer(val) {
+    answers[questions[currentQ].id] = val;
     if (currentQ < questions.length - 1) {
-      setCurrentQ(currentQ + 1);
+      currentQ++;
+      renderQuestion();
     } else {
-      setStep('loading');
-      setTimeout(() => {
-        calculateResult();
-      }, 2000);
+      showScreen('screen-loading');
+      setTimeout(showResult, 1500);
     }
-  };
+  }
 
-  const handleChatSubmit = async () => {
-    if (!chatInput.trim() || isAiLoading) return;
-    
-    const userMsg = { role: 'user', text: chatInput };
-    setChatHistory(prev => [...prev, userMsg]);
-    setChatInput("");
-    setIsAiLoading(true);
+  // ===== 診断結果 =====
+  function showResult() {
+    const { scalp, damage } = answers;
+    let r;
+    if (scalp === 'sensitive') r = results.sensitive;
+    else if (damage >= 4)      r = results.highDamage;
+    else                       r = results.default;
 
-    const systemPrompt = "あなたはヘアケアの専門AIです。診断結果とユーザーの質問に基づき、簡潔で実践的なアドバイスをしてください。";
-    const chatPrompt = `これまでの診断結果: ${result?.name}. ユーザーの質問: ${chatInput}`;
-    
-    const botText = await callGemini(chatPrompt, systemPrompt);
-    setChatHistory(prev => [...prev, { role: 'bot', text: botText }]);
-    setIsAiLoading(false);
-  };
+    currentResult = r;
 
-  // --- Render Helpers ---
-  const renderProgressBar = () => (
-    <div className="flex space-x-1 mb-8">
-      {questions.map((_, i) => (
-        <div 
-          key={i} 
-          className={`h-1 flex-grow rounded-full transition-all duration-500 ${i <= currentQ ? 'bg-[#9a8478]' : 'bg-gray-100'}`} 
-        />
-      ))}
-    </div>
-  );
+    const badge = document.getElementById('result-badge');
+    badge.textContent = r.badge;
+    badge.className = 'result-badge ' + r.badgeClass;
 
-  return (
-    <div className="min-h-screen bg-[#fdfbf9] text-[#4a4a4a] flex items-center justify-center p-4 font-sans selection:bg-[#9a8478]/10">
-      <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl overflow-hidden min-h-[750px] flex flex-col relative border border-[#f0ece9]">
-        
-        {/* Start Screen */}
-        {step === 'start' && (
-          <div className="p-10 flex flex-col items-center justify-center flex-grow text-center animate-in fade-in duration-700">
-            <div className="w-32 h-32 border-t-2 border-[#d4af37] rounded-full flex items-center justify-center mb-8 rotate-45">
-              <div className="w-24 h-24 bg-[#f5f0ed] rounded-full flex items-center justify-center -rotate-45">
-                <span className="text-4xl font-serif text-[#9a8478] italic">H</span>
-              </div>
-            </div>
-            <h1 className="text-3xl font-bold mb-4 tracking-tighter text-gray-800 italic font-serif">Hair Identity</h1>
-            <div className="flex items-center justify-center space-x-2 mb-8 bg-indigo-50 px-3 py-1 rounded-full">
-              <Sparkles size={14} className="text-indigo-500" />
-              <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">Powered by AI Analysis</span>
-            </div>
-            <p className="text-sm text-gray-400 mb-10 leading-relaxed px-4">
-              現役美容師の知見とAIの解析で、<br/>
-              あなたの髪と地肌に「真に適合する」<br/>
-              パーソナライズ・ケアを特定します。
-            </p>
-            <button 
-              onClick={() => setStep('quiz')}
-              className="w-full py-5 bg-[#9a8478] text-white rounded-full font-bold shadow-xl hover:bg-[#857166] active:scale-[0.98] transition-all"
-            >
-              無料診断をはじめる
-            </button>
-          </div>
-        )}
+    document.getElementById('result-name').textContent = r.name;
+    document.getElementById('product-name').textContent = r.shampoo;
+    document.getElementById('product-desc').textContent = r.desc;
+    document.getElementById('product-link').href = r.link;
+    document.getElementById('advice-text').textContent = '解析中...';
 
-        {/* Quiz Screen */}
-        {step === 'quiz' && (
-          <div className="flex flex-col flex-grow p-8 animate-in slide-in-from-bottom-4 duration-500">
-            <div className="flex justify-between items-center mb-4">
-              <button onClick={() => currentQ > 0 ? setCurrentQ(currentQ - 1) : setStep('start')}>
-                <ArrowLeft size={20} className="text-gray-300 hover:text-gray-600 transition-colors" />
-              </button>
-              <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">Step {currentQ + 1} / {questions.length}</span>
-            </div>
-            
-            {renderProgressBar()}
-            
-            <div className="flex-grow">
-              <span className="text-[10px] font-bold text-[#d4af37] tracking-[0.3em] uppercase block mb-2">{questions[currentQ].category}</span>
-              <h2 className="text-xl font-bold text-gray-800 mb-8 leading-snug">{questions[currentQ].text}</h2>
-              <div className="space-y-3">
-                {questions[currentQ].options.map((opt, i) => (
-                  <button
-                    key={i}
-                    onClick={() => handleAnswerSelect(opt.value)}
-                    className="w-full py-5 px-6 text-left border border-[#f0ece9] rounded-2xl bg-white hover:bg-[#faf9f8] hover:border-[#9a8478] active:bg-[#f5f0ed] transition-all text-sm font-medium flex justify-between items-center group"
-                  >
-                    <span>{opt.text}</span>
-                    <ChevronRight size={16} className="text-gray-200 group-hover:text-[#9a8478] transition-transform group-hover:translate-x-1" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+    showScreen('screen-result');
+    generateAdvice(r);
+  }
 
-        {/* Loading Screen */}
-        {step === 'loading' && (
-          <div className="flex-grow flex flex-col items-center justify-center p-10 text-center animate-in fade-in duration-500">
-            <div className="relative mb-8">
-              <RefreshCw className="w-16 h-16 text-[#9a8478] animate-spin" />
-              <Sparkles className="absolute -top-1 -right-1 text-indigo-400 animate-pulse" />
-            </div>
-            <p className="font-serif italic text-[#9a8478] text-xl tracking-widest">Analyzing DNA...</p>
-            <p className="text-[10px] text-gray-400 mt-4 uppercase tracking-[0.2em]">界面活性剤の配列と相性を照合中</p>
-          </div>
-        )}
+  // ===== Gemini API =====
+  async function callGemini(prompt, system = "", retry = 0) {
+    if (!GEMINI_API_KEY) {
+      return "プロの美容師として：このシャンプーは週3〜4回の使用がおすすめです。洗い流しは念入りに、コンディショナーと組み合わせるとより効果的です。";
+    }
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            systemInstruction: { parts: [{ text: system }] }
+          })
+        }
+      );
+      if (res.status === 429 && retry < 4) {
+        await new Promise(r => setTimeout(r, Math.pow(2, retry) * 1000));
+        return callGemini(prompt, system, retry + 1);
+      }
+      const data = await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || "アドバイスを生成できませんでした。";
+    } catch(e) {
+      return "通信エラーが発生しました。";
+    }
+  }
 
-        {/* Result Screen */}
-        {step === 'result' && result && (
-          <div className="flex flex-col flex-grow p-8 animate-in fade-in duration-1000 overflow-y-auto custom-scrollbar">
-            <div className="text-center mb-8">
-              <div className={`inline-block px-4 py-1 ${result.badgeColor || 'bg-[#f5f0ed] text-[#9a8478]'} text-[10px] font-bold rounded-full mb-2 uppercase tracking-widest`}>
-                Analysis Complete
-              </div>
-              <h2 className="text-2xl font-bold text-gray-800 tracking-tight leading-tight">{result.name}</h2>
-              <p className="text-[10px] text-gray-400 mt-1 font-bold">{result.nickname}</p>
-            </div>
+  async function generateAdvice(r) {
+    const advice = await callGemini(
+      `診断結果: ${r.name}、推奨シャンプー: ${r.shampoo}。地肌: ${answers.scalp}、ダメージ: ${answers.damage}`,
+      "あなたはプロの美容師です。この診断結果に基づき、お客様へのシャンプー使用アドバイスを100〜130文字程度の日本語で、丁寧かつ親しみやすいトーンで書いてください。"
+    );
+    document.getElementById('advice-text').textContent = advice;
+  }
 
-            {/* AI Deep Insight */}
-            {apiKey && (
-              <div className="bg-indigo-50 rounded-[1.5rem] p-5 mb-6 border border-indigo-100 relative overflow-hidden">
-                <div className="flex items-center mb-3 relative z-10">
-                  <Sparkles size={14} className="text-indigo-500 mr-2" />
-                  <h4 className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">AI Expert Insight</h4>
-                </div>
-                {isAiLoading && !aiAnalysis ? (
-                  <div className="flex space-x-1 py-2">
-                    <div className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce" />
-                    <div className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce [animation-delay:0.2s]" />
-                    <div className="w-1.5 h-1.5 bg-indigo-300 rounded-full animate-bounce [animation-delay:0.4s]" />
-                  </div>
-                ) : (
-                  <p className="text-[11px] text-indigo-800 leading-relaxed font-medium relative z-10 animate-in fade-in duration-500">
-                    {aiAnalysis}
-                  </p>
-                )}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-200/20 rounded-full -translate-y-16 translate-x-16 blur-2xl" />
-              </div>
-            )}
+  // ===== チャット =====
+  let chatHistory = [];
 
-            {/* Main Prescription */}
-            <div className="bg-gray-50 rounded-[1.5rem] p-5 mb-6 border border-white shadow-sm">
-              <div className="flex items-center mb-3">
-                <ShieldCheck size={16} className="text-[#9a8478] mr-2" />
-                <h4 className="text-xs font-bold text-gray-700 uppercase">Selected Care</h4>
-              </div>
-              <p className="text-xs text-gray-500 leading-relaxed mb-4">{result.desc}</p>
-              
-              <div className="space-y-4 border-t border-gray-100 pt-4">
-                <div className="flex items-start">
-                  <Droplets size={16} className="text-[#9a8478] mr-3 mt-1" />
-                  <div>
-                    <h5 className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Best Match</h5>
-                    <p className="text-sm font-bold text-gray-800 leading-tight">{result.shampoo}</p>
-                    <p className="text-[9px] text-[#d4af37] font-bold mt-1 tracking-tight">{result.ingredients}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+  async function sendChat() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
 
-            {/* Chatbot Section */}
-            {apiKey && (
-              <div className="bg-white border border-gray-100 rounded-2xl mb-8 shadow-sm">
-                <div className="p-3 border-b border-gray-50 bg-gray-50/50 flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Bot size={14} className="text-indigo-500 mr-2" />
-                    <span className="text-[9px] font-bold uppercase tracking-widest text-gray-400">AI Concierge</span>
-                  </div>
-                  {isAiLoading && chatHistory.length > 0 && <RefreshCw size={10} className="animate-spin text-gray-300" />}
-                </div>
-                
-                <div className="max-h-40 overflow-y-auto p-4 space-y-3 custom-scrollbar">
-                  {chatHistory.length === 0 && (
-                    <p className="text-[10px] text-gray-300 italic text-center">正しい洗い方や、併用すべきケアを質問できます。</p>
-                  )}
-                  {chatHistory.map((msg, idx) => (
-                    <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[85%] rounded-2xl p-3 text-[10px] leading-relaxed ${
-                        msg.role === 'user' 
-                          ? 'bg-[#9a8478] text-white rounded-tr-none' 
-                          : 'bg-gray-100 text-gray-700 rounded-tl-none'
-                      }`}>
-                        {msg.text}
-                      </div>
-                    </div>
-                  ))}
-                  <div ref={chatEndRef} />
-                </div>
+    addMessage('user', text);
+    chatHistory.push({ role: 'user', text });
 
-                <div className="p-2 flex space-x-2">
-                  <input 
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleChatSubmit()}
-                    placeholder="例: ナノイーの効果的な使い方は？"
-                    className="flex-grow bg-gray-50 rounded-xl px-4 py-2 text-[10px] focus:outline-none focus:ring-1 focus:ring-indigo-100 transition-all"
-                  />
-                  <button 
-                    onClick={handleChatSubmit}
-                    disabled={isAiLoading || !chatInput.trim()}
-                    className="bg-gray-900 text-white p-2.5 rounded-xl hover:bg-black transition-all disabled:opacity-30 disabled:cursor-not-allowed"
-                  >
-                    <Send size={14} />
-                  </button>
-                </div>
-              </div>
-            )}
+    const reply = await callGemini(
+      text,
+      `あなたはプロの美容師です。診断結果は「${currentResult?.name}」、推奨シャンプーは「${currentResult?.shampoo}」です。お客様の質問に100文字程度で丁寧に答えてください。`
+    );
+    addMessage('bot', reply);
+    chatHistory.push({ role: 'bot', text: reply });
+  }
 
-            {/* Actions */}
-            <div className="space-y-3 pb-4">
-              <a 
-                href={result.link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center justify-center w-full py-4 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all shadow-lg active:scale-[0.98]"
-              >
-                商品販売ページを見る <ExternalLink size={14} className="ml-2" />
-              </a>
-              <button 
-                onClick={() => window.location.reload()}
-                className="w-full text-[10px] text-gray-400 font-bold tracking-widest uppercase hover:text-[#9a8478] py-4 transition-colors"
-              >
-                ← Back to Home
-              </button>
-            </div>
-          </div>
-        )}
+  function addMessage(role, text) {
+    const container = document.getElementById('chat-messages');
+    const empty = container.querySelector('.chat-empty');
+    if (empty) empty.remove();
 
-      </div>
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    div.innerHTML = `<div class="msg-bubble">${text}</div>`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+</script>
 
-      <style>{`
-        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #f0ece9; border-radius: 10px; }
-        
-        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slide-in-bottom { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .animate-in { animation-fill-mode: forwards; }
-        .fade-in { animation-name: fade-in; }
-        .slide-in-from-bottom-4 { animation-name: slide-in-bottom; }
-      `}</style>
-    </div>
-  );
-};
-
-export default App;
+</body>
+</html>
