@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hair Identity by Ryoichi Hashimoto</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React & ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+  <!-- Babel (JSX変換) -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <style>
+    body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .animate-spin { animation: spin 1s linear infinite; }
+  </style>
+</head>
+<body class="bg-[#fdfbf9]">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // ========== Lucide アイコンをラップ ==========
+    const Icon = ({ name, size = 20, className = "" }) => {
+      const ref = useRef(null);
+      useEffect(() => {
+        if (ref.current && window.lucide) {
+          ref.current.innerHTML = "";
+          const el = document.createElement("i");
+          el.setAttribute("data-lucide", name);
+          el.style.width = size + "px";
+          el.style.height = size + "px";
+          ref.current.appendChild(el);
+          window.lucide.createIcons({ elements: [el] });
+          // SVGにclassを適用
+          const svg = el.querySelector("svg");
+          if (svg && className) {
+            svg.setAttribute("class", className);
+            svg.style.width = size + "px";
+            svg.style.height = size + "px";
+          }
+        }
+      }, [name, size, className]);
+      return <span ref={ref} className={className} style={{ display: "inline-flex", alignItems: "center" }} />;
+    };
+
+    // ========== メインアプリ ==========
+    const App = () => {
+      const [step, setStep] = useState("start");
+      const [currentQ, setCurrentQ] = useState(0);
+      const [answers, setAnswers] = useState({});
+      const [result, setResult] = useState(null);
+      const [aiAnalysis, setAiAnalysis] = useState("");
+      const [chatInput, setChatInput] = useState("");
+      const [chatHistory, setChatHistory] = useState([]);
+      const [isAiLoading, setIsAiLoading] = useState(false);
+      const chatEndRef = useRef(null);
+
+      // ▼▼▼ Gemini APIキーをここに貼り付けてください ▼▼▼
+      const apiKey = "";
+      // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
+      useEffect(() => {
+        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, [chatHistory]);
+
+      const callGemini = async (prompt, systemPrompt = "", retryCount = 0) => {
+        if (!apiKey) {
+          return "【デモモード】APIキーが未設定です。実際の運用ではAPIキーを設定してください。";
+        }
+        try {
+          const res = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+              })
+            }
+          );
+          if (!res.ok) {
+            if (res.status === 429 && retryCount < 5) {
+              await new Promise(r => setTimeout(r, Math.pow(2, retryCount) * 1000));
+              return callGemini(prompt, systemPrompt, retryCount + 1);
+            }
+            throw new Error(`API Error: ${res.status}`);
+          }
+          const data = await res.json();
+          return data.candidates?.[0]?.content?.parts?.[0]?.text || "回答を取得できませんでした。";
+        } catch (err) {
+          console.error(err);
+          return "接続エラーが発生しました。APIキーを確認してください。";
+        }
+      };
+
+      const questions = [
+        {
+          id: "scalp",
+          category: "Scalp Environment",
+          text: "頭皮の「地肌の状態」に最も近いものは？",
+          options: [
+            { text: "乾燥しやすく、カサつきやフケが気になる", value: "dry" },
+            { text: "夕方にはベタつきやニオイが気になる", value: "oily" },
+            { text: "Tゾーンはベタつくが、他は乾燥する", value: "mixed" },
+            { text: "赤みや湿疹、かゆみがある", value: "sensitive" }
+          ]
+        },
+        {
+          id: "damage",
+          category: "Damage Level",
+          text: "現在の「ダメージ状態」を教えてください",
+          options: [
+            { text: "レベル0：バージン毛", value: 0 },
+            { text: "レベル2：カラー等でパサつく", value: 2 },
+            { text: "レベル4：ブリーチ・枝毛がある", value: 4 },
+            { text: "レベル6：深刻な傷みがある", value: 6 }
+          ]
+        },
+        {
+          id: "goal",
+          category: "Ideal Finish",
+          text: "どのような「仕上がり」を求めていますか？",
+          options: [
+            { text: "しっとり・重めのまとまり", value: "moist" },
+            { text: "サラサラ・軽やかな指通り", value: "smooth" }
+          ]
+        }
+      ];
+
+      const calculateResult = async () => {
+        const { scalp, damage } = answers;
+        let diag = {
+          name: "スタンダード・ケア",
+          desc: "あなたの髪質は比較的安定していますが、季節の変わり目に乾燥しやすい傾向があります。",
+          shampoo: "ミルボン オージュア クエンチ",
+          link: "https://www.aujua.com/",
+          badgeColor: "bg-purple-50 text-purple-600"
+        };
+        if (scalp === "sensitive") {
+          diag.name = "レッド・セーフティ";
+          diag.shampoo = "ミノン 全身シャンプー";
+          diag.desc = "敏感肌タイプのあなたには、低刺激処方が最優先です。";
+          diag.badgeColor = "bg-red-50 text-red-600";
+        } else if (damage >= 4) {
+          diag.name = "リバイブ・アルケミスト";
+          diag.shampoo = "ミルボン オージュア ケラヴェール";
+          diag.desc = "ダメージが深刻です。タンパク質補給を中心としたケアが必要です。";
+          diag.badgeColor = "bg-indigo-50 text-indigo-600";
+        }
+
+        setResult(diag);
+        setStep("result");
+
+        if (apiKey) {
+          setIsAiLoading(true);
+          const analysis = await callGemini(
+            `結果: ${diag.name}, シャンプー: ${diag.shampoo}, ダメージ: ${damage}`,
+            "プロの美容師として、この診断結果に基づいた150文字以内のアドバイスを生成してください。"
+          );
+          setAiAnalysis(analysis);
+          setIsAiLoading(false);
+        } else {
+          setAiAnalysis("APIキーを設定するとAIによる個別アドバイスが表示されます。");
+        }
+      };
+
+      const handleAnswer = (val) => {
+        const qId = questions[currentQ].id;
+        const newAnswers = { ...answers, [qId]: val };
+        setAnswers(newAnswers);
+        if (currentQ < questions.length - 1) {
+          setCurrentQ(currentQ + 1);
+        } else {
+          setStep("loading");
+          setTimeout(calculateResult, 1500);
+        }
+      };
+
+      const handleChat = async () => {
+        if (!chatInput.trim()) return;
+        const text = chatInput;
+        setChatInput("");
+        setChatHistory(prev => [...prev, { role: "user", text }]);
+        const reply = await callGemini(
+          text,
+          `診断結果: ${result?.name} のユーザーからの質問です。プロの美容師として丁寧に答えてください。`
+        );
+        setChatHistory(prev => [...prev, { role: "bot", text: reply }]);
+      };
+
+      return (
+        <div className="min-h-screen bg-[#fdfbf9] flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white rounded-[2rem] shadow-xl overflow-hidden min-h-[600px] flex flex-col border border-slate-100">
+
+            {/* ===== START ===== */}
+            {step === "start" && (
+              <div className="p-10 flex flex-col items-center justify-center flex-grow text-center">
+                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
+                  <Icon name="sparkles" size={32} className="text-[#9a8478]" />
+                </div>
+                <h1 className="text-2xl font-bold mb-1">Hair Identity</h1>
+                <p className="text-xs text-slate-400 mb-1">by Ryoichi Hashimoto</p>
+                <p className="text-sm text-slate-400 mb-8 leading-relaxed mt-4">
+                  あなたの髪と地肌に最適な<br />シャンプーをAIが特定します。
+                </p>
+                <button
+                  onClick={() => setStep("quiz")}
+                  className="w-full py-4 bg-[#9a8478] text-white rounded-full font-bold hover:bg-[#857166] transition-all shadow-lg"
+                >
+                  診断をはじめる
+                </button>
+              </div>
+            )}
+
+            {/* ===== QUIZ ===== */}
+            {step === "quiz" && (
+              <div className="p-8 flex flex-col flex-grow">
+                <div className="flex items-center mb-8">
+                  <button onClick={() => currentQ > 0 ? setCurrentQ(currentQ - 1) : setStep("start")}>
+                    <Icon name="arrow-left" size={20} className="text-slate-300" />
+                  </button>
+                  <div className="flex-grow flex justify-center space-x-1">
+                    {questions.map((_, i) => (
+                      <div key={i} className={`h-1 w-8 rounded-full ${i <= currentQ ? "bg-[#9a8478]" : "bg-slate-100"}`} />
+                    ))}
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-[#d4af37] tracking-widest uppercase mb-2">
+                  {questions[currentQ].category}
+                </span>
+                <h2 className="text-lg font-bold mb-6">{questions[currentQ].text}</h2>
+                <div className="space-y-3 flex-grow">
+                  {questions[currentQ].options.map((opt, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleAnswer(opt.value)}
+                      className="w-full p-5 text-left border border-slate-100 rounded-2xl hover:border-[#9a8478] hover:bg-slate-50 transition-all flex justify-between items-center group"
+                    >
+                      <span className="text-sm font-medium">{opt.text}</span>
+                      <Icon name="chevron-right" size={16} className="text-slate-200 group-hover:text-[#9a8478]" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ===== LOADING ===== */}
+            {step === "loading" && (
+              <div className="flex-grow flex flex-col items-center justify-center p-10">
+                <div className="animate-spin mb-4">
+                  <Icon name="refresh-cw" size={48} className="text-[#9a8478]" />
+                </div>
+                <p className="text-sm italic text-slate-400">Analyzing your hair profile...</p>
+              </div>
+            )}
+
+            {/* ===== RESULT ===== */}
+            {step === "result" && result && (
+              <div className="p-8 flex flex-col flex-grow overflow-y-auto">
+                <div className="text-center mb-6">
+                  <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold mb-2 ${result.badgeColor}`}>
+                    DIAGNOSIS
+                  </span>
+                  <h2 className="text-xl font-bold">{result.name}</h2>
+                </div>
+
+                {/* AI Advice */}
+                <div className="bg-indigo-50/50 rounded-2xl p-5 mb-6 border border-indigo-100">
+                  <div className="flex items-center mb-2">
+                    <Icon name="sparkles" size={14} className="text-indigo-500 mr-2" />
+                    <span className="text-[10px] font-bold text-indigo-500 uppercase ml-1">AI Advice</span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-indigo-900">
+                    {isAiLoading ? "AIが解析内容を生成中..." : aiAnalysis}
+                  </p>
+                </div>
+
+                {/* Recommendation */}
+                <div className="bg-slate-50 rounded-2xl p-5 mb-6">
+                  <div className="flex items-start mb-4">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center mr-3 shadow-sm">
+                      <Icon name="droplets" size={20} className="text-[#9a8478]" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Recommended Item</p>
+                      <p className="text-sm font-bold">{result.shampoo}</p>
+                    </div>
+                  </div>
+                  <p className="text-[11px] text-slate-500 mb-4">{result.desc}</p>
+                  <a
+                    href={result.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center justify-center w-full py-3 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all"
+                  >
+                    詳細を見る &nbsp;
+                    <Icon name="external-link" size={12} className="text-white" />
+                  </a>
+                </div>
+
+                {/* Chat */}
+                <div className="bg-white border border-slate-100 rounded-2xl p-3 shadow-sm mb-4">
+                  <div className="h-32 overflow-y-auto mb-3 p-2 space-y-2">
+                    {chatHistory.length === 0 && (
+                      <p className="text-slate-300 text-center text-[10px] italic pt-4">ケアの悩みを相談してください</p>
+                    )}
+                    {chatHistory.map((msg, i) => (
+                      <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                        <div className={`p-2 rounded-lg max-w-[80%] text-[10px] ${msg.role === "user" ? "bg-[#9a8478] text-white" : "bg-slate-100 text-slate-600"}`}>
+                          {msg.text}
+                        </div>
+                      </div>
+                    ))}
+                    <div ref={chatEndRef} />
+                  </div>
+                  <div className="flex space-x-2">
+                    <input
+                      className="flex-grow text-[11px] bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#9a8478]"
+                      placeholder="例: 洗い方のコツは？"
+                      value={chatInput}
+                      onChange={e => setChatInput(e.target.value)}
+                      onKeyDown={e => e.key === "Enter" && handleChat()}
+                    />
+                    <button onClick={handleChat} className="p-2 bg-slate-900 text-white rounded-lg">
+                      <Icon name="send" size={14} className="text-white" />
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => { setStep("start"); setCurrentQ(0); setAnswers({}); setResult(null); setAiAnalysis(""); setChatHistory([]); }}
+                  className="text-[10px] font-bold text-slate-300 uppercase tracking-widest hover:text-[#9a8478] transition-colors"
+                >
+                  Restart Diagnosis
+                </button>
+              </div>
+            )}
+
+          </div>
+        </div>
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+  </script>
+</body>
+</html>
