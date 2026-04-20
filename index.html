@@ -1,360 +1,779 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hair Identity by Ryoichi Hashimoto</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hair Identity by Ryoichi Hashimoto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F8F5F0;--ivory:#F2EBE0;--gold:#B8956A;--gold-l:#D4B896;--gold-d:#8A6843;
+  --char:#28221C;--char2:#4A3E34;--muted:#8A7A6A;--border:rgba(184,149,106,0.22);
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Noto Sans JP',sans-serif;
+  --r:3px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--char);font-family:var(--sans);font-weight:300;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+#root{position:relative;z-index:1}
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+/* ── Progress ── */
+#pbar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-l));z-index:999;transition:width .4s ease}
 
-  <!-- React & ReactDOM -->
-  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+/* ── Header ── */
+.hdr{text-align:center;padding:3.5rem 1.5rem 2rem;border-bottom:1px solid var(--border)}
+.hdr-eye{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+.hdr-h1{font-family:var(--serif);font-size:clamp(2rem,6vw,3.4rem);font-weight:300;letter-spacing:.06em;line-height:1.1;color:var(--char);margin-bottom:.4rem}
+.hdr-sub{font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--muted)}
+.gold-line{width:36px;height:1px;background:var(--gold);margin:1.4rem auto 0}
 
-  <!-- Babel (JSX変換) -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+/* ── Layout ── */
+.wrap{max-width:680px;margin:0 auto;padding:2.5rem 1.4rem}
+.sec-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
+.sec-title{font-family:var(--serif);font-size:clamp(1.4rem,4vw,2rem);font-weight:300;color:var(--char);margin-bottom:.5rem;line-height:1.3;white-space:pre-line}
+.sec-desc{font-size:.83rem;color:var(--muted);line-height:1.85;margin-bottom:2.2rem}
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+/* ── Buttons ── */
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--char);color:var(--cream);border:none;border-radius:var(--r);padding:.95rem 1.5rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .25s;margin-top:1.8rem}
+.btn-primary:hover{background:var(--gold-d)}
+.btn-primary:disabled{background:#bbb;cursor:not-allowed}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:var(--r);padding:.65rem 1rem;font-size:.7rem;letter-spacing:.1em;cursor:pointer;font-family:var(--sans);transition:all .2s;margin-top:.7rem;width:100%}
+.btn-ghost:hover{border-color:var(--gold-l);color:var(--char)}
+.btn-gold{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--gold);color:#fff;border:none;border-radius:var(--r);padding:.9rem 1.5rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .25s;margin-top:1rem}
+.btn-gold:hover{background:var(--gold-d)}
 
-  <style>
-    body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .animate-spin { animation: spin 1s linear infinite; }
-  </style>
+/* ── Progress dots ── */
+.dots{display:flex;gap:5px;justify-content:center;margin-bottom:2rem;flex-wrap:wrap}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s}
+.dot.active{background:var(--gold);transform:scale(1.4)}
+.dot.done{background:var(--gold-l)}
+
+/* ── Question ── */
+.q-num{font-size:.58rem;letter-spacing:.15em;color:var(--gold);margin-bottom:.4rem}
+.q-text{font-family:var(--serif);font-size:1.12rem;font-weight:400;color:var(--char);margin-bottom:1rem;line-height:1.55}
+.q-cat{font-size:.62rem;letter-spacing:.12em;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase}
+.opts{display:grid;gap:.55rem}
+.opt{display:flex;align-items:flex-start;gap:.75rem;width:100%;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--sans);font-size:.82rem;font-weight:300;color:var(--char2);line-height:1.5}
+.opt:hover{border-color:var(--gold-l);background:var(--ivory)}
+.opt.sel{border-color:var(--gold);background:var(--ivory);color:var(--char)}
+.opt-lt{flex-shrink:0;width:22px;height:22px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--gold);font-family:var(--serif);font-style:italic;transition:all .2s}
+.opt.sel .opt-lt{background:var(--gold);color:#fff}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:fadeUp .45s ease both}
+
+/* ── Loading ── */
+.loading{text-align:center;padding:5rem 1.5rem}
+.spin{width:34px;height:34px;border:1.5px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:rot 1s linear infinite;margin:0 auto 1.4rem}
+@keyframes rot{to{transform:rotate(360deg)}}
+.loading-txt{font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--muted)}
+
+/* ── Result ── */
+.badge{display:inline-block;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:.28rem .8rem;border-radius:20px;margin-bottom:1.4rem}
+.res-title{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.6rem);font-weight:300;color:var(--char);margin-bottom:.4rem;white-space:pre-line;line-height:1.2}
+.res-sub{font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--muted);margin-bottom:1.8rem}
+.divider{border:none;border-top:1px solid var(--border);margin:1.8rem 0}
+
+/* ── AI Block ── */
+.ai-box{background:var(--ivory);border-left:2px solid var(--gold);padding:1.2rem 1.2rem 1.2rem 1.4rem;border-radius:0 var(--r) var(--r) 0;margin-bottom:1.8rem}
+.ai-lbl{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;display:flex;align-items:center;gap:.35rem}
+.ai-txt{font-size:.83rem;line-height:1.9;color:var(--char2);white-space:pre-line}
+.alert-box{background:#fff8f5;border:1px solid #f5c8b0;border-radius:var(--r);padding:1rem;margin-bottom:1.5rem;font-size:.82rem;color:#8a4020;line-height:1.7}
+
+/* ── Products ── */
+.prod-hd{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--char);margin-bottom:.25rem}
+.prod-sub{font-size:.75rem;color:var(--muted);margin-bottom:1.3rem}
+.prod-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:.7rem}
+.prod-card-inner{display:flex;gap:1rem;align-items:flex-start}
+.prod-img-wrap{flex-shrink:0;width:72px;height:72px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--ivory);display:flex;align-items:center;justify-content:center}
+.prod-img{width:100%;height:100%;object-fit:contain}
+.prod-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.prod-info{flex:1;min-width:0}
+.prod-name{font-size:.84rem;font-weight:500;color:var(--char);margin-bottom:.3rem;line-height:1.4}
+.prod-desc{font-size:.73rem;color:var(--muted);margin-bottom:.7rem;line-height:1.5}
+.prod-links{display:flex;gap:.5rem;flex-wrap:wrap}
+.prod-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;letter-spacing:.06em;padding:.3rem .7rem;border-radius:var(--r);text-decoration:none;transition:all .2s;border:1px solid var(--border);color:var(--char2)}
+.prod-link:hover{border-color:var(--gold-l);background:var(--ivory)}
+.prod-link.amz{background:#FF9900;border-color:#FF9900;color:#111}
+.prod-link.amz:hover{background:#e68900;border-color:#e68900}
+.prod-link.rak{background:#BF0000;border-color:#BF0000;color:#fff}
+.prod-link.rak:hover{background:#a00000;border-color:#a00000}
+.prod-link.drg{background:#4CAF82;border-color:#4CAF82;color:#fff}
+.prod-link.drg:hover{background:#3a9a6e;border-color:#3a9a6e}
+.virgo-box{background:var(--char);color:var(--cream);border-radius:var(--r);padding:1.4rem;text-align:center;margin:2rem 0}
+.virgo-box-ttl{font-family:var(--serif);font-size:1.2rem;font-weight:300;letter-spacing:.04em;margin-bottom:.4rem}
+.virgo-box-sub{font-size:.73rem;color:var(--gold-l);margin-bottom:1rem;line-height:1.6}
+.virgo-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.6rem 1.2rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;transition:background .2s}
+.virgo-btn:hover{background:var(--gold-d)}
+
+/* ── Chat ── */
+.chat-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:1.5rem}
+.chat-hdr{background:var(--ivory);padding:.75rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.5rem}
+.chat-hdr-txt{font-size:.73rem;letter-spacing:.08em;color:var(--char2)}
+.chat-msgs{padding:1rem;min-height:160px;max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:.7rem}
+.msg{max-width:88%;padding:.6rem .85rem;border-radius:var(--r);font-size:.8rem;line-height:1.7}
+.msg.user{align-self:flex-end;background:var(--char);color:var(--cream)}
+.msg.ai{align-self:flex-start;background:var(--ivory);color:var(--char2)}
+.msg.typing{color:var(--muted);font-style:italic}
+.chat-input-row{display:flex;border-top:1px solid var(--border)}
+.chat-input{flex:1;border:none;padding:.7rem 1rem;font-family:var(--sans);font-size:.82rem;font-weight:300;color:var(--char);background:transparent;outline:none}
+.chat-send{background:var(--gold);border:none;padding:.7rem 1rem;cursor:pointer;color:#fff;transition:background .2s;display:flex;align-items:center}
+.chat-send:hover{background:var(--gold-d)}
+.chat-send:disabled{background:#ccc;cursor:not-allowed}
+
+/* ── Surf / Ingredient ── */
+.ingr-box{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;margin-top:2rem}
+.ingr-ttl{font-size:.73rem;font-weight:500;color:var(--char2);margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem}
+.ingr-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem}
+.ingr-num{font-size:.6rem;color:var(--gold);width:16px;text-align:right;flex-shrink:0}
+.ingr-bar-wrap{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.ingr-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,#4CAF82,var(--gold),#e05530)}
+.ingr-name{font-size:.68rem;color:var(--char2);width:180px;flex-shrink:0}
+.ingr-hl{font-weight:500;color:var(--gold-d)}
+
+/* ── Footer ── */
+.ftr{text-align:center;padding:2.5rem 1.5rem 2rem;border-top:1px solid var(--border);margin-top:2rem}
+.ftr-profile{display:flex;align-items:center;gap:1.2rem;background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:1.4rem;text-align:left}
+.ftr-photo-wrap{flex-shrink:0;width:64px;height:64px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--cream);position:relative}
+.ftr-photo{width:100%;height:100%;object-fit:cover;display:block}
+.ftr-photo-fallback{width:100%;height:100%;display:none;align-items:center;justify-content:center;background:var(--ivory)}
+.ftr-profile-info{flex:1;min-width:0}
+.ftr-profile-label{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem}
+.ftr-name{font-family:var(--serif);font-size:1.1rem;font-weight:300;color:var(--char);letter-spacing:.04em;margin-bottom:.15rem}
+.ftr-salon{font-size:.6rem;letter-spacing:.1em;color:var(--gold);margin-bottom:.7rem}
+.ftr-rsv-btn{display:inline-flex;align-items:center;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.4rem .9rem;font-size:.68rem;letter-spacing:.08em;transition:background .2s}
+.ftr-rsv-btn:hover{background:var(--gold-d)}
+.ftr-note{font-size:.62rem;color:var(--muted);line-height:1.75;white-space:pre-line}
+.ftr-link{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1px;transition:border-color .2s}
+.ftr-link:hover{border-color:var(--gold)}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
 </head>
-<body class="bg-[#fdfbf9]">
-  <div id="root"></div>
+<body>
+<div id="pbar" style="width:0%"></div>
+<div id="root"></div>
 
-  <script type="text/babel">
-    const { useState, useEffect, useRef } = React;
+<script type="text/babel">
+// ───────────────────────────────────────────────────────────
+// CONFIG  ← ここを編集してください
+// ───────────────────────────────────────────────────────────
+const GEMINI_KEY = "YOUR_GEMINI_API_KEY";
+const ASSOC_ID   = "hassihair06-22"; // アソシエイトID確定済み
 
-    // ========== Lucide アイコンをラップ ==========
-    const Icon = ({ name, size = 20, className = "" }) => {
-      const ref = useRef(null);
-      useEffect(() => {
-        if (ref.current && window.lucide) {
-          ref.current.innerHTML = "";
-          const el = document.createElement("i");
-          el.setAttribute("data-lucide", name);
-          el.style.width = size + "px";
-          el.style.height = size + "px";
-          ref.current.appendChild(el);
-          window.lucide.createIcons({ elements: [el] });
-          // SVGにclassを適用
-          const svg = el.querySelector("svg");
-          if (svg && className) {
-            svg.setAttribute("class", className);
-            svg.style.width = size + "px";
-            svg.style.height = size + "px";
-          }
-        }
-      }, [name, size, className]);
-      return <span ref={ref} className={className} style={{ display: "inline-flex", alignItems: "center" }} />;
-    };
+// ───────────────────────────────────────────────────────────
+// AFFILIATE LINK HELPER
+// ───────────────────────────────────────────────────────────
+function amzLink(asin) {
+  return `https://www.amazon.co.jp/dp/${asin}?tag=${ASSOC_ID}`;
+}
+function rakLink(keyword) {
+  return `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(keyword)}/?affiliate_id=${ASSOC_ID}`;
+}
+function drugLink(keyword) {
+  return `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(keyword + " 薬局")}/?affiliate_id=${ASSOC_ID}`;
+}
 
-    // ========== メインアプリ ==========
-    const App = () => {
-      const [step, setStep] = useState("start");
-      const [currentQ, setCurrentQ] = useState(0);
-      const [answers, setAnswers] = useState({});
-      const [result, setResult] = useState(null);
-      const [aiAnalysis, setAiAnalysis] = useState("");
-      const [chatInput, setChatInput] = useState("");
-      const [chatHistory, setChatHistory] = useState([]);
-      const [isAiLoading, setIsAiLoading] = useState(false);
-      const chatEndRef = useRef(null);
+// ───────────────────────────────────────────────────────────
+// 11問定義
+// ───────────────────────────────────────────────────────────
+const QUESTIONS = [
+  { id:"q1", cat:"頭皮", text:"地肌の状態はどれに当てはまりますか？",
+    opts:[{k:"dry",l:"A",t:"乾燥している"},{k:"normal",l:"B",t:"普通（特に気にならない）"},{k:"oily",l:"C",t:"脂性（べたつきやすい）"},{k:"mix",l:"D",t:"混合（部位によって異なる）"},{k:"red",l:"E",t:"赤み・湿疹がある"}]},
+  { id:"q2", cat:"長さ", text:"髪の長さはどのくらいですか？",
+    opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
+  { id:"q3", cat:"毛質", text:"髪の太さは？",
+    opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
+  { id:"q4", cat:"毛質", text:"髪の硬さは？",
+    opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
+  { id:"q5", cat:"親水性", text:"髪を濡らした後、自然放置するとどうなりますか？",
+    opts:[{k:"fast",l:"A",t:"すぐ乾く（15分以内）"},{k:"mid",l:"B",t:"どちらともいえない（15〜30分程度）"},{k:"slow",l:"C",t:"なかなか乾かない（30分以上）"}]},
+  { id:"q6", cat:"くせ毛", text:"くせ毛の強さは？",
+    opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
+  { id:"q7", cat:"薬剤", text:"薬剤処理の経験は？",
+    opts:[{k:"none",l:"A",t:"なし（バージン毛）"},{k:"color",l:"B",t:"カラーのみ"},{k:"perm",l:"C",t:"パーマ・ブリーチ・縮毛矯正"}]},
+  { id:"q8", cat:"ダメージ", text:"今の髪の状態は？",
+    opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
+  { id:"q9", cat:"熱器具", text:"使っている熱器具は？",
+    opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
+  { id:"q10", cat:"仕上がり", text:"なりたい髪質は？",
+    opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
+  { id:"q11", cat:"悩み", text:"特に気になる悩みは？",
+    opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"none",l:"E",t:"特にない"}]},
+];
 
-      // ▼▼▼ Gemini APIキーをここに貼り付けてください ▼▼▼
-      const apiKey = "AIzaSyDIdy71KhjfjlSdWv86mtALRfiPhyWwNiU";
-      // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+// ───────────────────────────────────────────────────────────
+// 6タイプ定義
+// ───────────────────────────────────────────────────────────
+const TYPES = {
+  skin_alert: {
+    badge:"Hair Type — SA",
+    title:"Skin Alert",
+    sub:"頭皮に炎症サインあり",
+    color:"#c0392b",
+    alert:"⚠️ 頭皮に赤みや湿疹がある場合、まずは皮膚科の受診をおすすめします。セルフケアで症状が悪化することもあります。",
+    advice:[
+      "頭皮の赤みや湿疹は、接触性皮膚炎・脂漏性皮膚炎・アトピーなど原因が様々です。まず皮膚科を受診して原因を特定することが最優先です。",
+      "シャンプーは低刺激のアミノ酸系を選び、爪を立てずに指の腹で優しく洗いましょう。洗浄力の強いラウリル硫酸系・ラウレス硫酸系は避けてください。",
+      "シャワーの温度は38℃前後がベスト。高温のお湯は皮脂を過剰に落とし、刺激になります。すすぎは2分以上丁寧に。",
+      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。",
+    ],
+    products:[
+      { name:"ミノン 全身シャンプー やさしいせっけん泡タイプ",
+        desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",
+        amz:"B007K7KZBC", rak:"ミノン 全身シャンプー", drug:true,
+        img_url:"https://images-na.ssl-images-amazon.com/images/I/71placeholder_SA.jpg" },
+    ]
+  },
+  oil_reset_short: {
+    badge:"Hair Type — OR",
+    title:"Oil Reset",
+    sub:"脂性頭皮 × ショート",
+    color:"#2980b9",
+    advice:[
+      "脂性頭皮の方は皮脂分泌が多く、頭皮の毛穴が詰まりやすい状態です。洗浄力のしっかりしたシャンプーで、頭皮を清潔に保つことが第一優先です。",
+      "シャンプーは1回目で汚れを落とし、2回目で泡立てるダブル洗いが効果的。すすぎを特に丁寧に行い、シャンプーの残留をゼロにしましょう。",
+      "ショートヘアは頭皮への影響が直接出やすいため、ドライヤーでしっかり乾かすことが大切。半乾きで寝ると雑菌が増えてニオイの原因になります。",
+      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。",
+    ],
+    products:[
+      { name:"h&s スカルプ シャンプー（清潔感タイプ）",
+        desc:"フケ・かゆみケア。洗浄力が高く脂性頭皮に効果的。",
+        amz:"B07WQKZ3CX", rak:"h&s スカルプ シャンプー", drug:true,
+        img_url:"" },
+      { name:"デオコ 薬用スカルプケア シャンプー",
+        desc:"頭皮の臭いと脂を同時にケア。",
+        amz:"B07X7S4W5P", rak:"デオコ スカルプ シャンプー", drug:true,
+        img_url:"" },
+      { name:"ウェルプ アミノ酸シャンプー",
+        desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",
+        amz:"B08XYZ0001", rak:"ウェルプ シャンプー", drug:false,
+        img_url:"" },
+    ]
+  },
+  oil_reset_long: {
+    badge:"Hair Type — OR",
+    title:"Oil Reset",
+    sub:"脂性頭皮 × ミディアム〜ロング",
+    color:"#2980b9",
+    advice:[
+      "ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。",
+      "トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。",
+      "洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。",
+      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。",
+    ],
+    products:[
+      { name:"パンテーン ミラクルズ シャンプー",
+        desc:"日常使いの定番。脂性頭皮でも毛先はしっとり。",
+        amz:"B087CFKWL5", rak:"パンテーン ミラクルズ シャンプー", drug:true,
+        img_url:"" },
+      { name:"ラックス スーパーリッチシャイン シャンプー",
+        desc:"べたつきを抑えながら輝く仕上がり。",
+        amz:"B07RTSG8KG", rak:"ラックス スーパーリッチシャイン シャンプー", drug:true,
+        img_url:"" },
+      { name:"ツバキ プレミアムモイスト シャンプー",
+        desc:"和の美容成分・ツバキ油配合。",
+        amz:"B082GG0001", rak:"ツバキ プレミアム シャンプー", drug:true,
+        img_url:"" },
+      { name:"ダヴ ボタニカル セレクション シャンプー",
+        desc:"マイルドな洗浄力。肌に近い成分で優しい洗い上がり。",
+        amz:"B082GG0002", rak:"ダヴ ボタニカル シャンプー", drug:true,
+        img_url:"" },
+    ]
+  },
+  repair_mode: {
+    badge:"Hair Type — RM",
+    title:"Repair Mode",
+    sub:"ハイダメージ（パーマ・ブリーチ・縮毛矯正）",
+    color:"#8e44ad",
+    advice:[
+      "パーマ・ブリーチ・縮毛矯正などの薬剤処理は、髪のタンパク質（ケラチン）を変性させます。失ったタンパク質を補うことが修復の第一歩です。",
+      "トスチア（トスキサシン）配合のシャンプーは、ケラチンとシスチンを同時に補修できる成分。ダメージが深刻な方に特におすすめのラインナップです。",
+      "シャンプー後はすぐにトリートメントをつけ、5分程度時間をおいてから流しましょう。タオルドライは擦らず、押さえるように。",
+      "※ 詳しくは担当の美容師さんに相談しながら、ご自身のダメージレベルに合ったケアを確認してみてください。",
+    ],
+    products:[
+      { name:"ストレイン リペア シャンプー",
+        desc:"トスチア配合。縮毛矯正・ブリーチダメージに特化。",
+        amz:"B09XYZ0001", rak:"ストレイン シャンプー", drug:false,
+        img_url:"" },
+      { name:"セラムイン ダメージケア シャンプー",
+        desc:"PPT成分でダメージを内部から補修。",
+        amz:"B09XYZ0002", rak:"セラムイン シャンプー", drug:false,
+        img_url:"" },
+      { name:"SN repair シャンプー",
+        desc:"楽天限定。トスチア×ヘマチン配合のプレミアムライン。",
+        amz:null, rak:"SN repair シャンプー", drug:false,
+        img_url:"" },
+      { name:"etol. ディープリペア シャンプー",
+        desc:"エタノール不使用。敏感な頭皮のダメージヘアに。",
+        amz:"B09XYZ0003", rak:"etol シャンプー", drug:false,
+        img_url:"" },
+    ]
+  },
+  smooth_wave: {
+    badge:"Hair Type — SW",
+    title:"Smooth Wave",
+    sub:"くせ毛 × 軽〜中ダメージ",
+    color:"#16a085",
+    advice:[
+      "くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。",
+      "シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。",
+      "ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。",
+      "※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。",
+    ],
+    products:[
+      { name:"ストレイン モイスチャー シャンプー",
+        desc:"トスチア配合でうねりをケア。くせ毛向け保湿処方。",
+        amz:"B09XYZ0011", rak:"ストレイン モイスチャー シャンプー", drug:false,
+        img_url:"" },
+      { name:"セラムイン スムース シャンプー",
+        desc:"くせ毛・うねりを抑える植物由来成分配合。",
+        amz:"B09XYZ0012", rak:"セラムイン スムース シャンプー", drug:false,
+        img_url:"" },
+      { name:"SN repair（くせ毛向け）",
+        desc:"楽天限定。うねりを抑えながら補修。",
+        amz:null, rak:"SN repair くせ毛 シャンプー", drug:false,
+        img_url:"" },
+      { name:"etol. カーム シャンプー",
+        desc:"低刺激処方。くせ毛×カラー毛の両方に対応。",
+        amz:"B09XYZ0013", rak:"etol カーム シャンプー", drug:false,
+        img_url:"" },
+    ]
+  },
+  aqua_sensitive: {
+    badge:"Hair Type — AS",
+    title:"Aqua Sensitive",
+    sub:"乾燥・バージン毛・健康な髪",
+    color:"#2471a3",
+    advice:[
+      "バージン毛や健康な髪の方は、過度なケアをしすぎないことが大切。洗浄力が強すぎるシャンプーで必要な皮脂まで落としてしまうと、逆に乾燥が進みます。",
+      "ジュレームなどのアミノ酸系・ロイヤルフローラル系シャンプーは、髪と頭皮を優しく洗いながら適度な潤いを残してくれます。",
+      "週に1〜2回スカルプマッサージを取り入れると血行が促進され、健康な髪の成長をサポートします。洗髪時の1〜2分が効果的。",
+      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪質に合ったケアを確認してみてください。",
+    ],
+    products:[
+      { name:"ジュレーム リラックス ウォータリー シャンプー",
+        desc:"アミノ酸系洗浄成分。しっとりまとまる保湿ケア。",
+        amz:"B07X0001AS", rak:"ジュレーム リラックス シャンプー", drug:true,
+        img_url:"" },
+    ]
+  },
+  bare_skin: {
+    badge:"Hair Type — BS",
+    title:"Bare Skin",
+    sub:"乾燥・混合 × カラー × 軽ダメージ",
+    color:"#CA8A04",
+    advice:[
+      "カラーによる軽いダメージがある髪は、カラーの色持ちを良くしながら補修できるシャンプーがベストです。カラーシャンプーや低刺激アミノ酸系を選びましょう。",
+      "洗髪は毎日行っても問題ありませんが、お湯の温度は38〜40℃に。熱すぎるお湯はカラーの退色を早め、頭皮の乾燥にもつながります。",
+      "週1回の集中トリートメントで補修成分を補うのが効果的。市販品でも十分ですが、美容室でのトリートメントと組み合わせると持続性がアップします。",
+      "※ 詳しくは担当の美容師さんに相談しながら、ご自身のカラーダメージに合ったケアを確認してみてください。",
+    ],
+    products:[
+      { name:"エッセンシャル プレミアム ダメージリペア シャンプー",
+        desc:"カラー毛のパサつき・軽ダメージに。ドラッグストアで入手しやすい。",
+        amz:"B082GG0003", rak:"エッセンシャル プレミアム シャンプー", drug:true,
+        img_url:"" },
+    ]
+  },
+};
 
-      useEffect(() => {
-        chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, [chatHistory]);
+// ───────────────────────────────────────────────────────────
+// 界面活性剤リスト（橋元メソッド）
+// ───────────────────────────────────────────────────────────
+const SURFACTANTS = [
+  { name:"コカミドプロピルベタイン", highlight:false },
+  { name:"ココアンホ酢酸ナトリウム", highlight:false },
+  { name:"ココイルグルタミン酸系", highlight:false },
+  { name:"ラウロイルメチルアラニン系", highlight:false },
+  { name:"ラウロイルサルコシン系", highlight:false },
+  { name:"ラウレスカルボン酸系", highlight:false },
+  { name:"ココイルメチルタウリン系", highlight:true, note:"Aqua / Bare Skin" },
+  { name:"スルホコハク酸系", highlight:false },
+  { name:"カリ石鹸・石鹸", highlight:false },
+  { name:"オレフィンスルホン酸系", highlight:true, note:"デオコ" },
+  { name:"ラウレス硫酸系", highlight:true, note:"パンテーン・ラックス・ツバキ・ダヴ" },
+  { name:"ラウリルベンゼンスルホン酸系", highlight:false },
+  { name:"ラウリル硫酸系", highlight:true, note:"h&s" },
+];
 
-      const callGemini = async (prompt, systemPrompt = "", retryCount = 0) => {
-        if (!apiKey) {
-          return "【デモモード】APIキーが未設定です。実際の運用ではAPIキーを設定してください。";
-        }
-        try {
-          const res = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
-              })
-            }
-          );
-          if (!res.ok) {
-            if (res.status === 429 && retryCount < 5) {
-              await new Promise(r => setTimeout(r, Math.pow(2, retryCount) * 1000));
-              return callGemini(prompt, systemPrompt, retryCount + 1);
-            }
-            throw new Error(`API Error: ${res.status}`);
-          }
-          const data = await res.json();
-          return data.candidates?.[0]?.content?.parts?.[0]?.text || "回答を取得できませんでした。";
-        } catch (err) {
-          console.error(err);
-          return "接続エラーが発生しました。APIキーを確認してください。";
-        }
-      };
+// ───────────────────────────────────────────────────────────
+// 振り分けロジック
+// ───────────────────────────────────────────────────────────
+function diagnose(ans) {
+  const q1=ans.q1, q2=ans.q2, q6=ans.q6, q7=ans.q7, q8=ans.q8;
+  if (q1==="red") return "skin_alert";
+  if (q1==="oily") return q2==="short" ? "oil_reset_short" : "oil_reset_long";
+  // 乾燥 / 普通 / 混合
+  if (q7==="perm" && (q8==="split"||q8==="frizz")) return "repair_mode";
+  // 広がる・うねるはSmooth Wave方向
+  if ((q6==="some"||q6==="strong") && (q7==="none"||q7==="color")) return "smooth_wave";
+  if (q8==="spread") return "smooth_wave";
+  // ぺたんこはボリューム系 → Aqua Sensitive（バージン or 普通毛でボリュームなし）
+  if (q8==="flat") return q7==="none" ? "aqua_sensitive" : "bare_skin";
+  if (q7==="none" && (q8==="gloss"||q8==="dry")) return "aqua_sensitive";
+  return "bare_skin";
+}
 
-      const questions = [
-        {
-          id: "scalp",
-          category: "Scalp Environment",
-          text: "頭皮の「地肌の状態」に最も近いものは？",
-          options: [
-            { text: "乾燥しやすく、カサつきやフケが気になる", value: "dry" },
-            { text: "夕方にはベタつきやニオイが気になる", value: "oily" },
-            { text: "Tゾーンはベタつくが、他は乾燥する", value: "mixed" },
-            { text: "赤みや湿疹、かゆみがある", value: "sensitive" }
-          ]
-        },
-        {
-          id: "damage",
-          category: "Damage Level",
-          text: "現在の「ダメージ状態」を教えてください",
-          options: [
-            { text: "レベル0：バージン毛", value: 0 },
-            { text: "レベル2：カラー等でパサつく", value: 2 },
-            { text: "レベル4：ブリーチ・枝毛がある", value: 4 },
-            { text: "レベル6：深刻な傷みがある", value: 6 }
-          ]
-        },
-        {
-          id: "goal",
-          category: "Ideal Finish",
-          text: "どのような「仕上がり」を求めていますか？",
-          options: [
-            { text: "しっとり・重めのまとまり", value: "moist" },
-            { text: "サラサラ・軽やかな指通り", value: "smooth" }
-          ]
-        }
+// ───────────────────────────────────────────────────────────
+// Gemini API
+// ───────────────────────────────────────────────────────────
+async function callGemini(prompt, history=[]) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_KEY}`;
+  const contents = [
+    ...history,
+    { role:"user", parts:[{ text: prompt }] }
+  ];
+  const res = await fetch(url, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ contents, generationConfig:{ temperature:0.75, maxOutputTokens:512 } })
+  });
+  if (!res.ok) throw new Error("API " + res.status);
+  const data = await res.json();
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || "応答を取得できませんでした。";
+}
+
+// ───────────────────────────────────────────────────────────
+// Icon Helper
+// ───────────────────────────────────────────────────────────
+const {createElement:h,useRef,useEffect,useState,useCallback} = React;
+function Icon({name,size=16,color}){
+  const ref=useRef(null);
+  useEffect(()=>{
+    if(ref.current&&window.lucide){
+      ref.current.innerHTML="";
+      const s=lucide.icons[name]?.toSvg({width:size,height:size,color:color||"currentColor"});
+      if(s) ref.current.innerHTML=s;
+    }
+  },[name,size,color]);
+  return h("span",{ref,style:{display:"inline-flex",alignItems:"center"}});
+}
+
+// ───────────────────────────────────────────────────────────
+// CHAT Component
+// ───────────────────────────────────────────────────────────
+function Chat({typeKey,typeDef}){
+  const [msgs,setMsgs]=useState([
+    {role:"ai",text:`こんにちは！橋元リョウイチです。\n「${typeDef.title}」タイプのヘアケアについて、何でも聞いてください。`}
+  ]);
+  const [input,setInput]=useState("");
+  const [loading,setLoading]=useState(false);
+  const bottomRef=useRef(null);
+  const historyRef=useRef([]);
+
+  useEffect(()=>{ bottomRef.current?.scrollIntoView({behavior:"smooth"}); },[msgs]);
+
+  async function send(){
+    if(!input.trim()||loading) return;
+    const userText=input.trim();
+    setInput("");
+    setMsgs(m=>[...m,{role:"user",text:userText}]);
+    setLoading(true);
+
+    const systemContext = `あなたは原宿の美容室VIRGOのスタイリスト橋元リョウイチです。
+ユーザーは「${typeDef.title}（${typeDef.sub}）」タイプと診断されています。
+プロとして丁寧に、100〜150字程度で回答してください。`;
+
+    try {
+      const fullPrompt = systemContext + "\n\nユーザーの質問: " + userText;
+      const aiText = await callGemini(fullPrompt, historyRef.current);
+      historyRef.current=[
+        ...historyRef.current,
+        {role:"user",parts:[{text:userText}]},
+        {role:"model",parts:[{text:aiText}]}
       ];
+      setMsgs(m=>[...m,{role:"ai",text:aiText}]);
+    } catch(e) {
+      setMsgs(m=>[...m,{role:"ai",text:"申し訳ありません。応答を取得できませんでした。しばらく後にお試しください。"}]);
+    }
+    setLoading(false);
+  }
 
-      const calculateResult = async () => {
-        const { scalp, damage } = answers;
-        let diag = {
-          name: "スタンダード・ケア",
-          desc: "あなたの髪質は比較的安定していますが、季節の変わり目に乾燥しやすい傾向があります。",
-          shampoo: "ミルボン オージュア クエンチ",
-          link: "https://www.aujua.com/",
-          badgeColor: "bg-purple-50 text-purple-600"
-        };
-        if (scalp === "sensitive") {
-          diag.name = "レッド・セーフティ";
-          diag.shampoo = "ミノン 全身シャンプー";
-          diag.desc = "敏感肌タイプのあなたには、低刺激処方が最優先です。";
-          diag.badgeColor = "bg-red-50 text-red-600";
-        } else if (damage >= 4) {
-          diag.name = "リバイブ・アルケミスト";
-          diag.shampoo = "ミルボン オージュア ケラヴェール";
-          diag.desc = "ダメージが深刻です。タンパク質補給を中心としたケアが必要です。";
-          diag.badgeColor = "bg-indigo-50 text-indigo-600";
-        }
+  function onKey(e){ if(e.key==="Enter"&&!e.shiftKey){ e.preventDefault(); send(); } }
 
-        setResult(diag);
+  return h("div",{className:"chat-wrap"},
+    h("div",{className:"chat-hdr"},
+      h(Icon,{name:"message-circle",size:14,color:"var(--gold)"}),
+      h("span",{className:"chat-hdr-txt",style:{marginLeft:".4rem"}},"AIチャット — 橋元リョウイチに追加質問")
+    ),
+    h("div",{className:"chat-msgs"},
+      msgs.map((m,i)=>h("div",{key:i,className:"msg "+(m.role==="user"?"user":"ai")},m.text)),
+      loading&&h("div",{className:"msg ai typing"},"考えています…"),
+      h("div",{ref:bottomRef})
+    ),
+    h("div",{className:"chat-input-row"},
+      h("input",{className:"chat-input",value:input,onChange:e=>setInput(e.target.value),
+        onKeyDown:onKey,placeholder:"例：週に何回洗えばいいですか？",disabled:loading}),
+      h("button",{className:"chat-send",onClick:send,disabled:loading||!input.trim()},
+        h(Icon,{name:"send",size:15,color:"#fff"})
+      )
+    )
+  );
+}
+
+// ───────────────────────────────────────────────────────────
+// Surfactant Chart
+// ───────────────────────────────────────────────────────────
+function SurfactantChart(){
+  return h("div",{className:"ingr-box"},
+    h("div",{className:"ingr-ttl"},
+      h(Icon,{name:"flask-conical",size:14,color:"var(--gold)"}),
+      h("span",{style:{marginLeft:".35rem"}},"界面活性剤の強さ（橋元メソッド）— 弱い順")
+    ),
+    SURFACTANTS.map((s,i)=>
+      h("div",{key:i,className:"ingr-row"},
+        h("span",{className:"ingr-num"},i+1),
+        h("div",{className:"ingr-bar-wrap"},
+          h("div",{className:"ingr-bar",style:{width:`${((i+1)/13*100).toFixed(0)}%`}})
+        ),
+        h("span",{className:"ingr-name "+(s.highlight?"ingr-hl":"")},
+          s.name+(s.note?` ← ${s.note}`:"")
+        )
+      )
+    )
+  );
+}
+
+// ───────────────────────────────────────────────────────────
+// MAIN APP
+// ───────────────────────────────────────────────────────────
+function App(){
+  const [step,setStep]=useState("intro");
+  const [curQ,setCurQ]=useState(0);
+  const [answers,setAnswers]=useState({});
+  const [typeKey,setTypeKey]=useState(null);
+
+  const totalQ=QUESTIONS.length;
+  const prog = step==="quiz"?(curQ/totalQ*100): step==="result"||step==="products"?100:0;
+
+  useEffect(()=>{
+    document.getElementById("pbar").style.width=prog+"%";
+  },[prog]);
+
+  // ページ切替時に必ず上にスクロール
+  useEffect(()=>{ window.scrollTo({top:0,behavior:"instant"}); },[step]);
+
+  function startQuiz(){ setStep("quiz"); setCurQ(0); setAnswers({}); }
+
+  function selectOpt(k){
+    const q=QUESTIONS[curQ];
+    const na={...answers,[q.id]:k};
+    setAnswers(na);
+    setTimeout(()=>{
+      if(curQ<totalQ-1){ setCurQ(curQ+1); }
+      else {
+        const tk=diagnose(na);
+        setTypeKey(tk);
         setStep("result");
+      }
+    },280);
+  }
 
-        if (apiKey) {
-          setIsAiLoading(true);
-          const analysis = await callGemini(
-            `結果: ${diag.name}, シャンプー: ${diag.shampoo}, ダメージ: ${damage}`,
-            "プロの美容師として、この診断結果に基づいた150文字以内のアドバイスを生成してください。"
-          );
-          setAiAnalysis(analysis);
-          setIsAiLoading(false);
-        } else {
-          setAiAnalysis("APIキーを設定するとAIによる個別アドバイスが表示されます。");
-        }
-      };
+  function goBack(){
+    if(curQ>0) setCurQ(curQ-1);
+    else setStep("intro");
+  }
 
-      const handleAnswer = (val) => {
-        const qId = questions[currentQ].id;
-        const newAnswers = { ...answers, [qId]: val };
-        setAnswers(newAnswers);
-        if (currentQ < questions.length - 1) {
-          setCurrentQ(currentQ + 1);
-        } else {
-          setStep("loading");
-          setTimeout(calculateResult, 1500);
-        }
-      };
+  function retry(){ setStep("intro"); setAnswers({}); setCurQ(0); setTypeKey(null); }
 
-      const handleChat = async () => {
-        if (!chatInput.trim()) return;
-        const text = chatInput;
-        setChatInput("");
-        setChatHistory(prev => [...prev, { role: "user", text }]);
-        const reply = await callGemini(
-          text,
-          `診断結果: ${result?.name} のユーザーからの質問です。プロの美容師として丁寧に答えてください。`
-        );
-        setChatHistory(prev => [...prev, { role: "bot", text: reply }]);
-      };
+  const td = typeKey ? TYPES[typeKey] : null;
 
-      return (
-        <div className="min-h-screen bg-[#fdfbf9] flex items-center justify-center p-4">
-          <div className="max-w-md w-full bg-white rounded-[2rem] shadow-xl overflow-hidden min-h-[600px] flex flex-col border border-slate-100">
+  return h("div",null,
+    // ── HEADER
+    h("header",{className:"hdr"},
+      h("p",{className:"hdr-eye"},"Hair Care Diagnosis"),
+      h("h1",{className:"hdr-h1"},"Hair Identity"),
+      h("p",{className:"hdr-sub"},"by Ryoichi Hashimoto"),
+      h("div",{className:"gold-line"})
+    ),
 
-            {/* ===== START ===== */}
-            {step === "start" && (
-              <div className="p-10 flex flex-col items-center justify-center flex-grow text-center">
-                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-                  <Icon name="sparkles" size={32} className="text-[#9a8478]" />
-                </div>
-                <h1 className="text-2xl font-bold mb-1">Hair Identity</h1>
-                <p className="text-xs text-slate-400 mb-1">by Ryoichi Hashimoto</p>
-                <p className="text-sm text-slate-400 mb-8 leading-relaxed mt-4">
-                  あなたの髪と地肌に最適な<br />シャンプーをAIが特定します。
-                </p>
-                <button
-                  onClick={() => setStep("quiz")}
-                  className="w-full py-4 bg-[#9a8478] text-white rounded-full font-bold hover:bg-[#857166] transition-all shadow-lg"
-                >
-                  診断をはじめる
-                </button>
-              </div>
-            )}
+    h("main",{className:"wrap"},
+      h("h2",{className:"visually-hidden"},"ヘアケア診断アプリ — Hair Identity by Ryoichi Hashimoto"),
 
-            {/* ===== QUIZ ===== */}
-            {step === "quiz" && (
-              <div className="p-8 flex flex-col flex-grow">
-                <div className="flex items-center mb-8">
-                  <button onClick={() => currentQ > 0 ? setCurrentQ(currentQ - 1) : setStep("start")}>
-                    <Icon name="arrow-left" size={20} className="text-slate-300" />
-                  </button>
-                  <div className="flex-grow flex justify-center space-x-1">
-                    {questions.map((_, i) => (
-                      <div key={i} className={`h-1 w-8 rounded-full ${i <= currentQ ? "bg-[#9a8478]" : "bg-slate-100"}`} />
-                    ))}
-                  </div>
-                </div>
-                <span className="text-[10px] font-bold text-[#d4af37] tracking-widest uppercase mb-2">
-                  {questions[currentQ].category}
-                </span>
-                <h2 className="text-lg font-bold mb-6">{questions[currentQ].text}</h2>
-                <div className="space-y-3 flex-grow">
-                  {questions[currentQ].options.map((opt, i) => (
-                    <button
-                      key={i}
-                      onClick={() => handleAnswer(opt.value)}
-                      className="w-full p-5 text-left border border-slate-100 rounded-2xl hover:border-[#9a8478] hover:bg-slate-50 transition-all flex justify-between items-center group"
-                    >
-                      <span className="text-sm font-medium">{opt.text}</span>
-                      <Icon name="chevron-right" size={16} className="text-slate-200 group-hover:text-[#9a8478]" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+      // ────── INTRO
+      step==="intro"&&h("div",{className:"fade"},
+        h("p",{className:"sec-label"},"About"),
+        h("h2",{className:"sec-title"},"あなたの髪を、\nもっと深く知ってほしい。"),
+        h("p",{className:"sec-desc"},
+          "11の質問に答えるだけで、髪と頭皮のタイプを診断。\nプロが厳選したシャンプーと、AIによるパーソナルアドバイスをお届けします。\n所要時間：約2〜3分"
+        ),
+        h("button",{className:"btn-primary",onClick:startQuiz},
+          h(Icon,{name:"scissors",size:14}),
+          h("span",{style:{marginLeft:".5rem"}},"診断をはじめる")
+        )
+      ),
 
-            {/* ===== LOADING ===== */}
-            {step === "loading" && (
-              <div className="flex-grow flex flex-col items-center justify-center p-10">
-                <div className="animate-spin mb-4">
-                  <Icon name="refresh-cw" size={48} className="text-[#9a8478]" />
-                </div>
-                <p className="text-sm italic text-slate-400">Analyzing your hair profile...</p>
-              </div>
-            )}
+      // ────── QUIZ
+      step==="quiz"&&h("div",null,
+        h("div",{className:"dots"},
+          QUESTIONS.map((_,i)=>h("div",{key:i,className:"dot"+(i===curQ?" active":i<curQ?" done":"")}))
+        ),
+        h("div",{className:"fade",key:curQ},
+          h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
+          h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
+          h("p",{className:"q-text"},QUESTIONS[curQ].text),
+          h("div",{className:"opts"},
+            QUESTIONS[curQ].opts.map(opt=>
+              h("button",{key:opt.k,
+                className:"opt"+(answers[QUESTIONS[curQ].id]===opt.k?" sel":""),
+                onClick:()=>selectOpt(opt.k)},
+                h("span",{className:"opt-lt"},opt.l),
+                h("span",null,opt.t)
+              )
+            )
+          )
+        ),
+        h("button",{className:"btn-ghost",onClick:goBack},"← 前の質問に戻る")
+      ),
 
-            {/* ===== RESULT ===== */}
-            {step === "result" && result && (
-              <div className="p-8 flex flex-col flex-grow overflow-y-auto">
-                <div className="text-center mb-6">
-                  <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-bold mb-2 ${result.badgeColor}`}>
-                    DIAGNOSIS
-                  </span>
-                  <h2 className="text-xl font-bold">{result.name}</h2>
-                </div>
+      // ────── LOADING
+      step==="loading"&&h("div",{className:"loading"},
+        h("div",{className:"spin"}),
+        h("p",{className:"loading-txt"},"髪質を分析しています…")
+      ),
 
-                {/* AI Advice */}
-                <div className="bg-indigo-50/50 rounded-2xl p-5 mb-6 border border-indigo-100">
-                  <div className="flex items-center mb-2">
-                    <Icon name="sparkles" size={14} className="text-indigo-500 mr-2" />
-                    <span className="text-[10px] font-bold text-indigo-500 uppercase ml-1">AI Advice</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed text-indigo-900">
-                    {isAiLoading ? "AIが解析内容を生成中..." : aiAnalysis}
-                  </p>
-                </div>
+      // ────── RESULT
+      step==="result"&&td&&h("div",{className:"fade"},
+        h("span",{className:"badge"},td.badge),
+        h("h2",{className:"res-title"},td.title),
+        h("p",{className:"res-sub"},td.sub),
 
-                {/* Recommendation */}
-                <div className="bg-slate-50 rounded-2xl p-5 mb-6">
-                  <div className="flex items-start mb-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center mr-3 shadow-sm">
-                      <Icon name="droplets" size={20} className="text-[#9a8478]" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Recommended Item</p>
-                      <p className="text-sm font-bold">{result.shampoo}</p>
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-slate-500 mb-4">{result.desc}</p>
-                  <a
-                    href={result.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center justify-center w-full py-3 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all"
-                  >
-                    詳細を見る &nbsp;
-                    <Icon name="external-link" size={12} className="text-white" />
-                  </a>
-                </div>
+        // アラート（Skin Alert のみ）
+        td.alert&&h("div",{className:"alert-box"},td.alert),
 
-                {/* Chat */}
-                <div className="bg-white border border-slate-100 rounded-2xl p-3 shadow-sm mb-4">
-                  <div className="h-32 overflow-y-auto mb-3 p-2 space-y-2">
-                    {chatHistory.length === 0 && (
-                      <p className="text-slate-300 text-center text-[10px] italic pt-4">ケアの悩みを相談してください</p>
-                    )}
-                    {chatHistory.map((msg, i) => (
-                      <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                        <div className={`p-2 rounded-lg max-w-[80%] text-[10px] ${msg.role === "user" ? "bg-[#9a8478] text-white" : "bg-slate-100 text-slate-600"}`}>
-                          {msg.text}
-                        </div>
-                      </div>
-                    ))}
-                    <div ref={chatEndRef} />
-                  </div>
-                  <div className="flex space-x-2">
-                    <input
-                      className="flex-grow text-[11px] bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[#9a8478]"
-                      placeholder="例: 洗い方のコツは？"
-                      value={chatInput}
-                      onChange={e => setChatInput(e.target.value)}
-                      onKeyDown={e => e.key === "Enter" && handleChat()}
-                    />
-                    <button onClick={handleChat} className="p-2 bg-slate-900 text-white rounded-lg">
-                      <Icon name="send" size={14} className="text-white" />
-                    </button>
-                  </div>
-                </div>
+        h("hr",{className:"divider"}),
 
-                <button
-                  onClick={() => { setStep("start"); setCurrentQ(0); setAnswers({}); setResult(null); setAiAnalysis(""); setChatHistory([]); }}
-                  className="text-[10px] font-bold text-slate-300 uppercase tracking-widest hover:text-[#9a8478] transition-colors"
-                >
-                  Restart Diagnosis
-                </button>
-              </div>
-            )}
+        // 事前テキストアドバイス（1〜3は番号付き、最後の※は注釈スタイル）
+        h("div",{className:"ai-box"},
+          h("p",{className:"ai-lbl"},
+            h(Icon,{name:"sparkles",size:11,color:"var(--gold)"}),
+            h("span",null,"Hair Advice — Ryoichi Hashimoto")
+          ),
+          td.advice.map((txt,i)=>{
+            const isNote = txt.startsWith("※");
+            return h("p",{key:i,className:"ai-txt",style:{
+              marginBottom:i<td.advice.length-1?".9rem":"0",
+              paddingLeft:"0",
+              ...(isNote?{fontSize:".76rem",color:"var(--muted)",borderTop:"1px solid var(--border)",paddingTop:".75rem",marginTop:".25rem"}:{})
+            }},
+              isNote
+                ? txt
+                : h(React.Fragment,null,
+                    h("span",{style:{color:"var(--gold)",fontFamily:"var(--serif)",fontStyle:"italic",marginRight:".4rem"}},`${i+1}.`),
+                    txt
+                  )
+            );
+          })
+        ),
 
-          </div>
-        </div>
-      );
-    };
+        h("button",{className:"btn-primary",onClick:()=>setStep("products")},
+          h(Icon,{name:"package",size:14}),
+          h("span",{style:{marginLeft:".5rem"}},"おすすめシャンプーを見る")
+        ),
+        h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
+      ),
 
-    const root = ReactDOM.createRoot(document.getElementById("root"));
-    root.render(<App />);
-  </script>
+      // ────── PRODUCTS
+      step==="products"&&td&&h("div",{className:"fade"},
+        h("span",{className:"badge"},td.badge),
+        h("h2",{className:"res-title"},td.title),
+        h("p",{className:"res-sub"},td.sub),
+        h("hr",{className:"divider"}),
+
+        h("p",{className:"prod-hd"},"あなたにおすすめのシャンプー"),
+        h("p",{className:"prod-sub"},"タイプ別に厳選したアイテムです。複数のショップで比較して選んでください。"),
+
+        // アラート（Skin Alert のみ）
+        td.alert&&h("div",{className:"alert-box"},td.alert),
+
+        td.products.map((p,i)=>
+          h("div",{key:i,className:"prod-card"},
+            h("div",{className:"prod-card-inner"},
+              // 商品画像
+              h("div",{className:"prod-img-wrap"},
+                p.img_url
+                  ? h("img",{src:p.img_url,alt:p.name,className:"prod-img",loading:"lazy"})
+                  : h("div",{className:"prod-img-placeholder"},
+                      h(Icon,{name:"droplets",size:28,color:"var(--gold-l)"})
+                    )
+              ),
+              h("div",{className:"prod-info"},
+                h("p",{className:"prod-name"},p.name),
+                h("p",{className:"prod-desc"},p.desc),
+                h("div",{className:"prod-links"},
+                  p.amz&&h("a",{className:"prod-link amz",href:amzLink(p.amz),target:"_blank",rel:"noopener noreferrer"},
+                    h(Icon,{name:"shopping-cart",size:12,color:"#111"}),
+                    h("span",{style:{marginLeft:".3rem"}},"Amazon")
+                  ),
+                  h("a",{className:"prod-link rak",href:rakLink(p.rak),target:"_blank",rel:"noopener noreferrer"},
+                    h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),
+                    h("span",{style:{marginLeft:".3rem"}},"楽天")
+                  ),
+                  p.drug&&h("a",{className:"prod-link drg",href:drugLink(p.rak),target:"_blank",rel:"noopener noreferrer"},
+                    h(Icon,{name:"store",size:12,color:"#fff"}),
+                    h("span",{style:{marginLeft:".3rem"}},"薬局で探す")
+                  )
+                )
+              )
+            )
+          )
+        ),
+
+        // Chat
+        h(Chat,{typeKey,typeDef:td}),
+
+        // 界面活性剤チャート
+        h(SurfactantChart,null),
+
+        h("button",{className:"btn-ghost",style:{marginTop:"1.5rem"},onClick:retry},"← もう一度診断する")
+      )
+    ),
+
+    // ── FOOTER：結果・商品ページのみ表示
+    (step==="result"||step==="products")&&h("footer",{className:"ftr"},
+      // プロフィールカード
+      h("div",{className:"ftr-profile"},
+        h("div",{className:"ftr-photo-wrap"},
+          h("img",{
+            src:"YOUR_PHOTO_URL_HERE",
+            alt:"橋元リョウイチ",
+            className:"ftr-photo",
+            onError:e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}
+          }),
+          h("div",{className:"ftr-photo-fallback"},
+            h(Icon,{name:"user",size:32,color:"var(--gold-l)"})
+          )
+        ),
+        h("div",{className:"ftr-profile-info"},
+          h("p",{className:"ftr-profile-label"},"このアプリを作ったひと"),
+          h("p",{className:"ftr-name"},"橋元 リョウイチ"),
+          h("p",{className:"ftr-salon"},"Freelance Hair Stylist — VIRGO Harajuku"),
+          h("a",{
+            className:"ftr-rsv-btn",
+            href:"https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/",
+            target:"_blank",
+            rel:"noopener noreferrer"
+          },
+            h(Icon,{name:"calendar-check",size:13,color:"#fff"}),
+            h("span",{style:{marginLeft:".35rem"}},"ご予約はこちら")
+          )
+        )
+      ),
+      h("p",{className:"ftr-note"},
+        "このサイトはAmazonアソシエイト・楽天アフィリエイトプログラムに参加しています。\n掲載リンクから商品を購入された場合、紹介料を受け取る場合があります。\n診断結果はあくまで参考情報です。頭皮の症状が続く場合は皮膚科を受診してください。"
+      )
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(h(App));
+</script>
 </body>
 </html>
