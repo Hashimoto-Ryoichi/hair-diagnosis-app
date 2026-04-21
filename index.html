@@ -107,6 +107,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ingr-name{font-size:.68rem;color:var(--char2)}
 .ingr-hl{font-weight:500;color:var(--gold-d)}
 .ingr-products{font-size:.62rem;color:var(--gold);font-style:italic}
+.ingr-otc-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.65rem;color:var(--muted);margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border);line-height:1.6}
 .ftr{text-align:center;padding:2.5rem 1.5rem 2rem;border-top:1px solid var(--border);margin-top:2rem}
 .ftr-profile{display:flex;align-items:center;gap:1.2rem;background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:1.4rem;text-align:left}
 .ftr-photo-wrap{flex-shrink:0;width:64px;height:64px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--cream)}
@@ -151,13 +152,13 @@ const TYPES={
   skin_alert:{badge:"Hair Type — SA",title:"Skin Alert",sub:"頭皮に炎症サインあり",
     alert:"⚠️ 頭皮に赤みや湿疹がある場合、まずは皮膚科の受診をおすすめします。",
     advice:["頭皮の赤みや湿疹は、接触性皮膚炎・脂漏性皮膚炎・アトピーなど原因が様々です。まず皮膚科を受診して原因を特定することが最優先です。","シャンプーは低刺激のアミノ酸系を選び、爪を立てずに指の腹で優しく洗いましょう。洗浄力の強いラウリル硫酸系・ラウレス硫酸系は避けてください。","シャワーの温度は38℃前後がベスト。高温のお湯は皮脂を過剰に落とし、刺激になります。すすぎは2分以上丁寧に。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
-    products:[{name:"ミノン 全身シャンプー しっとりタイプ",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"",top:true,amz:"B00N3KJH58",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:""}]},
+    products:[{name:"ミノン 全身シャンプー しっとりタイプ",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"",top:true,otc:true,amz:"B00N3KJH58",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:""}]},
   oil_reset_short:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ショート",
     advice:["脂性頭皮の方は皮脂分泌が多く、頭皮の毛穴が詰まりやすい状態です。洗浄力のしっかりしたシャンプーで、頭皮を清潔に保つことが第一優先です。","シャンプーは1回目で汚れを落とし、2回目で泡立てるダブル洗いが効果的。すすぎを特に丁寧に行い、シャンプーの残留をゼロにしましょう。","ショートヘアは頭皮への影響が直接出やすいため、ドライヤーでしっかり乾かすことが大切。半乾きで寝ると雑菌が増えてニオイの原因になります。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
-      {name:"h&s スカルプ シャンプー",forWhom:"夕方になると頭皮の匂いやベタつきが気になる方",desc:"フケ・かゆみケア。洗浄力が高く脂性頭皮に効果的。",note:"香りや容量など複数あります。リンク先でお選びください。",top:true,amz:"B08X732T5Z",rakUrl:rak1("360f53076a02e226e890e2ba28dd5d4f"),img_url:""},
-      {name:"デオコ 薬用スカルプケア シャンプー",forWhom:"頭皮の臭いが気になりはじめた方",desc:"頭皮の臭いと脂を同時にケア。",note:"",top:false,amz:"B0CW3C9TYD",rakUrl:rak1("ec66d0987e9db2681148d12f1972c99a"),img_url:""},
-      {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性だけど髪のダメージも気になる方",desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",note:"",top:false,amz:"B0DJ1CMC5Y",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:""}]},
+      {name:"h&s スカルプ シャンプー",forWhom:"夕方になると頭皮の匂いやベタつきが気になる方",desc:"フケ・かゆみケア。洗浄力が高く脂性頭皮に効果的。",note:"香りや容量など複数あります。リンク先でお選びください。",top:true,otc:true,amz:"B08X732T5Z",rakUrl:rak1("360f53076a02e226e890e2ba28dd5d4f"),img_url:""},
+      {name:"デオコ 薬用スカルプケア シャンプー",forWhom:"頭皮の臭いが気になりはじめた方",desc:"頭皮の臭いと脂を同時にケア。",note:"",top:false,otc:true,amz:"B0CW3C9TYD",rakUrl:rak1("ec66d0987e9db2681148d12f1972c99a"),img_url:""},
+      {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性だけど髪のダメージも気になる方",desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",note:"",top:false,otc:true,amz:"B0DJ1CMC5Y",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:""}]},
   oil_reset_long:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ミディアム〜ロング",
     advice:["ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。","トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。","洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
@@ -186,21 +187,7 @@ const TYPES={
       {name:"エッセンシャル プレミアム うるおいバリア シャンプー",forWhom:"カラーしてるけど、ベタつきもパサつきも気になる方",desc:"カラー毛のパサつき・軽ダメージに。",note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",top:false,amz:"B0CXHLSP8S",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]}
 };
 
-const SURFACTANTS=[
-  {name:"\u30b3\u30ab\u30df\u30c9\u30d7\u30ed\u30d4\u30eb\u30d9\u30bf\u30a4\u30f3",types:[],products:[]},
-  {name:"\u30b3\u30b3\u30a2\u30f3\u30db\u9162\u9178\u30ca\u30c8\u30ea\u30a6\u30e0",types:[],products:[]},
-  {name:"\u30b3\u30b3\u30a4\u30eb\u30b0\u30eb\u30bf\u30df\u30f3\u9178\u7cfb",types:[],products:[]},
-  {name:"\u30e9\u30a6\u30ed\u30a4\u30eb\u30e1\u30c1\u30eb\u30a2\u30e9\u30cb\u30f3\u7cfb",types:["aqua_sensitive","bare_skin"],products:["\u30b8\u30a2\u30f3\u30b5\u30fc"]},
-  {name:"\u30e9\u30a6\u30ed\u30a4\u30eb\u30b5\u30eb\u30b3\u30b7\u30f3\u7cfb",types:[],products:[]},
-  {name:"\u30e9\u30a6\u30ec\u30b9\u30ab\u30eb\u30dc\u30f3\u9178\u7cfb",types:[],products:[]},
-  {name:"\u30b3\u30b3\u30a4\u30eb\u30e1\u30c1\u30eb\u30bf\u30a6\u30ea\u30f3\u7cfb",types:["aqua_sensitive","bare_skin"],products:["\u30b8\u30e5\u30ec\u30fc\u30e0","\u30a8\u30c3\u30bb\u30f3\u30b7\u30e3\u30eb \u30d7\u30ec\u30df\u30a2\u30e0"]},
-  {name:"\u30b9\u30eb\u30db\u30b3\u30cf\u30af\u9178\u7cfb",types:[],products:[]},
-  {name:"\u30ab\u30ea\u77f3\u9e7f\u30fb\u77f3\u9e7f",types:[],products:[]},
-  {name:"\u30aa\u30ec\u30d5\u30a3\u30f3\u30b9\u30eb\u30db\u30f3\u9178\u7cfb",types:["oil_reset_short"],products:["\u30c7\u30aa\u30b3"]},
-  {name:"\u30e9\u30a6\u30ec\u30b9\u7947\u9178\u7cfb",types:["oil_reset_long","oil_reset_short"],products:["\u30d1\u30f3\u30c6\u30fc\u30f3","\u30e9\u30c3\u30af\u30b9","\u30c4\u30d0\u30ad","\u30c0\u30f4","\u30a6\u30a7\u30eb\u30d7"]},
-  {name:"\u30e9\u30a6\u30ea\u30eb\u30d9\u30f3\u30bc\u30f3\u30b9\u30eb\u30db\u30f3\u9178\u7cfb",types:[],products:[]},
-  {name:"\u30e9\u30a6\u30ea\u30eb\u7947\u9178\u7cfb",types:["oil_reset_short"],products:["h&s"]},
-];
+const SURFACTANTS=[{name:"コカミドプロピルベタイン",types:["repair_mode","smooth_wave"],products:["ストレイン","SN repair","セラムイン"]},{name:"ココアンホ酢酸ナトリウム",types:[],products:[]},{name:"ココイルグルタミン酸系",types:["aqua_sensitive"],products:["ジュレーム"]},{name:"ラウロイルメチルアラニン系",types:["aqua_sensitive","bare_skin"],products:["ジアンサー","ジュレーム"]},{name:"ラウロイルサルコシン系",types:[],products:[]},{name:"ラウレスカルボン酸系",types:[],products:[]},{name:"ココイルメチルタウリン系",types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave"],products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン"]},{name:"スルホコハク酸系",types:[],products:[]},{name:"カリ石鹿・石鹿",types:[],products:[]},{name:"オレフィンスルホン酸系",types:["oil_reset_short"],products:[]},{name:"ラウレス祇酸系",types:["oil_reset_long","oil_reset_short"],products:["パンテーン","ラックス","ツバキ","ダヴ"]},{name:"ラウリルベンゼンスルホン酸系",types:[],products:[]},{name:"ラウリル祇酸系",types:["oil_reset_short"],products:[]}];
 
 function diagnose(ans){
   const {q1,q2,q6,q7,q8}=ans;
@@ -228,6 +215,8 @@ function Icon({name,size=16,color}){
 }
 
 function SurfactantChart({typeKey}){
+  const td=typeKey?TYPES[typeKey]:null;
+  const otcProducts=td?td.products.filter(p=>p.otc).map(p=>p.name):[];
   return h("div",{className:"ingr-box"},
     h("div",{className:"ingr-ttl"},
       h(Icon,{name:"flask-conical",size:14,color:"var(--gold)"}),
@@ -244,7 +233,13 @@ function SurfactantChart({typeKey}){
           isMatch&&s.products.length>0&&h("span",{className:"ingr-products"},"← "+s.products.join("・"))
         )
       );
-    })
+    }),
+    otcProducts.length>0&&h("p",{className:"ingr-otc-note"},
+      h(Icon,{name:"info",size:11,color:"var(--muted)"}),
+      h("span",{style:{marginLeft:".35rem"}},
+        otcProducts.join("・")+" は医薬部外品のため、成分の詳細表示は省略しています。"
+      )
+    )
   );
 }
 
