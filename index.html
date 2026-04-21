@@ -400,12 +400,12 @@ const TYPES = {
 // ───────────────────────────────────────────────────────────
 const SURFACTANTS = [
   { name:"コカミドプロピルベタイン",     types:[], products:[] },
-  { name:"ококоアンホ酢酸ナトリウム",    types:[], products:[] },
-  { name:"ококоイルグルタミン酸系",      types:[], products:[] },
+  { name:"ココアンホ酢酸ナトリウム",    types:[], products:[] },
+  { name:"ココイルグルタミン酸系",      types:[], products:[] },
   { name:"ラウロイルメチルアラニン系",   types:["aqua_sensitive","bare_skin"], products:["ジアンサー"] },
   { name:"ラウロイルサルコシン系",       types:[], products:[] },
   { name:"ラウレスカルボン酸系",         types:[], products:[] },
-  { name:"ококоイルメチルタウリン系",    types:["aqua_sensitive","bare_skin"], products:["ジュレーム","エッセンシャル プレミアム"] },
+  { name:"ココイルメチルタウリン系",    types:["aqua_sensitive","bare_skin"], products:["ジュレーム","エッセンシャル プレミアム"] },
   { name:"スルホコハク酸系",             types:[], products:[] },
   { name:"カリ石鹸・石鹸",              types:[], products:[] },
   { name:"オレフィンスルホン酸系",       types:["oil_reset_short"], products:["デオコ"] },
@@ -413,6 +413,22 @@ const SURFACTANTS = [
   { name:"ラウリルベンゼンスルホン酸系", types:[], products:[] },
   { name:"ラウリル硫酸系",              types:["oil_reset_short"], products:["h&s"] },
 ];
+
+// ───────────────────────────────────────────────────────────
+// Icon Helper
+// ───────────────────────────────────────────────────────────
+const {createElement:h,useRef,useEffect,useState} = React;
+function Icon({name,size=16,color}){
+  const ref=useRef(null);
+  useEffect(()=>{
+    if(ref.current&&window.lucide){
+      ref.current.innerHTML="";
+      const s=lucide.icons[name]?.toSvg({width:size,height:size,color:color||"currentColor"});
+      if(s) ref.current.innerHTML=s;
+    }
+  },[name,size,color]);
+  return h("span",{ref,style:{display:"inline-flex",alignItems:"center"}});
+}
 
 // ───────────────────────────────────────────────────────────
 // Surfactant Chart（タイプ連携版）
