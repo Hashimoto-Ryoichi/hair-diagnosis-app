@@ -7,55 +7,42 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.2/babel.min.js"></script>
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --cream:#F8F5F0;--ivory:#F2EBE0;--gold:#B8956A;--gold-l:#D4B896;--gold-d:#8A6843;
   --char:#28221C;--char2:#4A3E34;--muted:#8A7A6A;--border:rgba(184,149,106,0.22);
-  --serif:'Cormorant Garamond',Georgia,serif;--sans:'Noto Sans JP',sans-serif;
+  --serif:"Cormorant Garamond",Georgia,serif;--sans:"Noto Sans JP",sans-serif;
   --r:3px;
 }
 html{scroll-behavior:smooth}
 body{background:var(--cream);color:var(--char);font-family:var(--sans);font-weight:300;min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.85%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27 opacity=%270.028%27/%3E%3C/svg%3E");pointer-events:none;z-index:0}
 #root{position:relative;z-index:1}
-
-/* ── Progress ── */
 #pbar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-l));z-index:999;transition:width .4s ease}
-
-/* ── Header ── */
 .hdr{text-align:center;padding:3.5rem 1.5rem 2rem;border-bottom:1px solid var(--border)}
 .hdr-eye{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
 .hdr-h1{font-family:var(--serif);font-size:clamp(2rem,6vw,3.4rem);font-weight:300;letter-spacing:.06em;line-height:1.1;color:var(--char);margin-bottom:.4rem}
 .hdr-sub{font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--muted)}
 .gold-line{width:36px;height:1px;background:var(--gold);margin:1.4rem auto 0}
-
-/* ── Layout ── */
 .wrap{max-width:680px;margin:0 auto;padding:2.5rem 1.4rem}
 .sec-label{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
 .sec-title{font-family:var(--serif);font-size:clamp(1.4rem,4vw,2rem);font-weight:300;color:var(--char);margin-bottom:.5rem;line-height:1.3;white-space:pre-line}
 .sec-desc{font-size:.83rem;color:var(--muted);line-height:1.85;margin-bottom:2.2rem}
-
-/* ── Buttons ── */
+.trust-bar{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;margin-bottom:1.8rem;display:flex;align-items:flex-start;gap:.6rem}
+.trust-bar-txt{font-size:.72rem;color:var(--char2);line-height:1.7}
 .btn-primary{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--char);color:var(--cream);border:none;border-radius:var(--r);padding:.95rem 1.5rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .25s;margin-top:1.8rem}
 .btn-primary:hover{background:var(--gold-d)}
-.btn-primary:disabled{background:#bbb;cursor:not-allowed}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:var(--r);padding:.65rem 1rem;font-size:.7rem;letter-spacing:.1em;cursor:pointer;font-family:var(--sans);transition:all .2s;margin-top:.7rem;width:100%}
 .btn-ghost:hover{border-color:var(--gold-l);color:var(--char)}
-.btn-gold{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--gold);color:#fff;border:none;border-radius:var(--r);padding:.9rem 1.5rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .25s;margin-top:1rem}
-.btn-gold:hover{background:var(--gold-d)}
-
-/* ── Progress dots ── */
 .dots{display:flex;gap:5px;justify-content:center;margin-bottom:2rem;flex-wrap:wrap}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s}
 .dot.active{background:var(--gold);transform:scale(1.4)}
 .dot.done{background:var(--gold-l)}
-
-/* ── Question ── */
 .q-num{font-size:.58rem;letter-spacing:.15em;color:var(--gold);margin-bottom:.4rem}
 .q-text{font-family:var(--serif);font-size:1.12rem;font-weight:400;color:var(--char);margin-bottom:1rem;line-height:1.55}
 .q-cat{font-size:.62rem;letter-spacing:.12em;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase}
@@ -67,35 +54,30 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .opt.sel .opt-lt{background:var(--gold);color:#fff}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .fade{animation:fadeUp .45s ease both}
-
-/* ── Loading ── */
 .loading{text-align:center;padding:5rem 1.5rem}
 .spin{width:34px;height:34px;border:1.5px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:rot 1s linear infinite;margin:0 auto 1.4rem}
 @keyframes rot{to{transform:rotate(360deg)}}
 .loading-txt{font-family:var(--serif);font-style:italic;font-size:1rem;color:var(--muted)}
-
-/* ── Result ── */
 .badge{display:inline-block;font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:.28rem .8rem;border-radius:20px;margin-bottom:1.4rem}
 .res-title{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.6rem);font-weight:300;color:var(--char);margin-bottom:.4rem;white-space:pre-line;line-height:1.2}
 .res-sub{font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--muted);margin-bottom:1.8rem}
 .divider{border:none;border-top:1px solid var(--border);margin:1.8rem 0}
-
-/* ── AI Block ── */
 .ai-box{background:var(--ivory);border-left:2px solid var(--gold);padding:1.2rem 1.2rem 1.2rem 1.4rem;border-radius:0 var(--r) var(--r) 0;margin-bottom:1.8rem}
 .ai-lbl{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;display:flex;align-items:center;gap:.35rem}
 .ai-txt{font-size:.83rem;line-height:1.9;color:var(--char2);white-space:pre-line}
 .alert-box{background:#fff8f5;border:1px solid #f5c8b0;border-radius:var(--r);padding:1rem;margin-bottom:1.5rem;font-size:.82rem;color:#8a4020;line-height:1.7}
-
-/* ── Products ── */
 .prod-hd{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--char);margin-bottom:.25rem}
 .prod-sub{font-size:.75rem;color:var(--muted);margin-bottom:1.3rem}
-.prod-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:.7rem}
+.prod-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:.7rem;position:relative}
+.prod-card.top-pick{border:2px solid var(--gold)}
+.prod-top-badge{position:absolute;top:-.6rem;left:.8rem;background:var(--gold);color:#fff;font-size:.58rem;letter-spacing:.12em;padding:.2rem .6rem;border-radius:10px;text-transform:uppercase}
 .prod-card-inner{display:flex;gap:1rem;align-items:flex-start}
 .prod-img-wrap{flex-shrink:0;width:72px;height:72px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--ivory);display:flex;align-items:center;justify-content:center}
 .prod-img{width:100%;height:100%;object-fit:contain}
 .prod-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .prod-info{flex:1;min-width:0}
-.prod-name{font-size:.84rem;font-weight:500;color:var(--char);margin-bottom:.3rem;line-height:1.4}
+.prod-name{font-size:.84rem;font-weight:500;color:var(--char);margin-bottom:.25rem;line-height:1.4}
+.prod-for{display:flex;align-items:flex-start;gap:.3rem;font-size:.7rem;color:var(--gold-d);margin-bottom:.3rem;line-height:1.5;font-weight:500}
 .prod-desc{font-size:.73rem;color:var(--muted);margin-bottom:.5rem;line-height:1.5}
 .prod-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.68rem;color:var(--gold-d);background:var(--ivory);border-radius:var(--r);padding:.4rem .6rem;margin-bottom:.6rem;line-height:1.5}
 .prod-links{display:flex;gap:.5rem;flex-wrap:wrap}
@@ -105,13 +87,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .prod-link.amz:hover{background:#e68900;border-color:#e68900}
 .prod-link.rak{background:#BF0000;border-color:#BF0000;color:#fff}
 .prod-link.rak:hover{background:#a00000;border-color:#a00000}
-.virgo-box{background:var(--char);color:var(--cream);border-radius:var(--r);padding:1.4rem;text-align:center;margin:2rem 0}
-.virgo-box-ttl{font-family:var(--serif);font-size:1.2rem;font-weight:300;letter-spacing:.04em;margin-bottom:.4rem}
-.virgo-box-sub{font-size:.73rem;color:var(--gold-l);margin-bottom:1rem;line-height:1.6}
-.virgo-btn{display:inline-flex;align-items:center;gap:.4rem;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.6rem 1.2rem;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;transition:background .2s}
-.virgo-btn:hover{background:var(--gold-d)}
-
-/* ── Surf / Ingredient ── */
+.consult-bar{background:var(--char);color:var(--cream);border-radius:var(--r);padding:1.3rem 1.2rem;margin:1.8rem 0;display:flex;align-items:center;gap:1rem}
+.consult-bar-txt{flex:1}
+.consult-bar-ttl{font-family:var(--serif);font-size:1rem;font-weight:300;margin-bottom:.2rem}
+.consult-bar-sub{font-size:.7rem;color:var(--gold-l);line-height:1.5}
+.consult-bar-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:.35rem;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.5rem 1rem;font-size:.68rem;letter-spacing:.08em;white-space:nowrap;transition:background .2s}
+.consult-bar-btn:hover{background:var(--gold-d)}
 .ingr-box{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;margin-top:2rem}
 .ingr-ttl{font-size:.73rem;font-weight:500;color:var(--char2);margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
 .ingr-legend{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;color:var(--gold-d);font-weight:400;margin-left:auto}
@@ -126,11 +107,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ingr-name{font-size:.68rem;color:var(--char2)}
 .ingr-hl{font-weight:500;color:var(--gold-d)}
 .ingr-products{font-size:.62rem;color:var(--gold);font-style:italic}
-
-/* ── Footer ── */
 .ftr{text-align:center;padding:2.5rem 1.5rem 2rem;border-top:1px solid var(--border);margin-top:2rem}
 .ftr-profile{display:flex;align-items:center;gap:1.2rem;background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:1.4rem;text-align:left}
-.ftr-photo-wrap{flex-shrink:0;width:64px;height:64px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--cream);position:relative}
+.ftr-photo-wrap{flex-shrink:0;width:64px;height:64px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--cream)}
 .ftr-photo{width:100%;height:100%;object-fit:cover;display:block}
 .ftr-photo-fallback{width:100%;height:100%;display:none;align-items:center;justify-content:center;background:var(--ivory)}
 .ftr-profile-info{flex:1;min-width:0}
@@ -140,284 +119,102 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ftr-rsv-btn{display:inline-flex;align-items:center;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.4rem .9rem;font-size:.68rem;letter-spacing:.08em;transition:background .2s}
 .ftr-rsv-btn:hover{background:var(--gold-d)}
 .ftr-note{font-size:.62rem;color:var(--muted);line-height:1.75;white-space:pre-line}
-.ftr-link{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--border);padding-bottom:1px;transition:border-color .2s}
-.ftr-link:hover{border-color:var(--gold)}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 </head>
 <body>
 <div id="pbar" style="width:0%"></div>
 <div id="root"></div>
-
 <script type="text/babel">
-// ───────────────────────────────────────────────────────────
-// CONFIG  ← ここを編集してください
-// ───────────────────────────────────────────────────────────
-const GEMINI_KEY = "YOUR_GEMINI_API_KEY";
-const ASSOC_ID   = "hassihair06-22"; // アソシエイトID確定済み
+const ASSOC_ID="hassihair06-22";
+const HPB_URL="https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/";
 
-// ───────────────────────────────────────────────────────────
-// AFFILIATE LINK HELPER
-// ───────────────────────────────────────────────────────────
-function amzLink(asin) {
-  return `https://www.amazon.co.jp/dp/${asin}?tag=${ASSOC_ID}`;
-}
-function rakLink(keyword) {
-  return `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(keyword)}/?affiliate_id=${ASSOC_ID}`;
-}
-
-// ───────────────────────────────────────────────────────────
-// 11問定義
-// ───────────────────────────────────────────────────────────
-const QUESTIONS = [
-  { id:"q1", cat:"頭皮", text:"地肌の状態はどれに当てはまりますか？",
-    opts:[{k:"dry",l:"A",t:"乾燥している"},{k:"normal",l:"B",t:"普通（特に気にならない）"},{k:"oily",l:"C",t:"脂性（べたつきやすい）"},{k:"mix",l:"D",t:"混合（部位によって異なる）"},{k:"red",l:"E",t:"赤み・湿疹がある"}]},
-  { id:"q2", cat:"長さ", text:"髪の長さはどのくらいですか？",
-    opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
-  { id:"q3", cat:"毛質", text:"髪の太さは？",
-    opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
-  { id:"q4", cat:"毛質", text:"髪の硬さは？",
-    opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
-  { id:"q5", cat:"親水性", text:"髪を濡らした後、自然放置するとどうなりますか？",
-    opts:[{k:"fast",l:"A",t:"すぐ乾く（15分以内）"},{k:"mid",l:"B",t:"どちらともいえない（15〜30分程度）"},{k:"slow",l:"C",t:"なかなか乾かない（30分以上）"}]},
-  { id:"q6", cat:"くせ毛", text:"くせ毛の強さは？",
-    opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
-  { id:"q7", cat:"薬剤", text:"薬剤処理の経験は？",
-    opts:[{k:"none",l:"A",t:"なし（バージン毛）"},{k:"color",l:"B",t:"カラーのみ"},{k:"perm",l:"C",t:"パーマ・ブリーチ・縮毛矯正"}]},
-  { id:"q8", cat:"ダメージ", text:"今の髪の状態は？",
-    opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
-  { id:"q9", cat:"熱器具", text:"使っている熱器具は？",
-    opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
-  { id:"q10", cat:"仕上がり", text:"なりたい髪質は？",
-    opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
-  { id:"q11", cat:"悩み", text:"特に気になる悩みは？",
-    opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"none",l:"E",t:"特にない"}]},
+const QUESTIONS=[
+  {id:"q1",cat:"頭皮",text:"地肌の状態はどれに当てはまりますか？",opts:[{k:"dry",l:"A",t:"乾燥している"},{k:"normal",l:"B",t:"普通（特に気にならない）"},{k:"oily",l:"C",t:"脂性（べたつきやすい）"},{k:"mix",l:"D",t:"混合（部位によって異なる）"},{k:"red",l:"E",t:"赤み・湿疹がある"}]},
+  {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
+  {id:"q3",cat:"毛質",text:"髪の太さは？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
+  {id:"q4",cat:"毛質",text:"髪の硬さは？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
+  {id:"q5",cat:"親水性",text:"髪を濡らした後、自然放置するとどうなりますか？",opts:[{k:"fast",l:"A",t:"すぐ乾く（15分以内）"},{k:"mid",l:"B",t:"どちらともいえない（15〜30分程度）"},{k:"slow",l:"C",t:"なかなか乾かない（30分以上）"}]},
+  {id:"q6",cat:"くせ毛",text:"くせ毛の強さは？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
+  {id:"q7",cat:"薬剤",text:"薬剤処理の経験は？",opts:[{k:"none",l:"A",t:"なし（バージン毛）"},{k:"color",l:"B",t:"カラーのみ"},{k:"perm",l:"C",t:"パーマ・ブリーチ・縮毛矯正"}]},
+  {id:"q8",cat:"ダメージ",text:"今の髪の状態は？",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
+  {id:"q9",cat:"熱器具",text:"使っている熱器具は？",opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
+  {id:"q10",cat:"仕上がり",text:"なりたい髪質は？",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
+  {id:"q11",cat:"悩み",text:"特に気になる悩みは？",opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"none",l:"E",t:"特にない"}]},
 ];
 
-// ───────────────────────────────────────────────────────────
-// 6タイプ定義
-// ───────────────────────────────────────────────────────────
-const TYPES = {
-  skin_alert: {
-    badge:"Hair Type — SA",
-    title:"Skin Alert",
-    sub:"頭皮に炎症サインあり",
-    color:"#c0392b",
-    alert:"⚠️ 頭皮に赤みや湿疹がある場合、まずは皮膚科の受診をおすすめします。セルフケアで症状が悪化することもあります。",
-    advice:[
-      "頭皮の赤みや湿疹は、接触性皮膚炎・脂漏性皮膚炎・アトピーなど原因が様々です。まず皮膚科を受診して原因を特定することが最優先です。",
-      "シャンプーは低刺激のアミノ酸系を選び、爪を立てずに指の腹で優しく洗いましょう。洗浄力の強いラウリル硫酸系・ラウレス硫酸系は避けてください。",
-      "シャワーの温度は38℃前後がベスト。高温のお湯は皮脂を過剰に落とし、刺激になります。すすぎは2分以上丁寧に。",
-      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。",
-    ],
+const R1="https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F";
+const R2="&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9";
+function rak1(id){return R1+id+"/"+R2;}
+
+const TYPES={
+  skin_alert:{badge:"Hair Type — SA",title:"Skin Alert",sub:"頭皮に炎症サインあり",
+    alert:"⚠️ 頭皮に赤みや湿疹がある場合、まずは皮膚科の受診をおすすめします。",
+    advice:["頭皮の赤みや湿疹は、接触性皮膚炎・脂漏性皮膚炎・アトピーなど原因が様々です。まず皮膚科を受診して原因を特定することが最優先です。","シャンプーは低刺激のアミノ酸系を選び、爪を立てずに指の腹で優しく洗いましょう。洗浄力の強いラウリル硫酸系・ラウレス硫酸系は避けてください。","シャワーの温度は38℃前後がベスト。高温のお湯は皮脂を過剰に落とし、刺激になります。すすぎは2分以上丁寧に。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
+    products:[{name:"ミノン 全身シャンプー しっとりタイプ",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"",top:true,amz:"B00N3KJH58",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:""}]},
+  oil_reset_short:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ショート",
+    advice:["脂性頭皮の方は皮脂分泌が多く、頭皮の毛穴が詰まりやすい状態です。洗浄力のしっかりしたシャンプーで、頭皮を清潔に保つことが第一優先です。","シャンプーは1回目で汚れを落とし、2回目で泡立てるダブル洗いが効果的。すすぎを特に丁寧に行い、シャンプーの残留をゼロにしましょう。","ショートヘアは頭皮への影響が直接出やすいため、ドライヤーでしっかり乾かすことが大切。半乾きで寝ると雑菌が増えてニオイの原因になります。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
-      { name:"ミノン 全身シャンプー しっとりタイプ",
-        desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",
-        note:"",
-        amz:"B00N3KJH58",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F272f92155ee4457fdcc005d40ecb26cf%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-    ]
-  },
-  oil_reset_short: {
-    badge:"Hair Type — OR",
-    title:"Oil Reset",
-    sub:"脂性頭皮 × ショート",
-    color:"#2980b9",
-    advice:[
-      "脂性頭皮の方は皮脂分泌が多く、頭皮の毛穴が詰まりやすい状態です。洗浄力のしっかりしたシャンプーで、頭皮を清潔に保つことが第一優先です。",
-      "シャンプーは1回目で汚れを落とし、2回目で泡立てるダブル洗いが効果的。すすぎを特に丁寧に行い、シャンプーの残留をゼロにしましょう。",
-      "ショートヘアは頭皮への影響が直接出やすいため、ドライヤーでしっかり乾かすことが大切。半乾きで寝ると雑菌が増えてニオイの原因になります。",
-      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。",
-    ],
+      {name:"h&s スカルプ シャンプー",forWhom:"夕方になると頭皮の匂いやベタつきが気になる方",desc:"フケ・かゆみケア。洗浄力が高く脂性頭皮に効果的。",note:"香りや容量など複数あります。リンク先でお選びください。",top:true,amz:"B08X732T5Z",rakUrl:rak1("360f53076a02e226e890e2ba28dd5d4f"),img_url:""},
+      {name:"デオコ 薬用スカルプケア シャンプー",forWhom:"頭皮の臭いが気になりはじめた方",desc:"頭皮の臭いと脂を同時にケア。",note:"",top:false,amz:"B0CW3C9TYD",rakUrl:rak1("ec66d0987e9db2681148d12f1972c99a"),img_url:""},
+      {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性だけど髪のダメージも気になる方",desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",note:"",top:false,amz:"B0DJ1CMC5Y",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:""}]},
+  oil_reset_long:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ミディアム〜ロング",
+    advice:["ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。","トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。","洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
-      { name:"h&s スカルプ シャンプー",
-        desc:"フケ・かゆみケア。洗浄力が高く脂性頭皮に効果的。",
-        note:"香りや容量など、バリエーションが複数あります。リンク先でご自身に合うものをお選びください。",
-        amz:"B08X732T5Z",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F360f53076a02e226e890e2ba28dd5d4f%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"デオコ 薬用スカルプケア シャンプー",
-        desc:"頭皮の臭いと脂を同時にケア。",
-        note:"",
-        amz:"B0CW3C9TYD",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2Fec66d0987e9db2681148d12f1972c99a%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"WELLP（ウェルプ）薬用スムースシャンプー",
-        desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",
-        note:"",
-        amz:"B0DJ1CMC5Y",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2Fd17ec847309d51e390b10db5bd9381bb%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-    ]
-  },
-  oil_reset_long: {
-    badge:"Hair Type — OR",
-    title:"Oil Reset",
-    sub:"脂性頭皮 × ミディアム〜ロング",
-    color:"#2980b9",
-    advice:[
-      "ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。",
-      "トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。",
-      "洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。",
-      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。",
-    ],
+      {name:"パンテーン ミラクルズ シャンプー",forWhom:"頭皮のベタつきが気になるけど、毛先はしっとりさせたい方",desc:"日常使いの定番。脂性頭皮でも毛先はしっとり。",note:"シリーズによって仕上がりが異なります。リンク先でご確認のうえお選びください。",top:true,amz:"B0DF2PW2M6",rakUrl:rak1("61af1323f75fa2d1d3cbf8d6a180004f"),img_url:""},
+      {name:"ラックス スーパーリッチシャイン ダメージリペア シャンプー",forWhom:"ツヤのある仕上がりを求める方",desc:"べたつきを抑えながら輝く仕上がり。",note:"シリーズ・香りのバリエーションが複数あります。リンク先でご確認ください。",top:false,amz:"B0BX96NGCM",rakUrl:rak1("3e1872af0708329c9eb97f57ef2b0e16"),img_url:""},
+      {name:"TSUBAKI プレミアムモイスト＆リペア シャンプー",forWhom:"和の成分にこだわりたい、しっとりまとめたい方",desc:"和の美容成分・ツバキ油配合。",note:"",top:false,amz:"B0DBHRQHFH",rakUrl:rak1("5fb3ca4a3bfaaf3cd253023c37723698"),img_url:""},
+      {name:"ダヴ ボタニカルセレクション つややかストレート シャンプー",forWhom:"マイルドな洗い心地で、肌に優しいものを選びたい方",desc:"マイルドな洗浄力。肌に近い成分で優しい洗い上がり。",note:"",top:false,amz:"B07969HHCQ",rakUrl:rak1("a606c025612d56c2d7f06006f551d2aa"),img_url:""}]},
+  repair_mode:{badge:"Hair Type — RM",title:"Repair Mode",sub:"ハイダメージ（パーマ・ブリーチ・縮毛矯正）",
+    advice:["パーマ・ブリーチ・縮毛矯正などの薬剤処理は、髪のタンパク質（ケラチン）を変性させます。失ったタンパク質を補うことが修復の第一歩です。","トスチア（トスキサシン）配合のシャンプーは、ケラチンとシスチンを同時に補修できる成分。ダメージが深刻な方に特におすすめのラインナップです。","シャンプー後はすぐにトリートメントをつけ、5分程度時間をおいてから流しましょう。タオルドライは擦らず、押さえるように。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のダメージレベルに合ったケアを確認してみてください。"],
     products:[
-      { name:"パンテーン ミラクルズ シャンプー",
-        desc:"日常使いの定番。脂性頭皮でも毛先はしっとり。",
-        note:"シリーズによって仕上がりの質感が異なります。リンク先で香りや用途をご確認のうえお選びください。",
-        amz:"B0DF2PW2M6",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F61af1323f75fa2d1d3cbf8d6a180004f%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"ラックス スーパーリッチシャイン ダメージリペア シャンプー",
-        desc:"べたつきを抑えながら輝く仕上がり。",
-        note:"シリーズ・香りのバリエーションが複数あります。リンク先でご確認のうえお選びください。",
-        amz:"B0BX96NGCM",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F3e1872af0708329c9eb97f57ef2b0e16%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"TSUBAKI プレミアムモイスト＆リペア シャンプー",
-        desc:"和の美容成分・ツバキ油配合。",
-        note:"",
-        amz:"B0DBHRQHFH",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F5fb3ca4a3bfaaf3cd253023c37723698%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"ダヴ ボタニカルセレクション つややかストレート シャンプー",
-        desc:"マイルドな洗浄力。肌に近い成分で優しい洗い上がり。",
-        note:"",
-        amz:"B07969HHCQ",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2Fa606c025612d56c2d7f06006f551d2aa%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-    ]
-  },
-  repair_mode: {
-    badge:"Hair Type — RM",
-    title:"Repair Mode",
-    sub:"ハイダメージ（パーマ・ブリーチ・縮毛矯正）",
-    color:"#8e44ad",
-    advice:[
-      "パーマ・ブリーチ・縮毛矯正などの薬剤処理は、髪のタンパク質（ケラチン）を変性させます。失ったタンパク質を補うことが修復の第一歩です。",
-      "トスチア（トスキサシン）配合のシャンプーは、ケラチンとシスチンを同時に補修できる成分。ダメージが深刻な方に特におすすめのラインナップです。",
-      "シャンプー後はすぐにトリートメントをつけ、5分程度時間をおいてから流しましょう。タオルドライは擦らず、押さえるように。",
-      "※ 詳しくは担当の美容師さんに相談しながら、ご自身のダメージレベルに合ったケアを確認してみてください。",
-    ],
+      {name:"Straine（ストレイン）ストレートシャンプー BASIC",forWhom:"縮毛矯正・ブリーチでダメージが蓄積し、広がりが気になる方",desc:"広がり・ダメージが気になる方向け。きしみを抑えしなやかで扱いやすい質感へ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",top:true,amz:"B0FV2PQ11B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
+      {name:"セラムイン シャンプー＆トリートメント",forWhom:"内部からしっかり補修したい、パサつきが深刻な方",desc:"PPT成分でダメージを内部から補修。",note:"シャンプー単体ではなくセット販売です。リンク先でご確認ください。",top:false,amz:"B0F4QGL5FD",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
+      {name:"SN repair シャンプー",forWhom:"本格的なサロン品質の補修を、自宅で試したい方",desc:"楽天限定。トスチア×ヘマチン配合のプレミアムライン。",note:"楽天のみの取り扱いです。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]},
+  smooth_wave:{badge:"Hair Type — SW",title:"Smooth Wave",sub:"くせ毛 × 軽〜中ダメージ",
+    advice:["くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。","シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。","ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。"],
     products:[
-      { name:"Straine（ストレイン）ストレートシャンプー BASIC",
-        desc:"広がり・ダメージが気になる方向け。きしみを抑えしなやかで扱いやすい質感へ。",
-        note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",
-        amz:"B0FV2PQ11B",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"セラムイン シャンプー＆トリートメント",
-        desc:"PPT成分でダメージを内部から補修。",
-        note:"シャンプー単体ではなくセット販売です。リンク先でご確認ください。",
-        amz:"B0F4QGL5FD",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"SN repair シャンプー",
-        desc:"楽天限定。トスチア×ヘマチン配合のプレミアムライン。",
-        note:"楽天のみの取り扱いです。",
-        amz:null,
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-    ]
-  },
-  smooth_wave: {
-    badge:"Hair Type — SW",
-    title:"Smooth Wave",
-    sub:"くせ毛 × 軽〜中ダメージ",
-    color:"#16a085",
-    advice:[
-      "くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。",
-      "シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。",
-      "ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。",
-      "※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。",
-    ],
+      {name:"Straine（ストレイン）ストレートシャンプー SOFT",forWhom:"くせ・うねりが気になるけど、重くなりすぎたくない方",desc:"くせ毛・うねりが気になる方向け。ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",top:true,amz:"B0GRSYL4J3",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
+      {name:"SN repair（くせ毛向け）",forWhom:"カラーもしていてうねりも気になる方",desc:"楽天限定。うねりを抑えながら補修。",note:"楽天のみの取り扱いです。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600006%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]},
+  aqua_sensitive:{badge:"Hair Type — AS",title:"Aqua Sensitive",sub:"乾燥・バージン毛・健康な髪",
+    advice:["バージン毛や健康な髪の方は、過度なケアをしすぎないことが大切。洗浄力が強すぎるシャンプーで必要な皮脂まで落としてしまうと、逆に乾燥が進みます。","ジュレームなどのアミノ酸系・ロイヤルフローラル系シャンプーは、髪と頭皮を優しく洗いながら適度な潤いを残してくれます。","週に1〜2回スカルプマッサージを取り入れると血行が促進され、健康な髪の成長をサポートします。洗髪時の1〜2分が効果的。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪質に合ったケアを確認してみてください。"],
+    products:[{name:"ジュレーム リラックス ミッドナイトリペア シャンプー＆トリートメント",forWhom:"健康な髪を守りながら、しっとりとしたまとまりがほしい方",desc:"アミノ酸系洗浄成分。しっとりまとまる保湿ケア。",note:"セット販売です。単品もございますのでリンク先でご確認ください。",top:true,amz:"B0GKDTHTS2",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308dce4.d1bc80a4.5308dce5.9af6e60e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffukuroku-1%2F4cd3dhc5arsokd76ns5btlt2eu%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]},
+  bare_skin:{badge:"Hair Type — BS",title:"Bare Skin",sub:"乾燥・混合 × カラー × 軽ダメージ",
+    advice:["カラーによる軽いダメージがある髪は、カラーの色持ちを良くしながら補修できるシャンプーがベストです。カラーシャンプーや低刺激アミノ酸系を選びましょう。","洗髪は毎日行っても問題ありませんが、お湯の温度は38〜40℃に。熱すぎるお湯はカラーの退色を早め、頭皮の乾燥にもつながります。","週1回の集中トリートメントで補修成分を補うのが効果的。市販品でも十分ですが、美容室でのトリートメントと組み合わせると持続性がアップします。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のカラーダメージに合ったケアを確認してみてください。"],
     products:[
-      { name:"Straine（ストレイン）ストレートシャンプー SOFT",
-        desc:"くせ毛・うねりが気になる方向け。ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",
-        note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",
-        amz:"B0GRSYL4J3",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"SN repair（くせ毛向け）",
-        desc:"楽天限定。うねりを抑えながら補修。",
-        note:"楽天のみの取り扱いです。",
-        amz:null,
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600006%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-    ]
-  },
-  aqua_sensitive: {
-    badge:"Hair Type — AS",
-    title:"Aqua Sensitive",
-    sub:"乾燥・バージン毛・健康な髪",
-    color:"#2471a3",
-    advice:[
-      "バージン毛や健康な髪の方は、過度なケアをしすぎないことが大切。洗浄力が強すぎるシャンプーで必要な皮脂まで落としてしまうと、逆に乾燥が進みます。",
-      "ジュレームなどのアミノ酸系・ロイヤルフローラル系シャンプーは、髪と頭皮を優しく洗いながら適度な潤いを残してくれます。",
-      "週に1〜2回スカルプマッサージを取り入れると血行が促進され、健康な髪の成長をサポートします。洗髪時の1〜2分が効果的。",
-      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪質に合ったケアを確認してみてください。",
-    ],
-    products:[
-      { name:"ジュレーム リラックス ミッドナイトリペア シャンプー＆トリートメント",
-        desc:"アミノ酸系洗浄成分。しっとりまとまる保湿ケア。",
-        note:"セット販売です。単品もございますのでリンク先でご確認ください。",
-        amz:"B0GKDTHTS2",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308dce4.d1bc80a4.5308dce5.9af6e60e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffukuroku-1%2F4cd3dhc5arsokd76ns5btlt2eu%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-    ]
-  },
-  bare_skin: {
-    badge:"Hair Type — BS",
-    title:"Bare Skin",
-    sub:"乾燥・混合 × カラー × 軽ダメージ",
-    color:"#CA8A04",
-    advice:[
-      "カラーによる軽いダメージがある髪は、カラーの色持ちを良くしながら補修できるシャンプーがベストです。カラーシャンプーや低刺激アミノ酸系を選びましょう。",
-      "洗髪は毎日行っても問題ありませんが、お湯の温度は38〜40℃に。熱すぎるお湯はカラーの退色を早め、頭皮の乾燥にもつながります。",
-      "週1回の集中トリートメントで補修成分を補うのが効果的。市販品でも十分ですが、美容室でのトリートメントと組み合わせると持続性がアップします。",
-      "※ 詳しくは担当の美容師さんに相談しながら、ご自身のカラーダメージに合ったケアを確認してみてください。",
-    ],
-    products:[
-      { name:"エッセンシャル プレミアム うるおいバリア シャンプー",
-        desc:"カラー毛のパサつき・軽ダメージに。",
-        note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",
-        amz:"B0CXHLSP8S",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-      { name:"花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー＆EXトリートメント",
-        desc:"花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系洗浄成分×ラメラプラットフォーム技術で、補修成分を従来の約12倍配合。カラー毛のまとまり・ツヤに。",
-        note:"シャンプーは1種類ですが、コンディショナーは「しっとり・さらさら・ツヤ」の3タイプから選べます。リンク先でなりたい仕上がりに合わせてお選びください。",
-        amz:"B0GMDSB9V1",
-        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fanswer-03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
-        img_url:"" },
-    ]
-  },
+      {name:"花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー＆EXトリートメント",forWhom:"カラー毛のツヤとまとまりを、次世代ケアで叶えたい方",desc:"花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。",note:"シャンプーは1種類ですが、コンディショナーは「しっとり・さらさら・ツヤ」の3タイプから選べます。リンク先でなりたい仕上がりに合わせてお選びください。",top:true,amz:"B0GMDSB9V1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fanswer-03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
+      {name:"エッセンシャル プレミアム うるおいバリア シャンプー",forWhom:"カラーしてるけど、ベタつきもパサつきも気になる方",desc:"カラー毛のパサつき・軽ダメージに。",note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",top:false,amz:"B0CXHLSP8S",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]}
 };
 
-// ───────────────────────────────────────────────────────────
-// 界面活性剤リスト（商品・タイプと連携）
-// ───────────────────────────────────────────────────────────
-const SURFACTANTS = [
-  { name:"コカミドプロピルベタイン",     types:[], products:[] },
-  { name:"ココアンホ酢酸ナトリウム",    types:[], products:[] },
-  { name:"ココイルグルタミン酸系",      types:[], products:[] },
-  { name:"ラウロイルメチルアラニン系",   types:["aqua_sensitive","bare_skin"], products:["ジアンサー"] },
-  { name:"ラウロイルサルコシン系",       types:[], products:[] },
-  { name:"ラウレスカルボン酸系",         types:[], products:[] },
-  { name:"ココイルメチルタウリン系",    types:["aqua_sensitive","bare_skin"], products:["ジュレーム","エッセンシャル プレミアム"] },
-  { name:"スルホコハク酸系",             types:[], products:[] },
-  { name:"カリ石鹸・石鹸",              types:[], products:[] },
-  { name:"オレフィンスルホン酸系",       types:["oil_reset_short"], products:["デオコ"] },
-  { name:"ラウレス硫酸系",              types:["oil_reset_long","oil_reset_short"], products:["パンテーン","ラックス","ツバキ","ダヴ","ウェルプ"] },
-  { name:"ラウリルベンゼンスルホン酸系", types:[], products:[] },
-  { name:"ラウリル硫酸系",              types:["oil_reset_short"], products:["h&s"] },
+const SURFACTANTS=[
+  {name:"\u30b3\u30ab\u30df\u30c9\u30d7\u30ed\u30d4\u30eb\u30d9\u30bf\u30a4\u30f3",types:[],products:[]},
+  {name:"\u30b3\u30b3\u30a2\u30f3\u30db\u9162\u9178\u30ca\u30c8\u30ea\u30a6\u30e0",types:[],products:[]},
+  {name:"\u30b3\u30b3\u30a4\u30eb\u30b0\u30eb\u30bf\u30df\u30f3\u9178\u7cfb",types:[],products:[]},
+  {name:"\u30e9\u30a6\u30ed\u30a4\u30eb\u30e1\u30c1\u30eb\u30a2\u30e9\u30cb\u30f3\u7cfb",types:["aqua_sensitive","bare_skin"],products:["\u30b8\u30a2\u30f3\u30b5\u30fc"]},
+  {name:"\u30e9\u30a6\u30ed\u30a4\u30eb\u30b5\u30eb\u30b3\u30b7\u30f3\u7cfb",types:[],products:[]},
+  {name:"\u30e9\u30a6\u30ec\u30b9\u30ab\u30eb\u30dc\u30f3\u9178\u7cfb",types:[],products:[]},
+  {name:"\u30b3\u30b3\u30a4\u30eb\u30e1\u30c1\u30eb\u30bf\u30a6\u30ea\u30f3\u7cfb",types:["aqua_sensitive","bare_skin"],products:["\u30b8\u30e5\u30ec\u30fc\u30e0","\u30a8\u30c3\u30bb\u30f3\u30b7\u30e3\u30eb \u30d7\u30ec\u30df\u30a2\u30e0"]},
+  {name:"\u30b9\u30eb\u30db\u30b3\u30cf\u30af\u9178\u7cfb",types:[],products:[]},
+  {name:"\u30ab\u30ea\u77f3\u9e7f\u30fb\u77f3\u9e7f",types:[],products:[]},
+  {name:"\u30aa\u30ec\u30d5\u30a3\u30f3\u30b9\u30eb\u30db\u30f3\u9178\u7cfb",types:["oil_reset_short"],products:["\u30c7\u30aa\u30b3"]},
+  {name:"\u30e9\u30a6\u30ec\u30b9\u7947\u9178\u7cfb",types:["oil_reset_long","oil_reset_short"],products:["\u30d1\u30f3\u30c6\u30fc\u30f3","\u30e9\u30c3\u30af\u30b9","\u30c4\u30d0\u30ad","\u30c0\u30f4","\u30a6\u30a7\u30eb\u30d7"]},
+  {name:"\u30e9\u30a6\u30ea\u30eb\u30d9\u30f3\u30bc\u30f3\u30b9\u30eb\u30db\u30f3\u9178\u7cfb",types:[],products:[]},
+  {name:"\u30e9\u30a6\u30ea\u30eb\u7947\u9178\u7cfb",types:["oil_reset_short"],products:["h&s"]},
 ];
 
-// ───────────────────────────────────────────────────────────
-// Icon Helper
-// ───────────────────────────────────────────────────────────
-const {createElement:h,useRef,useEffect,useState} = React;
+function diagnose(ans){
+  const {q1,q2,q6,q7,q8}=ans;
+  if(q1==="red") return "skin_alert";
+  if(q1==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
+  if(q7==="perm"&&(q8==="split"||q8==="frizz")) return "repair_mode";
+  if((q6==="some"||q6==="strong")&&(q7==="none"||q7==="color")) return "smooth_wave";
+  if(q8==="spread") return "smooth_wave";
+  if(q8==="flat") return q7==="none"?"aqua_sensitive":"bare_skin";
+  if(q7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
+  return "bare_skin";
+}
+
+const {createElement:h,useRef,useEffect,useState}=React;
 function Icon({name,size=16,color}){
   const ref=useRef(null);
   useEffect(()=>{
@@ -430,271 +227,158 @@ function Icon({name,size=16,color}){
   return h("span",{ref,style:{display:"inline-flex",alignItems:"center"}});
 }
 
-// ───────────────────────────────────────────────────────────
-// Surfactant Chart（タイプ連携版）
-// ───────────────────────────────────────────────────────────
 function SurfactantChart({typeKey}){
   return h("div",{className:"ingr-box"},
     h("div",{className:"ingr-ttl"},
       h(Icon,{name:"flask-conical",size:14,color:"var(--gold)"}),
       h("span",{style:{marginLeft:".35rem"}},"界面活性剤の強さ — 弱い順"),
-      typeKey&&h("span",{className:"ingr-legend"},
-        h("span",{className:"ingr-legend-dot"}),
-        "あなたへのおすすめ"
-      )
+      typeKey&&h("span",{className:"ingr-legend"},h("span",{className:"ingr-legend-dot"}),"あなたへのおすすめ")
     ),
     SURFACTANTS.map((s,i)=>{
-      const isMatch = typeKey && s.types.includes(typeKey);
+      const isMatch=typeKey&&s.types.includes(typeKey);
       return h("div",{key:i,className:"ingr-row"+(isMatch?" ingr-row-match":"")},
         h("span",{className:"ingr-num"},i+1),
-        h("div",{className:"ingr-bar-wrap"},
-          h("div",{className:"ingr-bar",style:{
-            width:`${((i+1)/13*100).toFixed(0)}%`,
-            background: isMatch
-              ? "linear-gradient(90deg,var(--gold-d),var(--gold))"
-              : "linear-gradient(90deg,#4CAF82,var(--gold),#e05530)"
-          }})
-        ),
+        h("div",{className:"ingr-bar-wrap"},h("div",{className:"ingr-bar",style:{width:`${((i+1)/13*100).toFixed(0)}%`,background:isMatch?"linear-gradient(90deg,var(--gold-d),var(--gold))":"linear-gradient(90deg,#4CAF82,var(--gold),#e05530)"}})),
         h("div",{className:"ingr-name-wrap"},
-          h("span",{className:"ingr-name"+(isMatch?" ingr-hl":"")}, s.name),
-          isMatch&&s.products.length>0&&h("span",{className:"ingr-products"},
-            "← "+s.products.join("・")
-          )
+          h("span",{className:"ingr-name"+(isMatch?" ingr-hl":"")},s.name),
+          isMatch&&s.products.length>0&&h("span",{className:"ingr-products"},"← "+s.products.join("・"))
         )
       );
     })
   );
 }
 
-// ───────────────────────────────────────────────────────────
-// MAIN APP
-// ───────────────────────────────────────────────────────────
+const PHOTO_SRC="data:image/jpeg;base64,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";
+
 function App(){
   const [step,setStep]=useState("intro");
   const [curQ,setCurQ]=useState(0);
   const [answers,setAnswers]=useState({});
   const [typeKey,setTypeKey]=useState(null);
-
   const totalQ=QUESTIONS.length;
-  const prog = step==="quiz"?(curQ/totalQ*100): step==="result"||step==="products"?100:0;
-
-  useEffect(()=>{
-    document.getElementById("pbar").style.width=prog+"%";
-  },[prog]);
-
-  // ページ切替時に必ず上にスクロール
-  useEffect(()=>{ window.scrollTo({top:0,behavior:"instant"}); },[step]);
-
-  function startQuiz(){ setStep("quiz"); setCurQ(0); setAnswers({}); }
-
+  const prog=step==="quiz"?(curQ/totalQ*100):step==="result"||step==="products"?100:0;
+  useEffect(()=>{document.getElementById("pbar").style.width=prog+"%";},[prog]);
+  useEffect(()=>{window.scrollTo({top:0,behavior:"instant"});},[step]);
+  function startQuiz(){setStep("quiz");setCurQ(0);setAnswers({});}
   function selectOpt(k){
     const q=QUESTIONS[curQ];
     const na={...answers,[q.id]:k};
     setAnswers(na);
     setTimeout(()=>{
-      if(curQ<totalQ-1){ setCurQ(curQ+1); }
-      else {
-        const tk=diagnose(na);
-        setTypeKey(tk);
-        setStep("result");
-      }
+      if(curQ<totalQ-1){setCurQ(curQ+1);}
+      else{setTypeKey(diagnose(na));setStep("result");}
     },280);
   }
-
-  function goBack(){
-    if(curQ>0) setCurQ(curQ-1);
-    else setStep("intro");
-  }
-
-  function retry(){ setStep("intro"); setAnswers({}); setCurQ(0); setTypeKey(null); }
-
-  const td = typeKey ? TYPES[typeKey] : null;
-
+  function goBack(){if(curQ>0)setCurQ(curQ-1);else setStep("intro");}
+  function retry(){setStep("intro");setAnswers({});setCurQ(0);setTypeKey(null);}
+  const td=typeKey?TYPES[typeKey]:null;
   return h("div",null,
-    // ── HEADER
     h("header",{className:"hdr"},
       h("p",{className:"hdr-eye"},"Hair Care Diagnosis"),
       h("h1",{className:"hdr-h1"},"Hair Identity"),
       h("p",{className:"hdr-sub"},"by Ryoichi Hashimoto"),
       h("div",{className:"gold-line"})
     ),
-
     h("main",{className:"wrap"},
-      h("h2",{className:"visually-hidden"},"ヘアケア診断アプリ — Hair Identity by Ryoichi Hashimoto"),
-
-      // ────── INTRO
+      h("h2",{className:"visually-hidden"},"ヘアケア診断アプリ"),
       step==="intro"&&h("div",{className:"fade"},
+        h("div",{className:"trust-bar"},
+          h(Icon,{name:"shield-check",size:16,color:"var(--gold)"}),
+          h("p",{className:"trust-bar-txt"},"この診断はご購入を強制するものではありません。20年以上の経験をもとに、あなたの髪質に合ったケアを純粋にご提案します。")
+        ),
         h("p",{className:"sec-label"},"About"),
         h("h2",{className:"sec-title"},"あなたの髪を、\nもっと深く知ってほしい。"),
-        h("p",{className:"sec-desc"},
-          "11の質問に答えるだけで、髪と頭皮のタイプを診断。\nプロが厳選したシャンプーと、AIによるパーソナルアドバイスをお届けします。\n所要時間：約2〜3分"
-        ),
-        h("button",{className:"btn-primary",onClick:startQuiz},
-          h(Icon,{name:"scissors",size:14}),
-          h("span",{style:{marginLeft:".5rem"}},"診断をはじめる")
-        )
+        h("p",{className:"sec-desc"},"11の質問に答えるだけで、髪と頭皮のタイプを診断。\nプロが厳選したシャンプーをご提案します。\n所要時間：約2〜3分"),
+        h("button",{className:"btn-primary",onClick:startQuiz},h(Icon,{name:"scissors",size:14}),h("span",{style:{marginLeft:".5rem"}},"診断をはじめる"))
       ),
-
-      // ────── QUIZ
       step==="quiz"&&h("div",null,
-        h("div",{className:"dots"},
-          QUESTIONS.map((_,i)=>h("div",{key:i,className:"dot"+(i===curQ?" active":i<curQ?" done":"")}))
-        ),
+        h("div",{className:"dots"},QUESTIONS.map((_,i)=>h("div",{key:i,className:"dot"+(i===curQ?" active":i<curQ?" done":"")}))),
         h("div",{className:"fade",key:curQ},
           h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
           h("p",{className:"q-text"},QUESTIONS[curQ].text),
-          h("div",{className:"opts"},
-            QUESTIONS[curQ].opts.map(opt=>
-              h("button",{key:opt.k,
-                className:"opt"+(answers[QUESTIONS[curQ].id]===opt.k?" sel":""),
-                onClick:()=>selectOpt(opt.k)},
-                h("span",{className:"opt-lt"},opt.l),
-                h("span",null,opt.t)
-              )
-            )
-          )
+          h("div",{className:"opts"},QUESTIONS[curQ].opts.map(opt=>
+            h("button",{key:opt.k,className:"opt"+(answers[QUESTIONS[curQ].id]===opt.k?" sel":""),onClick:()=>selectOpt(opt.k)},
+              h("span",{className:"opt-lt"},opt.l),h("span",null,opt.t))
+          ))
         ),
         h("button",{className:"btn-ghost",onClick:goBack},"← 前の質問に戻る")
       ),
-
-      // ────── LOADING
-      step==="loading"&&h("div",{className:"loading"},
-        h("div",{className:"spin"}),
-        h("p",{className:"loading-txt"},"髪質を分析しています…")
-      ),
-
-      // ────── RESULT
+      step==="loading"&&h("div",{className:"loading"},h("div",{className:"spin"}),h("p",{className:"loading-txt"},"髪質を分析しています…")),
       step==="result"&&td&&h("div",{className:"fade"},
         h("span",{className:"badge"},td.badge),
         h("h2",{className:"res-title"},td.title),
         h("p",{className:"res-sub"},td.sub),
-
-        // アラート（Skin Alert のみ）
         td.alert&&h("div",{className:"alert-box"},td.alert),
-
         h("hr",{className:"divider"}),
-
-        // 事前テキストアドバイス（1〜3は番号付き、最後の※は注釈スタイル）
         h("div",{className:"ai-box"},
-          h("p",{className:"ai-lbl"},
-            h(Icon,{name:"sparkles",size:11,color:"var(--gold)"}),
-            h("span",null,"Hair Advice — Ryoichi Hashimoto")
-          ),
+          h("p",{className:"ai-lbl"},h(Icon,{name:"sparkles",size:11,color:"var(--gold)"}),h("span",null,"Hair Advice — Ryoichi Hashimoto")),
           td.advice.map((txt,i)=>{
-            const isNote = txt.startsWith("※");
-            return h("p",{key:i,className:"ai-txt",style:{
-              marginBottom:i<td.advice.length-1?".9rem":"0",
-              paddingLeft:"0",
-              ...(isNote?{fontSize:".76rem",color:"var(--muted)",borderTop:"1px solid var(--border)",paddingTop:".75rem",marginTop:".25rem"}:{})
-            }},
-              isNote
-                ? txt
-                : h(React.Fragment,null,
-                    h("span",{style:{color:"var(--gold)",fontFamily:"var(--serif)",fontStyle:"italic",marginRight:".4rem"}},`${i+1}.`),
-                    txt
-                  )
+            const isNote=txt.startsWith("※");
+            return h("p",{key:i,className:"ai-txt",style:{marginBottom:i<td.advice.length-1?".9rem":"0",paddingLeft:"0",...(isNote?{fontSize:".76rem",color:"var(--muted)",borderTop:"1px solid var(--border)",paddingTop:".75rem",marginTop:".25rem"}:{})}},
+              isNote?txt:h(React.Fragment,null,h("span",{style:{color:"var(--gold)",fontFamily:"var(--serif)",fontStyle:"italic",marginRight:".4rem"}},`${i+1}.`),txt)
             );
           })
         ),
-
-        h("button",{className:"btn-primary",onClick:()=>setStep("products")},
-          h(Icon,{name:"package",size:14}),
-          h("span",{style:{marginLeft:".5rem"}},"おすすめシャンプーを見る")
-        ),
+        h("button",{className:"btn-primary",onClick:()=>setStep("products")},h(Icon,{name:"package",size:14}),h("span",{style:{marginLeft:".5rem"}},"おすすめシャンプーを見る")),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
       ),
-
-      // ────── PRODUCTS
       step==="products"&&td&&h("div",{className:"fade"},
         h("span",{className:"badge"},td.badge),
         h("h2",{className:"res-title"},td.title),
         h("p",{className:"res-sub"},td.sub),
         h("hr",{className:"divider"}),
-
         h("p",{className:"prod-hd"},"あなたにおすすめのシャンプー"),
         h("p",{className:"prod-sub"},"タイプ別に厳選したアイテムです。複数のショップで比較して選んでください。"),
-
-        // アラート（Skin Alert のみ）
         td.alert&&h("div",{className:"alert-box"},td.alert),
-
         td.products.map((p,i)=>
-          h("div",{key:i,className:"prod-card"},
+          h("div",{key:i,className:"prod-card"+(p.top?" top-pick":"")},
+            p.top&&h("span",{className:"prod-top-badge"},"★ おすすめ1位"),
             h("div",{className:"prod-card-inner"},
-              // 商品画像
               h("div",{className:"prod-img-wrap"},
-                p.img_url
-                  ? h("img",{src:p.img_url,alt:p.name,className:"prod-img",loading:"lazy"})
-                  : h("div",{className:"prod-img-placeholder"},
-                      h(Icon,{name:"droplets",size:28,color:"var(--gold-l)"})
-                    )
+                p.img_url?h("img",{src:p.img_url,alt:p.name,className:"prod-img",loading:"lazy"}):h("div",{className:"prod-img-placeholder"},h(Icon,{name:"droplets",size:28,color:"var(--gold-l)"}))
               ),
               h("div",{className:"prod-info"},
                 h("p",{className:"prod-name"},p.name),
+                p.forWhom&&h("p",{className:"prod-for"},h(Icon,{name:"user-check",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},`こんな方に：${p.forWhom}`)),
                 h("p",{className:"prod-desc"},p.desc),
-                p.note&&h("p",{className:"prod-note"},
-                  h(Icon,{name:"info",size:11,color:"var(--gold)"}),
-                  h("span",{style:{marginLeft:".3rem"}},p.note)
-                ),
+                p.note&&h("p",{className:"prod-note"},h(Icon,{name:"info",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},p.note)),
                 h("div",{className:"prod-links"},
-                  p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"noopener noreferrer"},
-                    h(Icon,{name:"shopping-cart",size:12,color:"#111"}),
-                    h("span",{style:{marginLeft:".3rem"}},"Amazon")
-                  ),
-                  p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"noopener noreferrer"},
-                    h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),
-                    h("span",{style:{marginLeft:".3rem"}},"楽天で見る")
-                  ),
+                  p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
+                  p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
                 )
               )
             )
           )
         ),
-
-        // 界面活性剤チャート
+        h("div",{className:"consult-bar"},
+          h("div",{className:"consult-bar-txt"},
+            h("p",{className:"consult-bar-ttl"},"どれを選べばいいか迷ったら"),
+            h("p",{className:"consult-bar-sub"},"あなたの髪を直接見ながら、いちばん合うものをご提案します。")
+          ),
+          h("a",{className:"consult-bar-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"相談する"))
+        ),
         h(SurfactantChart,{typeKey}),
-
         h("button",{className:"btn-ghost",style:{marginTop:"1.5rem"},onClick:retry},"← もう一度診断する")
       )
     ),
-
-    // ── FOOTER：結果・商品ページのみ表示
     (step==="result"||step==="products")&&h("footer",{className:"ftr"},
-      // プロフィールカード
       h("div",{className:"ftr-profile"},
         h("div",{className:"ftr-photo-wrap"},
-          h("img",{
-            src:"data:image/jpeg;base64,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",
-            alt:"橋元リョウイチ",
-            className:"ftr-photo",
-            onError:e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}
-          }),
-          h("div",{className:"ftr-photo-fallback"},
-            h(Icon,{name:"user",size:32,color:"var(--gold-l)"})
-          )
+          h("img",{src:PHOTO_SRC,alt:"橋元リョウイチ",className:"ftr-photo",onError:e=>{e.target.style.display="none";e.target.nextSibling.style.display="flex";}}),
+          h("div",{className:"ftr-photo-fallback"},h(Icon,{name:"user",size:32,color:"var(--gold-l)"}))
         ),
         h("div",{className:"ftr-profile-info"},
           h("p",{className:"ftr-profile-label"},"20年以上 髪と向き合ってきました。気になることがあればお気軽にどうぞ。"),
           h("p",{className:"ftr-name"},"橋元 リョウイチ"),
           h("p",{className:"ftr-salon"},"Freelance Hair Stylist"),
-          h("a",{
-            className:"ftr-rsv-btn",
-            href:"https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/",
-            target:"_blank",
-            rel:"noopener noreferrer"
-          },
-            h(Icon,{name:"calendar-check",size:13,color:"#fff"}),
-            h("span",{style:{marginLeft:".35rem"}},"ご予約はこちら")
-          )
+          h("a",{className:"ftr-rsv-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"calendar-check",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"ご予約はこちら"))
         )
       ),
-      h("p",{className:"ftr-note"},
-        "このサイトはAmazonアソシエイト・楽天アフィリエイトプログラムに参加しています。\n掲載リンクから商品を購入された場合、紹介料を受け取る場合があります。\n診断結果はあくまで参考情報です。頭皮の症状が続く場合は皮膚科を受診してください。"
-      )
+      h("p",{className:"ftr-note"},"このサイトはAmazonアソシエイト・楽天アフィリエイトプログラムに参加しています。\n掲載リンクから商品を購入された場合、紹介料を受け取る場合があります。\n診断結果はあくまで参考情報です。頭皮の症状が続く場合は皮膚科を受診してください。")
     )
   );
 }
-
 ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 </script>
 </body>
