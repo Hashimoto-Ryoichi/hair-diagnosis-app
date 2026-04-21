@@ -96,7 +96,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .prod-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .prod-info{flex:1;min-width:0}
 .prod-name{font-size:.84rem;font-weight:500;color:var(--char);margin-bottom:.3rem;line-height:1.4}
-.prod-desc{font-size:.73rem;color:var(--muted);margin-bottom:.7rem;line-height:1.5}
+.prod-desc{font-size:.73rem;color:var(--muted);margin-bottom:.5rem;line-height:1.5}
+.prod-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.68rem;color:var(--gold-d);background:var(--ivory);border-radius:var(--r);padding:.4rem .6rem;margin-bottom:.6rem;line-height:1.5}
 .prod-links{display:flex;gap:.5rem;flex-wrap:wrap}
 .prod-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;letter-spacing:.06em;padding:.3rem .7rem;border-radius:var(--r);text-decoration:none;transition:all .2s;border:1px solid var(--border);color:var(--char2)}
 .prod-link:hover{border-color:var(--gold-l);background:var(--ivory)}
@@ -104,8 +105,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .prod-link.amz:hover{background:#e68900;border-color:#e68900}
 .prod-link.rak{background:#BF0000;border-color:#BF0000;color:#fff}
 .prod-link.rak:hover{background:#a00000;border-color:#a00000}
-.prod-link.drg{background:#4CAF82;border-color:#4CAF82;color:#fff}
-.prod-link.drg:hover{background:#3a9a6e;border-color:#3a9a6e}
 .virgo-box{background:var(--char);color:var(--cream);border-radius:var(--r);padding:1.4rem;text-align:center;margin:2rem 0}
 .virgo-box-ttl{font-family:var(--serif);font-size:1.2rem;font-weight:300;letter-spacing:.04em;margin-bottom:.4rem}
 .virgo-box-sub{font-size:.73rem;color:var(--gold-l);margin-bottom:1rem;line-height:1.6}
@@ -114,13 +113,19 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* ── Surf / Ingredient ── */
 .ingr-box{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;margin-top:2rem}
-.ingr-ttl{font-size:.73rem;font-weight:500;color:var(--char2);margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem}
-.ingr-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.35rem}
-.ingr-num{font-size:.6rem;color:var(--gold);width:16px;text-align:right;flex-shrink:0}
-.ingr-bar-wrap{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
-.ingr-bar{height:100%;border-radius:2px;background:linear-gradient(90deg,#4CAF82,var(--gold),#e05530)}
-.ingr-name{font-size:.68rem;color:var(--char2);width:180px;flex-shrink:0}
+.ingr-ttl{font-size:.73rem;font-weight:500;color:var(--char2);margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.ingr-legend{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;color:var(--gold-d);font-weight:400;margin-left:auto}
+.ingr-legend-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.ingr-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;padding:.2rem .3rem;border-radius:var(--r);transition:background .2s}
+.ingr-row-match{background:rgba(184,149,106,0.1);border:1px solid var(--border)}
+.ingr-num{font-size:.6rem;color:var(--muted);width:16px;text-align:right;flex-shrink:0}
+.ingr-row-match .ingr-num{color:var(--gold)}
+.ingr-bar-wrap{flex:0 0 80px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.ingr-bar{height:100%;border-radius:2px}
+.ingr-name-wrap{flex:1;display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+.ingr-name{font-size:.68rem;color:var(--char2)}
 .ingr-hl{font-weight:500;color:var(--gold-d)}
+.ingr-products{font-size:.62rem;color:var(--gold);font-style:italic}
 
 /* ── Footer ── */
 .ftr{text-align:center;padding:2.5rem 1.5rem 2rem;border-top:1px solid var(--border);margin-top:2rem}
@@ -159,9 +164,6 @@ function amzLink(asin) {
 }
 function rakLink(keyword) {
   return `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(keyword)}/?affiliate_id=${ASSOC_ID}`;
-}
-function drugLink(keyword) {
-  return `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(keyword + " 薬局")}/?affiliate_id=${ASSOC_ID}`;
 }
 
 // ───────────────────────────────────────────────────────────
@@ -209,10 +211,12 @@ const TYPES = {
       "※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。",
     ],
     products:[
-      { name:"ミノン 全身シャンプー やさしいせっけん泡タイプ",
+      { name:"ミノン 全身シャンプー しっとりタイプ",
         desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",
-        amz:"B007K7KZBC", rak:"ミノン 全身シャンプー", drug:true,
-        img_url:"https://images-na.ssl-images-amazon.com/images/I/71placeholder_SA.jpg" },
+        note:"",
+        amz:"B00N3KJH58",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F272f92155ee4457fdcc005d40ecb26cf%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
+        img_url:"" },
     ]
   },
   oil_reset_short: {
@@ -227,17 +231,23 @@ const TYPES = {
       "※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。",
     ],
     products:[
-      { name:"h&s スカルプ シャンプー（清潔感タイプ）",
+      { name:"h&s スカルプ シャンプー",
         desc:"フケ・かゆみケア。洗浄力が高く脂性頭皮に効果的。",
-        amz:"B07WQKZ3CX", rak:"h&s スカルプ シャンプー", drug:true,
+        note:"香りや容量など、バリエーションが複数あります。リンク先でご自身に合うものをお選びください。",
+        amz:"B08X732T5Z",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F360f53076a02e226e890e2ba28dd5d4f%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
         img_url:"" },
       { name:"デオコ 薬用スカルプケア シャンプー",
         desc:"頭皮の臭いと脂を同時にケア。",
-        amz:"B07X7S4W5P", rak:"デオコ スカルプ シャンプー", drug:true,
+        note:"",
+        amz:"B0CW3C9TYD",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2Fec66d0987e9db2681148d12f1972c99a%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
         img_url:"" },
-      { name:"ウェルプ アミノ酸シャンプー",
+      { name:"WELLP（ウェルプ）薬用スムースシャンプー",
         desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",
-        amz:"B08XYZ0001", rak:"ウェルプ シャンプー", drug:false,
+        note:"",
+        amz:"B0DJ1CMC5Y",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2Fd17ec847309d51e390b10db5bd9381bb%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
         img_url:"" },
     ]
   },
@@ -255,19 +265,27 @@ const TYPES = {
     products:[
       { name:"パンテーン ミラクルズ シャンプー",
         desc:"日常使いの定番。脂性頭皮でも毛先はしっとり。",
-        amz:"B087CFKWL5", rak:"パンテーン ミラクルズ シャンプー", drug:true,
+        note:"シリーズによって仕上がりの質感が異なります。リンク先で香りや用途をご確認のうえお選びください。",
+        amz:"B0DF2PW2M6",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F61af1323f75fa2d1d3cbf8d6a180004f%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
         img_url:"" },
-      { name:"ラックス スーパーリッチシャイン シャンプー",
+      { name:"ラックス スーパーリッチシャイン ダメージリペア シャンプー",
         desc:"べたつきを抑えながら輝く仕上がり。",
-        amz:"B07RTSG8KG", rak:"ラックス スーパーリッチシャイン シャンプー", drug:true,
+        note:"シリーズ・香りのバリエーションが複数あります。リンク先でご確認のうえお選びください。",
+        amz:"B0BX96NGCM",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F3e1872af0708329c9eb97f57ef2b0e16%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
         img_url:"" },
-      { name:"ツバキ プレミアムモイスト シャンプー",
+      { name:"TSUBAKI プレミアムモイスト＆リペア シャンプー",
         desc:"和の美容成分・ツバキ油配合。",
-        amz:"B082GG0001", rak:"ツバキ プレミアム シャンプー", drug:true,
+        note:"",
+        amz:"B0DBHRQHFH",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F5fb3ca4a3bfaaf3cd253023c37723698%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
         img_url:"" },
-      { name:"ダヴ ボタニカル セレクション シャンプー",
+      { name:"ダヴ ボタニカルセレクション つややかストレート シャンプー",
         desc:"マイルドな洗浄力。肌に近い成分で優しい洗い上がり。",
-        amz:"B082GG0002", rak:"ダヴ ボタニカル シャンプー", drug:true,
+        note:"",
+        amz:"B07969HHCQ",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2Fa606c025612d56c2d7f06006f551d2aa%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9",
         img_url:"" },
     ]
   },
@@ -283,21 +301,23 @@ const TYPES = {
       "※ 詳しくは担当の美容師さんに相談しながら、ご自身のダメージレベルに合ったケアを確認してみてください。",
     ],
     products:[
-      { name:"ストレイン リペア シャンプー",
-        desc:"トスチア配合。縮毛矯正・ブリーチダメージに特化。",
-        amz:"B09XYZ0001", rak:"ストレイン シャンプー", drug:false,
+      { name:"Straine（ストレイン）ストレートシャンプー BASIC",
+        desc:"広がり・ダメージが気になる方向け。きしみを抑えしなやかで扱いやすい質感へ。",
+        note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",
+        amz:"B0FV2PQ11B",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
         img_url:"" },
-      { name:"セラムイン ダメージケア シャンプー",
+      { name:"セラムイン シャンプー＆トリートメント",
         desc:"PPT成分でダメージを内部から補修。",
-        amz:"B09XYZ0002", rak:"セラムイン シャンプー", drug:false,
+        note:"シャンプー単体ではなくセット販売です。リンク先でご確認ください。",
+        amz:"B0F4QGL5FD",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
         img_url:"" },
       { name:"SN repair シャンプー",
         desc:"楽天限定。トスチア×ヘマチン配合のプレミアムライン。",
-        amz:null, rak:"SN repair シャンプー", drug:false,
-        img_url:"" },
-      { name:"etol. ディープリペア シャンプー",
-        desc:"エタノール不使用。敏感な頭皮のダメージヘアに。",
-        amz:"B09XYZ0003", rak:"etol シャンプー", drug:false,
+        note:"楽天のみの取り扱いです。",
+        amz:null,
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
         img_url:"" },
     ]
   },
@@ -313,21 +333,17 @@ const TYPES = {
       "※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。",
     ],
     products:[
-      { name:"ストレイン モイスチャー シャンプー",
-        desc:"トスチア配合でうねりをケア。くせ毛向け保湿処方。",
-        amz:"B09XYZ0011", rak:"ストレイン モイスチャー シャンプー", drug:false,
-        img_url:"" },
-      { name:"セラムイン スムース シャンプー",
-        desc:"くせ毛・うねりを抑える植物由来成分配合。",
-        amz:"B09XYZ0012", rak:"セラムイン スムース シャンプー", drug:false,
+      { name:"Straine（ストレイン）ストレートシャンプー SOFT",
+        desc:"くせ毛・うねりが気になる方向け。ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",
+        note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",
+        amz:"B0GRSYL4J3",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
         img_url:"" },
       { name:"SN repair（くせ毛向け）",
         desc:"楽天限定。うねりを抑えながら補修。",
-        amz:null, rak:"SN repair くせ毛 シャンプー", drug:false,
-        img_url:"" },
-      { name:"etol. カーム シャンプー",
-        desc:"低刺激処方。くせ毛×カラー毛の両方に対応。",
-        amz:"B09XYZ0013", rak:"etol カーム シャンプー", drug:false,
+        note:"楽天のみの取り扱いです。",
+        amz:null,
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600006%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
         img_url:"" },
     ]
   },
@@ -343,9 +359,11 @@ const TYPES = {
       "※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪質に合ったケアを確認してみてください。",
     ],
     products:[
-      { name:"ジュレーム リラックス ウォータリー シャンプー",
+      { name:"ジュレーム リラックス ミッドナイトリペア シャンプー＆トリートメント",
         desc:"アミノ酸系洗浄成分。しっとりまとまる保湿ケア。",
-        amz:"B07X0001AS", rak:"ジュレーム リラックス シャンプー", drug:true,
+        note:"セット販売です。単品もございますのでリンク先でご確認ください。",
+        amz:"B0GKDTHTS2",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308dce4.d1bc80a4.5308dce5.9af6e60e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffukuroku-1%2F4cd3dhc5arsokd76ns5btlt2eu%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
         img_url:"" },
     ]
   },
@@ -361,107 +379,74 @@ const TYPES = {
       "※ 詳しくは担当の美容師さんに相談しながら、ご自身のカラーダメージに合ったケアを確認してみてください。",
     ],
     products:[
-      { name:"エッセンシャル プレミアム ダメージリペア シャンプー",
-        desc:"カラー毛のパサつき・軽ダメージに。ドラッグストアで入手しやすい。",
-        amz:"B082GG0003", rak:"エッセンシャル プレミアム シャンプー", drug:true,
+      { name:"エッセンシャル プレミアム うるおいバリア シャンプー",
+        desc:"カラー毛のパサつき・軽ダメージに。",
+        note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",
+        amz:"B0CXHLSP8S",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
+        img_url:"" },
+      { name:"花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー＆EXトリートメント",
+        desc:"花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系洗浄成分×ラメラプラットフォーム技術で、補修成分を従来の約12倍配合。カラー毛のまとまり・ツヤに。",
+        note:"シャンプーは1種類ですが、コンディショナーは「しっとり・さらさら・ツヤ」の3タイプから選べます。リンク先でなりたい仕上がりに合わせてお選びください。",
+        amz:"B0GMDSB9V1",
+        rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fanswer-03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",
         img_url:"" },
     ]
   },
 };
 
 // ───────────────────────────────────────────────────────────
-// 界面活性剤リスト（橋元メソッド）
+// 界面活性剤リスト（商品・タイプと連携）
 // ───────────────────────────────────────────────────────────
 const SURFACTANTS = [
-  { name:"コカミドプロピルベタイン", highlight:false },
-  { name:"ココアンホ酢酸ナトリウム", highlight:false },
-  { name:"ココイルグルタミン酸系", highlight:false },
-  { name:"ラウロイルメチルアラニン系", highlight:false },
-  { name:"ラウロイルサルコシン系", highlight:false },
-  { name:"ラウレスカルボン酸系", highlight:false },
-  { name:"ココイルメチルタウリン系", highlight:true, note:"Aqua / Bare Skin" },
-  { name:"スルホコハク酸系", highlight:false },
-  { name:"カリ石鹸・石鹸", highlight:false },
-  { name:"オレフィンスルホン酸系", highlight:true, note:"デオコ" },
-  { name:"ラウレス硫酸系", highlight:true, note:"パンテーン・ラックス・ツバキ・ダヴ" },
-  { name:"ラウリルベンゼンスルホン酸系", highlight:false },
-  { name:"ラウリル硫酸系", highlight:true, note:"h&s" },
+  { name:"コカミドプロピルベタイン",     types:[], products:[] },
+  { name:"ококоアンホ酢酸ナトリウム",    types:[], products:[] },
+  { name:"ококоイルグルタミン酸系",      types:[], products:[] },
+  { name:"ラウロイルメチルアラニン系",   types:["aqua_sensitive","bare_skin"], products:["ジアンサー"] },
+  { name:"ラウロイルサルコシン系",       types:[], products:[] },
+  { name:"ラウレスカルボン酸系",         types:[], products:[] },
+  { name:"ококоイルメチルタウリン系",    types:["aqua_sensitive","bare_skin"], products:["ジュレーム","エッセンシャル プレミアム"] },
+  { name:"スルホコハク酸系",             types:[], products:[] },
+  { name:"カリ石鹸・石鹸",              types:[], products:[] },
+  { name:"オレフィンスルホン酸系",       types:["oil_reset_short"], products:["デオコ"] },
+  { name:"ラウレス硫酸系",              types:["oil_reset_long","oil_reset_short"], products:["パンテーン","ラックス","ツバキ","ダヴ","ウェルプ"] },
+  { name:"ラウリルベンゼンスルホン酸系", types:[], products:[] },
+  { name:"ラウリル硫酸系",              types:["oil_reset_short"], products:["h&s"] },
 ];
 
 // ───────────────────────────────────────────────────────────
-// 振り分けロジック
+// Surfactant Chart（タイプ連携版）
 // ───────────────────────────────────────────────────────────
-function diagnose(ans) {
-  const q1=ans.q1, q2=ans.q2, q6=ans.q6, q7=ans.q7, q8=ans.q8;
-  if (q1==="red") return "skin_alert";
-  if (q1==="oily") return q2==="short" ? "oil_reset_short" : "oil_reset_long";
-  // 乾燥 / 普通 / 混合
-  if (q7==="perm" && (q8==="split"||q8==="frizz")) return "repair_mode";
-  // 広がる・うねるはSmooth Wave方向
-  if ((q6==="some"||q6==="strong") && (q7==="none"||q7==="color")) return "smooth_wave";
-  if (q8==="spread") return "smooth_wave";
-  // ぺたんこはボリューム系 → Aqua Sensitive（バージン or 普通毛でボリュームなし）
-  if (q8==="flat") return q7==="none" ? "aqua_sensitive" : "bare_skin";
-  if (q7==="none" && (q8==="gloss"||q8==="dry")) return "aqua_sensitive";
-  return "bare_skin";
-}
-
-// ───────────────────────────────────────────────────────────
-// Gemini API
-// ───────────────────────────────────────────────────────────
-async function callGemini(prompt, history=[]) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_KEY}`;
-  const contents = [
-    ...history,
-    { role:"user", parts:[{ text: prompt }] }
-  ];
-  const res = await fetch(url, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({ contents, generationConfig:{ temperature:0.75, maxOutputTokens:512 } })
-  });
-  if (!res.ok) throw new Error("API " + res.status);
-  const data = await res.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || "応答を取得できませんでした。";
-}
-
-// ───────────────────────────────────────────────────────────
-// Icon Helper
-// ───────────────────────────────────────────────────────────
-const {createElement:h,useRef,useEffect,useState,useCallback} = React;
-function Icon({name,size=16,color}){
-  const ref=useRef(null);
-  useEffect(()=>{
-    if(ref.current&&window.lucide){
-      ref.current.innerHTML="";
-      const s=lucide.icons[name]?.toSvg({width:size,height:size,color:color||"currentColor"});
-      if(s) ref.current.innerHTML=s;
-    }
-  },[name,size,color]);
-  return h("span",{ref,style:{display:"inline-flex",alignItems:"center"}});
-}
-
-
-// ───────────────────────────────────────────────────────────
-// Surfactant Chart
-// ───────────────────────────────────────────────────────────
-function SurfactantChart(){
+function SurfactantChart({typeKey}){
   return h("div",{className:"ingr-box"},
     h("div",{className:"ingr-ttl"},
       h(Icon,{name:"flask-conical",size:14,color:"var(--gold)"}),
-      h("span",{style:{marginLeft:".35rem"}},"界面活性剤の強さ — 弱い順")
+      h("span",{style:{marginLeft:".35rem"}},"界面活性剤の強さ — 弱い順"),
+      typeKey&&h("span",{className:"ingr-legend"},
+        h("span",{className:"ingr-legend-dot"}),
+        "あなたへのおすすめ"
+      )
     ),
-    SURFACTANTS.map((s,i)=>
-      h("div",{key:i,className:"ingr-row"},
+    SURFACTANTS.map((s,i)=>{
+      const isMatch = typeKey && s.types.includes(typeKey);
+      return h("div",{key:i,className:"ingr-row"+(isMatch?" ingr-row-match":"")},
         h("span",{className:"ingr-num"},i+1),
         h("div",{className:"ingr-bar-wrap"},
-          h("div",{className:"ingr-bar",style:{width:`${((i+1)/13*100).toFixed(0)}%`}})
+          h("div",{className:"ingr-bar",style:{
+            width:`${((i+1)/13*100).toFixed(0)}%`,
+            background: isMatch
+              ? "linear-gradient(90deg,var(--gold-d),var(--gold))"
+              : "linear-gradient(90deg,#4CAF82,var(--gold),#e05530)"
+          }})
         ),
-        h("span",{className:"ingr-name "+(s.highlight?"ingr-hl":"")},
-          s.name+(s.note?` ← ${s.note}`:"")
+        h("div",{className:"ingr-name-wrap"},
+          h("span",{className:"ingr-name"+(isMatch?" ingr-hl":"")}, s.name),
+          isMatch&&s.products.length>0&&h("span",{className:"ingr-products"},
+            "← "+s.products.join("・")
+          )
         )
-      )
-    )
+      );
+    })
   );
 }
 
@@ -631,19 +616,19 @@ function App(){
               h("div",{className:"prod-info"},
                 h("p",{className:"prod-name"},p.name),
                 h("p",{className:"prod-desc"},p.desc),
+                p.note&&h("p",{className:"prod-note"},
+                  h(Icon,{name:"info",size:11,color:"var(--gold)"}),
+                  h("span",{style:{marginLeft:".3rem"}},p.note)
+                ),
                 h("div",{className:"prod-links"},
-                  p.amz&&h("a",{className:"prod-link amz",href:amzLink(p.amz),target:"_blank",rel:"noopener noreferrer"},
+                  p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"noopener noreferrer"},
                     h(Icon,{name:"shopping-cart",size:12,color:"#111"}),
                     h("span",{style:{marginLeft:".3rem"}},"Amazon")
                   ),
-                  h("a",{className:"prod-link rak",href:rakLink(p.rak),target:"_blank",rel:"noopener noreferrer"},
+                  p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"noopener noreferrer"},
                     h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),
-                    h("span",{style:{marginLeft:".3rem"}},"楽天")
+                    h("span",{style:{marginLeft:".3rem"}},"楽天で見る")
                   ),
-                  p.drug&&h("a",{className:"prod-link drg",href:drugLink(p.rak),target:"_blank",rel:"noopener noreferrer"},
-                    h(Icon,{name:"store",size:12,color:"#fff"}),
-                    h("span",{style:{marginLeft:".3rem"}},"薬局で探す")
-                  )
                 )
               )
             )
@@ -651,7 +636,7 @@ function App(){
         ),
 
         // 界面活性剤チャート
-        h(SurfactantChart,null),
+        h(SurfactantChart,{typeKey}),
 
         h("button",{className:"btn-ghost",style:{marginTop:"1.5rem"},onClick:retry},"← もう一度診断する")
       )
