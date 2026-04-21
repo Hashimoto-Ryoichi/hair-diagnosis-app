@@ -190,14 +190,98 @@ const TYPES={
 const SURFACTANTS=[{name:"コカミドプロピルベタイン",types:["repair_mode","smooth_wave"],products:["ストレイン","SN repair","セラムイン"]},{name:"ココアンホ酢酸ナトリウム",types:[],products:[]},{name:"ココイルグルタミン酸系",types:["aqua_sensitive"],products:["ジュレーム"]},{name:"ラウロイルメチルアラニン系",types:["aqua_sensitive","bare_skin"],products:["ジアンサー","ジュレーム"]},{name:"ラウロイルサルコシン系",types:[],products:[]},{name:"ラウレスカルボン酸系",types:[],products:[]},{name:"ココイルメチルタウリン系",types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave"],products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン"]},{name:"スルホコハク酸系",types:[],products:[]},{name:"カリ石鹿・石鹿",types:[],products:[]},{name:"オレフィンスルホン酸系",types:["oil_reset_short"],products:[]},{name:"ラウレス祇酸系",types:["oil_reset_long","oil_reset_short"],products:["パンテーン","ラックス","ツバキ","ダヴ"]},{name:"ラウリルベンゼンスルホン酸系",types:[],products:[]},{name:"ラウリル祇酸系",types:["oil_reset_short"],products:[]}];
 
 function diagnose(ans){
-  const {q1,q2,q6,q7,q8}=ans;
+  const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11}=ans;
+
+  // ── Step1: 頭皮タイプで大枠確定 ──────────────────────
   if(q1==="red") return "skin_alert";
-  if(q1==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
-  if(q7==="perm"&&(q8==="split"||q8==="frizz")) return "repair_mode";
-  if((q6==="some"||q6==="strong")&&(q7==="none"||q7==="color")) return "smooth_wave";
-  if(q8==="spread") return "smooth_wave";
-  if(q8==="flat") return q7==="none"?"aqua_sensitive":"bare_skin";
+  if(q1==="oily") return (q2==="short")?"oil_reset_short":"oil_reset_long";
+
+  // ── 以下は乾燥/普通/混合頭皮 ──────────────────────────
+
+  // ── Step2: Q10「なりたい髪質」を最優先で反映 ──────────
+  // ボリュームアップ希望 → 細毛・ペタンコ悩みが多い → Aqua Sensitive
+  // ボリュームダウン希望 → 広がり・太毛悩みが多い → Smooth Wave or Repair Mode
+
+  // ── Step3: 薬剤ダメージが深刻なケース ──────────────────
+  // パーマ/ブリーチ/縮毛矯正 + 枝毛・チリつき → 最優先でRepair Mode
+  if(q7==="perm"&&(q8==="split"||q8==="frizz"||q8==="spread")){
+    // Q10でボリュームダウン希望なら → Smooth Waveへ（うねりを抑える方向）
+    if(q10==="vdown") return "smooth_wave";
+    return "repair_mode";
+  }
+
+  // ── Step4: くせ毛・うねりが主訴 ──────────────────────
+  const hasKuse = q6==="some"||q6==="strong";
+  const hasSpread = q8==="spread";
+  const wantStraight = q10==="smooth"||q10==="gloss"||q10==="vdown";
+  const wantVolume = q10==="volume";
+
+  if(hasKuse||hasSpread){
+    // ボリュームアップ希望かつダメージ軽い → Aqua Sensitive（くせを活かす方向）
+    if(wantVolume&&q7!=="perm") return "aqua_sensitive";
+    return "smooth_wave";
+  }
+
+  // ── Step5: Q8現在の髪の状態 ─────────────────────────
+  // チリつき・まとまらない → ダメージ補修必要
+  if(q8==="frizz"||q8==="split"){
+    if(q7==="perm") return "repair_mode";
+    // カラーのみでもひどいダメージ → Repair Mode
+    if(q7==="color"&&(q8==="frizz")) return "repair_mode";
+    return "bare_skin";
+  }
+
+  // ぺたんこ・ボリュームなし
+  if(q8==="flat"){
+    // ボリュームアップ希望 → Aqua Sensitive（軽い洗浄でふんわり）
+    if(wantVolume||q10==="volume") return "aqua_sensitive";
+    return q7==="none"?"aqua_sensitive":"bare_skin";
+  }
+
+  // ── Step6: Q3毛の太さ・Q4硬さで補正 ─────────────────
+  const isThickHard = (q3==="thick"||q4==="hard");
+  const isThinSoft  = (q3==="thin"||q4==="soft");
+
+  // 太い・硬い → ボリュームが出やすい → ボリュームダウン・しっとり系
+  if(isThickHard){
+    // ボリュームダウン or うねり抑え → Smooth Wave
+    if(q10==="vdown"||q10==="moist") return "smooth_wave";
+    // パサつき悩み + カラー → Bare Skin
+    if(q8==="dry"&&q7==="color") return "bare_skin";
+    return "smooth_wave";
+  }
+
+  // 細い・柔らかい → ぺたんこ悩み多い → ふんわり系
+  if(isThinSoft){
+    if(wantVolume) return "aqua_sensitive";
+    if(q7==="none") return "aqua_sensitive";
+    return "bare_skin";
+  }
+
+  // ── Step7: Q9熱器具でダメージ補正 ───────────────────
+  // 高機能器具（リファ・ビューロン・レプロナイザー・ナノイー）使用 → ダメージ軽減とみなす
+  const hasProTool = q9==="refa"||q9==="bio"||q9==="repro"||q9==="nanoe";
+  const hasNoDamageProtect = q9==="other"||q9==="none";
+
+  // ── Step8: Q5親水性（疎水性＝ダメージの指標）───────────
+  // すぐ乾く（疎水性）→ ダメージ少ない or バージン毛の可能性
+  // 乾かない（親水性）→ ダメージ・くせ毛の可能性
+
+  // ── Step9: Q11悩みで最終決定 ─────────────────────────
+  if(q11==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
+  if(q11==="wave") return "smooth_wave";
+  if(q11==="repair"){
+    return q7==="perm"?"repair_mode":"bare_skin";
+  }
+
+  // Q10なりたい髪質を最終反映
+  if(q10==="volume") return "aqua_sensitive";
+  if(q10==="vdown") return "smooth_wave";
+
+  // バージン毛 + ツヤあり・普通 → Aqua Sensitive
   if(q7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
+
+  // カラーあり + ダメージ軽め → Bare Skin（デフォルト）
   return "bare_skin";
 }
 
@@ -279,7 +363,7 @@ function App(){
       step==="intro"&&h("div",{className:"fade"},
         h("div",{className:"trust-bar"},
           h(Icon,{name:"shield-check",size:16,color:"var(--gold)"}),
-          h("p",{className:"trust-bar-txt"},"この診断はご購入を強制するものではありません。20年以上の経験をもとに、あなたの髪質に合ったケアを純粋にご提案します。")
+          h("p",{className:"trust-bar-txt"},"この診断では、無理にご購入をおすすめすることはありません。20年以上の経験をもとに、あなたの髪質に合ったケアをご提案します。")
         ),
         h("p",{className:"sec-label"},"About"),
         h("h2",{className:"sec-title"},"あなたの髪を、\nもっと深く知ってほしい。"),
@@ -349,9 +433,9 @@ function App(){
         h("div",{className:"consult-bar"},
           h("div",{className:"consult-bar-txt"},
             h("p",{className:"consult-bar-ttl"},"どれを選べばいいか迷ったら"),
-            h("p",{className:"consult-bar-sub"},"あなたの髪を直接見ながら、いちばん合うものをご提案します。")
+            h("p",{className:"consult-bar-sub"},"カットやカラーをしながら、あなたの髪を直接見てご提案します。")
           ),
-          h("a",{className:"consult-bar-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"相談する"))
+          h("a",{className:"consult-bar-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"サロンで相談する"))
         ),
         h(SurfactantChart,{typeKey}),
         h("button",{className:"btn-ghost",style:{marginTop:"1.5rem"},onClick:retry},"← もう一度診断する")
