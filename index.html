@@ -137,7 +137,7 @@ const QUESTIONS=[
   {id:"q4",cat:"毛質",text:"髪の硬さは？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
   {id:"q5",cat:"親水性",text:"髪を濡らした後、自然放置するとどうなりますか？",opts:[{k:"fast",l:"A",t:"すぐ乾く（15分以内）"},{k:"mid",l:"B",t:"どちらともいえない（15〜30分程度）"},{k:"slow",l:"C",t:"なかなか乾かない（30分以上）"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さは？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
-  {id:"q7",cat:"薬剤",text:"薬剤処理の経験は？",opts:[{k:"none",l:"A",t:"なし（バージン毛）"},{k:"color",l:"B",t:"カラーのみ"},{k:"perm",l:"C",t:"パーマ・ブリーチ・縮毛矯正"}]},
+  {id:"q7",cat:"薬剤",text:"薬剤処理の経験は？",opts:[{k:"none",l:"A",t:"なし（バージン毛）"},{k:"color",l:"B",t:"カラー・パーマ"},{k:"bleach",l:"C",t:"ブリーチ・ハイライト"},{k:"straight",l:"D",t:"縮毛矯正・ストレートパーマ"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態は？",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q9",cat:"熱器具",text:"使っている熱器具は？",opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質は？",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
@@ -203,10 +203,20 @@ function diagnose(ans){
   // ボリュームダウン希望 → 広がり・太毛悩みが多い → Smooth Wave or Repair Mode
 
   // ── Step3: 薬剤ダメージが深刻なケース ──────────────────
-  // パーマ/ブリーチ/縮毛矯正 + 枝毛・チリつき → 最優先でRepair Mode
-  if(q7==="perm"&&(q8==="split"||q8==="frizz"||q8==="spread")){
-    // Q10でボリュームダウン希望なら → Smooth Waveへ（うねりを抑える方向）
-    if(q10==="vdown") return "smooth_wave";
+  // ブリーチ → 最高レベルのダメージ → Repair Mode確定
+  if(q7==="bleach") return "repair_mode";
+
+  // 縮毛矯正 → ダメージあり、かつボリュームを抑えたい方も多い
+  if(q7==="straight"){
+    if(q8==="split"||q8==="frizz") return "repair_mode";
+    // ボリュームダウン希望 or しっとり希望 → Smooth Wave
+    if(q10==="vdown"||q10==="moist") return "smooth_wave";
+    return "repair_mode";
+  }
+
+  // カラー・パーマ + 深刻ダメージ → Repair Mode
+  // ※パーマはボリューム目的なのでボリュームダウン方向には振らない
+  if(q7==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
     return "repair_mode";
   }
 
@@ -217,17 +227,16 @@ function diagnose(ans){
   const wantVolume = q10==="volume";
 
   if(hasKuse||hasSpread){
-    // ボリュームアップ希望かつダメージ軽い → Aqua Sensitive（くせを活かす方向）
-    if(wantVolume&&q7!=="perm") return "aqua_sensitive";
+    // ボリュームアップ希望かつダメージ軽い（カラー・パーマ以下）→ Aqua Sensitive
+    if(wantVolume&&(q7==="none"||q7==="color")) return "aqua_sensitive";
     return "smooth_wave";
   }
 
   // ── Step5: Q8現在の髪の状態 ─────────────────────────
   // チリつき・まとまらない → ダメージ補修必要
   if(q8==="frizz"||q8==="split"){
-    if(q7==="perm") return "repair_mode";
-    // カラーのみでもひどいダメージ → Repair Mode
-    if(q7==="color"&&(q8==="frizz")) return "repair_mode";
+    if(q7==="bleach"||q7==="straight") return "repair_mode";
+    if(q7==="color"&&q8==="frizz") return "repair_mode";
     return "bare_skin";
   }
 
@@ -271,7 +280,7 @@ function diagnose(ans){
   if(q11==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
   if(q11==="wave") return "smooth_wave";
   if(q11==="repair"){
-    return q7==="perm"?"repair_mode":"bare_skin";
+    return (q7==="bleach"||q7==="straight")?"repair_mode":"bare_skin";
   }
 
   // Q10なりたい髪質を最終反映
