@@ -47,8 +47,12 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .q-text{font-family:var(--serif);font-size:1.12rem;font-weight:400;color:var(--char);margin-bottom:1rem;line-height:1.55}
 .q-cat{font-size:.62rem;letter-spacing:.12em;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase}
 .opts{display:grid;gap:.55rem}
-.opt{display:flex;align-items:flex-start;gap:.75rem;width:100%;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--sans);font-size:.82rem;font-weight:300;color:var(--char2);line-height:1.5}
-.opt:hover{border-color:var(--gold-l);background:var(--ivory)}
+.opt{display:flex;align-items:flex-start;gap:.75rem;width:100%;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--sans);font-size:.82rem;font-weight:300;color:var(--char2);line-height:1.5;-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;outline:none}
+.opt:focus{outline:none}
+.opt:focus-visible{outline:2px solid var(--gold-l);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){
+  .opt:hover{border-color:var(--gold-l);background:var(--ivory)}
+}
 .opt.sel{border-color:var(--gold);background:var(--ivory);color:var(--char)}
 .opt-lt{flex-shrink:0;width:22px;height:22px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--gold);font-family:var(--serif);font-style:italic;transition:all .2s}
 .opt.sel .opt-lt{background:var(--gold);color:#fff}
@@ -386,7 +390,7 @@ function App(){
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
           h("p",{className:"q-text"},QUESTIONS[curQ].text),
           h("div",{className:"opts"},QUESTIONS[curQ].opts.map(opt=>
-            h("button",{key:opt.k,className:"opt"+(answers[QUESTIONS[curQ].id]===opt.k?" sel":""),onClick:()=>selectOpt(opt.k)},
+            h("button",{key:opt.k,className:"opt"+(answers[QUESTIONS[curQ].id]===opt.k?" sel":""),onClick:(e)=>{e.currentTarget.blur();selectOpt(opt.k);}},
               h("span",{className:"opt-lt"},opt.l),h("span",null,opt.t))
           ))
         ),
