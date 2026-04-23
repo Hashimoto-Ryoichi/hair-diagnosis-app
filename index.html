@@ -37,6 +37,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .trust-bar-txt{font-size:.72rem;color:var(--char2);line-height:1.7}
 .btn-primary{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--char);color:var(--cream);border:none;border-radius:var(--r);padding:.95rem 1.5rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .25s;margin-top:1.8rem}
 .btn-primary:hover{background:var(--gold-d)}
+.btn-primary-lg{font-size:.9rem;letter-spacing:.08em;text-transform:none;padding:1.1rem 1.5rem;font-weight:400}
 .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:var(--r);padding:.65rem 1rem;font-size:.7rem;letter-spacing:.1em;cursor:pointer;font-family:var(--sans);transition:all .2s;margin-top:.7rem;width:100%}
 .btn-ghost:hover{border-color:var(--gold-l);color:var(--char)}
 .dots{display:flex;gap:5px;justify-content:center;margin-bottom:2rem;flex-wrap:wrap}
@@ -145,7 +146,7 @@ const QUESTIONS=[
   {id:"q8",cat:"ダメージ",text:"今の髪の状態は？",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q9",cat:"熱器具",text:"使っている熱器具は？",opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質は？",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
-  {id:"q11",cat:"悩み",text:"特に気になる悩みは？",opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"none",l:"E",t:"特にない"}]},
+  {id:"q11",cat:"悩み",text:"特に気になる悩みは？",opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"aging",l:"E",t:"エイジング（ハリ・コシ・ボリューム不足）"},{k:"none",l:"F",t:"特にない"}]},
 ];
 
 const R1="https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F";
@@ -286,6 +287,9 @@ function diagnose(ans){
   if(q11==="repair"){
     return (q7==="bleach"||q7==="straight")?"repair_mode":"bare_skin";
   }
+  // エイジング（ハリ・コシ・ボリューム不足）→ ふんわりケア寄り
+  // ※今後エイジング専用タイプ追加予定
+  if(q11==="aging") return "aqua_sensitive";
 
   // Q10なりたい髪質を最終反映
   if(q10==="volume") return "aqua_sensitive";
@@ -412,7 +416,7 @@ function App(){
             );
           })
         ),
-        h("button",{className:"btn-primary",onClick:()=>setStep("products")},h(Icon,{name:"package",size:14}),h("span",{style:{marginLeft:".5rem"}},"おすすめシャンプーを見る")),
+        h("button",{className:"btn-primary btn-primary-lg",onClick:()=>setStep("products")},h("span",null,"おすすめのシャンプーを見る ↗")),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
       ),
       step==="products"&&td&&h("div",{className:"fade"},
