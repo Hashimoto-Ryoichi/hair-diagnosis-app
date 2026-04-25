@@ -113,6 +113,31 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ingr-hl{font-weight:500;color:var(--gold-d)}
 .ingr-products{font-size:.62rem;color:var(--gold);font-style:italic}
 .ingr-otc-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.65rem;color:var(--muted);margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border);line-height:1.6}
+
+/* ── 5分類カード（メイン表示）── */
+.ingr-detail-intro{font-size:.65rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;padding:0 .2rem}
+.ingr-cat{margin-bottom:.5rem;background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .2s}
+.ingr-cat-match{border:1px solid var(--gold);background:rgba(184,149,106,0.08)}
+.ingr-cat-head{display:flex;align-items:center;gap:.7rem;width:100%;background:transparent;border:none;padding:.7rem .8rem;font-family:var(--sans);text-align:left;cursor:pointer;transition:background .2s}
+.ingr-cat-head:hover{background:var(--ivory)}
+.ingr-cat-match .ingr-cat-head:hover{background:rgba(184,149,106,0.15)}
+.ingr-cat-stars{flex-shrink:0;display:flex;gap:1px;font-size:.55rem;color:var(--border);letter-spacing:-.5px}
+.ingr-star.filled{color:var(--gold)}
+.ingr-cat-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:.15rem}
+.ingr-cat-name{font-size:.72rem;font-weight:500;color:var(--char);letter-spacing:.02em}
+.ingr-cat-match .ingr-cat-name{color:var(--gold-d)}
+.ingr-cat-desc{font-size:.6rem;color:var(--muted);line-height:1.4}
+.ingr-cat-products{font-size:.62rem;color:var(--gold);font-style:italic;margin-top:.15rem;line-height:1.4}
+.ingr-cat-items{padding:.7rem .9rem .8rem;margin:0;border-top:1px solid var(--border);background:var(--ivory)}
+.ingr-subgroup{margin-bottom:.7rem}
+.ingr-subgroup:last-child{margin-bottom:0}
+.ingr-subgroup-name{font-size:.62rem;font-weight:500;color:var(--gold-d);letter-spacing:.04em;margin-bottom:.25rem;padding-bottom:.2rem;border-bottom:1px dashed var(--border)}
+.ingr-subgroup-list{list-style:none;padding:0;margin:0}
+.ingr-subgroup-list li{font-size:.66rem;color:var(--char2);line-height:1.85;letter-spacing:.01em;position:relative;padding-left:.8rem}
+.ingr-subgroup-list li::before{content:"·";position:absolute;left:0;color:var(--gold);font-weight:700}
+
+/* ── さらに詳しく見るボタン（旧、未使用）── */
+.ingr-detail-btn{display:none}
 .ftr{text-align:center;padding:2.5rem 1.5rem 2rem;border-top:1px solid var(--border);margin-top:2rem}
 .ftr-profile{display:flex;align-items:center;gap:1.2rem;background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:1.4rem;text-align:left}
 .ftr-photo-wrap{flex-shrink:0;width:64px;height:64px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--cream)}
@@ -157,7 +182,11 @@ const TYPES={
   skin_alert:{badge:"Hair Type — SA",title:"Skin Alert",sub:"頭皮に炎症サインあり",
     alert:"⚠️ 頭皮に赤みや湿疹がある場合、まずは皮膚科の受診をおすすめします。",
     advice:["頭皮の赤みや湿疹は、接触性皮膚炎・脂漏性皮膚炎・アトピーなど原因が様々です。まず皮膚科を受診して原因を特定することが最優先です。","シャンプーは低刺激のアミノ酸系を選び、爪を立てずに指の腹で優しく洗いましょう。洗浄力の強いラウリル硫酸系・ラウレス硫酸系は避けてください。","シャワーの温度は38℃前後がベスト。高温のお湯は皮脂を過剰に落とし、刺激になります。すすぎは2分以上丁寧に。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
-    products:[{name:"ミノン 全身シャンプー しっとりタイプ",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"",top:true,otc:true,amz:"B00N3KJH58",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:""}]},
+    products:[
+      {name:"ミノン 全身シャンプー しっとりタイプ",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"",top:true,otc:true,amz:"B00N3KJH58",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:""},
+      {name:"NOV ヘアシャンプー DS",forWhom:"皮膚科推奨レベルの低刺激処方を求める方",desc:"敏感肌ブランドNOVの化粧品シャンプー。アミノ酸系・ベタイン系・タウリン系の3つを組み合わせた低刺激処方。無香料・無着色。",note:"250ml・500mlの2サイズがあります。リンク先でお選びください。",top:false,otc:false,amz:"B00BTDV3FS",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9c12.6ce6773e.532e9c13.20592aa2/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fwebdrug%2F4934651574022%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
+      {name:"キュレル シャンプー",forWhom:"フケ・かゆみが気になる、乾燥性敏感肌の方",desc:"花王の医薬部外品シャンプー。グリチルリチン酸ジカリウム配合でフケ・かゆみを防ぐ。セラミドを守りながら洗う処方で、赤ちゃんから大人まで使える。弱酸性・無香料・無着色。",note:"ポンプ・つめかえ用・泡シャンプーなど複数あります。リンク先でお選びください。洗浄成分はラウレス硫酸Naがベースで、洗浄力はしっかりめ。乾燥性のフケが強い方は、よりマイルドなミノンを優先してください。",top:false,otc:true,amz:"B01AUMOTLS",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9808.56d1a4c2.532e980a.fb0409e3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fyayoi-cosme%2Fkao276070%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}
+    ]},
   oil_reset_short:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ショート",
     advice:["脂性頭皮の方は皮脂分泌が多く、頭皮の毛穴が詰まりやすい状態です。洗浄力のしっかりしたシャンプーで、頭皮を清潔に保つことが第一優先です。","シャンプーは1回目で汚れを落とし、2回目で泡立てるダブル洗いが効果的。すすぎを特に丁寧に行い、シャンプーの残留をゼロにしましょう。","ショートヘアは頭皮への影響が直接出やすいため、ドライヤーでしっかり乾かすことが大切。半乾きで寝ると雑菌が増えてニオイの原因になります。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
@@ -189,10 +218,14 @@ const TYPES={
     advice:["カラーによる軽いダメージがある髪は、カラーの色持ちを良くしながら補修できるシャンプーがベストです。カラーシャンプーや低刺激アミノ酸系を選びましょう。","洗髪は毎日行っても問題ありませんが、お湯の温度は38〜40℃に。熱すぎるお湯はカラーの退色を早め、頭皮の乾燥にもつながります。","週1回の集中トリートメントで補修成分を補うのが効果的。市販品でも十分ですが、美容室でのトリートメントと組み合わせると持続性がアップします。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のカラーダメージに合ったケアを確認してみてください。"],
     products:[
       {name:"花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー＆EXトリートメント",forWhom:"カラー毛のツヤとまとまりを、次世代ケアで叶えたい方",desc:"花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。",note:"シャンプーは1種類ですが、コンディショナーは「しっとり・さらさら・ツヤ」の3タイプから選べます。リンク先でなりたい仕上がりに合わせてお選びください。",top:true,amz:"B0GMDSB9V1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fanswer-03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
-      {name:"エッセンシャル プレミアム うるおいバリア シャンプー",forWhom:"カラーしてるけど、ベタつきもパサつきも気になる方",desc:"カラー毛のパサつき・軽ダメージに。",note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",top:false,amz:"B0CXHLSP8S",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]}
+      {name:"エッセンシャル プレミアム うるおいバリア シャンプー",forWhom:"カラーしてるけど、ベタつきもパサつきも気になる方",desc:"カラー毛のパサつき・軽ダメージに。",note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",top:false,amz:"B0CXHLSP8S",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]},
+  vital_aging:{badge:"Hair Type — VA",title:"Vital Aging",sub:"ハリ・コシ・ボリューム不足が気になる髪",
+    advice:["年齢とともに髪は細く・コシがなくなり、トップやサイドのボリュームが出にくくなります。これは髪内部の脂質が減少し空洞化が進むため。内部補修できるエイジングケアシャンプーが効果的です。","シャンプー時は頭皮マッサージを意識しましょう。指の腹で円を描くように揉みほぐすことで血流が促進され、健やかな髪が育つ土台が整います。","ノンシリコーン処方を選ぶと、シリコンの蓄積による根元のペタンコ感を防げます。コンディショナーは毛先〜中間に留め、頭皮にはつけないのがコツ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪のエイジングサインに合ったケアを確認してみてください。"],
+    products:[
+      {name:"セグレタ シャンプー 根元からふんわり",forWhom:"トップやサイドのボリューム不足、髪のハリ・コシ低下が気になる方",desc:"花王のエイジングケアブランド。セラミドSが髪内部に浸透・補修する内部密度ケア処方。ノンシリコーンで根元から立ち上がり、ふんわりとした仕上がりに。6種の植物エキス配合。",note:"本体・つめかえ用、シリーズに「うねる髪もまとまる」など複数あります。リンク先でお選びください。",top:true,amz:"B0DH7WD8W5",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532eb60f.8dafe5f6.532eb617.4f160360/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fenetroom%2F7288631%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}
+    ]}
 };
 
-const SURFACTANTS=[{name:"コカミドプロピルベタイン",types:["repair_mode","smooth_wave"],products:["ストレイン","SN repair","セラムイン"]},{name:"ココアンホ酢酸ナトリウム",types:[],products:[]},{name:"ココイルグルタミン酸系",types:["aqua_sensitive"],products:["ジュレーム"]},{name:"ラウロイルメチルアラニン系",types:["aqua_sensitive","bare_skin"],products:["ジアンサー","ジュレーム"]},{name:"ラウロイルサルコシン系",types:[],products:[]},{name:"ラウレスカルボン酸系",types:[],products:[]},{name:"ココイルメチルタウリン系",types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave"],products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン"]},{name:"スルホコハク酸系",types:[],products:[]},{name:"カリ石鹿・石鹿",types:[],products:[]},{name:"オレフィンスルホン酸系",types:["oil_reset_short"],products:[]},{name:"ラウレス祇酸系",types:["oil_reset_long","oil_reset_short"],products:["パンテーン","ラックス","ツバキ","ダヴ"]},{name:"ラウリルベンゼンスルホン酸系",types:[],products:[]},{name:"ラウリル祇酸系",types:["oil_reset_short"],products:[]}];
 
 function diagnose(ans){
   const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11}=ans;
@@ -287,9 +320,8 @@ function diagnose(ans){
   if(q11==="repair"){
     return (q7==="bleach"||q7==="straight")?"repair_mode":"bare_skin";
   }
-  // エイジング（ハリ・コシ・ボリューム不足）→ ふんわりケア寄り
-  // ※今後エイジング専用タイプ追加予定
-  if(q11==="aging") return "aqua_sensitive";
+  // エイジング（ハリ・コシ・ボリューム不足）→ Vital Aging
+  if(q11==="aging") return "vital_aging";
 
   // Q10なりたい髪質を最終反映
   if(q10==="volume") return "aqua_sensitive";
@@ -315,26 +347,122 @@ function Icon({name,size=16,color}){
   return h("span",{ref,style:{display:"inline-flex",alignItems:"center"}});
 }
 
+// ── 詳細37成分（5分類別・洗浄力ランク★1〜★5）─────────
+// ── 5分類のメタデータ（系統ごとの紹介商品・タイプ連携・細分類）
+// 化粧品表示名称ベース、シャンプー用途のみ、カチオン除外
+// items は細分類ごとにグループ化して表示
+const SURFACTANT_DETAIL=[
+  {key:"betaine",cat:"ベタイン系（両性）",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
+    types:["repair_mode","smooth_wave","skin_alert","vital_aging"],
+    products:["ストレイン","SN repair","セラムイン","NOV DS","セグレタ"],
+    groups:[
+      {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
+      {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
+      {sub:"イミダゾリン系",items:["ココアンホジ酢酸2Na"]},
+    ]},
+  {key:"amino",cat:"アミノ酸系（アニオン）",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
+    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
+    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","NOV DS"],
+    groups:[
+      {sub:"グルタミン酸系",items:["ココイルグルタミン酸Na","ココイルグルタミン酸TEA","ココイルグルタミン酸K","ラウロイルグルタミン酸Na","ラウロイルグルタミン酸TEA"]},
+      {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
+      {sub:"グリシン系・サルコシン系",items:["ココイルグリシンK","ココイルグリシンNa","ラウロイルサルコシンNa","ラウロイルサルコシンTEA"]},
+    ]},
+  {key:"taurine",cat:"タウリン系（アニオン）",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
+    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
+    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","NOV DS"],
+    groups:[
+      {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
+    ]},
+  {key:"acid",cat:"その他のマイルド系（アニオン）",rank:2,desc:"弱酸性で頭皮に近く、低刺激な補助系",
+    types:[],
+    products:[],
+    groups:[
+      {sub:"カルボン酸系",items:["ラウレス-4カルボン酸Na","ラウレス-5カルボン酸Na"]},
+      {sub:"スルホコハク酸系",items:["スルホコハク酸ラウレス2Na","スルホコハク酸(C12-14)パレス-2Na","スルホコハク酸ラウリル2Na"]},
+      {sub:"タンパク質系",items:["ココイル加水分解コラーゲンK","ラウロイル加水分解シルクNa"]},
+    ]},
+  {key:"soap",cat:"石けん系（アニオン）",rank:3,desc:"中程度の洗浄力、アルカリ性。すっきりだが髪はきしみやすい",
+    types:[],
+    products:[],
+    groups:[
+      {sub:"アルカリ石けん",items:["石ケン素地","カリ石ケン素地","ラウリン酸K","ミリスチン酸K","パルミチン酸K","オレイン酸K","ラウリン酸Na","ステアリン酸Na"]},
+    ]},
+  {key:"olefin",cat:"オレフィン系（アニオン）",rank:4,desc:"高洗浄力だがサルフェート不使用。硬水でも泡立つ",
+    types:["oil_reset_short"],
+    products:[],
+    groups:[
+      {sub:"オレフィンスルホン酸系",items:["オレフィン(C14-16)スルホン酸Na"]},
+    ]},
+  {key:"amido_sulfate",cat:"アミドエーテル硫酸系（アニオン）",rank:4,desc:"硫酸系の中では比較的マイルド。アミド構造で皮膚刺激を緩和",
+    types:[],
+    products:[],
+    groups:[
+      {sub:"アミドエーテル硫酸系",items:["ラウラミドエーテル硫酸Na","ココアミドエーテル硫酸Na"]},
+    ]},
+  {key:"laureth",cat:"ラウレス硫酸系（アニオン）",rank:5,desc:"高洗浄力。エトキシ化(EO)鎖により分子が大きく、ラウリル硫酸より皮膚浸透が抑えられている",
+    types:["oil_reset_long","oil_reset_short","vital_aging"],
+    products:["パンテーン","ラックス","ツバキ","ダヴ","セグレタ"],
+    groups:[
+      {sub:"ラウレス硫酸塩",items:["ラウレス硫酸Na","ラウレス硫酸アンモニウム","ラウレス硫酸TEA"]},
+      {sub:"参考：EO付加数",items:["EO平均2〜3モルが主流","EO数が増えるほど起泡性↑・刺激↓・洗浄力はやや低下"]},
+    ]},
+  {key:"lauryl",cat:"ラウリル硫酸系（アニオン）",rank:5,desc:"洗浄力・脱脂力が最強。分子が小さく皮膚浸透性が高いため、現代のシャンプーでは敬遠される傾向",
+    types:[],
+    products:[],
+    groups:[
+      {sub:"ラウリル硫酸塩",items:["ラウリル硫酸Na","ラウリル硫酸アンモニウム","ラウリル硫酸TEA","ラウリル硫酸K"]},
+      {sub:"備考",items:["ラウリル硫酸＝硫酸系で最も刺激が強い","近年は歯磨き粉・業務用洗浄剤に使用が多い","シャンプーではラウレス硫酸系に置き換わりつつある"]},
+    ]},
+];
+
 function SurfactantChart({typeKey}){
   const td=typeKey?TYPES[typeKey]:null;
   const otcProducts=td?td.products.filter(p=>p.otc).map(p=>p.name):[];
+  const [openCat,setOpenCat]=useState(null);
   return h("div",{className:"ingr-box"},
+    // ── タイトル ──────────────────────────────
     h("div",{className:"ingr-ttl"},
       h(Icon,{name:"flask-conical",size:14,color:"var(--gold)"}),
-      h("span",{style:{marginLeft:".35rem"}},"界面活性剤の強さ — 弱い順"),
+      h("span",{style:{marginLeft:".35rem"}},"シャンプーで使われる界面活性剤"),
       typeKey&&h("span",{className:"ingr-legend"},h("span",{className:"ingr-legend-dot"}),"あなたへのおすすめ")
     ),
-    SURFACTANTS.map((s,i)=>{
-      const isMatch=typeKey&&s.types.includes(typeKey);
-      return h("div",{key:i,className:"ingr-row"+(isMatch?" ingr-row-match":"")},
-        h("span",{className:"ingr-num"},i+1),
-        h("div",{className:"ingr-bar-wrap"},h("div",{className:"ingr-bar",style:{width:`${((i+1)/13*100).toFixed(0)}%`,background:isMatch?"linear-gradient(90deg,var(--gold-d),var(--gold))":"linear-gradient(90deg,#4CAF82,var(--gold),#e05530)"}})),
-        h("div",{className:"ingr-name-wrap"},
-          h("span",{className:"ingr-name"+(isMatch?" ingr-hl":"")},s.name),
-          isMatch&&s.products.length>0&&h("span",{className:"ingr-products"},"← "+s.products.join("・"))
+    h("p",{className:"ingr-detail-intro"},"アニオン・両性に分けて7系統に分類。系統名をタップすると細分類と成分名が表示されます。"),
+
+    // ── 5分類カード ──────────────────────────────
+    SURFACTANT_DETAIL.map((g,gi)=>{
+      const isOpen=openCat===gi;
+      const isMatch=typeKey&&g.types.includes(typeKey);
+      return h("div",{key:gi,className:"ingr-cat"+(isMatch?" ingr-cat-match":"")},
+        h("button",{className:"ingr-cat-head",onClick:()=>setOpenCat(isOpen?null:gi)},
+          h("div",{className:"ingr-cat-stars"},
+            Array.from({length:5}).map((_,si)=>
+              h("span",{key:si,className:"ingr-star"+(si<g.rank?" filled":"")},"★")
+            )
+          ),
+          h("div",{className:"ingr-cat-info"},
+            h("span",{className:"ingr-cat-name"},g.cat),
+            h("span",{className:"ingr-cat-desc"},g.desc),
+            isMatch&&g.products.length>0&&h("span",{className:"ingr-cat-products"},
+              "← "+g.products.join("・")
+            )
+          ),
+          h(Icon,{name:isOpen?"chevron-up":"chevron-down",size:12,color:"var(--muted)"})
+        ),
+        isOpen&&h("div",{className:"ingr-cat-items"},
+          g.groups.map((sg,sgi)=>
+            h("div",{key:sgi,className:"ingr-subgroup"},
+              h("p",{className:"ingr-subgroup-name"},sg.sub),
+              h("ul",{className:"ingr-subgroup-list"},
+                sg.items.map((item,ii)=>h("li",{key:ii},item))
+              )
+            )
+          )
         )
       );
     }),
+
+    // ── 医薬部外品の注記 ──────────────────────────────
     otcProducts.length>0&&h("p",{className:"ingr-otc-note"},
       h(Icon,{name:"info",size:11,color:"var(--muted)"}),
       h("span",{style:{marginLeft:".35rem"}},
