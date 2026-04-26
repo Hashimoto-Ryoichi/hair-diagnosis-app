@@ -179,13 +179,13 @@ const ASSOC_ID="hassihair06-22";
 const HPB_URL="https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/";
 
 const QUESTIONS=[
-  {id:"q1",cat:"頭皮",text:"地肌の状態はどれに当てはまりますか？",opts:[{k:"dry",l:"A",t:"乾燥している"},{k:"normal",l:"B",t:"普通（特に気にならない）"},{k:"oily",l:"C",t:"脂性（べたつきやすい）"},{k:"mix",l:"D",t:"混合（部位によって異なる）"},{k:"red",l:"E",t:"赤み・湿疹がある"}]},
+  {id:"q1",cat:"頭皮",text:"夕方になると頭皮はどのように感じますか？",opts:[{k:"oily",l:"A",t:"ベタつく・脂っぽい"},{k:"normal",l:"B",t:"特に気にならない"},{k:"dry",l:"C",t:"つっぱる・カサつく"},{k:"mix",l:"D",t:"部分的にベタつき、部分的にカサつく"},{k:"red",l:"E",t:"赤み・かゆみ・湿疹がある"}]},
   {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
   {id:"q3",cat:"毛質",text:"髪の太さは？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
   {id:"q4",cat:"毛質",text:"髪の硬さは？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
   {id:"q5",cat:"親水性",text:"髪を濡らした後、自然放置するとどうなりますか？",opts:[{k:"fast",l:"A",t:"すぐ乾く（15分以内）"},{k:"mid",l:"B",t:"どちらともいえない（15〜30分程度）"},{k:"slow",l:"C",t:"なかなか乾かない（30分以上）"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さは？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
-  {id:"q7",cat:"薬剤",text:"薬剤処理の経験は？",opts:[{k:"none",l:"A",t:"なし（バージン毛）"},{k:"color",l:"B",t:"カラー・パーマ"},{k:"bleach",l:"C",t:"ブリーチ・ハイライト"},{k:"straight",l:"D",t:"縮毛矯正・ストレートパーマ"}]},
+  {id:"q7",cat:"薬剤",text:"直近1年以内に髪に何か施術はしましたか？（だいたいでOKです）",opts:[{k:"none",l:"A",t:"なし（1年以上していない）"},{k:"color",l:"B",t:"カラー（白髪染め含む）"},{k:"bleach",l:"C",t:"ブリーチ・ハイライト"},{k:"straight",l:"D",t:"縮毛矯正・ストレートパーマ"},{k:"unknown",l:"E",t:"わからない・覚えていない"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態は？",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q9",cat:"熱器具",text:"使っている熱器具は？",opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質は？",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
@@ -199,49 +199,49 @@ function rak1(id){return R1+id+"/"+R2;}
 const TYPES={
   skin_alert:{badge:"Hair Type — SA",title:"Skin Alert",sub:"頭皮に炎症サインあり",
     alert:"⚠️ 頭皮に赤みや湿疹がある場合、まずは皮膚科の受診をおすすめします。",
-    advice:["頭皮の赤みや湿疹は、接触性皮膚炎・脂漏性皮膚炎・アトピーなど原因が様々です。まず皮膚科を受診して原因を特定することが最優先です。","シャンプーは低刺激のアミノ酸系を選び、爪を立てずに指の腹で優しく洗いましょう。洗浄力の強いラウリル硫酸系・ラウレス硫酸系は避けてください。","シャワーの温度は38℃前後がベスト。高温のお湯は皮脂を過剰に落とし、刺激になります。すすぎは2分以上丁寧に。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
+    advice:["サロンでも「頭皮が赤い・かゆい」とご相談いただくお客様は少なくありません。まずは原因を特定することが大切です。","頭皮の赤みや湿疹は、接触性皮膚炎・脂漏性皮膚炎・アトピーなど原因が様々です。まず皮膚科を受診して原因を特定することが最優先です。","シャンプーは低刺激のアミノ酸系を選び、爪を立てずに指の腹で優しく洗いましょう。洗浄力の強いラウリル硫酸系・ラウレス硫酸系は避けてください。","シャワーの温度は38℃前後がベスト。高温のお湯は皮脂を過剰に落とし、刺激になります。すすぎは2分以上丁寧に。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
       {name:"ミノン 全身シャンプー しっとりタイプ",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"",top:true,otc:true,amz:"B00N3KJH58",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:""},
       {name:"NOV ヘアシャンプー DS",forWhom:"皮膚科推奨レベルの低刺激処方を求める方",desc:"敏感肌ブランドNOVの化粧品シャンプー。アミノ酸系・ベタイン系・タウリン系の3つを組み合わせた低刺激処方。無香料・無着色。",note:"250ml・500mlの2サイズがあります。リンク先でお選びください。",top:false,otc:false,amz:"B00BTDV3FS",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9c12.6ce6773e.532e9c13.20592aa2/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fwebdrug%2F4934651574022%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
       {name:"キュレル シャンプー",forWhom:"フケ・かゆみが気になる、乾燥性敏感肌の方",desc:"花王の医薬部外品シャンプー。グリチルリチン酸ジカリウム配合でフケ・かゆみを防ぐ。セラミドを守りながら洗う処方で、赤ちゃんから大人まで使える。弱酸性・無香料・無着色。",note:"ポンプ・つめかえ用・泡シャンプーなど複数あります。リンク先でお選びください。洗浄成分はラウレス硫酸Naがベースで、洗浄力はしっかりめ。乾燥性のフケが強い方は、よりマイルドなミノンを優先してください。",top:false,otc:true,amz:"B01AUMOTLS",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9808.56d1a4c2.532e980a.fb0409e3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fyayoi-cosme%2Fkao276070%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}
     ]},
   oil_reset_short:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ショート",
-    advice:["脂性頭皮の方は皮脂分泌が多く、頭皮の毛穴が詰まりやすい状態です。洗浄力のしっかりしたシャンプーで、頭皮を清潔に保つことが第一優先です。","シャンプーは1回目で汚れを落とし、2回目で泡立てるダブル洗いが効果的。すすぎを特に丁寧に行い、シャンプーの残留をゼロにしましょう。","ショートヘアは頭皮への影響が直接出やすいため、ドライヤーでしっかり乾かすことが大切。半乾きで寝ると雑菌が増えてニオイの原因になります。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
+    advice:["夕方になると頭皮のベタつきが気になる…というお客様、実はとても多いんです。ショートヘアは頭皮環境がダイレクトに出るので、洗浄力のバランスがカギになります。","脂性頭皮の方は皮脂分泌が多く、頭皮の毛穴が詰まりやすい状態です。洗浄力のしっかりしたシャンプーで、頭皮を清潔に保つことが第一優先です。","シャンプーは1回目で汚れを落とし、2回目で泡立てるダブル洗いが効果的。すすぎを特に丁寧に行い、シャンプーの残留をゼロにしましょう。","ショートヘアは頭皮への影響が直接出やすいため、ドライヤーでしっかり乾かすことが大切。半乾きで寝ると雑菌が増えてニオイの原因になります。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
       {name:"h&s スカルプ シャンプー",forWhom:"夕方になると頭皮の匂いやベタつきが気になる方",desc:"フケ・かゆみケア。洗浄力が高く脂性頭皮に効果的。",note:"香りや容量など複数あります。リンク先でお選びください。",top:true,otc:true,amz:"B08X732T5Z",rakUrl:rak1("360f53076a02e226e890e2ba28dd5d4f"),img_url:""},
       {name:"デオコ 薬用スカルプケア シャンプー",forWhom:"頭皮の臭いが気になりはじめた方",desc:"頭皮の臭いと脂を同時にケア。",note:"",top:false,otc:true,amz:"B0CW3C9TYD",rakUrl:rak1("ec66d0987e9db2681148d12f1972c99a"),img_url:""},
       {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性だけど髪のダメージも気になる方",desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",note:"",top:false,otc:true,amz:"B0DJ1CMC5Y",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:""}]},
   oil_reset_long:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ミディアム〜ロング",
-    advice:["ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。","トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。","洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
+    advice:["「頭皮はべたつくのに毛先は乾燥する」という悩み、ミディアム〜ロングのお客様から本当によく聞きます。実は頭皮と毛先で別々のケアが必要なんです。","ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。","トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。","洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
       {name:"パンテーン ミラクルズ シャンプー",forWhom:"頭皮のベタつきが気になるけど、毛先はしっとりさせたい方",desc:"日常使いの定番。脂性頭皮でも毛先はしっとり。",note:"シリーズによって仕上がりが異なります。リンク先でご確認のうえお選びください。",top:true,amz:"B0DF2PW2M6",rakUrl:rak1("61af1323f75fa2d1d3cbf8d6a180004f"),img_url:""},
       {name:"ラックス スーパーリッチシャイン ダメージリペア シャンプー",forWhom:"ツヤのある仕上がりを求める方",desc:"べたつきを抑えながら輝く仕上がり。",note:"シリーズ・香りのバリエーションが複数あります。リンク先でご確認ください。",top:false,amz:"B0BX96NGCM",rakUrl:rak1("3e1872af0708329c9eb97f57ef2b0e16"),img_url:""},
       {name:"TSUBAKI プレミアムモイスト＆リペア シャンプー",forWhom:"和の成分にこだわりたい、しっとりまとめたい方",desc:"和の美容成分・ツバキ油配合。",note:"",top:false,amz:"B0DBHRQHFH",rakUrl:rak1("5fb3ca4a3bfaaf3cd253023c37723698"),img_url:""},
       {name:"ダヴ ボタニカルセレクション つややかストレート シャンプー",forWhom:"マイルドな洗い心地で、肌に優しいものを選びたい方",desc:"マイルドな洗浄力。肌に近い成分で優しい洗い上がり。",note:"",top:false,amz:"B07969HHCQ",rakUrl:rak1("a606c025612d56c2d7f06006f551d2aa"),img_url:""}]},
   repair_mode:{badge:"Hair Type — RM",title:"Repair Mode",sub:"ハイダメージ（パーマ・ブリーチ・縮毛矯正）",
-    advice:["パーマ・ブリーチ・縮毛矯正などの薬剤処理は、髪のタンパク質（ケラチン）を変性させます。失ったタンパク質を補うことが修復の第一歩です。","トスチア（トスキサシン）配合のシャンプーは、ケラチンとシスチンを同時に補修できる成分。ダメージが深刻な方に特におすすめのラインナップです。","シャンプー後はすぐにトリートメントをつけ、5分程度時間をおいてから流しましょう。タオルドライは擦らず、押さえるように。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のダメージレベルに合ったケアを確認してみてください。"],
+    advice:["ブリーチや縮毛矯正の後、毛先がチリつく・パサつくというお客様をたくさん担当してきました。ダメージが深い分、正しいケアで確実に変わります。","パーマ・ブリーチ・縮毛矯正などの薬剤処理は、髪のタンパク質（ケラチン）を変性させます。失ったタンパク質を補うことが修復の第一歩です。","トスチア（トスキサシン）配合のシャンプーは、ケラチンとシスチンを同時に補修できる成分。ダメージが深刻な方に特におすすめのラインナップです。","シャンプー後はすぐにトリートメントをつけ、5分程度時間をおいてから流しましょう。タオルドライは擦らず、押さえるように。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のダメージレベルに合ったケアを確認してみてください。"],
     products:[
       {name:"Straine（ストレイン）ストレートシャンプー BASIC",forWhom:"縮毛矯正・ブリーチでダメージが蓄積し、広がりが気になる方",desc:"広がり・ダメージが気になる方向け。きしみを抑えしなやかで扱いやすい質感へ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",top:true,amz:"B0FV2PQ11B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
       {name:"セラムイン シャンプー＆トリートメント",forWhom:"内部からしっかり補修したい、パサつきが深刻な方",desc:"PPT成分でダメージを内部から補修。",note:"シャンプー単体ではなくセット販売です。リンク先でご確認ください。",top:false,amz:"B0F4QGL5FD",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
       {name:"SN repair シャンプー",forWhom:"本格的なサロン品質の補修を、自宅で試したい方",desc:"楽天限定。トスチア×ヘマチン配合のプレミアムライン。",note:"楽天のみの取り扱いです。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]},
   smooth_wave:{badge:"Hair Type — SW",title:"Smooth Wave",sub:"くせ毛 × 軽〜中ダメージ",
-    advice:["くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。","シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。","ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。"],
+    advice:["くせ毛・うねりのお悩みは、サロンでも相談件数がとても多いです。完全にまっすぐにしなくても、保湿ケアだけでかなり扱いやすくなりますよ。","くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。","シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。","ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。"],
     products:[
       {name:"Straine（ストレイン）ストレートシャンプー SOFT",forWhom:"くせ・うねりが気になるけど、重くなりすぎたくない方",desc:"くせ毛・うねりが気になる方向け。ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",top:true,amz:"B0GRSYL4J3",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
       {name:"SN repair（くせ毛向け）",forWhom:"カラーもしていてうねりも気になる方",desc:"楽天限定。うねりを抑えながら補修。",note:"楽天のみの取り扱いです。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600006%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
       {name:"bonparme（ボンパルム）ボン リペア シャンプー＆トリートメント",forWhom:"うねり・広がりを抑えながら、頭皮環境も一緒に整えたい方",desc:"温泉水ベースのタウリン×アミノ酸×ベタイン系シャンプー。ヘマチン・加水分解ケラチン・PPTなど補修成分を多数配合し、レチノール・アゼライン酸・ナイアシンアミドなど頭皮ケア成分もプラス。サルフェート・シリコンフリー。アプリコット＆ムスクの香り。",note:"シャンプー＆トリートメントのセット商品です。リンク先でご確認ください。",top:false,amz:"B0F1CZG79C",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5334033e.2303197f.5334033f.5deb1b18/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpluestshop%2Fbp-bt-set-mall%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]},
   aqua_sensitive:{badge:"Hair Type — AS",title:"Aqua Sensitive",sub:"乾燥・バージン毛・健康な髪",
-    advice:["バージン毛や健康な髪の方は、過度なケアをしすぎないことが大切。洗浄力が強すぎるシャンプーで必要な皮脂まで落としてしまうと、逆に乾燥が進みます。","ジュレームなどのアミノ酸系・ロイヤルフローラル系シャンプーは、髪と頭皮を優しく洗いながら適度な潤いを残してくれます。","週に1〜2回スカルプマッサージを取り入れると血行が促進され、健康な髪の成長をサポートします。洗髪時の1〜2分が効果的。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪質に合ったケアを確認してみてください。"],
+    advice:["健康な髪をお持ちの方は、実は「何もしすぎないこと」が一番大切です。過度なケアが逆効果になるケースもサロンではよく見かけます。","バージン毛や健康な髪の方は、過度なケアをしすぎないことが大切。洗浄力が強すぎるシャンプーで必要な皮脂まで落としてしまうと、逆に乾燥が進みます。","ジュレームなどのアミノ酸系・ロイヤルフローラル系シャンプーは、髪と頭皮を優しく洗いながら適度な潤いを残してくれます。","週に1〜2回スカルプマッサージを取り入れると血行が促進され、健康な髪の成長をサポートします。洗髪時の1〜2分が効果的。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪質に合ったケアを確認してみてください。"],
     products:[{name:"ジュレーム リラックス ミッドナイトリペア シャンプー＆トリートメント",forWhom:"健康な髪を守りながら、しっとりとしたまとまりがほしい方",desc:"アミノ酸系洗浄成分。しっとりまとまる保湿ケア。",note:"セット販売です。単品もございますのでリンク先でご確認ください。",top:true,amz:"B0GKDTHTS2",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308dce4.d1bc80a4.5308dce5.9af6e60e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffukuroku-1%2F4cd3dhc5arsokd76ns5btlt2eu%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]},
   bare_skin:{badge:"Hair Type — BS",title:"Bare Skin",sub:"乾燥・混合 × カラー × 軽ダメージ",
-    advice:["カラーによる軽いダメージがある髪は、カラーの色持ちを良くしながら補修できるシャンプーがベストです。カラーシャンプーや低刺激アミノ酸系を選びましょう。","洗髪は毎日行っても問題ありませんが、お湯の温度は38〜40℃に。熱すぎるお湯はカラーの退色を早め、頭皮の乾燥にもつながります。","週1回の集中トリートメントで補修成分を補うのが効果的。市販品でも十分ですが、美容室でのトリートメントと組み合わせると持続性がアップします。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のカラーダメージに合ったケアを確認してみてください。"],
+    advice:["カラーを繰り返していて、毛先のパサつきだけが気になる…というお客様は、サロンで最も多いタイプです。正しいシャンプー選びで色持ちもぐんと変わります。","カラーによる軽いダメージがある髪は、カラーの色持ちを良くしながら補修できるシャンプーがベストです。カラーシャンプーや低刺激アミノ酸系を選びましょう。","洗髪は毎日行っても問題ありませんが、お湯の温度は38〜40℃に。熱すぎるお湯はカラーの退色を早め、頭皮の乾燥にもつながります。","週1回の集中トリートメントで補修成分を補うのが効果的。市販品でも十分ですが、美容室でのトリートメントと組み合わせると持続性がアップします。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のカラーダメージに合ったケアを確認してみてください。"],
     products:[
       {name:"花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー＆EXトリートメント",forWhom:"カラー毛のツヤとまとまりを、次世代ケアで叶えたい方",desc:"花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。",note:"シャンプーは1種類ですが、コンディショナーは「しっとり・さらさら・ツヤ」の3タイプから選べます。リンク先でなりたい仕上がりに合わせてお選びください。",top:true,amz:"B0GMDSB9V1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fanswer-03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
       {name:"エッセンシャル プレミアム うるおいバリア シャンプー",forWhom:"カラーしてるけど、ベタつきもパサつきも気になる方",desc:"カラー毛のパサつき・軽ダメージに。",note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",top:false,amz:"B0CXHLSP8S",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
       {name:"YOLU（ヨル）リラックスナイトリペア シャンプー＆トリートメント",forWhom:"カラーを長持ちさせながら、するんとサラサラな仕上がりが好みの方",desc:"睡眠中の摩擦ダメージから髪を守るナイトキャップ処方。アミノ酸（アラニン系）×ベタイン×タウリン系のマイルドな洗浄ベースに、ナイトケラチン・CMC類似補修成分を配合。サルフェートフリー。ペアー＆ゼラニウムの香り。",note:"シャンプー＆トリートメントのセット商品です。単品もございますのでリンク先でご確認ください。",top:false,amz:"B0DT9SH47R",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fyol001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""},
       {name:"IONICO（イオニコ）プレミアムイオン ダメージケア シャンプー（モイスト＆リペア）",forWhom:"カラーを綺麗に長持ちさせたい、ノンシリコン処方が好みの方",desc:"独自のプレミアムイオン処方で、髪のイオンバランスを整えるノンシリコン・サルフェートフリーシャンプー。オレフィン系をベースにアミノ酸（グルタミン酸系）・ベタイン系で補完。ヘマチン・シルク・セラミド・カラー褪色防止成分を配合。オレンジフラワーの香り。",note:"450ml本体・380ml詰替・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0859SPJ7B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333f2bc.d29748d5.5333f2bd.3d588382/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fakakabeshop%2F4573492151315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}]},
   vital_aging:{badge:"Hair Type — VA",title:"Vital Aging",sub:"ハリ・コシ・ボリューム不足が気になる髪",
-    advice:["年齢とともに髪は細く・コシがなくなり、トップやサイドのボリュームが出にくくなります。これは髪内部の脂質が減少し空洞化が進むため。内部補修できるエイジングケアシャンプーが効果的です。","シャンプー時は頭皮マッサージを意識しましょう。指の腹で円を描くように揉みほぐすことで血流が促進され、健やかな髪が育つ土台が整います。","ノンシリコーン処方を選ぶと、シリコンの蓄積による根元のペタンコ感を防げます。コンディショナーは毛先〜中間に留め、頭皮にはつけないのがコツ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪のエイジングサインに合ったケアを確認してみてください。"],
+    advice:["「最近トップがペタンとする」「分け目が目立つ」というお悩みは、40代以降のお客様からとても多くいただきます。髪の内部密度を補うケアが効果的です。","年齢とともに髪は細く・コシがなくなり、トップやサイドのボリュームが出にくくなります。これは髪内部の脂質が減少し空洞化が進むため。内部補修できるエイジングケアシャンプーが効果的です。","シャンプー時は頭皮マッサージを意識しましょう。指の腹で円を描くように揉みほぐすことで血流が促進され、健やかな髪が育つ土台が整います。","ノンシリコーン処方を選ぶと、シリコンの蓄積による根元のペタンコ感を防げます。コンディショナーは毛先〜中間に留め、頭皮にはつけないのがコツ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪のエイジングサインに合ったケアを確認してみてください。"],
     products:[
       {name:"セグレタ シャンプー 根元からふんわり",forWhom:"トップやサイドのボリューム不足、髪のハリ・コシ低下が気になる方",desc:"花王のエイジングケアブランド。セラミドSが髪内部に浸透・補修する内部密度ケア処方。ノンシリコーンで根元から立ち上がり、ふんわりとした仕上がりに。6種の植物エキス配合。",note:"本体・つめかえ用、シリーズに「うねる髪もまとまる」など複数あります。リンク先でお選びください。",top:true,amz:"B0DH7WD8W5",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532eb60f.8dafe5f6.532eb617.4f160360/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fenetroom%2F7288631%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:""}
     ]}
@@ -250,6 +250,18 @@ const TYPES={
 
 function diagnose(ans){
   const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11}=ans;
+
+  // ── Step0: Q7「わからない」→ Q8の毛先状態で推定 ──────────
+  // 「わからない・覚えていない」場合、髪のダメージ状態から施術履歴を推定する
+  // チリつき・枝毛 → カラー相当のダメージありとみなす
+  // ツヤあり → バージン毛相当とみなす
+  // その他 → 軽めのカラー相当とみなす
+  let q7e=q7;
+  if(q7==="unknown"){
+    if(q8==="frizz"||q8==="split") q7e="color";
+    else if(q8==="gloss") q7e="none";
+    else q7e="color";
+  }
 
   // ── Step1: 頭皮タイプで大枠確定 ──────────────────────
   if(q1==="red") return "skin_alert";
@@ -263,10 +275,10 @@ function diagnose(ans){
 
   // ── Step3: 薬剤ダメージが深刻なケース ──────────────────
   // ブリーチ → 最高レベルのダメージ → Repair Mode確定
-  if(q7==="bleach") return "repair_mode";
+  if(q7e==="bleach") return "repair_mode";
 
   // 縮毛矯正 → ダメージあり、かつボリュームを抑えたい方も多い
-  if(q7==="straight"){
+  if(q7e==="straight"){
     if(q8==="split"||q8==="frizz") return "repair_mode";
     // ボリュームダウン希望 or しっとり希望 → Smooth Wave
     if(q10==="vdown"||q10==="moist") return "smooth_wave";
@@ -275,7 +287,7 @@ function diagnose(ans){
 
   // カラー・パーマ + 深刻ダメージ → Repair Mode
   // ※パーマはボリューム目的なのでボリュームダウン方向には振らない
-  if(q7==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
+  if(q7e==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
     return "repair_mode";
   }
 
@@ -287,15 +299,15 @@ function diagnose(ans){
 
   if(hasKuse||hasSpread){
     // ボリュームアップ希望かつダメージ軽い（カラー・パーマ以下）→ Aqua Sensitive
-    if(wantVolume&&(q7==="none"||q7==="color")) return "aqua_sensitive";
+    if(wantVolume&&(q7e==="none"||q7e==="color")) return "aqua_sensitive";
     return "smooth_wave";
   }
 
   // ── Step5: Q8現在の髪の状態 ─────────────────────────
   // チリつき・まとまらない → ダメージ補修必要
   if(q8==="frizz"||q8==="split"){
-    if(q7==="bleach"||q7==="straight") return "repair_mode";
-    if(q7==="color"&&q8==="frizz") return "repair_mode";
+    if(q7e==="bleach"||q7e==="straight") return "repair_mode";
+    if(q7e==="color"&&q8==="frizz") return "repair_mode";
     return "bare_skin";
   }
 
@@ -303,7 +315,7 @@ function diagnose(ans){
   if(q8==="flat"){
     // ボリュームアップ希望 → Aqua Sensitive（軽い洗浄でふんわり）
     if(wantVolume||q10==="volume") return "aqua_sensitive";
-    return q7==="none"?"aqua_sensitive":"bare_skin";
+    return q7e==="none"?"aqua_sensitive":"bare_skin";
   }
 
   // ── Step6: Q3毛の太さ・Q4硬さで補正 ─────────────────
@@ -315,14 +327,14 @@ function diagnose(ans){
     // ボリュームダウン or うねり抑え → Smooth Wave
     if(q10==="vdown"||q10==="moist") return "smooth_wave";
     // パサつき悩み + カラー → Bare Skin
-    if(q8==="dry"&&q7==="color") return "bare_skin";
+    if(q8==="dry"&&q7e==="color") return "bare_skin";
     return "smooth_wave";
   }
 
   // 細い・柔らかい → ぺたんこ悩み多い → ふんわり系
   if(isThinSoft){
     if(wantVolume) return "aqua_sensitive";
-    if(q7==="none") return "aqua_sensitive";
+    if(q7e==="none") return "aqua_sensitive";
     return "bare_skin";
   }
 
@@ -339,7 +351,7 @@ function diagnose(ans){
   if(q11==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
   if(q11==="wave") return "smooth_wave";
   if(q11==="repair"){
-    return (q7==="bleach"||q7==="straight")?"repair_mode":"bare_skin";
+    return (q7e==="bleach"||q7e==="straight")?"repair_mode":"bare_skin";
   }
   // エイジング（ハリ・コシ・ボリューム不足）→ Vital Aging
   if(q11==="aging") return "vital_aging";
@@ -349,7 +361,7 @@ function diagnose(ans){
   if(q10==="vdown") return "smooth_wave";
 
   // バージン毛 + ツヤあり・普通 → Aqua Sensitive
-  if(q7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
+  if(q7e==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
 
   // カラーあり + ダメージ軽め → Bare Skin（デフォルト）
   return "bare_skin";
@@ -598,7 +610,7 @@ function App(){
         ),
         h("div",{className:"consult-bar"},
           h("div",{className:"consult-bar-txt"},
-            h("p",{className:"consult-bar-ttl"},"どれを選べばいいか迷ったら"),
+            h("p",{className:"consult-bar-ttl"},"この診断結果をもとに相談する"),
             h("p",{className:"consult-bar-sub"},"カットやカラーをしながら、あなたの髪を直接見てご提案します。")
           ),
           h("a",{className:"consult-bar-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"サロンで相談する"))
