@@ -169,10 +169,10 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ftr-rsv-btn:hover{background:var(--gold-d)}
 .ftr-note{font-size:.62rem;color:var(--muted);line-height:1.75;white-space:pre-line}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.res-header{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.5rem}
-.res-header-text{flex:1;min-width:0}
-.res-char-img{width:110px;height:110px;object-fit:contain;flex-shrink:0;border-radius:12px;filter:drop-shadow(0 2px 8px rgba(0,0,0,.08))}
-@media(max-width:480px){.res-char-img{width:90px;height:90px}}
+.res-title-row{display:flex;align-items:center;gap:.7rem}
+.res-title-row .res-title{margin:0}
+.res-char-img{width:80px;height:80px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.08))}
+@media(max-width:480px){.res-char-img{width:65px;height:65px}}
 </style>
 </head>
 <body>
@@ -578,14 +578,12 @@ function App(){
       ),
       step==="loading"&&h("div",{className:"loading"},h("div",{className:"spin"}),h("p",{className:"loading-txt"},"髪質を分析しています…")),
       step==="result"&&td&&h("div",{className:"fade"},
-        h("div",{className:"res-header"},
-          h("div",{className:"res-header-text"},
-            h("span",{className:"badge"},td.badge),
-            h("h2",{className:"res-title"},td.title),
-            h("p",{className:"res-sub"},td.sub)
-          ),
+        h("span",{className:"badge"},td.badge),
+        h("div",{className:"res-title-row"},
+          h("h2",{className:"res-title"},td.title),
           typeKey&&CHAR_IMG[typeKey]&&h("img",{src:CHAR_IMG[typeKey],alt:td.title,className:"res-char-img"})
         ),
+        h("p",{className:"res-sub"},td.sub),
         td.alert&&h("div",{className:"alert-box"},td.alert),
         h("hr",{className:"divider"}),
         h("div",{className:"ai-box"},
@@ -601,14 +599,12 @@ function App(){
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
       ),
       step==="products"&&td&&h("div",{className:"fade"},
-        h("div",{className:"res-header"},
-          h("div",{className:"res-header-text"},
-            h("span",{className:"badge"},td.badge),
-            h("h2",{className:"res-title"},td.title),
-            h("p",{className:"res-sub"},td.sub)
-          ),
+        h("span",{className:"badge"},td.badge),
+        h("div",{className:"res-title-row"},
+          h("h2",{className:"res-title"},td.title),
           typeKey&&CHAR_IMG[typeKey]&&h("img",{src:CHAR_IMG[typeKey],alt:td.title,className:"res-char-img"})
         ),
+        h("p",{className:"res-sub"},td.sub),
         h("hr",{className:"divider"}),
         h("p",{className:"prod-hd"},"あなたにおすすめのシャンプー"),
         h("p",{className:"prod-sub"},"タイプ別に厳選したアイテムです。複数のショップで比較して選んでください。"),
