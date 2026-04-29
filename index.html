@@ -442,6 +442,7 @@ const SURFACTANT_DETAIL=[
 function SurfactantChart({typeKey}){
   const td=typeKey?TYPES[typeKey]:null;
   const otcProducts=td?td.products.filter(p=>p.otc).map(p=>p.name):[];
+  const recNames=td?td.products.filter(p=>!p.otc).map(p=>p.name):[];
   const [openCat,setOpenCat]=useState(null);
   return h("div",{className:"ingr-box"},
     // ── タイトル ──────────────────────────────
@@ -456,7 +457,8 @@ function SurfactantChart({typeKey}){
     SURFACTANT_DETAIL.map((g,gi)=>{
       const isOpen=openCat===gi;
       const isMatch=typeKey&&g.types.includes(typeKey);
-      return h("div",{key:gi,className:"ingr-cat"+(isMatch?" ingr-cat-match":"")},
+      const matchedProducts=isMatch?g.products.filter(pn=>recNames.some(n=>n.includes(pn))):[];
+      return h("div",{key:gi,className:"ingr-cat"+(isMatch&&matchedProducts.length>0?" ingr-cat-match":"")},
         h("button",{className:"ingr-cat-head",onClick:()=>setOpenCat(isOpen?null:gi)},
           h("div",{className:"ingr-cat-stars"},
             Array.from({length:5}).map((_,si)=>
@@ -466,8 +468,8 @@ function SurfactantChart({typeKey}){
           h("div",{className:"ingr-cat-info"},
             h("span",{className:"ingr-cat-name"},g.cat),
             h("span",{className:"ingr-cat-desc"},g.desc),
-            isMatch&&g.products.length>0&&h("span",{className:"ingr-cat-products"},
-              "← "+g.products.join("・")
+            matchedProducts.length>0&&h("span",{className:"ingr-cat-products"},
+              "← "+matchedProducts.join("・")
             )
           ),
           h(Icon,{name:isOpen?"chevron-up":"chevron-down",size:12,color:"var(--muted)"})
