@@ -185,7 +185,7 @@ const QUESTIONS=[
   {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
   {id:"q3",cat:"毛質",text:"髪の太さは？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
   {id:"q4",cat:"毛質",text:"髪の硬さは？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
-  {id:"q5",cat:"親水性",text:"髪を濡らした後、自然放置するとどうなりますか？",opts:[{k:"fast",l:"A",t:"すぐ乾く（15分以内）"},{k:"mid",l:"B",t:"どちらともいえない（15〜30分程度）"},{k:"slow",l:"C",t:"なかなか乾かない（30分以上）"}]},
+  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのはいつごろから？",opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"early",l:"B",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"C",t:"50代から実感"},{k:"strong",l:"D",t:"60代以降で強く実感"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さは？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
   {id:"q7",cat:"薬剤",text:"薬剤処理の経験は？",opts:[{k:"none",l:"A",t:"なし（バージン毛）"},{k:"color",l:"B",t:"カラー"},{k:"perm",l:"C",t:"パーマ（ウェーブ・デジタルパーマ等）"},{k:"bleach",l:"D",t:"ブリーチ・ハイライト"},{k:"straight",l:"E",t:"縮毛矯正・ストレートパーマ"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態は？",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
@@ -259,111 +259,107 @@ const TYPES={
 function diagnose(ans){
   const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11}=ans;
 
-  // ── Step1: 頭皮タイプで大枠確定 ──────────────────────
+  // Q9補正：高機能器具なら1段階軽め、普通器具/使わないなら1段階重め
+  // ダメージ軸（Aqua Sensitive ↔ Bare Skin ↔ Repair Mode）のみ補正
+  const correctQ9=(type)=>{
+    const good=q9==="refa"||q9==="bio"||q9==="repro"||q9==="nanoe";
+    const bad =q9==="other"||q9==="none";
+    if(good){
+      if(type==="repair_mode") return "bare_skin";
+      if(type==="bare_skin")   return "aqua_sensitive";
+    }
+    if(bad){
+      if(type==="aqua_sensitive") return "bare_skin";
+      if(type==="bare_skin")      return "repair_mode";
+    }
+    return type;
+  };
+
+  // ── Step1: 頭皮トラブル・脂性は最優先 ──────────────────
   if(q1==="red") return "skin_alert";
-  if(q1==="oily") return (q2==="short")?"oil_reset_short":"oil_reset_long";
+  if(q1==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
 
-  // ── 以下は乾燥/普通/混合頭皮 ──────────────────────────
+  // ── Step2: Q5=D（60代以降）→ Vital Aging 確定（年代だけで判定）─
+  if(q5==="strong") return "vital_aging";
 
-  // ── Step2: Q10「なりたい髪質」を最優先で反映 ──────────
-  // ボリュームアップ希望 → 細毛・ペタンコ悩みが多い → Aqua Sensitive
-  // ボリュームダウン希望 → 広がり・太毛悩みが多い → Smooth Wave or Repair Mode
-
-  // ── Step3: 薬剤ダメージが深刻なケース ──────────────────
-  // ブリーチ → Q8の状態で分岐
-  // 深刻ダメージサイン（枝毛・チリつき・広がる）→ Repair Mode
-  // それ以外（ツヤあり・パサつき・ぺたんこ）→ Bare Skin（アミノ酸×補修成分の軽め補修）
+  // ── Step3: 薬剤ダメージ ────────────────────────────────
+  // ブリーチ → Q8で分岐：深刻ダメージなら Repair、軽ければ Bare Skin
   if(q7==="bleach"){
     if(q8==="split"||q8==="frizz"||q8==="spread") return "repair_mode";
-    return "bare_skin";
+    return correctQ9("bare_skin");
   }
-
-  // 縮毛矯正 → トステア配合シャンプーで補修したいので Repair Mode 確定
+  // 縮毛矯正 → トステア配合 Repair Mode 確定
   if(q7==="straight") return "repair_mode";
-
-  // パーマ → トステアの熱反応がカール持続にも有効なので Repair Mode 確定
+  // パーマ → トステアの熱反応でカール持続にも有効 → Repair Mode 確定
   if(q7==="perm") return "repair_mode";
-
-  // カラー・パーマ + 深刻ダメージ → Repair Mode
-  // ※パーマはボリューム目的なのでボリュームダウン方向には振らない
+  // カラー + 深刻ダメージサイン → Repair Mode
   if(q7==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
     return "repair_mode";
   }
 
   // ── Step4: くせ毛・うねりが主訴 ──────────────────────
-  const hasKuse = q6==="some"||q6==="strong";
-  const hasSpread = q8==="spread";
-  const wantStraight = q10==="smooth"||q10==="gloss"||q10==="vdown";
-  const wantVolume = q10==="volume";
+  const hasKuse=q6==="some"||q6==="strong";
+  const hasSpread=q8==="spread";
+  const wantVolume=q10==="volume";
 
   if(hasKuse||hasSpread){
-    // ボリュームアップ希望かつダメージ軽い（カラー・パーマ以下）→ Aqua Sensitive
-    if(wantVolume&&(q7==="none"||q7==="color")) return "aqua_sensitive";
+    if(wantVolume&&(q7==="none"||q7==="color")) return correctQ9("aqua_sensitive");
     return "smooth_wave";
   }
 
-  // ── Step5: Q8現在の髪の状態 ─────────────────────────
-  // チリつき・まとまらない → ダメージ補修必要
+  // ── Step5: Q8 現在の髪の状態 ─────────────────────────
   if(q8==="frizz"||q8==="split"){
-    if(q7==="bleach"||q7==="straight") return "repair_mode";
-    if(q7==="color"&&q8==="frizz") return "repair_mode";
-    return "bare_skin";
+    return correctQ9("bare_skin");
   }
-
-  // ぺたんこ・ボリュームなし
   if(q8==="flat"){
-    // ボリュームアップ希望 → Aqua Sensitive（軽い洗浄でふんわり）
-    if(wantVolume||q10==="volume") return "aqua_sensitive";
-    return q7==="none"?"aqua_sensitive":"bare_skin";
+    // Q5=C（50代）でぺたんこ → Vital Aging（エイジング由来）
+    if(q5==="clear") return "vital_aging";
+    if(wantVolume) return correctQ9("aqua_sensitive");
+    return q7==="none"?correctQ9("aqua_sensitive"):correctQ9("bare_skin");
   }
 
-  // ── Step6: Q3毛の太さ・Q4硬さで補正 ─────────────────
-  const isThickHard = (q3==="thick"||q4==="hard");
-  const isThinSoft  = (q3==="thin"||q4==="soft");
+  // ── Step6: Q3 太さ × Q4 硬さ ─────────────────────────
+  const isThickHard=(q3==="thick"||q4==="hard");
+  const isThinSoft =(q3==="thin"||q4==="soft");
 
-  // 太い・硬い → ボリュームが出やすい → ボリュームダウン・しっとり系
   if(isThickHard){
-    // ボリュームダウン or うねり抑え → Smooth Wave
     if(q10==="vdown"||q10==="moist") return "smooth_wave";
-    // パサつき悩み + カラー → Bare Skin
-    if(q8==="dry"&&q7==="color") return "bare_skin";
+    if(q8==="dry"&&q7==="color") return correctQ9("bare_skin");
     return "smooth_wave";
   }
-
-  // 細い・柔らかい → ぺたんこ悩み多い → ふんわり系
   if(isThinSoft){
-    if(wantVolume) return "aqua_sensitive";
-    if(q7==="none") return "aqua_sensitive";
-    return "bare_skin";
+    // Q5=C（50代）+ 細毛・柔らかい → Vital Aging
+    if(q5==="clear") return "vital_aging";
+    if(wantVolume) return correctQ9("aqua_sensitive");
+    if(q7==="none") return correctQ9("aqua_sensitive");
+    return correctQ9("bare_skin");
   }
 
-  // ── Step7: Q9熱器具でダメージ補正 ───────────────────
-  // 高機能器具（リファ・ビューロン・レプロナイザー・ナノイー）使用 → ダメージ軽減とみなす
-  const hasProTool = q9==="refa"||q9==="bio"||q9==="repro"||q9==="nanoe";
-  const hasNoDamageProtect = q9==="other"||q9==="none";
-
-  // ── Step8: Q5親水性（疎水性＝ダメージの指標）───────────
-  // すぐ乾く（疎水性）→ ダメージ少ない or バージン毛の可能性
-  // 乾かない（親水性）→ ダメージ・くせ毛の可能性
-
-  // ── Step9: Q11悩みで最終決定 ─────────────────────────
+  // ── Step7: Q11 悩みで最終決定 ────────────────────────
   if(q11==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
-  if(q11==="wave") return "smooth_wave";
-  if(q11==="repair"){
-    return (q7==="bleach"||q7==="straight")?"repair_mode":"bare_skin";
+  if(q11==="wave"){
+    // Q5=C（50代）+ 細毛 or ぺたんこ → エイジング由来のうねりとして Vital Aging
+    if(q5==="clear"&&(isThinSoft||q8==="flat")) return "vital_aging";
+    return "smooth_wave";
   }
-  // エイジング（ハリ・コシ・ボリューム不足）→ Vital Aging
+  if(q11==="repair"){
+    // 自覚あり + Q8深刻ダメージサイン → Repair Mode、それ以外 Bare Skin
+    if(q8==="split"||q8==="frizz"||q8==="spread") return "repair_mode";
+    return correctQ9("bare_skin");
+  }
   if(q11==="aging") return "vital_aging";
 
-  // Q10なりたい髪質を最終反映
-  if(q10==="volume") return "aqua_sensitive";
+  // ── Step8: Q10 なりたい髪質を最終反映 ───────────────
+  if(q10==="volume"){
+    // Q5=C（50代）+ ボリュームアップ希望 → エイジング由来のボリューム不足
+    if(q5==="clear") return "vital_aging";
+    return correctQ9("aqua_sensitive");
+  }
   if(q10==="vdown") return "smooth_wave";
 
-  // バージン毛 + ツヤあり・普通 → Aqua Sensitive
-  if(q7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
-
-  // カラーあり + ダメージ軽め → Bare Skin（デフォルト）
-  return "bare_skin";
+  // ── Step9: デフォルト ─────────────────────────────
+  if(q7==="none"&&(q8==="gloss"||q8==="dry")) return correctQ9("aqua_sensitive");
+  return correctQ9("bare_skin");
 }
 
 const {createElement:h,useRef,useEffect,useState}=React;
@@ -579,6 +575,7 @@ function App(){
             );
           })
         ),
+        (typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&(answers.q5==="clear"||answers.q5==="strong")&&answers.q10==="volume"&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ ボリュームアップの実感が得られない場合は、エイジングケア（Vital Aging）もご検討ください。"),
         h("button",{className:"btn-primary btn-primary-lg",onClick:()=>setStep("products")},h("span",null,"おすすめのシャンプーを見る ↗")),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
       ),
