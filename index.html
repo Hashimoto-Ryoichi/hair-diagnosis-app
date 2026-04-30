@@ -259,22 +259,6 @@ const TYPES={
 function diagnose(ans){
   const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11}=ans;
 
-  // Q9補正：高機能器具なら1段階軽め、普通器具/使わないなら1段階重め
-  // ダメージ軸（Aqua Sensitive ↔ Bare Skin ↔ Repair Mode）のみ補正
-  const correctQ9=(type)=>{
-    const good=q9==="refa"||q9==="bio"||q9==="repro"||q9==="nanoe";
-    const bad =q9==="other"||q9==="none";
-    if(good){
-      if(type==="repair_mode") return "bare_skin";
-      if(type==="bare_skin")   return "aqua_sensitive";
-    }
-    if(bad){
-      if(type==="aqua_sensitive") return "bare_skin";
-      if(type==="bare_skin")      return "repair_mode";
-    }
-    return type;
-  };
-
   // ── Step1: 頭皮トラブル・脂性は最優先 ──────────────────
   if(q1==="red") return "skin_alert";
   if(q1==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
@@ -286,15 +270,18 @@ function diagnose(ans){
   // ブリーチ → Q8で分岐：深刻ダメージなら Repair、軽ければ Bare Skin
   if(q7==="bleach"){
     if(q8==="split"||q8==="frizz"||q8==="spread") return "repair_mode";
-    return correctQ9("bare_skin");
+    return "bare_skin";
   }
   // 縮毛矯正 → トステア配合 Repair Mode 確定
   if(q7==="straight") return "repair_mode";
   // パーマ → トステアの熱反応でカール持続にも有効 → Repair Mode 確定
   if(q7==="perm") return "repair_mode";
-  // カラー + 深刻ダメージサイン → Repair Mode
+  // カラー + 深刻ダメージサイン → Q9で分岐
+  // 高機能器具（リファ・ビューロン・レプロナイザー・ナノイー）でダメージ軽減 → Bare Skin
+  // 普通器具・使わない → Repair Mode（補修強め）
   if(q7==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
-    return "repair_mode";
+    const goodTool=q9==="refa"||q9==="bio"||q9==="repro"||q9==="nanoe";
+    return goodTool?"bare_skin":"repair_mode";
   }
 
   // ── Step4: くせ毛・うねりが主訴 ──────────────────────
@@ -303,19 +290,19 @@ function diagnose(ans){
   const wantVolume=q10==="volume";
 
   if(hasKuse||hasSpread){
-    if(wantVolume&&(q7==="none"||q7==="color")) return correctQ9("aqua_sensitive");
+    if(wantVolume&&(q7==="none"||q7==="color")) return "aqua_sensitive";
     return "smooth_wave";
   }
 
   // ── Step5: Q8 現在の髪の状態 ─────────────────────────
   if(q8==="frizz"||q8==="split"){
-    return correctQ9("bare_skin");
+    return "bare_skin";
   }
   if(q8==="flat"){
     // Q5=C（50代）でぺたんこ → Vital Aging（エイジング由来）
     if(q5==="clear") return "vital_aging";
-    if(wantVolume) return correctQ9("aqua_sensitive");
-    return q7==="none"?correctQ9("aqua_sensitive"):correctQ9("bare_skin");
+    if(wantVolume) return "aqua_sensitive";
+    return q7==="none"?"aqua_sensitive":"bare_skin";
   }
 
   // ── Step6: Q3 太さ × Q4 硬さ ─────────────────────────
@@ -324,15 +311,15 @@ function diagnose(ans){
 
   if(isThickHard){
     if(q10==="vdown"||q10==="moist") return "smooth_wave";
-    if(q8==="dry"&&q7==="color") return correctQ9("bare_skin");
+    if(q8==="dry"&&q7==="color") return "bare_skin";
     return "smooth_wave";
   }
   if(isThinSoft){
     // Q5=C（50代）+ 細毛・柔らかい → Vital Aging
     if(q5==="clear") return "vital_aging";
-    if(wantVolume) return correctQ9("aqua_sensitive");
-    if(q7==="none") return correctQ9("aqua_sensitive");
-    return correctQ9("bare_skin");
+    if(wantVolume) return "aqua_sensitive";
+    if(q7==="none") return "aqua_sensitive";
+    return "bare_skin";
   }
 
   // ── Step7: Q11 悩みで最終決定 ────────────────────────
@@ -345,7 +332,7 @@ function diagnose(ans){
   if(q11==="repair"){
     // 自覚あり + Q8深刻ダメージサイン → Repair Mode、それ以外 Bare Skin
     if(q8==="split"||q8==="frizz"||q8==="spread") return "repair_mode";
-    return correctQ9("bare_skin");
+    return "bare_skin";
   }
   if(q11==="aging") return "vital_aging";
 
@@ -353,13 +340,13 @@ function diagnose(ans){
   if(q10==="volume"){
     // Q5=C（50代）+ ボリュームアップ希望 → エイジング由来のボリューム不足
     if(q5==="clear") return "vital_aging";
-    return correctQ9("aqua_sensitive");
+    return "aqua_sensitive";
   }
   if(q10==="vdown") return "smooth_wave";
 
   // ── Step9: デフォルト ─────────────────────────────
-  if(q7==="none"&&(q8==="gloss"||q8==="dry")) return correctQ9("aqua_sensitive");
-  return correctQ9("bare_skin");
+  if(q7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
+  return "bare_skin";
 }
 
 const {createElement:h,useRef,useEffect,useState}=React;
