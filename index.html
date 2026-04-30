@@ -200,6 +200,45 @@ function rak1(id){return R1+id+"/"+R2;}
 
 const CHAR_IMG={skin_alert:"char-skin-alert.png",oil_reset_short:"char-oil-reset-short.png",oil_reset_long:"char-oil-reset-long.png",repair_mode:"char-repair-mode.png",smooth_wave:"char-smooth-wave.png",aqua_sensitive:"char-aqua-sensitive.png",bare_skin:"char-bare-skin.png",vital_aging:"char-vital-aging.png"};
 
+// 商品マッチング用タグ：商品名のキーワードで紐付け、回答との一致数でスコアリング
+const MATCH_TAGS=[
+  {key:"ミノン",          tags:{q1:["red","dry"],q11:["dry"]}},
+  {key:"NOV",             tags:{q1:["red"],q11:["repair"]}},
+  {key:"コラージュフルフル", tags:{q1:["oily"],q11:["oily"]}},
+  {key:"キュレル",         tags:{q1:["dry"],q11:["dry"]}},
+  {key:"h&s",             tags:{q11:["oily"],q10:["smooth"]}},
+  {key:"デオコ",           tags:{q11:["oily"]}},
+  {key:"WELLP",           tags:{q11:["oily","repair"],q8:["dry"]}},
+  {key:"パンテーン",        tags:{q10:["moist"],q11:["oily"]}},
+  {key:"ラックス",          tags:{q10:["gloss"]}},
+  {key:"TSUBAKI",         tags:{q10:["moist"]}},
+  {key:"ダヴ",             tags:{q10:["smooth"]}},
+  {key:"スカルプクレンズ",   tags:{q11:["oily"]}},
+  {key:"スティーブンノル",   tags:{q10:["moist","gloss"]}},
+  {key:"ストレートシャンプー BASIC", tags:{q10:["smooth"],q11:["repair"],q7:["bleach","straight"]}},
+  {key:"セラムイン",        tags:{q11:["repair"],q8:["dry","split"]}},
+  {key:"SN repair",       tags:{q11:["repair"],q7:["bleach","straight","perm"]}},
+  {key:"ストレートシャンプー SOFT", tags:{q10:["smooth","gloss"],q11:["wave"],q6:["some","strong"]}},
+  {key:"BOTANIST ボタニカルシャンプー モイスト", tags:{q10:["moist"]}},
+  {key:"BOTANIST ボタニカルシャンプー スムース", tags:{q10:["smooth"]}},
+  {key:"ジュレーム",        tags:{q10:["moist"],q5:["stable","early"]}},
+  {key:"BOTANIST ボタニカルシャンプー ダメージケア", tags:{q8:["dry"],q11:["repair"]}},
+  {key:"ジアンサー",        tags:{q7:["color"],q10:["moist","gloss","smooth"]}},
+  {key:"エッセンシャル プレミアム", tags:{q7:["color"],q10:["smooth"]}},
+  {key:"セグレタ",          tags:{q11:["aging"],q10:["volume"],q5:["clear","strong"]}},
+  {key:"バウンシーボリューム", tags:{q10:["volume"]}},
+];
+
+function scoreProduct(product,answers){
+  const entry=MATCH_TAGS.find(m=>product.name.includes(m.key));
+  if(!entry) return 0;
+  let s=0;
+  for(const q in entry.tags){
+    if(entry.tags[q].includes(answers[q])) s++;
+  }
+  return s;
+}
+
 const TYPES={
   skin_alert:{badge:"Hair Type — SA",title:"Skin Alert",sub:"頭皮に炎症サインあり",
     alert:"⚠️ 頭皮に赤みや湿疹がある場合、まずは皮膚科の受診をおすすめします。",
@@ -575,9 +614,8 @@ function App(){
         h("p",{className:"prod-hd"},"あなたにおすすめのシャンプー"),
         h("p",{className:"prod-sub"},"タイプ別に厳選したアイテムです。複数のショップで比較して選んでください。"),
         td.alert&&h("div",{className:"alert-box"},td.alert),
-        td.products.map((p,i)=>
-          h("div",{key:i,className:"prod-card"+(p.top?" top-pick":"")},
-            p.top&&h("span",{className:"prod-top-badge"},"★ おすすめ1位"),
+        [...td.products].sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers)).map((p,i)=>
+          h("div",{key:i,className:"prod-card"},
             h("div",{className:"prod-card-inner"},
               h("div",{className:"prod-img-wrap"},
                 p.img_url?h("img",{src:p.img_url,alt:p.name,className:"prod-img",loading:"lazy"}):h("div",{className:"prod-img-placeholder"},h(Icon,{name:"droplets",size:28,color:"var(--gold-l)"}))
