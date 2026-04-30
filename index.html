@@ -270,8 +270,13 @@ function diagnose(ans){
   // ボリュームダウン希望 → 広がり・太毛悩みが多い → Smooth Wave or Repair Mode
 
   // ── Step3: 薬剤ダメージが深刻なケース ──────────────────
-  // ブリーチ → 最高レベルのダメージ → Repair Mode確定
-  if(q7==="bleach") return "repair_mode";
+  // ブリーチ → Q8の状態で分岐
+  // 深刻ダメージサイン（枝毛・チリつき・広がる）→ Repair Mode
+  // それ以外（ツヤあり・パサつき・ぺたんこ）→ Bare Skin（アミノ酸×補修成分の軽め補修）
+  if(q7==="bleach"){
+    if(q8==="split"||q8==="frizz"||q8==="spread") return "repair_mode";
+    return "bare_skin";
+  }
 
   // 縮毛矯正 → ダメージあり、かつボリュームを抑えたい方も多い
   if(q7==="straight"){
