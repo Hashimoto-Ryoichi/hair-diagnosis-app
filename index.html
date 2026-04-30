@@ -278,13 +278,8 @@ function diagnose(ans){
     return "bare_skin";
   }
 
-  // 縮毛矯正 → ダメージあり、かつボリュームを抑えたい方も多い
-  if(q7==="straight"){
-    if(q8==="split"||q8==="frizz") return "repair_mode";
-    // ボリュームダウン希望 or しっとり希望 → Smooth Wave
-    if(q10==="vdown"||q10==="moist") return "smooth_wave";
-    return "repair_mode";
-  }
+  // 縮毛矯正 → トステア配合シャンプーで補修したいので Repair Mode 確定
+  if(q7==="straight") return "repair_mode";
 
   // カラー・パーマ + 深刻ダメージ → Repair Mode
   // ※パーマはボリューム目的なのでボリュームダウン方向には振らない
