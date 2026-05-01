@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hair Identity by Ryoichi Hashimoto｜あなたに合うシャンプー診断</title>
+<title>Hair Identity｜あなたに合うシャンプー診断</title>
 <meta name="description" content="原宿の現役美容師・橋元リョウイチが20年以上の経験から組み立てた、あなたの髪質に本当に合うシャンプーを11問で診断する無料アプリです。">
 
 <!-- Open Graph (Facebook, LINE, note等) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hair-diagnosis-app.vercel.app/">
-<meta property="og:title" content="Hair Identity by Ryoichi Hashimoto｜あなたに合うシャンプー診断">
+<meta property="og:title" content="Hair Identity｜あなたに合うシャンプー診断">
 <meta property="og:description" content="原宿の現役美容師・橋元リョウイチが20年以上の経験から組み立てた、あなたの髪質に本当に合うシャンプーを11問で診断する無料アプリです。">
 <meta property="og:image" content="https://hair-diagnosis-app.vercel.app/og-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -19,7 +19,7 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Hair Identity by Ryoichi Hashimoto｜あなたに合うシャンプー診断">
+<meta name="twitter:title" content="Hair Identity｜あなたに合うシャンプー診断">
 <meta name="twitter:description" content="原宿の現役美容師・橋元リョウイチが20年以上の経験から組み立てた、あなたの髪質に本当に合うシャンプーを11問で診断する無料アプリです。">
 <meta name="twitter:image" content="https://hair-diagnosis-app.vercel.app/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -183,15 +183,15 @@ const HPB_URL="https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/";
 const QUESTIONS=[
   {id:"q1",cat:"頭皮",text:"地肌の状態はどれに当てはまりますか？",opts:[{k:"dry",l:"A",t:"乾燥している"},{k:"normal",l:"B",t:"普通（特に気にならない）"},{k:"oily",l:"C",t:"脂性（べたつきやすい）"},{k:"mix",l:"D",t:"混合（部位によって異なる）"},{k:"red",l:"E",t:"赤み・湿疹がある"}]},
   {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
-  {id:"q3",cat:"毛質",text:"髪の太さは？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
-  {id:"q4",cat:"毛質",text:"髪の硬さは？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
-  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのはいつごろから？",opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"early",l:"B",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"C",t:"50代から実感"},{k:"strong",l:"D",t:"60代以降で強く実感"}]},
-  {id:"q6",cat:"くせ毛",text:"くせ毛の強さは？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
-  {id:"q7",cat:"薬剤",text:"直近１年以内に髪に何か施術はしましたか？（だいたいでOKです）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー"},{k:"perm",l:"C",t:"パーマ（ウェーブ・デジタルパーマ等）"},{k:"bleach",l:"D",t:"ブリーチ・ハイライト"},{k:"straight",l:"E",t:"縮毛矯正・ストレートパーマ"}]},
-  {id:"q8",cat:"ダメージ",text:"今の髪の状態は？",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
-  {id:"q9",cat:"熱器具",text:"使っている熱器具は？",opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
-  {id:"q10",cat:"仕上がり",text:"なりたい髪質は？",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
-  {id:"q11",cat:"悩み",text:"特に気になる悩みは？",opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"aging",l:"E",t:"エイジング（ハリ・コシ・ボリューム不足）"},{k:"none",l:"F",t:"特にない"}]},
+  {id:"q3",cat:"毛質",text:"髪の太さはどのくらいですか？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
+  {id:"q4",cat:"毛質",text:"髪の硬さはどのくらいですか？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
+  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのはいつごろからですか？",opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"early",l:"B",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"C",t:"50代から実感"},{k:"strong",l:"D",t:"60代以降で強く実感"}]},
+  {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
+  {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー"},{k:"perm",l:"C",t:"パーマ（ウェーブ・デジタルパーマ等）"},{k:"bleach",l:"D",t:"ブリーチ・ハイライト"},{k:"straight",l:"E",t:"縮毛矯正・ストレートパーマ"}]},
+  {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
+  {id:"q9",cat:"熱器具",text:"使っている熱器具はありますか？",opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
+  {id:"q10",cat:"仕上がり",text:"なりたい髪質はどれですか？（複数回答可）",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
+  {id:"q11",cat:"悩み",text:"特に気になるお悩みはどれですか？",opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"aging",l:"E",t:"エイジング（ハリ・コシ・ボリューム不足）"},{k:"none",l:"F",t:"特にない"}]},
 ];
 
 const R1="https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F";
@@ -237,6 +237,10 @@ function scoreProduct(product,answers){
     if(q==="q7"){
       const q7arr=Array.isArray(answers.q7)?answers.q7:[answers.q7||"none"];
       if(entry.tags.q7.some(t=>q7arr.includes(t))) s++;
+    } else if(q==="q10"){
+      const q10arr=Array.isArray(answers.q10)?answers.q10:[answers.q10].filter(Boolean);
+      if(q10arr.length>0&&entry.tags.q10.includes(q10arr[0])) s+=2;
+      else if(q10arr.some(t=>entry.tags.q10.includes(t))) s++;
     } else {
       if(entry.tags[q].includes(answers[q])) s++;
     }
@@ -301,12 +305,16 @@ const TYPES={
 
 
 function diagnose(ans){
-  const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11}=ans;
+  const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q11}=ans;
 
   // Q7は複数選択配列。最強ダメージを1つ抽出して診断に使う
   const Q7_PRIORITY=["bleach","straight","perm","color","none"];
   const q7arr=Array.isArray(q7)?q7:[q7||"none"];
   const eq7=Q7_PRIORITY.find(p=>q7arr.includes(p))||"none";
+
+  // Q10は複数選択配列。先頭（最初に押した=最重視）を主回答として使用
+  const q10arr=Array.isArray(ans.q10)?ans.q10:(ans.q10?[ans.q10]:[]);
+  const q10=q10arr[0];
 
   // ── Step1: 頭皮トラブル・脂性は最優先 ──────────────────
   if(q1==="red") return "skin_alert";
@@ -570,9 +578,15 @@ function App(){
     }
     setAnswers({...answers,q7:next});
   }
-  function confirmQ7(){
+  function toggleQ10(k){
+    const cur=Array.isArray(answers.q10)?answers.q10:[];
+    const next=cur.includes(k)?cur.filter(v=>v!==k):[...cur,k];
+    setAnswers({...answers,q10:next});
+  }
+  function confirmMulti(qid){
     const na={...answers};
-    if(!na.q7||na.q7.length===0) return;
+    const arr=Array.isArray(na[qid])?na[qid]:[];
+    if(arr.length===0) return;
     if(curQ<totalQ-1){setCurQ(curQ+1);}
     else{setTypeKey(diagnose(na));setStep("result");}
   }
@@ -583,7 +597,6 @@ function App(){
     h("header",{className:"hdr"},
       h("p",{className:"hdr-eye"},"Hair Care Diagnosis"),
       h("h1",{className:"hdr-h1"},"Hair Identity"),
-      h("p",{className:"hdr-sub"},"by Ryoichi Hashimoto"),
       h("div",{className:"gold-line"})
     ),
     h("main",{className:"wrap"},
@@ -604,19 +617,26 @@ function App(){
           h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
           h("p",{className:"q-text"},QUESTIONS[curQ].text),
-          QUESTIONS[curQ].id==="q7"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"（複数選択できます。「なし」は他と同時選択不可）"),
+          QUESTIONS[curQ].id==="q10"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 一番気になる仕上がりから順にタップしてください。"),
           h("div",{className:"opts"},QUESTIONS[curQ].opts.map(opt=>{
-            const isQ7=QUESTIONS[curQ].id==="q7";
-            const q7sel=Array.isArray(answers.q7)?answers.q7:[];
-            const isSel=isQ7?q7sel.includes(opt.k):answers[QUESTIONS[curQ].id]===opt.k;
-            return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();isQ7?toggleQ7(opt.k):selectOpt(opt.k);}},
-              h("span",{className:"opt-lt"},opt.l),h("span",null,opt.t));
+            const qid=QUESTIONS[curQ].id;
+            const isMulti=qid==="q7"||qid==="q10";
+            const arr=Array.isArray(answers[qid])?answers[qid]:[];
+            const isSel=isMulti?arr.includes(opt.k):answers[qid]===opt.k;
+            const order=qid==="q10"&&isSel?arr.indexOf(opt.k)+1:0;
+            return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
+              qid==="q7"?toggleQ7(opt.k):qid==="q10"?toggleQ10(opt.k):selectOpt(opt.k);
+            }},
+              h("span",{className:"opt-lt"},opt.l),
+              h("span",{style:{flex:1}},opt.t),
+              order>0&&h("span",{style:{marginLeft:"auto",fontSize:".72rem",color:"var(--gold)",fontWeight:500,fontFamily:"var(--serif)",fontStyle:"italic"}},`${order}番目`)
+            );
           })),
-          QUESTIONS[curQ].id==="q7"&&h("button",{
+          (QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q10")&&h("button",{
             className:"btn-primary",
-            style:{marginTop:"1rem",opacity:(Array.isArray(answers.q7)&&answers.q7.length>0)?1:0.4},
-            disabled:!(Array.isArray(answers.q7)&&answers.q7.length>0),
-            onClick:confirmQ7
+            style:{marginTop:"1rem",opacity:(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0)?1:0.4},
+            disabled:!(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0),
+            onClick:()=>confirmMulti(QUESTIONS[curQ].id)
           },"次へ →")
         ),
         h("button",{className:"btn-ghost",onClick:goBack},"← 前の質問に戻る")
@@ -638,7 +658,7 @@ function App(){
             );
           })
         ),
-        (typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&(answers.q5==="clear"||answers.q5==="strong")&&answers.q10==="volume"&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ ボリュームアップの実感が得られない場合は、エイジングケア（Vital Aging）もご検討ください。"),
+        (typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&(answers.q5==="clear"||answers.q5==="strong")&&(Array.isArray(answers.q10)?answers.q10.includes("volume"):answers.q10==="volume")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ ボリュームアップの実感が得られない場合は、エイジングケア（Vital Aging）もご検討ください。"),
         answers.q1==="oily"&&(typeKey==="repair_mode"||typeKey==="bare_skin")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ 地肌は脂性傾向があります。シャンプー後はお湯で丁寧にすすいで、残留しないようにしましょう。"),
         h("button",{className:"btn-primary btn-primary-lg",onClick:()=>setStep("products")},h("span",null,"おすすめのシャンプーを見る ↗")),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
@@ -689,7 +709,7 @@ function App(){
           h("div",{className:"ftr-photo-fallback"},h(Icon,{name:"user",size:32,color:"var(--gold-l)"}))
         ),
         h("div",{className:"ftr-profile-info"},
-          h("p",{className:"ftr-profile-label"},"20年以上 髪と向き合ってきました。気になることがあればお気軽にどうぞ。"),
+          h("p",{className:"ftr-profile-label"},"カットやカラーの時間こそ、髪のお悩みを解く一番のチャンス。施術しながら、あなたに本当に合うケアを一緒に見つけていきましょう。"),
           h("p",{className:"ftr-name"},"橋元 リョウイチ"),
           h("p",{className:"ftr-salon"},"Freelance Hair Stylist"),
           h("a",{className:"ftr-rsv-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"calendar-check",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"ご予約はこちら"))
