@@ -310,7 +310,7 @@ function diagnose(ans){
 
   // ── Step1: 頭皮トラブル・脂性は最優先 ──────────────────
   if(q1==="red") return "skin_alert";
-  if(q1==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
+  if(q1==="oily"&&(eq7==="none"||eq7==="color")) return q2==="short"?"oil_reset_short":"oil_reset_long";
 
   // ── Step2: Q5=D（60代以降）→ Vital Aging 確定（年代だけで判定）─
   if(q5==="strong") return "vital_aging";
