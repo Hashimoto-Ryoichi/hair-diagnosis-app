@@ -626,7 +626,7 @@ function App(){
                 h("p",{className:"prod-desc"},p.desc),
                 p.note&&h("p",{className:"prod-note"},h(Icon,{name:"info",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},p.note)),
                 h("div",{className:"prod-links"},
-                  p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/s?k=${encodeURIComponent(p.name)}&tag=${ASSOC_ID}`,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
+                  p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
                   p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
                 )
               )
