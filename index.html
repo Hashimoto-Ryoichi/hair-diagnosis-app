@@ -234,7 +234,12 @@ function scoreProduct(product,answers){
   if(!entry) return 0;
   let s=0;
   for(const q in entry.tags){
-    if(entry.tags[q].includes(answers[q])) s++;
+    if(q==="q7"){
+      const q7arr=Array.isArray(answers.q7)?answers.q7:[answers.q7||"none"];
+      if(entry.tags.q7.some(t=>q7arr.includes(t))) s++;
+    } else {
+      if(entry.tags[q].includes(answers[q])) s++;
+    }
   }
   return s;
 }
@@ -298,6 +303,11 @@ const TYPES={
 function diagnose(ans){
   const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q10,q11}=ans;
 
+  // Q7は複数選択配列。最強ダメージを1つ抽出して診断に使う
+  const Q7_PRIORITY=["bleach","straight","perm","color","none"];
+  const q7arr=Array.isArray(q7)?q7:[q7||"none"];
+  const eq7=Q7_PRIORITY.find(p=>q7arr.includes(p))||"none";
+
   // ── Step1: 頭皮トラブル・脂性は最優先 ──────────────────
   if(q1==="red") return "skin_alert";
   if(q1==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
@@ -307,18 +317,18 @@ function diagnose(ans){
 
   // ── Step3: 薬剤ダメージ ────────────────────────────────
   // ブリーチ → Q8で分岐：深刻ダメージなら Repair、軽ければ Bare Skin
-  if(q7==="bleach"){
+  if(eq7==="bleach"){
     if(q8==="split"||q8==="frizz"||q8==="spread") return "repair_mode";
     return "bare_skin";
   }
   // 縮毛矯正 → トステア配合 Repair Mode 確定
-  if(q7==="straight") return "repair_mode";
+  if(eq7==="straight") return "repair_mode";
   // パーマ → トステアの熱反応でカール持続にも有効 → Repair Mode 確定
-  if(q7==="perm") return "repair_mode";
+  if(eq7==="perm") return "repair_mode";
   // カラー + 深刻ダメージサイン → Q9で分岐
   // 高機能器具（リファ・ビューロン・レプロナイザー・ナノイー）でダメージ軽減 → Bare Skin
   // 普通器具・使わない → Repair Mode（補修強め）
-  if(q7==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
+  if(eq7==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
     const goodTool=q9==="refa"||q9==="bio"||q9==="repro"||q9==="nanoe";
     return goodTool?"bare_skin":"repair_mode";
   }
@@ -329,7 +339,7 @@ function diagnose(ans){
   const wantVolume=q10==="volume";
 
   if(hasKuse||hasSpread){
-    if(wantVolume&&(q7==="none"||q7==="color")) return "aqua_sensitive";
+    if(wantVolume&&(eq7==="none"||eq7==="color")) return "aqua_sensitive";
     return "smooth_wave";
   }
 
@@ -341,7 +351,7 @@ function diagnose(ans){
     // Q5=C（50代）でぺたんこ → Vital Aging（エイジング由来）
     if(q5==="clear") return "vital_aging";
     if(wantVolume) return "aqua_sensitive";
-    return q7==="none"?"aqua_sensitive":"bare_skin";
+    return eq7==="none"?"aqua_sensitive":"bare_skin";
   }
 
   // ── Step6: Q3 太さ × Q4 硬さ ─────────────────────────
@@ -350,14 +360,14 @@ function diagnose(ans){
 
   if(isThickHard){
     if(q10==="vdown"||q10==="moist") return "smooth_wave";
-    if(q8==="dry"&&q7==="color") return "bare_skin";
+    if(q8==="dry"&&eq7==="color") return "bare_skin";
     return "smooth_wave";
   }
   if(isThinSoft){
     // Q5=C（50代）+ 細毛・柔らかい → Vital Aging
     if(q5==="clear") return "vital_aging";
     if(wantVolume) return "aqua_sensitive";
-    if(q7==="none") return "aqua_sensitive";
+    if(eq7==="none") return "aqua_sensitive";
     return "bare_skin";
   }
 
@@ -384,7 +394,7 @@ function diagnose(ans){
   if(q10==="vdown") return "smooth_wave";
 
   // ── Step9: デフォルト ─────────────────────────────
-  if(q7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
+  if(eq7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
   return "bare_skin";
 }
 
@@ -549,6 +559,23 @@ function App(){
       else{setTypeKey(diagnose(na));setStep("result");}
     },280);
   }
+  function toggleQ7(k){
+    const cur=Array.isArray(answers.q7)?answers.q7:[];
+    let next;
+    if(k==="none"){
+      next=["none"];
+    } else {
+      const without=cur.filter(v=>v!=="none"&&v!==k);
+      next=cur.includes(k)?without:[...without,k];
+    }
+    setAnswers({...answers,q7:next});
+  }
+  function confirmQ7(){
+    const na={...answers};
+    if(!na.q7||na.q7.length===0) return;
+    if(curQ<totalQ-1){setCurQ(curQ+1);}
+    else{setTypeKey(diagnose(na));setStep("result");}
+  }
   function goBack(){if(curQ>0)setCurQ(curQ-1);else setStep("intro");}
   function retry(){setStep("intro");setAnswers({});setCurQ(0);setTypeKey(null);}
   const td=typeKey?TYPES[typeKey]:null;
@@ -577,10 +604,20 @@ function App(){
           h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
           h("p",{className:"q-text"},QUESTIONS[curQ].text),
-          h("div",{className:"opts"},QUESTIONS[curQ].opts.map(opt=>
-            h("button",{key:opt.k,className:"opt"+(answers[QUESTIONS[curQ].id]===opt.k?" sel":""),onClick:(e)=>{e.currentTarget.blur();selectOpt(opt.k);}},
-              h("span",{className:"opt-lt"},opt.l),h("span",null,opt.t))
-          ))
+          QUESTIONS[curQ].id==="q7"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"（複数選択できます。「なし」は他と同時選択不可）"),
+          h("div",{className:"opts"},QUESTIONS[curQ].opts.map(opt=>{
+            const isQ7=QUESTIONS[curQ].id==="q7";
+            const q7sel=Array.isArray(answers.q7)?answers.q7:[];
+            const isSel=isQ7?q7sel.includes(opt.k):answers[QUESTIONS[curQ].id]===opt.k;
+            return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();isQ7?toggleQ7(opt.k):selectOpt(opt.k);}},
+              h("span",{className:"opt-lt"},opt.l),h("span",null,opt.t));
+          })),
+          QUESTIONS[curQ].id==="q7"&&h("button",{
+            className:"btn-primary",
+            style:{marginTop:"1rem",opacity:(Array.isArray(answers.q7)&&answers.q7.length>0)?1:0.4},
+            disabled:!(Array.isArray(answers.q7)&&answers.q7.length>0),
+            onClick:confirmQ7
+          },"次へ →")
         ),
         h("button",{className:"btn-ghost",onClick:goBack},"← 前の質問に戻る")
       ),
