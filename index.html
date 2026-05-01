@@ -188,7 +188,7 @@ const QUESTIONS=[
   {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのはいつごろからですか？",opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"early",l:"B",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"C",t:"50代から実感"},{k:"strong",l:"D",t:"60代以降で強く実感"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
   {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー"},{k:"perm",l:"C",t:"パーマ（ウェーブ・デジタルパーマ等）"},{k:"bleach",l:"D",t:"ブリーチ・ハイライト"},{k:"straight",l:"E",t:"縮毛矯正・ストレートパーマ"}]},
-  {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
+  {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q9",cat:"熱器具",text:"使っている熱器具はありますか？",opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質はどれですか？（複数回答可）",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
   {id:"q11",cat:"悩み",text:"特に気になるお悩みはどれですか？",opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"aging",l:"E",t:"エイジング（ハリ・コシ・ボリューム不足）"},{k:"none",l:"F",t:"特にない"}]},
@@ -237,6 +237,10 @@ function scoreProduct(product,answers){
     if(q==="q7"){
       const q7arr=Array.isArray(answers.q7)?answers.q7:[answers.q7||"none"];
       if(entry.tags.q7.some(t=>q7arr.includes(t))) s++;
+    } else if(q==="q8"){
+      const q8arr=Array.isArray(answers.q8)?answers.q8:[answers.q8].filter(Boolean);
+      if(q8arr.length>0&&entry.tags.q8.includes(q8arr[0])) s+=2;
+      else if(q8arr.some(t=>entry.tags.q8.includes(t))) s++;
     } else if(q==="q10"){
       const q10arr=Array.isArray(answers.q10)?answers.q10:[answers.q10].filter(Boolean);
       if(q10arr.length>0&&entry.tags.q10.includes(q10arr[0])) s+=2;
@@ -305,12 +309,16 @@ const TYPES={
 
 
 function diagnose(ans){
-  const {q1,q2,q3,q4,q5,q6,q7,q8,q9,q11}=ans;
+  const {q1,q2,q3,q4,q5,q6,q7,q9,q11}=ans;
 
   // Q7は複数選択配列。最強ダメージを1つ抽出して診断に使う
   const Q7_PRIORITY=["bleach","straight","perm","color","none"];
-  const q7arr=Array.isArray(q7)?q7:[q7||"none"];
+  const q7arr=Array.isArray(ans.q7)?ans.q7:[ans.q7||"none"];
   const eq7=Q7_PRIORITY.find(p=>q7arr.includes(p))||"none";
+
+  // Q8は複数選択配列。先頭（最初に押した=最重視）を主回答として使用
+  const q8arr=Array.isArray(ans.q8)?ans.q8:(ans.q8?[ans.q8]:[]);
+  const q8=q8arr[0];
 
   // Q10は複数選択配列。先頭（最初に押した=最重視）を主回答として使用
   const q10arr=Array.isArray(ans.q10)?ans.q10:(ans.q10?[ans.q10]:[]);
@@ -578,6 +586,11 @@ function App(){
     }
     setAnswers({...answers,q7:next});
   }
+  function toggleQ8(k){
+    const cur=Array.isArray(answers.q8)?answers.q8:[];
+    const next=cur.includes(k)?cur.filter(v=>v!==k):[...cur,k];
+    setAnswers({...answers,q8:next});
+  }
   function toggleQ10(k){
     const cur=Array.isArray(answers.q10)?answers.q10:[];
     const next=cur.includes(k)?cur.filter(v=>v!==k):[...cur,k];
@@ -616,22 +629,23 @@ function App(){
           h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
           h("p",{className:"q-text"},QUESTIONS[curQ].text),
+          QUESTIONS[curQ].id==="q8"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 一番気になる状態から順にタップしてください。"),
           QUESTIONS[curQ].id==="q10"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 一番気になる仕上がりから順にタップしてください。"),
           h("div",{className:"opts"},QUESTIONS[curQ].opts.map(opt=>{
             const qid=QUESTIONS[curQ].id;
-            const isMulti=qid==="q7"||qid==="q10";
+            const isMulti=qid==="q7"||qid==="q8"||qid==="q10";
             const arr=Array.isArray(answers[qid])?answers[qid]:[];
             const isSel=isMulti?arr.includes(opt.k):answers[qid]===opt.k;
-            const order=qid==="q10"&&isSel?arr.indexOf(opt.k)+1:0;
+            const order=(qid==="q8"||qid==="q10")&&isSel?arr.indexOf(opt.k)+1:0;
             return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
-              qid==="q7"?toggleQ7(opt.k):qid==="q10"?toggleQ10(opt.k):selectOpt(opt.k);
+              qid==="q7"?toggleQ7(opt.k):qid==="q8"?toggleQ8(opt.k):qid==="q10"?toggleQ10(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
               order>0&&h("span",{style:{marginLeft:"auto",fontSize:".72rem",color:"var(--gold)",fontWeight:500,fontFamily:"var(--serif)",fontStyle:"italic"}},`${order}番目`)
             );
           })),
-          (QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q10")&&h("button",{
+          (QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q10")&&h("button",{
             className:"btn-primary",
             style:{marginTop:"1rem",opacity:(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0)?1:0.4},
             disabled:!(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0),
