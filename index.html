@@ -639,6 +639,7 @@ function App(){
           })
         ),
         (typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&(answers.q5==="clear"||answers.q5==="strong")&&answers.q10==="volume"&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ ボリュームアップの実感が得られない場合は、エイジングケア（Vital Aging）もご検討ください。"),
+        answers.q1==="oily"&&(typeKey==="repair_mode"||typeKey==="bare_skin")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ 地肌は脂性傾向があります。シャンプー後はお湯で丁寧にすすいで、残留しないようにしましょう。"),
         h("button",{className:"btn-primary btn-primary-lg",onClick:()=>setStep("products")},h("span",null,"おすすめのシャンプーを見る ↗")),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
       ),
