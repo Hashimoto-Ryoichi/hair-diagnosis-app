@@ -185,9 +185,9 @@ const QUESTIONS=[
   {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
   {id:"q3",cat:"毛質",text:"髪の太さはどのくらいですか？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
   {id:"q4",cat:"毛質",text:"髪の硬さはどのくらいですか？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
-  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのはいつごろからですか？",opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"early",l:"B",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"C",t:"50代から実感"},{k:"strong",l:"D",t:"60代以降で強く実感"}]},
+  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？（複数回答可）",multi:true,opts:[{k:"young",l:"A",t:"20代（まだ変化は少ない）"},{k:"stable",l:"B",t:"まだ大きな変化は感じない"},{k:"early",l:"C",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"D",t:"50代から実感"},{k:"strong",l:"E",t:"60代以降で強く実感"},{k:"birth",l:"F",t:"出産を機に髪が変化したと感じる"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
-  {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー"},{k:"perm",l:"C",t:"パーマ（ウェーブ・デジタルパーマ等）"},{k:"bleach",l:"D",t:"ブリーチ・ハイライト"},{k:"straight",l:"E",t:"縮毛矯正・ストレートパーマ"}]},
+  {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー"},{k:"perm",l:"C",t:"パーマ（ウェーブ・デジタルパーマ等）"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"highlight",l:"E",t:"ハイライト"},{k:"straight",l:"F",t:"縮毛矯正・ストレートパーマ"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q9",cat:"熱器具",text:"使っている熱器具はありますか？",opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質はどれですか？（複数回答可）",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
@@ -315,10 +315,17 @@ const TYPES={
 
 
 function diagnose(ans){
-  const {q1,q2,q3,q4,q5,q6,q7,q9,q11}=ans;
+  const {q1,q2,q3,q4,q6,q7,q9,q11}=ans;
+
+  // Q5は複数選択配列。組み合わせで優先度を決定
+  const q5arr=Array.isArray(ans.q5)?ans.q5:[ans.q5||"stable"];
+  const hasBirth=q5arr.includes("birth");
+  const hasClear=q5arr.includes("clear");
+  const hasStrong=q5arr.includes("strong");
+  const eq5=hasStrong||(hasClear&&hasBirth)?"strong":hasClear?"clear":hasBirth?"birth":q5arr.includes("early")?"early":q5arr.includes("young")?"young":"stable";
 
   // Q7は複数選択配列。最強ダメージを1つ抽出して診断に使う
-  const Q7_PRIORITY=["bleach","straight","perm","color","none"];
+  const Q7_PRIORITY=["bleach","highlight","straight","perm","color","none"];
   const q7arr=Array.isArray(ans.q7)?ans.q7:[ans.q7||"none"];
   const eq7=Q7_PRIORITY.find(p=>q7arr.includes(p))||"none";
 
@@ -334,15 +341,14 @@ function diagnose(ans){
   if(q1==="red") return "skin_alert";
   if(q1==="oily"&&(eq7==="none"||eq7==="color")) return q2==="short"?"oil_reset_short":"oil_reset_long";
 
-  // ── Step2: Q5=D（60代以降）→ Vital Aging 確定（年代だけで判定）─
-  if(q5==="strong") return "vital_aging";
+  // ── Step2: 60代以降 or（50代＋出産後）→ Vital Aging 確定 ──
+  if(eq5==="strong") return "vital_aging";
 
   // ── Step3: 薬剤ダメージ ────────────────────────────────
-  // ブリーチ → Q8で分岐：深刻ダメージなら Repair、軽ければ Bare Skin
-  if(eq7==="bleach"){
-    if(q8==="split"||q8==="frizz"||q8==="spread") return "repair_mode";
-    return "bare_skin";
-  }
+  // 全体ブリーチ・インナーカラー → 問答無用でRepair Mode（ハイダメージ確定）
+  if(eq7==="bleach") return "repair_mode";
+  // ハイライトのみ → 軽ダメージ → Bare Skin
+  if(eq7==="highlight") return "bare_skin";
   // 縮毛矯正 → トステア配合 Repair Mode 確定
   if(eq7==="straight") return "repair_mode";
   // パーマ → トステアの熱反応でカール持続にも有効 → Repair Mode 確定
@@ -354,6 +360,9 @@ function diagnose(ans){
     const goodTool=q9==="refa"||q9==="bio"||q9==="repro"||q9==="nanoe";
     return goodTool?"bare_skin":"repair_mode";
   }
+
+  // 出産後の髪変化（単独）→ うねり由来として Smooth Wave
+  if(hasBirth) return "smooth_wave";
 
   // ── Step4: くせ毛・うねりが主訴 ──────────────────────
   const hasKuse=q6==="some"||q6==="strong";
@@ -370,8 +379,8 @@ function diagnose(ans){
     return "bare_skin";
   }
   if(q8==="flat"){
-    // Q5=C（50代）でぺたんこ → Vital Aging（エイジング由来）
-    if(q5==="clear") return "vital_aging";
+    // 50代でぺたんこ → Vital Aging（エイジング由来）
+    if(hasClear) return "vital_aging";
     if(wantVolume) return "aqua_sensitive";
     return eq7==="none"?"aqua_sensitive":"bare_skin";
   }
@@ -386,8 +395,8 @@ function diagnose(ans){
     return "smooth_wave";
   }
   if(isThinSoft){
-    // Q5=C（50代）+ 細毛・柔らかい → Vital Aging
-    if(q5==="clear") return "vital_aging";
+    // 50代 + 細毛・柔らかい → Vital Aging
+    if(hasClear) return "vital_aging";
     if(wantVolume) return "aqua_sensitive";
     if(eq7==="none") return "aqua_sensitive";
     return "bare_skin";
@@ -396,8 +405,8 @@ function diagnose(ans){
   // ── Step7: Q11 悩みで最終決定 ────────────────────────
   if(q11==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
   if(q11==="wave"){
-    // Q5=C（50代）+ 細毛 or ぺたんこ → エイジング由来のうねりとして Vital Aging
-    if(q5==="clear"&&(isThinSoft||q8==="flat")) return "vital_aging";
+    // 50代 + 細毛 or ぺたんこ → エイジング由来のうねりとして Vital Aging
+    if(hasClear&&(isThinSoft||q8==="flat")) return "vital_aging";
     return "smooth_wave";
   }
   if(q11==="repair"){
@@ -409,8 +418,8 @@ function diagnose(ans){
 
   // ── Step8: Q10 なりたい髪質を最終反映 ───────────────
   if(q10==="volume"){
-    // Q5=C（50代）+ ボリュームアップ希望 → エイジング由来のボリューム不足
-    if(q5==="clear") return "vital_aging";
+    // 50代 + ボリュームアップ希望 → エイジング由来のボリューム不足
+    if(hasClear) return "vital_aging";
     return "aqua_sensitive";
   }
   if(q10==="vdown") return "smooth_wave";
@@ -677,10 +686,11 @@ function App(){
             );
           })
         ),
-        (typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&(answers.q5==="clear"||answers.q5==="strong")&&(Array.isArray(answers.q10)?answers.q10.includes("volume"):answers.q10==="volume")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ ボリュームアップの実感が得られない場合は、エイジングケア（Vital Aging）もご検討ください。"),
-        answers.q1==="oily"&&(typeKey==="repair_mode"||typeKey==="bare_skin")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ 地肌は脂性傾向があります。シャンプー後はお湯で丁寧にすすいで、残留しないようにしましょう。"),
+        (typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&(Array.isArray(answers.q5)?answers.q5:[answers.q5||"stable"]).some(v=>v==="clear"||v==="strong")&&(Array.isArray(answers.q10)?answers.q10.includes("volume"):answers.q10==="volume")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ ボリュームアップの実感が得られない場合は、エイジングケア（Vital Aging）もご検討ください。"),
+        ((answers.q1==="oily"||answers.q1==="mix")&&typeKey==="repair_mode"||answers.q1==="oily"&&typeKey==="bare_skin")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ 地肌は脂性・混合傾向があります。シャンプー後はシャワーでしっかりすすいでください。"),
         h("button",{className:"btn-primary btn-primary-lg",onClick:()=>setStep("products")},h("span",null,"おすすめのシャンプーを見る ↗")),
-        h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
+        h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する"),
+        h("p",{style:{fontSize:".72rem",color:"var(--muted)",textAlign:"center",marginTop:".8rem",lineHeight:"1.6"}},"スクショで記録しておくと便利です")
       ),
       step==="products"&&td&&h("div",{className:"fade"},
         CHAR_IMG[typeKey]&&h("img",{src:CHAR_IMG[typeKey],alt:td.title,className:"char-img",loading:"lazy"}),
