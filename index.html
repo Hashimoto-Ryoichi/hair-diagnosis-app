@@ -187,7 +187,7 @@ const QUESTIONS=[
   {id:"q4",cat:"毛質",text:"髪の硬さはどのくらいですか？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
   {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？（複数回答可）",multi:true,opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"young",l:"B",t:"20代から少しずつ"},{k:"early",l:"C",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"D",t:"50代から実感"},{k:"strong",l:"E",t:"60代以降で強く実感"},{k:"birth",l:"F",t:"出産を機に髪が変化したと感じる"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
-  {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー"},{k:"perm",l:"C",t:"パーマ（ウェーブ・デジタルパーマ等）"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"highlight",l:"E",t:"ハイライト"},{k:"straight",l:"F",t:"縮毛矯正・ストレートパーマ"}]},
+  {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー・ハイライト"},{k:"perm",l:"C",t:"パーマ"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"straight",l:"E",t:"縮毛矯正・デジタルパーマ・ストレートパーマ"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q9",cat:"熱器具",text:"使っている熱器具はありますか？（複数回答可）",multi:true,opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質はどれですか？（複数回答可）",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
@@ -327,7 +327,7 @@ function diagnose(ans){
   const eq5=hasStrong||(hasClear&&hasBirth)?"strong":hasClear?"clear":hasBirth?"birth":q5arr.includes("early")?"early":q5arr.includes("young")?"young":"stable";
 
   // Q7は複数選択配列。最強ダメージを1つ抽出して診断に使う
-  const Q7_PRIORITY=["bleach","highlight","straight","perm","color","none"];
+  const Q7_PRIORITY=["bleach","straight","perm","color","none"];
   const q7arr=Array.isArray(ans.q7)?ans.q7:[ans.q7||"none"];
   const eq7=Q7_PRIORITY.find(p=>q7arr.includes(p))||"none";
 
@@ -357,8 +357,6 @@ function diagnose(ans){
     }
     return "repair_mode";
   }
-  // ハイライトのみ → 軽ダメージ → Bare Skin
-  if(eq7==="highlight") return "bare_skin";
   // 縮毛矯正 → トステア配合 Repair Mode 確定
   if(eq7==="straight") return "repair_mode";
   // パーマ → トステアの熱反応でカール持続にも有効 → Repair Mode 確定
