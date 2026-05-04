@@ -185,7 +185,7 @@ const QUESTIONS=[
   {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
   {id:"q3",cat:"毛質",text:"髪の太さはどのくらいですか？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
   {id:"q4",cat:"毛質",text:"髪の硬さはどのくらいですか？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"}]},
-  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？（複数回答可）",multi:true,opts:[{k:"young",l:"A",t:"20代（まだ変化は少ない）"},{k:"stable",l:"B",t:"まだ大きな変化は感じない"},{k:"early",l:"C",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"D",t:"50代から実感"},{k:"strong",l:"E",t:"60代以降で強く実感"},{k:"birth",l:"F",t:"出産を機に髪が変化したと感じる"}]},
+  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？（複数回答可）",multi:true,opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"young",l:"B",t:"20代から少しずつ"},{k:"early",l:"C",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"D",t:"50代から実感"},{k:"strong",l:"E",t:"60代以降で強く実感"},{k:"birth",l:"F",t:"出産を機に髪が変化したと感じる"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
   {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー"},{k:"perm",l:"C",t:"パーマ（ウェーブ・デジタルパーマ等）"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"highlight",l:"E",t:"ハイライト"},{k:"straight",l:"F",t:"縮毛矯正・ストレートパーマ"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
@@ -590,6 +590,17 @@ function App(){
       else{setTypeKey(diagnose(na));setStep("result");}
     },280);
   }
+  function toggleQ5(k){
+    const cur=Array.isArray(answers.q5)?answers.q5:[];
+    let next;
+    if(k==="stable"){
+      next=["stable"];
+    } else {
+      const without=cur.filter(v=>v!=="stable"&&v!==k);
+      next=cur.includes(k)?without:[...without,k];
+    }
+    setAnswers({...answers,q5:next});
+  }
   function toggleQ7(k){
     const cur=Array.isArray(answers.q7)?answers.q7:[];
     let next;
@@ -648,19 +659,19 @@ function App(){
           QUESTIONS[curQ].id==="q10"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 一番気になる仕上がりから順にタップしてください。"),
           h("div",{className:"opts"},QUESTIONS[curQ].opts.map(opt=>{
             const qid=QUESTIONS[curQ].id;
-            const isMulti=qid==="q7"||qid==="q8"||qid==="q10";
+            const isMulti=qid==="q5"||qid==="q7"||qid==="q8"||qid==="q10";
             const arr=Array.isArray(answers[qid])?answers[qid]:[];
             const isSel=isMulti?arr.includes(opt.k):answers[qid]===opt.k;
             const order=(qid==="q8"||qid==="q10")&&isSel?arr.indexOf(opt.k)+1:0;
             return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
-              qid==="q7"?toggleQ7(opt.k):qid==="q8"?toggleQ8(opt.k):qid==="q10"?toggleQ10(opt.k):selectOpt(opt.k);
+              qid==="q5"?toggleQ5(opt.k):qid==="q7"?toggleQ7(opt.k):qid==="q8"?toggleQ8(opt.k):qid==="q10"?toggleQ10(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
               order>0&&h("span",{style:{marginLeft:"auto",fontSize:".72rem",color:"var(--gold)",fontWeight:500,fontFamily:"var(--serif)",fontStyle:"italic"}},`${order}番目`)
             );
           })),
-          (QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q10")&&h("button",{
+          (QUESTIONS[curQ].id==="q5"||QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q10")&&h("button",{
             className:"btn-primary",
             style:{marginTop:"1rem",opacity:(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0)?1:0.4},
             disabled:!(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0),
