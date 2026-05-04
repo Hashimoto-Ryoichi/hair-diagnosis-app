@@ -230,6 +230,11 @@ const MATCH_TAGS=[
   {key:"バウンシーボリューム", tags:{q10:["volume"]}},
   {key:"IONICO",           tags:{q11:["repair"],q10:["moist"],q7:["color","bleach"],q8:["dry","split"]}},
   {key:"PRORY",            tags:{q11:["aging"],q5:["clear","strong"],q10:["moist"],q8:["dry"]}},
+  {key:"MEMEME",           tags:{q7:["color","none"],q8:["dry","gloss"],q10:["moist","gloss"]}},
+  {key:"コスメデコルテ",     tags:{q6:["some","strong"],q10:["smooth","moist"],q8:["frizz","spread"]}},
+  {key:"UNOVE",            tags:{q11:["repair"],q8:["dry","frizz","spread"],q10:["moist","smooth"]}},
+  {key:"ゴールドウェル",     tags:{q7:["color","bleach"],q11:["repair"],q8:["split","dry","frizz"],q10:["moist"]}},
+  {key:"アデノバイタル",     tags:{q11:["aging"],q5:["clear","strong"],q10:["volume"],q1:["dry","normal","mix"]}},
 ];
 
 function scoreProduct(product,answers){
@@ -285,11 +290,15 @@ const TYPES={
     products:[
       {name:"Straine（ストレイン）ストレートシャンプー BASIC",forWhom:"縮毛矯正・ブリーチでダメージが蓄積し、広がりが気になる方",desc:"広がり・ダメージが気になる方向け。きしみを抑えしなやかで扱いやすい質感へ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",top:true,amz:"B0FB2YF3BQ",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/straine-onlineshop/cabinet/kamitoku/imgrc0130768890.jpg"},
       {name:"セラムイン シャンプー＆トリートメント",forWhom:"内部からしっかり補修したい、パサつきが深刻な方",desc:"PPT成分でダメージを内部から補修。",note:"シャンプー単体ではなくセット販売です。リンク先でご確認ください。",top:false,amz:"B0F4QGL5FD",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/dr365/cabinet/item/ph0004v01_1.jpg"},
-      {name:"SN repair シャンプー",forWhom:"本格的なサロン品質の補修を、自宅で試したい方",desc:"楽天限定。トステア×ヘマチン配合のプレミアムライン。",note:"楽天のみの取り扱いです。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/snrepair/cabinet/12764464/600000_r3.jpg?_ex=400x400"}]},
+      {name:"SN repair シャンプー",forWhom:"本格的なサロン品質の補修を、自宅で試したい方",desc:"楽天限定。トステア×ヘマチン配合のプレミアムライン。",note:"楽天のみの取り扱いです。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/snrepair/cabinet/12764464/600000_r3.jpg?_ex=400x400"},
+      {name:"ゴールドウェル デュアルセンス リッチリペア シャンプー 1000ml",forWhom:"カラー・ブリーチで深刻にダメージした髪を、サロン品質で内部補修したい方",desc:"ドイツ発のサロンブランド。18-MEA×マイクロプロテックコンプレックスがキューティクル表面の脂質をケア、イントラリピッドが髪内部を集中補修。傷んだカラーヘアにツヤとしっとり感。",note:"1000ml業務用サイズ。シリーズに250ml・トリートメントもあります。リンク先でお選びください。",top:false,amz:"B01MZALRVO",rakUrl:null,img_url:"https://m.media-amazon.com/images/P/B01MZALRVO.09.LZZZZZZZ.jpg"},
+      {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力はやや強め。",note:"500ml本体・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CB1SG31Z",rakUrl:null,img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09.LZZZZZZZ.jpg"}]},
   smooth_wave:{badge:"Hair Type — SW",title:"Smooth Wave",sub:"くせ毛 × 軽〜中ダメージ",
     advice:["くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。","シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。","ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。"],
     products:[
-      {name:"Straine（ストレイン）ストレートシャンプー SOFT",forWhom:"くせ・うねりが気になるけど、重くなりすぎたくない方",desc:"くせ毛・うねりが気になる方向け。ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",top:true,amz:"B0FQ55PDG6",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://tshop.r10s.jp/straine-onlineshop/cabinet/11885291/ss-r001_ldk.jpg"}]},
+      {name:"Straine（ストレイン）ストレートシャンプー SOFT",forWhom:"くせ・うねりが気になるけど、重くなりすぎたくない方",desc:"くせ毛・うねりが気になる方向け。ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",top:true,amz:"B0FQ55PDG6",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://tshop.r10s.jp/straine-onlineshop/cabinet/11885291/ss-r001_ldk.jpg"},
+      {name:"コスメデコルテ AQ リペア スムース シャンプー（KOSE）",forWhom:"うねり・広がりが気になり、サロン品質のホームケアを求める方",desc:"KOSEのプレステージブランド。オレフィン系×ベタイン系×タウリン系のバランス洗浄。白樺水・ホワイトムクナエキス配合で頭皮と髪をなめらかに整える。",note:"250ml・600mlがあります。リンク先でお選びください。",top:true,amz:"B095HG3WV2",rakUrl:null,img_url:"https://m.media-amazon.com/images/P/B095HG3WV2.09.LZZZZZZZ.jpg"},
+      {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力はやや強め。",note:"500ml本体・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CB1SG31Z",rakUrl:null,img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09.LZZZZZZZ.jpg"}]},
   aqua_sensitive:{badge:"Hair Type — AS",title:"Aqua Sensitive",sub:"乾燥・バージン毛・健康な髪",
     advice:["バージン毛や健康な髪の方は、過度なケアをしすぎないことが大切。洗浄力が強すぎるシャンプーで必要な皮脂まで落としてしまうと、逆に乾燥が進みます。","ジュレームなどのアミノ酸系・ベタイン系のサルフェートフリー（硫酸系不使用）シャンプーは、髪と頭皮を優しく洗いながら適度な潤いを残してくれます。","週に1〜2回スカルプマッサージを取り入れると血行が促進され、健康な髪の成長をサポートします。洗髪時の1〜2分が効果的。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪質に合ったケアを確認してみてください。"],
     products:[
@@ -302,14 +311,16 @@ const TYPES={
       {name:"BOTANIST ボタニカルシャンプー ダメージケア",forWhom:"カラーやアイロンで毛先のダメージ・パサつきが気になる方",desc:"ボタニカル成分配合。傷んだ髪をなめらかに整え、しなやかな質感へ。サルフェートフリー処方。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CGHY3YKX",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
       {name:"花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー＆EXトリートメント",forWhom:"カラー毛のツヤとまとまりを、次世代ケアで叶えたい方",desc:"花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。",note:"シャンプーは1種類ですが、コンディショナーは「しっとり・さらさら・ツヤ」の3タイプから選べます。リンク先でなりたい仕上がりに合わせてお選びください。",top:true,amz:"B0GMDSB9V1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fanswer-03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0GMDSB9V1.09.LZZZZZZZ.jpg"},
       {name:"エッセンシャル プレミアム うるおいバリア シャンプー",forWhom:"カラーしてるけど、ベタつきもパサつきも気になる方",desc:"カラー毛のパサつき・軽ダメージに。",note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",top:false,amz:"B0CXH1FRTT",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CXH1FRTT.09.LZZZZZZZ.jpg"},
-      {name:"IONICO プレミアムイオン ダメージケアシャンプー モイスト＆リペア",forWhom:"カラーやアイロンによるダメージで、しっとりまとまる仕上がりが好みの方",desc:"プレミアムイオン処方でダメージ部に集中補修。ベタイン系×オレフィン系のバランス洗浄でしっとりまとまる仕上がり。ノンシリコン。",note:"本体・つめかえ用、シリーズに「スムース＆シャイン」もあります。リンク先でお選びください。",top:false,amz:"B0859SPJ7B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333f2bc.d29748d5.5333f2bd.3d588382/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fakakabeshop%2F4573492151315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0859SPJ7B.09.LZZZZZZZ.jpg"}]},
+      {name:"IONICO プレミアムイオン ダメージケアシャンプー モイスト＆リペア",forWhom:"カラーやアイロンによるダメージで、しっとりまとまる仕上がりが好みの方",desc:"プレミアムイオン処方でダメージ部に集中補修。ベタイン系×オレフィン系のバランス洗浄でしっとりまとまる仕上がり。ノンシリコン。",note:"本体・つめかえ用、シリーズに「スムース＆シャイン」もあります。リンク先でお選びください。",top:false,amz:"B0859SPJ7B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333f2bc.d29748d5.5333f2bd.3d588382/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fakakabeshop%2F4573492151315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0859SPJ7B.09.LZZZZZZZ.jpg"},
+      {name:"MEMEME（ミーミーミー）モイストブースト シャンプー",forWhom:"カラー毛のうるおいとツヤを、サルフェートフリー処方で叶えたい方",desc:"花王の新ブランド。タウリン系×アミノ酸系×ベタイン系のサルフェートフリー処方。ノンシリコンで根元ふんわり、毛先しっとり。レッドキウイ×フリージアの香り。",note:"本体・つめかえ用、トリートメントとのセット販売もあります。リンク先でお選びください。",top:false,amz:"B0FF43JRKK",rakUrl:null,img_url:"https://m.media-amazon.com/images/P/B0FF43JRKK.09.LZZZZZZZ.jpg"}]},
   vital_aging:{badge:"Hair Type — VA",title:"Vital Aging",sub:"ハリ・コシ・ボリューム不足が気になる髪",
     advice:["年齢とともに髪は細く・コシがなくなり、トップやサイドのボリュームが出にくくなります。これは髪内部の脂質が減少し空洞化が進むため。内部補修できるエイジングケアシャンプーが効果的です。","シャンプー時は頭皮マッサージを意識しましょう。指の腹で円を描くように揉みほぐすことで血流が促進され、健やかな髪が育つ土台が整います。","シリコン蓄積による根元のペタンコ感が気になる場合は、ノンシリコン処方も選択肢です。ただし髪質によってはキシみが出やすいので、トリートメントとの併用がおすすめ。コンディショナーは毛先〜中間に留め、頭皮にはつけないのがコツ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪のエイジングサインに合ったケアを確認してみてください。"],
     products:[
       {name:"セグレタ シャンプー 根元からふんわり",forWhom:"トップやサイドのボリューム不足、髪のハリ・コシ低下が気になる方",desc:"花王のエイジングケアブランド。セラミドSが髪内部に浸透・補修する内部密度ケア処方。ノンシリコンで根元から立ち上がり、ふんわりとした仕上がりに。6種の植物エキス配合。",note:"本体・つめかえ用、シリーズに「うねる髪もまとまる」など複数あります。リンク先でお選びください。",top:true,amz:"B0DH7WD8W5",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fsegreta-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DH7WD8W5.09.LZZZZZZZ.jpg"},
       {name:"セグレタ 地肌も髪も洗えるマッサージ美容クリーム",forWhom:"地肌の乾燥・かたさが気になる方、洗いながら頭皮ケアもしたい方",desc:"シャンプー・コンディショナー・マッサージクリームが1本に。泡立たないクリーム処方で、地肌にうるおいを与えながら皮脂・汚れをやさしく浮き上がらせる。石けん不使用。",note:"本体360ml・つめかえ用285ml、ブラシ付きセットもあります。リンク先でお選びください。",top:false,amz:"B07CZR5V1K",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308471c.a06cce71.5308471d.8a4cd11e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmorro%2F20251102211340_94%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B07CZR5V1K.09.LZZZZZZZ.jpg"},
       {name:"BOTANIST ボタニカルシャンプー バウンシーボリューム",forWhom:"髪のボリューム不足、ぺたんとしがちな根元が気になる方",desc:"ボタニカル成分配合のノンシリコン処方。髪にハリ・コシを与え、根元から軽やかに立ち上げる。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CGJ5H5L8",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
-      {name:"PRORY プロリー モイストリペア シャンプー",forWhom:"年齢とともに増えるパサつき・広がり・ツヤ不足が気になる方",desc:"ロート製薬のエイジングダメージケア。アミノ酸系主体の低刺激処方で、ステムプロテインCP配合。素髪に近づける機能性ヘアケア。",note:"本体450ml・つめかえ400mlがあります。リンク先でお選びください。",top:true,amz:"B0D839PQQH",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/535d7459.7d6d16ca.535d745a.0cc051ff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frohto610%2F19659r%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://www.shop.rohto.co.jp/on/demandware.static/-/Sites-all-master-catalog/default/dw112a6f5a/images/product/64_prory/195305_1.jpg"}
+      {name:"PRORY プロリー モイストリペア シャンプー",forWhom:"年齢とともに増えるパサつき・広がり・ツヤ不足が気になる方",desc:"ロート製薬のエイジングダメージケア。アミノ酸系主体の低刺激処方で、ステムプロテインCP配合。素髪に近づける機能性ヘアケア。",note:"本体450ml・つめかえ400mlがあります。リンク先でお選びください。",top:true,amz:"B0D839PQQH",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/535d7459.7d6d16ca.535d745a.0cc051ff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frohto610%2F19659r%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://www.shop.rohto.co.jp/on/demandware.static/-/Sites-all-master-catalog/default/dw112a6f5a/images/product/64_prory/195305_1.jpg"},
+      {name:"資生堂プロフェッショナル アデノバイタル シャンプー 250ml",forWhom:"頭皮環境を整えながら、ハリ・コシ・ボリューム不足にアプローチしたい方",desc:"資生堂サロン専売。育毛有効成分アデノシン（医薬部外品）配合で頭皮環境にアプローチ。ベタイン系・タウリン系・アミドエーテル硫酸系のバランス洗浄で、頭皮にやさしく洗い上げる。",note:"250ml・500ml・1000mlがあります。サブリミック版・ザ・ヘアケア版もあります。リンク先でお選びください。",top:true,amz:"B0091RREJI",rakUrl:null,img_url:"https://m.media-amazon.com/images/P/B0091RREJI.09.LZZZZZZZ.jpg"}
     ]}
 };
 
@@ -491,8 +502,8 @@ function renderProdCard(p,key){
 // items は細分類ごとにグループ化して表示
 const SURFACTANT_DETAIL=[
   {key:"betaine",cat:"ベタイン系（両性）",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
-    types:["repair_mode","smooth_wave","skin_alert","vital_aging"],
-    products:["ストレイン","SN repair","セラムイン","NOV DS","セグレタ","ボタニスト","イオニコ","プロリー"],
+    types:["repair_mode","smooth_wave","skin_alert","vital_aging","bare_skin"],
+    products:["ストレイン","SN repair","セラムイン","NOV DS","セグレタ","ボタニスト","イオニコ","プロリー","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル"],
     groups:[
       {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
       {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
@@ -500,21 +511,21 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"amino",cat:"アミノ酸系（アニオン）",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
-    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","NOV DS","ボタニスト","プロリー"],
+    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","NOV DS","ボタニスト","プロリー","MEMEME","ゴールドウェル"],
     groups:[
       {sub:"グルタミン酸系",items:["ココイルグルタミン酸Na","ココイルグルタミン酸TEA","ココイルグルタミン酸K","ラウロイルグルタミン酸Na","ラウロイルグルタミン酸TEA"]},
       {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
       {sub:"グリシン系・サルコシン系",items:["ココイルグリシンK","ココイルグリシンNa","ラウロイルサルコシンNa","ラウロイルサルコシンTEA"]},
     ]},
   {key:"taurine",cat:"タウリン系（アニオン）",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
-    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
-    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","NOV DS"],
+    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging"],
+    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","NOV DS","MEMEME","コスメデコルテ AQ","アデノバイタル"],
     groups:[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
     ]},
   {key:"acid",cat:"その他のマイルド系（アニオン）",rank:2,desc:"弱酸性で頭皮に近く、低刺激な補助系",
-    types:[],
-    products:[],
+    types:["bare_skin","vital_aging"],
+    products:["MEMEME","アデノバイタル"],
     groups:[
       {sub:"カルボン酸系",items:["ラウレス-4カルボン酸Na","ラウレス-5カルボン酸Na"]},
       {sub:"スルホコハク酸系",items:["スルホコハク酸ラウレス2Na","スルホコハク酸(C12-14)パレス-2Na","スルホコハク酸ラウリル2Na"]},
@@ -527,27 +538,27 @@ const SURFACTANT_DETAIL=[
       {sub:"アルカリ石けん",items:["石ケン素地","カリ石ケン素地","ラウリン酸K","ミリスチン酸K","パルミチン酸K","オレイン酸K","ラウリン酸Na","ステアリン酸Na"]},
     ]},
   {key:"olefin",cat:"オレフィン系（アニオン）",rank:4,desc:"高洗浄力だがサルフェート不使用。硬水でも泡立つ",
-    types:["oil_reset_short","oil_reset_long"],
-    products:["スティーブンノル モイスチュアコントロール","イオニコ","プロリー"],
+    types:["oil_reset_short","oil_reset_long","smooth_wave"],
+    products:["スティーブンノル モイスチュアコントロール","イオニコ","プロリー","コスメデコルテ AQ"],
     groups:[
       {sub:"オレフィンスルホン酸系",items:["オレフィン(C14-16)スルホン酸Na"]},
     ]},
   {key:"amido_sulfate",cat:"アミドエーテル硫酸系（アニオン）",rank:4,desc:"硫酸系の中では比較的マイルド。アミド構造で皮膚刺激を緩和",
-    types:[],
-    products:[],
+    types:["vital_aging"],
+    products:["アデノバイタル"],
     groups:[
       {sub:"アミドエーテル硫酸系",items:["ラウラミドエーテル硫酸Na","ココアミドエーテル硫酸Na"]},
     ]},
   {key:"laureth",cat:"ラウレス硫酸系（アニオン）",rank:5,desc:"高洗浄力。エトキシ化(EO)鎖により分子が大きく、ラウリル硫酸より皮膚浸透が抑えられている",
-    types:["oil_reset_long","oil_reset_short","vital_aging"],
-    products:["パンテーン","ラックス","ツバキ","ダヴ","セグレタ"],
+    types:["oil_reset_long","oil_reset_short","vital_aging","repair_mode","smooth_wave"],
+    products:["パンテーン","ラックス","ツバキ","ダヴ","セグレタ","UNOVE","ゴールドウェル","アデノバイタル"],
     groups:[
       {sub:"ラウレス硫酸塩",items:["ラウレス硫酸Na","ラウレス硫酸アンモニウム","ラウレス硫酸TEA"]},
       {sub:"参考：EO付加数",items:["EO平均2〜3モルが主流","EO数が増えるほど起泡性↑・刺激↓・洗浄力はやや低下"]},
     ]},
   {key:"lauryl",cat:"ラウリル硫酸系（アニオン）",rank:5,desc:"洗浄力・脱脂力が最強。分子が小さく皮膚浸透性が高いため、現代のシャンプーでは敬遠される傾向",
-    types:[],
-    products:[],
+    types:["repair_mode","smooth_wave"],
+    products:["UNOVE"],
     groups:[
       {sub:"ラウリル硫酸塩",items:["ラウリル硫酸Na","ラウリル硫酸アンモニウム","ラウリル硫酸TEA","ラウリル硫酸K"]},
       {sub:"備考",items:["ラウリル硫酸＝硫酸系で最も刺激が強い","近年は歯磨き粉・業務用洗浄剤に使用が多い","シャンプーではラウレス硫酸系に置き換わりつつある"]},
