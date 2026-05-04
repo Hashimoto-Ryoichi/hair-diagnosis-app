@@ -437,6 +437,28 @@ function diagnose(ans){
   return "bare_skin";
 }
 
+// セカンドセクション：診断結果に対する補助的なおすすめ商品
+function findSecondarySection(typeKey,answers){
+  const q1=answers.q1;
+  const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
+  const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
+  const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
+
+  if(typeKey==="repair_mode"&&q1==="oily"){
+    return{label:"地肌のベタつきが気になる日に",desc:"週1〜2回の地肌リセット用に取り入れたい方へ。",products:[findP("oil_reset_short","WELLP"),findP("oil_reset_short","デオコ")].filter(Boolean)};
+  }
+  if(typeKey==="bare_skin"&&q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")){
+    return{label:"毛先のダメージが深刻な場合は",desc:"より強い補修ケアに切り替えたい方へ。",products:[findP("repair_mode","Straine"),findP("repair_mode","SN repair")].filter(Boolean)};
+  }
+  if(typeKey==="smooth_wave"&&q8arr.some(v=>v==="split"||v==="frizz")){
+    return{label:"毛先ダメージも気になる場合は",desc:"うねりケアに加えて、補修も強化したい方へ。",products:[findP("repair_mode","Straine")].filter(Boolean)};
+  }
+  if((typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&q7arr.some(v=>v==="color"||v==="bleach")&&q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")){
+    return{label:"毛先のケアもしたい場合は",desc:"頭皮ケアと並行して、髪の補修も意識したい方へ。",products:[findP("bare_skin","ジアンサー")].filter(Boolean)};
+  }
+  return null;
+}
+
 const {createElement:h,useRef,useEffect,useState}=React;
 function Icon({name,size=16,color}){
   const ref=useRef(null);
@@ -448,6 +470,27 @@ function Icon({name,size=16,color}){
     }
   },[name,size,color]);
   return h("span",{ref,style:{display:"inline-flex",alignItems:"center"}});
+}
+
+// 商品カード描画（メイン・セカンドセクション共通）
+function renderProdCard(p,key){
+  return h("div",{key:key,className:"prod-card"},
+    h("div",{className:"prod-card-inner"},
+      h("div",{className:"prod-img-wrap"},
+        p.img_url?h("img",{src:p.img_url,alt:p.name,className:"prod-img",loading:"lazy"}):h("div",{className:"prod-img-placeholder"},h(Icon,{name:"droplets",size:28,color:"var(--gold-l)"}))
+      ),
+      h("div",{className:"prod-info"},
+        h("p",{className:"prod-name"},p.name),
+        p.forWhom&&h("p",{className:"prod-for"},h(Icon,{name:"user-check",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},`こんな方に：${p.forWhom}`)),
+        h("p",{className:"prod-desc"},p.desc),
+        p.note&&h("p",{className:"prod-note"},h(Icon,{name:"info",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},p.note)),
+        h("div",{className:"prod-links"},
+          p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
+          p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
+        )
+      )
+    )
+  );
 }
 
 // ── 詳細37成分（5分類別・洗浄力ランク★1〜★5）─────────
@@ -718,27 +761,19 @@ function App(){
         h("p",{className:"res-sub"},td.sub),
         h("hr",{className:"divider"}),
         h("p",{className:"prod-hd"},"あなたにおすすめのシャンプー"),
-        h("p",{className:"prod-sub"},"タイプ別に厳選したアイテムです。複数のショップで比較して選んでください。"),
+        h("p",{className:"prod-sub"},"タイプ別に厳選したアイテムです。あなたの回答との相性が高い順に並んでいます。"),
         td.alert&&h("div",{className:"alert-box"},td.alert),
-        [...td.products].sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers)).map((p,i)=>
-          h("div",{key:i,className:"prod-card"},
-            h("div",{className:"prod-card-inner"},
-              h("div",{className:"prod-img-wrap"},
-                p.img_url?h("img",{src:p.img_url,alt:p.name,className:"prod-img",loading:"lazy"}):h("div",{className:"prod-img-placeholder"},h(Icon,{name:"droplets",size:28,color:"var(--gold-l)"}))
-              ),
-              h("div",{className:"prod-info"},
-                h("p",{className:"prod-name"},p.name),
-                p.forWhom&&h("p",{className:"prod-for"},h(Icon,{name:"user-check",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},`こんな方に：${p.forWhom}`)),
-                h("p",{className:"prod-desc"},p.desc),
-                p.note&&h("p",{className:"prod-note"},h(Icon,{name:"info",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},p.note)),
-                h("div",{className:"prod-links"},
-                  p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
-                  p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
-                )
-              )
-            )
-          )
-        ),
+        [...td.products].sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers)).map((p,i)=>renderProdCard(p,"main_"+i)),
+        (()=>{
+          const sec=findSecondarySection(typeKey,answers);
+          if(!sec||sec.products.length===0) return null;
+          return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
+            h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"Optional"),
+            h("p",{style:{fontFamily:"var(--serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--char)",marginBottom:".3rem",lineHeight:"1.4"}},sec.label),
+            h("p",{style:{fontSize:".73rem",color:"var(--muted)",marginBottom:"1rem",lineHeight:"1.6"}},sec.desc),
+            sec.products.map((p,i)=>renderProdCard(p,"sec_"+i))
+          );
+        })(),
         h("div",{className:"consult-bar"},
           h("div",{className:"consult-bar-txt"},
             h("p",{className:"consult-bar-ttl"},"どれを選べばいいか迷ったら"),
