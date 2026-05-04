@@ -345,8 +345,16 @@ function diagnose(ans){
   if(eq5==="strong") return "vital_aging";
 
   // ── Step3: 薬剤ダメージ ────────────────────────────────
-  // 全体ブリーチ・インナーカラー → 問答無用でRepair Mode（ハイダメージ確定）
-  if(eq7==="bleach") return "repair_mode";
+  // 全体ブリーチ・インナーカラー
+  // ショート：毛先ダメージ（パサつき・チリつき・枝毛・広がり）があればRepair、なければBare Skin
+  // ミディアム以上：Repair確定
+  if(eq7==="bleach"){
+    if(q2==="short"){
+      const hasEndDmg=q8arr.some(v=>v==="dry"||v==="frizz"||v==="split"||v==="spread");
+      return hasEndDmg?"repair_mode":"bare_skin";
+    }
+    return "repair_mode";
+  }
   // ハイライトのみ → 軽ダメージ → Bare Skin
   if(eq7==="highlight") return "bare_skin";
   // 縮毛矯正 → トステア配合 Repair Mode 確定
