@@ -324,7 +324,7 @@ function diagnose(ans){
   const hasBirth=q5arr.includes("birth");
   const hasClear=q5arr.includes("clear");
   const hasStrong=q5arr.includes("strong");
-  const eq5=hasStrong||(hasClear&&hasBirth)?"strong":hasClear?"clear":hasBirth?"birth":q5arr.includes("early")?"early":q5arr.includes("young")?"young":"stable";
+  const eq5=hasStrong?"strong":hasClear?"clear":hasBirth?"birth":q5arr.includes("early")?"early":q5arr.includes("young")?"young":"stable";
 
   // Q7は複数選択配列。最強ダメージを1つ抽出して診断に使う
   const Q7_PRIORITY=["bleach","straight","perm","color","none"];
@@ -387,8 +387,6 @@ function diagnose(ans){
     return "bare_skin";
   }
   if(q8==="flat"){
-    // 50代でぺたんこ → Vital Aging（エイジング由来）
-    if(hasClear) return "vital_aging";
     if(wantVolume) return "aqua_sensitive";
     return eq7==="none"?"aqua_sensitive":"bare_skin";
   }
@@ -403,8 +401,6 @@ function diagnose(ans){
     return "smooth_wave";
   }
   if(isThinSoft){
-    // 50代 + 細毛・柔らかい → Vital Aging
-    if(hasClear) return "vital_aging";
     if(wantVolume) return "aqua_sensitive";
     if(eq7==="none") return "aqua_sensitive";
     return "bare_skin";
@@ -413,8 +409,6 @@ function diagnose(ans){
   // ── Step7: Q11 悩みで最終決定 ────────────────────────
   if(q11==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
   if(q11==="wave"){
-    // 50代 + 細毛 or ぺたんこ → エイジング由来のうねりとして Vital Aging
-    if(hasClear&&(isThinSoft||q8==="flat")) return "vital_aging";
     return "smooth_wave";
   }
   if(q11==="repair"){
@@ -426,8 +420,6 @@ function diagnose(ans){
 
   // ── Step8: Q10 なりたい髪質を最終反映 ───────────────
   if(q10==="volume"){
-    // 50代 + ボリュームアップ希望 → エイジング由来のボリューム不足
-    if(hasClear) return "vital_aging";
     return "aqua_sensitive";
   }
   if(q10==="vdown") return "smooth_wave";
@@ -783,6 +775,18 @@ function App(){
             h("p",{style:{fontFamily:"var(--serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--char)",marginBottom:".3rem",lineHeight:"1.4"}},sec.label),
             h("p",{style:{fontSize:".73rem",color:"var(--muted)",marginBottom:"1rem",lineHeight:"1.6"}},sec.desc),
             sec.products.map((p,i)=>renderProdCard(p,"sec_"+i))
+          );
+        })(),
+        (()=>{
+          const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
+          if(!q5arr.includes("clear")||typeKey==="vital_aging") return null;
+          const vaProds=[TYPES.vital_aging.products.find(p=>p.name.includes("セグレタ シャンプー")),TYPES.vital_aging.products.find(p=>p.name.includes("PRORY"))].filter(Boolean);
+          if(vaProds.length===0) return null;
+          return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
+            h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"Optional"),
+            h("p",{style:{fontFamily:"var(--serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--char)",marginBottom:".3rem",lineHeight:"1.4"}},"ハリ・コシが気になり始めたら"),
+            h("p",{style:{fontSize:".73rem",color:"var(--muted)",marginBottom:"1rem",lineHeight:"1.6"}},"使っているうちに、髪のボリューム感の変化を感じたときはこちらも選択肢に。"),
+            vaProds.map((p,i)=>renderProdCard(p,"va_"+i))
           );
         })(),
         h("div",{className:"consult-bar"},
