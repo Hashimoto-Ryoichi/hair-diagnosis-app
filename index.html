@@ -190,7 +190,7 @@ const QUESTIONS=[
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
   {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー・ハイライト"},{k:"perm",l:"C",t:"パーマ"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"straight",l:"E",t:"縮毛矯正・デジタルパーマ・ストレートパーマ"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
-  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？（複数回答可）",multi:true,opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"young",l:"B",t:"20代から少しずつ"},{k:"early",l:"C",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"D",t:"50代から実感"},{k:"strong",l:"E",t:"60代以降で強く実感"},{k:"birth",l:"F",t:"出産を機に髪が変化したと感じる"}]},
+  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？",multi:true,opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"birth",l:"B",t:"出産を機に髪が変化したと感じる"},{k:"young",l:"C",t:"20代から少しずつ"},{k:"early",l:"D",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"E",t:"50代から実感"},{k:"strong",l:"F",t:"60代以降で強く実感"}]},
   {id:"q9",cat:"熱器具",text:"使っている熱器具はありますか？（複数回答可）",multi:true,opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質はどれですか？（複数回答可）",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
   {id:"q11",cat:"悩み",text:"特に気になるお悩みはどれですか？",opts:[{k:"dry",l:"A",t:"パサつき"},{k:"wave",l:"B",t:"うねり"},{k:"oily",l:"C",t:"ベタつき"},{k:"repair",l:"D",t:"ダメージ修復"},{k:"aging",l:"E",t:"エイジング（ハリ・コシ・ボリューム不足）"},{k:"none",l:"F",t:"特にない"}]},
@@ -737,7 +737,7 @@ function App(){
             const isSel=isMulti?arr.includes(opt.k):answers[qid]===opt.k;
             const order=(qid==="q8"||qid==="q10")&&isSel?arr.indexOf(opt.k)+1:0;
             return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
-              qid==="q5"?toggleQ5(opt.k):qid==="q7"?toggleQ7(opt.k):qid==="q8"?toggleQ8(opt.k):qid==="q9"?toggleQ9(opt.k):qid==="q10"?toggleQ10(opt.k):selectOpt(opt.k);
+              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");}},280)):qid==="q7"?toggleQ7(opt.k):qid==="q8"?toggleQ8(opt.k):qid==="q9"?toggleQ9(opt.k):qid==="q10"?toggleQ10(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
