@@ -207,8 +207,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .opt.sel .opt-circle{color:var(--gold);transform:scale(1.08)}
 .q11-hint{font-size:.92rem;color:var(--char2);margin-bottom:.6rem;font-weight:400;line-height:1.55}
 
-/* ── B-4 星意味説明 ── */
-.star-meaning{font-size:.68rem;color:var(--muted);text-align:center;margin:1.6rem 0 .6rem;line-height:1.7;letter-spacing:.02em}
+/* ── B-4 星意味説明（界面活性剤チャート内） ── */
+.ingr-star-meaning{font-size:.66rem;color:var(--muted);line-height:1.75;margin:.4rem 0 .8rem;padding:.55rem .7rem;background:rgba(184,150,90,0.08);border-radius:var(--r);letter-spacing:.02em}
+.ingr-star-meaning-stars{color:var(--gold);font-weight:500}
 
 /* ── B-7 動的サマリー ── */
 .summary-box{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;margin-bottom:1.6rem}
@@ -742,8 +743,15 @@ function SurfactantChart({typeKey}){
     // ── タイトル ──────────────────────────────
     h("div",{className:"ingr-ttl"},
       h(Icon,{name:"flask-conical",size:14,color:"var(--gold)"}),
-      h("span",{style:{marginLeft:".35rem"}},"シャンプーで使われる界面活性剤"),
-      typeKey&&h("span",{className:"ingr-legend"},h("span",{className:"ingr-legend-dot"}),"あなたへのおすすめ")
+      h("span",{style:{marginLeft:".35rem"}},"おすすめシャンプーで使われている界面活性剤")
+    ),
+    h("p",{className:"ingr-star-meaning"},
+      h("span",{className:"ingr-star-meaning-stars"},"★"),
+      "の数は肌への刺激の強さを表します（",
+      h("span",{className:"ingr-star-meaning-stars"},"★1"),
+      "：低刺激 〜 ",
+      h("span",{className:"ingr-star-meaning-stars"},"★5"),
+      "：高刺激）"
     ),
     h("p",{className:"ingr-detail-intro"},"アニオン・両性に分けて7系統に分類。系統名をタップすると細分類と成分名が表示されます。"),
 
@@ -974,11 +982,9 @@ function App(){
             return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
               qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?toggleQ9(opt.k):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
             }},
-              qid==="q11"
-                ? h("span",{className:"opt-circle"},circled[optIdx]||opt.l)
-                : h("span",{className:"opt-lt"},opt.l),
+              h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
-              order>0&&h("span",{style:{marginLeft:"auto",fontSize:".72rem",color:"var(--gold)",fontWeight:500,fontFamily:"var(--serif)",fontStyle:"italic"}},`${order}番目`)
+              order>0&&h("span",{style:{marginLeft:"auto",fontSize:"1.15rem",color:"var(--gold)",fontWeight:500,lineHeight:1}},circled[order-1]||`${order}`)
             );
           })),
           (QUESTIONS[curQ].id==="q5"||QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q9"||QUESTIONS[curQ].id==="q10"||QUESTIONS[curQ].id==="q11")&&h("button",{
@@ -1077,7 +1083,6 @@ function App(){
           ),
           h("a",{className:"consult-bar-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"サロンで相談する"))
         ),
-        h("p",{className:"star-meaning"},"★の数は肌への刺激の強さを表します（★1：低刺激 〜 ★5：高刺激）"),
         h(SurfactantChart,{typeKey}),
         h("button",{className:"btn-share",disabled:shareBusy,onClick:()=>shareResult(typeKey,answers,setShareBusy)},
           h(Icon,{name:"image-down",size:14,color:"#fff"}),
