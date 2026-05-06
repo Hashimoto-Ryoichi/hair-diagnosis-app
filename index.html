@@ -188,12 +188,14 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ingr-star.half::before{content:"★";position:absolute;left:0;top:0;color:var(--gold);clip-path:inset(0 50% 0 0);-webkit-clip-path:inset(0 50% 0 0)}
 
 /* ── B-5 トップページプロフィール ── */
-.profile-top{display:flex;align-items:center;gap:.85rem;background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:.95rem 1.1rem;margin-top:1.6rem}
-.profile-top-photo{flex-shrink:0;width:46px;height:46px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--cream)}
+.profile-top{display:flex;align-items:center;gap:.85rem;background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem;margin-top:max(8rem,55vh)}
+.profile-top-photo{flex-shrink:0;width:48px;height:48px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--cream)}
 .profile-top-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .profile-top-info{flex:1;min-width:0}
 .profile-top-name{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--char);letter-spacing:.04em}
-.profile-top-role{font-size:.6rem;letter-spacing:.12em;color:var(--gold);margin-top:.2rem}
+.profile-top-role{font-size:.6rem;letter-spacing:.12em;color:var(--gold);margin-top:.2rem;margin-bottom:.55rem}
+.profile-top-btn{display:inline-flex;align-items:center;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.4rem .85rem;font-size:.66rem;letter-spacing:.08em;transition:background .2s}
+.profile-top-btn:hover{background:var(--gold-d)}
 
 /* ── B-6 シェアボタン ── */
 .btn-share{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--gold);color:#fff;border:none;border-radius:var(--r);padding:.9rem 1.5rem;font-family:var(--sans);font-size:.74rem;letter-spacing:.12em;cursor:pointer;transition:background .25s;margin-top:1.5rem}
@@ -945,7 +947,11 @@ function App(){
           ),
           h("div",{className:"profile-top-info"},
             h("p",{className:"profile-top-name"},"橋元リョウイチ"),
-            h("p",{className:"profile-top-role"},"Freelance Hair Stylist")
+            h("p",{className:"profile-top-role"},"Freelance Hair Stylist"),
+            h("a",{className:"profile-top-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},
+              h(Icon,{name:"calendar-check",size:11,color:"#fff"}),
+              h("span",{style:{marginLeft:".3rem"}},"ご予約はこちら")
+            )
           )
         )
       ),
