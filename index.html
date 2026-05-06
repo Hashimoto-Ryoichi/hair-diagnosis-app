@@ -556,57 +556,127 @@ function buildResultSummary(typeKey,answers){
 // B-6 結果カード画像生成（html2canvas）
 function shareResult(typeKey,answers,setBusy){
   const td=TYPES[typeKey];
-  if(!td||typeof window==="undefined"||!window.html2canvas){
-    alert("画像生成ライブラリの読み込みに失敗しました。時間をおいて再度お試しください。");
+  if(!td) return;
+  if(typeof window==="undefined"||!window.html2canvas){
+    alert("画像生成ライブラリの読み込みに失敗しました。ページを再読み込みしてお試しください。");
     return;
   }
   setBusy&&setBusy(true);
-  const prods=[...td.products].sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers));
+
+  const prods=[...td.products].filter(p=>{
+    if(p.name.includes("イオ クレンジング")){
+      const q1=answers.q1;
+      const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
+      const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
+      const isDry=q1==="dry"||q1==="mix"||q11arr.includes("dry")||q8arr.includes("dry");
+      if(!isDry) return false;
+    }
+    return true;
+  }).sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers));
   const summary=buildResultSummary(typeKey,answers);
+  const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
   const card=document.createElement("div");
-  card.style.cssText="width:540px;min-height:960px;background:#1a2744;color:#F8F5F0;font-family:'Noto Sans JP','Hiragino Sans',sans-serif;padding:60px 50px;box-sizing:border-box;position:fixed;left:-99999px;top:0;display:flex;flex-direction:column;";
-  const prodList=prods.map(p=>`<div style=\"font-size:13px;line-height:1.7;margin-bottom:6px;color:#F8F5F0;\">・${p.name}</div>`).join("");
+  card.style.cssText="width:540px;background:#1a2744;color:#F8F5F0;font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic Medium','Meiryo',sans-serif;padding:56px 48px;box-sizing:border-box;position:fixed;left:-99999px;top:0;z-index:-9999;";
+  const prodList=prods.map(p=>`<div style="font-size:13px;line-height:1.7;margin-bottom:6px;color:#F8F5F0;">・${escapeHtml(p.name)}</div>`).join("");
 
-  card.innerHTML=`
-    <div style="text-align:center;border-bottom:1px solid rgba(184,150,90,0.35);padding-bottom:28px;margin-bottom:32px;">
-      <p style="font-size:10px;letter-spacing:5px;color:#B8965A;text-transform:uppercase;margin-bottom:6px;">Hair Care Diagnosis</p>
-      <p style="font-family:Georgia,serif;font-size:28px;letter-spacing:3px;color:#F8F5F0;font-weight:300;">Hair Identity</p>
-    </div>
-    <div style="text-align:center;margin-bottom:30px;">
-      <p style="font-size:11px;letter-spacing:3px;color:#D4B896;text-transform:uppercase;margin-bottom:14px;">Your Type</p>
-      <p style="font-family:Georgia,serif;font-size:42px;font-weight:300;letter-spacing:3px;color:#F8F5F0;margin-bottom:8px;">${td.title}</p>
-      <p style="font-size:13px;color:#D4B896;letter-spacing:1px;">${td.sub}</p>
-    </div>
-    <div style="background:rgba(184,150,90,0.08);border-left:2px solid #B8965A;padding:18px 20px;margin-bottom:32px;font-size:12px;line-height:1.95;color:#F8F5F0;">${summary}</div>
-    <div style="margin-bottom:36px;">
-      <p style="font-size:10px;letter-spacing:3px;color:#B8965A;text-transform:uppercase;margin-bottom:14px;">Recommended Shampoo</p>
-      ${prodList}
-    </div>
-    <div style="margin-top:auto;border-top:1px solid rgba(184,150,90,0.35);padding-top:24px;text-align:center;">
-      <p style="font-size:11px;color:#B8965A;letter-spacing:1px;margin-bottom:8px;">https://hair-diagnosis-app.vercel.app</p>
-      <p style="font-size:11px;color:#D4B896;letter-spacing:.5px;">橋元リョウイチ / Freelance Hair Stylist</p>
-    </div>`;
+  card.innerHTML=
+    '<div style="text-align:center;border-bottom:1px solid rgba(184,150,90,0.35);padding-bottom:24px;margin-bottom:28px;">'+
+      '<p style="font-size:10px;letter-spacing:5px;color:#B8965A;text-transform:uppercase;margin:0 0 6px;">Hair Care Diagnosis</p>'+
+      '<p style="font-family:Georgia,serif;font-size:28px;letter-spacing:3px;color:#F8F5F0;font-weight:300;margin:0;">Hair Identity</p>'+
+    '</div>'+
+    '<div style="text-align:center;margin-bottom:28px;">'+
+      '<p style="font-size:11px;letter-spacing:3px;color:#D4B896;text-transform:uppercase;margin:0 0 14px;">Your Type</p>'+
+      '<p style="font-family:Georgia,serif;font-size:42px;font-weight:300;letter-spacing:3px;color:#F8F5F0;margin:0 0 8px;">'+escapeHtml(td.title)+'</p>'+
+      '<p style="font-size:13px;color:#D4B896;letter-spacing:1px;margin:0;">'+escapeHtml(td.sub)+'</p>'+
+    '</div>'+
+    '<div style="background:rgba(184,150,90,0.10);border-left:2px solid #B8965A;padding:16px 18px;margin-bottom:28px;font-size:12px;line-height:1.95;color:#F8F5F0;">'+escapeHtml(summary)+'</div>'+
+    '<div style="margin-bottom:30px;">'+
+      '<p style="font-size:10px;letter-spacing:3px;color:#B8965A;text-transform:uppercase;margin:0 0 12px;">Recommended Shampoo</p>'+
+      prodList+
+    '</div>'+
+    '<div style="border-top:1px solid rgba(184,150,90,0.35);padding-top:20px;text-align:center;">'+
+      '<p style="font-size:11px;color:#B8965A;letter-spacing:1px;margin:0 0 6px;">hair-diagnosis-app.vercel.app</p>'+
+      '<p style="font-size:11px;color:#D4B896;letter-spacing:.5px;margin:0;">橋元リョウイチ / Freelance Hair Stylist</p>'+
+    '</div>';
 
   document.body.appendChild(card);
 
-  setTimeout(()=>{
-    window.html2canvas(card,{scale:2,useCORS:true,backgroundColor:"#1a2744",logging:false}).then(canvas=>{
-      const link=document.createElement("a");
-      link.download=`hair-identity-${typeKey}.png`;
-      link.href=canvas.toDataURL("image/png");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      document.body.removeChild(card);
-      setBusy&&setBusy(false);
+  const cleanup=()=>{
+    if(card.parentNode) card.parentNode.removeChild(card);
+    setBusy&&setBusy(false);
+  };
+
+  const doRender=()=>{
+    window.html2canvas(card,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#1a2744",logging:false,letterRendering:true}).then(canvas=>{
+      const ua=navigator.userAgent||"";
+      const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
+      const isAndroid=/Android/.test(ua);
+      const filename=`hair-identity-${typeKey}.png`;
+
+      const triggerDownload=(href,target)=>{
+        const a=document.createElement("a");
+        a.href=href;
+        a.download=filename;
+        if(target) a.target=target;
+        a.rel="noopener";
+        a.style.display="none";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(()=>{if(a.parentNode) a.parentNode.removeChild(a);},100);
+      };
+
+      const finishWithBlob=blob=>{
+        if(!blob){
+          // フォールバック：dataURL
+          const dataUrl=canvas.toDataURL("image/png");
+          if(isIOS){
+            const w=window.open();
+            if(w){
+              w.document.write('<img src="'+dataUrl+'" style="width:100%;height:auto;display:block;"/><p style="font-family:sans-serif;font-size:14px;text-align:center;padding:1rem;color:#333;">画像を長押しして「写真に保存」を選んでください。</p>');
+              w.document.close();
+            } else {
+              triggerDownload(dataUrl);
+              alert("画像を長押しして保存してください。");
+            }
+          } else {
+            triggerDownload(dataUrl);
+          }
+          cleanup();
+          return;
+        }
+        const url=URL.createObjectURL(blob);
+        if(isIOS){
+          // iOS Safari: 新規タブで画像表示→ユーザーが長押し保存
+          const w=window.open(url,"_blank");
+          if(!w){
+            // ポップアップブロック時：同じウィンドウで開いてもらう
+            triggerDownload(url);
+            alert("画像が開いたら長押しして「写真に保存」を選んでください。");
+          }
+        } else {
+          // PC・Android：自動ダウンロード
+          triggerDownload(url);
+        }
+        setTimeout(()=>URL.revokeObjectURL(url),5000);
+        cleanup();
+      };
+
+      if(canvas.toBlob){
+        canvas.toBlob(finishWithBlob,"image/png");
+      } else {
+        finishWithBlob(null);
+      }
     }).catch(err=>{
-      console.error(err);
-      if(card.parentNode) document.body.removeChild(card);
-      alert("画像の生成に失敗しました。");
-      setBusy&&setBusy(false);
+      console.error("[shareResult] html2canvas error:",err);
+      cleanup();
+      alert("画像の生成に失敗しました。時間をおいて再度お試しください。");
     });
-  },120);
+  };
+
+  // フォント読み込み完了後にレンダリング
+  const ready=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();
+  ready.then(()=>setTimeout(doRender,150));
 }
 
 // セカンドセクション：診断結果に対する補助的なおすすめ商品
@@ -670,7 +740,7 @@ function renderProdCard(p,key){
 // 化粧品表示名称ベース、シャンプー用途のみ、カチオン除外
 // items は細分類ごとにグループ化して表示
 const SURFACTANT_DETAIL=[
-  {key:"betaine",cat:"ベタイン系（両性）",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
+  {key:"betaine",cat:"ベタイン系",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
     types:["repair_mode","smooth_wave","skin_alert","vital_aging","bare_skin","aqua_sensitive"],
     products:["ストレイン","SN repair","セラムイン","NOV DS","セグレタ","ボタニスト","イオニコ","プロリー","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル","イオ クレンジング"],
     groups:[
@@ -678,7 +748,7 @@ const SURFACTANT_DETAIL=[
       {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
       {sub:"イミダゾリン系",items:["ココアンホジ酢酸2Na"]},
     ]},
-  {key:"amino",cat:"アミノ酸系（アニオン）",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
+  {key:"amino",cat:"アミノ酸系",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
     products:["ジュレーム","ジアンサー","ストレイン","セラムイン","NOV DS","ボタニスト","プロリー","MEMEME","ゴールドウェル","イオ クレンジング"],
     groups:[
@@ -686,13 +756,13 @@ const SURFACTANT_DETAIL=[
       {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
       {sub:"グリシン系・サルコシン系",items:["ココイルグリシンK","ココイルグリシンNa","ラウロイルサルコシンNa","ラウロイルサルコシンTEA"]},
     ]},
-  {key:"taurine",cat:"タウリン系（アニオン）",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
+  {key:"taurine",cat:"タウリン系",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging"],
     products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","NOV DS","MEMEME","コスメデコルテ AQ","アデノバイタル","イオ クレンジング"],
     groups:[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
     ]},
-  {key:"acid",cat:"その他のマイルド系（アニオン）",rank:2,desc:"弱酸性で頭皮に近く、低刺激な補助系",
+  {key:"acid",cat:"その他のマイルド系",rank:2,desc:"弱酸性で頭皮に近く、低刺激な補助系",
     types:["bare_skin","vital_aging"],
     products:["MEMEME","アデノバイタル"],
     groups:[
@@ -700,32 +770,32 @@ const SURFACTANT_DETAIL=[
       {sub:"スルホコハク酸系",items:["スルホコハク酸ラウレス2Na","スルホコハク酸(C12-14)パレス-2Na","スルホコハク酸ラウリル2Na"]},
       {sub:"タンパク質系",items:["ココイル加水分解コラーゲンK","ラウロイル加水分解シルクNa"]},
     ]},
-  {key:"soap",cat:"石けん系（アニオン）",rank:3,desc:"中程度の洗浄力、アルカリ性。すっきりだが髪はきしみやすい",
+  {key:"soap",cat:"石けん系",rank:3,desc:"中程度の洗浄力、アルカリ性。すっきりだが髪はきしみやすい",
     types:[],
     products:[],
     groups:[
       {sub:"アルカリ石けん",items:["石ケン素地","カリ石ケン素地","ラウリン酸K","ミリスチン酸K","パルミチン酸K","オレイン酸K","ラウリン酸Na","ステアリン酸Na"]},
     ]},
-  {key:"olefin",cat:"オレフィン系（アニオン）",rank:4,desc:"高洗浄力だがサルフェート不使用。硬水でも泡立つ",
+  {key:"olefin",cat:"オレフィン系",rank:4,desc:"高洗浄力だがサルフェート不使用。硬水でも泡立つ",
     types:["oil_reset_short","oil_reset_long","smooth_wave"],
     products:["スティーブンノル モイスチュアコントロール","イオニコ","プロリー","コスメデコルテ AQ"],
     groups:[
       {sub:"オレフィンスルホン酸系",items:["オレフィン(C14-16)スルホン酸Na"]},
     ]},
-  {key:"amido_sulfate",cat:"アミドエーテル硫酸系（アニオン）",rank:4,desc:"硫酸系の中では比較的マイルド。アミド構造で皮膚刺激を緩和",
+  {key:"amido_sulfate",cat:"アミドエーテル硫酸系",rank:4,desc:"硫酸系の中では比較的マイルド。アミド構造で皮膚刺激を緩和",
     types:["vital_aging"],
     products:["アデノバイタル"],
     groups:[
       {sub:"アミドエーテル硫酸系",items:["ラウラミドエーテル硫酸Na","ココアミドエーテル硫酸Na"]},
     ]},
-  {key:"laureth",cat:"ラウレス硫酸系（アニオン）",rank:4.5,desc:"高洗浄力。エトキシ化(EO)鎖により分子が大きく、ラウリル硫酸より皮膚浸透が抑えられている",
+  {key:"laureth",cat:"ラウレス硫酸系",rank:4.5,desc:"高洗浄力。エトキシ化(EO)鎖により分子が大きく、ラウリル硫酸より皮膚浸透が抑えられている",
     types:["oil_reset_long","oil_reset_short","vital_aging","repair_mode","smooth_wave"],
     products:["パンテーン","ラックス","ツバキ","ダヴ","セグレタ","UNOVE","ゴールドウェル","アデノバイタル"],
     groups:[
       {sub:"ラウレス硫酸塩",items:["ラウレス硫酸Na","ラウレス硫酸アンモニウム","ラウレス硫酸TEA"]},
       {sub:"参考：EO付加数",items:["EO平均2〜3モルが主流","EO数が増えるほど起泡性↑・刺激↓・洗浄力はやや低下"]},
     ]},
-  {key:"lauryl",cat:"ラウリル硫酸系（アニオン）",rank:5,desc:"洗浄力・脱脂力が最強。分子が小さく皮膚浸透性が高いため、現代のシャンプーでは敬遠される傾向",
+  {key:"lauryl",cat:"ラウリル硫酸系",rank:5,desc:"洗浄力・脱脂力が最強。分子が小さく皮膚浸透性が高いため、現代のシャンプーでは敬遠される傾向",
     types:["repair_mode","smooth_wave"],
     products:["UNOVE"],
     groups:[
@@ -753,7 +823,7 @@ function SurfactantChart({typeKey}){
       h("span",{className:"ingr-star-meaning-stars"},"★5"),
       "：高刺激）"
     ),
-    h("p",{className:"ingr-detail-intro"},"アニオン・両性に分けて7系統に分類。系統名をタップすると細分類と成分名が表示されます。"),
+    h("p",{className:"ingr-detail-intro"},"7系統に分類しています。系統名をタップすると、細分類と成分名がご覧いただけます。"),
 
     // ── 5分類カード ──────────────────────────────
     SURFACTANT_DETAIL.map((g,gi)=>{
@@ -1031,7 +1101,16 @@ function App(){
         h("hr",{className:"divider"}),
         h("p",{className:"prod-sub",style:{marginBottom:"1.3rem"}},"タイプ別に厳選したアイテムです。あなたの回答との相性が高い順に並んでいます。"),
         td.alert&&h("div",{className:"alert-box"},td.alert),
-        [...td.products].sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers)).map((p,i)=>renderProdCard(p,"main_"+i)),
+        [...td.products].filter(p=>{
+          if(p.name.includes("イオ クレンジング")){
+            const q1=answers.q1;
+            const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
+            const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
+            const isDry=q1==="dry"||q1==="mix"||q11arr.includes("dry")||q8arr.includes("dry");
+            if(!isDry) return false;
+          }
+          return true;
+        }).sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers)).map((p,i)=>renderProdCard(p,"main_"+i)),
         (()=>{
           const sec=findSecondarySection(typeKey,answers);
           if(!sec||sec.products.length===0) return null;
