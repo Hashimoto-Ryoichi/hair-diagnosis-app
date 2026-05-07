@@ -29,7 +29,6 @@
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.2/babel.min.js"></script>
 <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -196,11 +195,6 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .profile-top-role{font-size:.6rem;letter-spacing:.12em;color:var(--gold);margin-top:.2rem;margin-bottom:.55rem}
 .profile-top-btn{display:inline-flex;align-items:center;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.4rem .85rem;font-size:.66rem;letter-spacing:.08em;transition:background .2s}
 .profile-top-btn:hover{background:var(--gold-d)}
-
-/* ── B-6 シェアボタン ── */
-.btn-share{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--gold);color:#fff;border:none;border-radius:var(--r);padding:.9rem 1.5rem;font-family:var(--sans);font-size:.74rem;letter-spacing:.12em;cursor:pointer;transition:background .25s;margin-top:1.5rem}
-.btn-share:hover{background:var(--gold-d)}
-.btn-share:disabled{opacity:.6;cursor:wait}
 
 /* ── B-2 Q11 ①②③ラベル ── */
 .opt-circle{flex-shrink:0;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.95rem;color:#bcc4d2;transition:color .2s,transform .2s;line-height:1}
@@ -551,129 +545,6 @@ function buildResultSummary(typeKey,answers){
   }
 }
 
-// B-6 結果カード画像生成（html2canvas）
-function shareResult(typeKey,answers,setBusy){
-  const td=TYPES[typeKey];
-  if(!td) return;
-  if(typeof window==="undefined"||!window.html2canvas){
-    alert("画像生成ライブラリの読み込みに失敗しました。ページを再読み込みしてお試しください。");
-    return;
-  }
-  setBusy&&setBusy(true);
-
-  const prods=[...td.products].filter(p=>{
-    if(p.name.includes("イオ クレンジング")){
-      const q1=answers.q1;
-      if(q1!=="dry"&&q1!=="mix") return false;
-    }
-    return true;
-  }).sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers));
-  const summary=buildResultSummary(typeKey,answers);
-  const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
-  const card=document.createElement("div");
-  card.style.cssText="width:540px;background:#1a2744;color:#F8F5F0;font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Yu Gothic Medium','Meiryo',sans-serif;padding:56px 48px;box-sizing:border-box;position:fixed;left:-99999px;top:0;z-index:-9999;";
-  const prodList=prods.map(p=>`<div style="font-size:13px;line-height:1.7;margin-bottom:6px;color:#F8F5F0;">・${escapeHtml(p.name)}</div>`).join("");
-
-  card.innerHTML=
-    '<div style="text-align:center;border-bottom:1px solid rgba(184,150,90,0.35);padding-bottom:24px;margin-bottom:28px;">'+
-      '<p style="font-size:10px;letter-spacing:5px;color:#B8965A;text-transform:uppercase;margin:0 0 6px;">Hair Care Diagnosis</p>'+
-      '<p style="font-family:Georgia,serif;font-size:28px;letter-spacing:3px;color:#F8F5F0;font-weight:300;margin:0;">Hair Identity</p>'+
-    '</div>'+
-    '<div style="text-align:center;margin-bottom:28px;">'+
-      '<p style="font-size:11px;letter-spacing:3px;color:#D4B896;text-transform:uppercase;margin:0 0 14px;">Your Type</p>'+
-      '<p style="font-family:Georgia,serif;font-size:42px;font-weight:300;letter-spacing:3px;color:#F8F5F0;margin:0 0 8px;">'+escapeHtml(td.title)+'</p>'+
-      '<p style="font-size:13px;color:#D4B896;letter-spacing:1px;margin:0;">'+escapeHtml(td.sub)+'</p>'+
-    '</div>'+
-    '<div style="background:rgba(184,150,90,0.10);border-left:2px solid #B8965A;padding:16px 18px;margin-bottom:28px;font-size:12px;line-height:1.95;color:#F8F5F0;">'+escapeHtml(summary)+'</div>'+
-    '<div style="margin-bottom:30px;">'+
-      '<p style="font-size:10px;letter-spacing:3px;color:#B8965A;text-transform:uppercase;margin:0 0 12px;">Recommended Shampoo</p>'+
-      prodList+
-    '</div>'+
-    '<div style="border-top:1px solid rgba(184,150,90,0.35);padding-top:20px;text-align:center;">'+
-      '<p style="font-size:11px;color:#B8965A;letter-spacing:1px;margin:0 0 6px;">hair-diagnosis-app.vercel.app</p>'+
-      '<p style="font-size:11px;color:#D4B896;letter-spacing:.5px;margin:0;">橋元リョウイチ / Freelance Hair Stylist</p>'+
-    '</div>';
-
-  document.body.appendChild(card);
-
-  const cleanup=()=>{
-    if(card.parentNode) card.parentNode.removeChild(card);
-    setBusy&&setBusy(false);
-  };
-
-  const doRender=()=>{
-    window.html2canvas(card,{scale:2,useCORS:true,allowTaint:true,backgroundColor:"#1a2744",logging:false,letterRendering:true}).then(canvas=>{
-      const ua=navigator.userAgent||"";
-      const isIOS=/iPhone|iPad|iPod/.test(ua)&&!window.MSStream;
-      const isAndroid=/Android/.test(ua);
-      const filename=`hair-identity-${typeKey}.png`;
-
-      const triggerDownload=(href,target)=>{
-        const a=document.createElement("a");
-        a.href=href;
-        a.download=filename;
-        if(target) a.target=target;
-        a.rel="noopener";
-        a.style.display="none";
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(()=>{if(a.parentNode) a.parentNode.removeChild(a);},100);
-      };
-
-      const finishWithBlob=blob=>{
-        if(!blob){
-          // フォールバック：dataURL
-          const dataUrl=canvas.toDataURL("image/png");
-          if(isIOS){
-            const w=window.open();
-            if(w){
-              w.document.write('<img src="'+dataUrl+'" style="width:100%;height:auto;display:block;"/><p style="font-family:sans-serif;font-size:14px;text-align:center;padding:1rem;color:#333;">画像を長押しして「写真に保存」を選んでください。</p>');
-              w.document.close();
-            } else {
-              triggerDownload(dataUrl);
-              alert("画像を長押しして保存してください。");
-            }
-          } else {
-            triggerDownload(dataUrl);
-          }
-          cleanup();
-          return;
-        }
-        const url=URL.createObjectURL(blob);
-        if(isIOS){
-          // iOS Safari: 新規タブで画像表示→ユーザーが長押し保存
-          const w=window.open(url,"_blank");
-          if(!w){
-            // ポップアップブロック時：同じウィンドウで開いてもらう
-            triggerDownload(url);
-            alert("画像が開いたら長押しして「写真に保存」を選んでください。");
-          }
-        } else {
-          // PC・Android：自動ダウンロード
-          triggerDownload(url);
-        }
-        setTimeout(()=>URL.revokeObjectURL(url),5000);
-        cleanup();
-      };
-
-      if(canvas.toBlob){
-        canvas.toBlob(finishWithBlob,"image/png");
-      } else {
-        finishWithBlob(null);
-      }
-    }).catch(err=>{
-      console.error("[shareResult] html2canvas error:",err);
-      cleanup();
-      alert("画像の生成に失敗しました。時間をおいて再度お試しください。");
-    });
-  };
-
-  // フォント読み込み完了後にレンダリング
-  const ready=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();
-  ready.then(()=>setTimeout(doRender,150));
-}
-
 // セカンドセクション：診断結果に対する補助的なおすすめ商品
 function findSecondarySection(typeKey,answers){
   const q1=answers.q1;
@@ -877,7 +748,6 @@ function App(){
   const [prevStep,setPrevStep]=useState(null);
   const [prevCurQ,setPrevCurQ]=useState(0);
   const [prevTypeKey,setPrevTypeKey]=useState(null);
-  const [shareBusy,setShareBusy]=useState(false);
   const totalQ=QUESTIONS.length;
   const prog=step==="quiz"?(curQ/totalQ*100):step==="result"||step==="products"?100:0;
   useEffect(()=>{document.getElementById("pbar").style.width=prog+"%";},[prog]);
@@ -1098,8 +968,7 @@ function App(){
         td.alert&&h("div",{className:"alert-box"},td.alert),
         [...td.products].filter(p=>{
           if(p.name.includes("イオ クレンジング")){
-            const q1=answers.q1;
-            if(q1!=="dry"&&q1!=="mix") return false;
+            if(answers.q1!=="dry") return false;
           }
           return true;
         }).sort((a,b)=>scoreProduct(b,answers)-scoreProduct(a,answers)).map((p,i)=>renderProdCard(p,"main_"+i)),
@@ -1155,11 +1024,7 @@ function App(){
           h("a",{className:"consult-bar-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"サロンで相談する"))
         ),
         h(SurfactantChart,{typeKey}),
-        h("button",{className:"btn-share",disabled:shareBusy,onClick:()=>shareResult(typeKey,answers,setShareBusy)},
-          h(Icon,{name:"image-down",size:14,color:"#fff"}),
-          h("span",{style:{marginLeft:".4rem"}},shareBusy?"画像を生成中…":"結果をシェア（画像で保存）")
-        ),
-        h("button",{className:"btn-ghost",style:{marginTop:".7rem"},onClick:retry},"← もう一度診断する")
+        h("button",{className:"btn-ghost",style:{marginTop:"1.5rem"},onClick:retry},"← もう一度診断する")
       )
     ),
     (step==="result"||step==="products")&&h("footer",{className:"ftr"},
