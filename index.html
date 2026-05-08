@@ -222,7 +222,7 @@ const QUESTIONS=[
   {id:"q1",cat:"頭皮",text:"地肌の状態はどれに当てはまりますか？",opts:[{k:"dry",l:"A",t:"乾燥している"},{k:"normal",l:"B",t:"普通（特に気にならない）"},{k:"oily",l:"C",t:"脂性（べたつきやすい）"},{k:"mix",l:"D",t:"混合（部位によって異なる）"},{k:"red",l:"E",t:"赤み・湿疹がある"}]},
   {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
   {id:"q3",cat:"毛質",text:"髪の太さはどのくらいですか？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
-  {id:"q4",cat:"毛質",text:"髪の硬さ・毛量はどのくらいですか？",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"},{k:"less",l:"D",t:"毛量が少ない"},{k:"more",l:"E",t:"毛量が多い"}]},
+  {id:"q4",cat:"毛質",text:"髪の硬さ・毛量はどのくらいですか？（複数回答可）",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"},{k:"less",l:"D",t:"毛量が少ない"},{k:"vol_normal",l:"E",t:"毛量が普通"},{k:"more",l:"F",t:"毛量が多い"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
   {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー・ハイライト"},{k:"perm",l:"C",t:"パーマ"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"straight",l:"E",t:"縮毛矯正・デジタルパーマ・ストレートパーマ"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
@@ -366,7 +366,8 @@ const TYPES={
 
 
 function diagnose(ans){
-  const {q1,q2,q3,q4,q6}=ans;
+  const {q1,q2,q3,q6}=ans;
+  const q4arr=Array.isArray(ans.q4)?ans.q4:(ans.q4?[ans.q4]:["normal"]);
   // Q11は複数選択配列。先頭（最初に押した=最重視）を主回答として使用
   const q11arr=Array.isArray(ans.q11)?ans.q11:(ans.q11?[ans.q11]:[]);
   const q11=q11arr[0]||"none";
@@ -446,8 +447,8 @@ function diagnose(ans){
   }
 
   // ── Step6: Q3 太さ × Q4 硬さ ─────────────────────────
-  const isThickHard=(q3==="thick"||q4==="hard"||q4==="more");
-  const isThinSoft =(q3==="thin"||q4==="soft"||q4==="less");
+  const isThickHard=(q3==="thick"||q4arr.includes("hard")||q4arr.includes("more"));
+  const isThinSoft =(q3==="thin"||q4arr.includes("soft")||q4arr.includes("less"));
 
   if(isThickHard){
     if(q10==="vdown"||q10==="moist") return "smooth_wave";
@@ -473,7 +474,7 @@ function diagnose(ans){
   if(q11==="aging") return "vital_aging";
   if(q11==="volume"){
     // ボリュームが欲しい：細毛・少毛量はVital Aging寄り、それ以外はAqua Sensitive
-    if(isThinSoft||q4==="less") return eq5==="clear"||eq5==="strong"?"vital_aging":"aqua_sensitive";
+    if(isThinSoft) return eq5==="clear"||eq5==="strong"?"vital_aging":"aqua_sensitive";
     return "aqua_sensitive";
   }
 
@@ -492,7 +493,7 @@ function diagnose(ans){
 function buildResultSummary(typeKey,answers){
   const q1=answers.q1||"normal";
   const q2=answers.q2||"mid";
-  const q4=answers.q4||"normal";
+  const q4arr=Array.isArray(answers.q4)?answers.q4:(answers.q4?[answers.q4]:["normal"]);
   const q6=answers.q6||"none";
   const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:["none"]);
   const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
@@ -537,7 +538,7 @@ function buildResultSummary(typeKey,answers){
     }
     case "vital_aging":{
       const when=q5arr.includes("strong")?"60代以降から":q5arr.includes("clear")?"50代から":"年齢とともに";
-      const wantVol=q11arr.includes("volume")||q4==="less"||q8arr.includes("flat");
+      const wantVol=q11arr.includes("volume")||q4arr.includes("less")||q8arr.includes("flat");
       const tail=wantVol?"根元から立ち上がる、ふんわりとした仕上がりを取り戻しましょう。":"ハリ・コシを補い、エイジングのサインに寄り添うケアをしていきましょう。";
       return `${when}実感しやすい、ハリ・コシ・ボリューム不足が気になるタイプです。エイジングケアに特化したシャンプーで、${tail}`;
     }
@@ -762,6 +763,11 @@ function App(){
       else{setTypeKey(diagnose(na));setStep("result");}
     },280);
   }
+  function toggleQ4(k){
+    const cur=Array.isArray(answers.q4)?answers.q4:[];
+    const next=cur.includes(k)?cur.filter(v=>v!==k):[...cur,k];
+    setAnswers({...answers,q4:next});
+  }
   function toggleQ5(k){
     const cur=Array.isArray(answers.q5)?answers.q5:[];
     let next;
@@ -909,20 +915,20 @@ function App(){
           QUESTIONS[curQ].id==="q11"&&h("p",{className:"q11-hint"},"※ 一番気になる順にタップしてください。"),
           h("div",{className:"opts"},QUESTIONS[curQ].opts.map((opt,optIdx)=>{
             const qid=QUESTIONS[curQ].id;
-            const isMulti=qid==="q5"||qid==="q7"||qid==="q8"||qid==="q9"||qid==="q10"||qid==="q11";
+            const isMulti=qid==="q4"||qid==="q5"||qid==="q7"||qid==="q8"||qid==="q9"||qid==="q10"||qid==="q11";
             const arr=Array.isArray(answers[qid])?answers[qid]:[];
             const isSel=isMulti?arr.includes(opt.k):answers[qid]===opt.k;
             const order=(qid==="q8"||qid==="q10"||qid==="q11")&&isSel?arr.indexOf(opt.k)+1:0;
             const circled=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
             return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
-              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?toggleQ9(opt.k):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
+              qid==="q4"?toggleQ4(opt.k):qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?toggleQ9(opt.k):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
               order>0&&h("span",{style:{marginLeft:"auto",fontSize:"1.15rem",color:"var(--gold)",fontWeight:500,lineHeight:1}},circled[order-1]||`${order}`)
             );
           })),
-          (QUESTIONS[curQ].id==="q5"||QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q9"||QUESTIONS[curQ].id==="q10"||QUESTIONS[curQ].id==="q11")&&h("button",{
+          (QUESTIONS[curQ].id==="q4"||QUESTIONS[curQ].id==="q5"||QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q9"||QUESTIONS[curQ].id==="q10"||QUESTIONS[curQ].id==="q11")&&h("button",{
             className:"btn-primary",
             style:{marginTop:"1rem",opacity:(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0)?1:0.4},
             disabled:!(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0),
@@ -996,8 +1002,8 @@ function App(){
         })(),
         (()=>{
           const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
-          const q4=answers.q4;
-          if(!(q11arr.includes("volume")&&q4==="less")) return null;
+          const q4arr=Array.isArray(answers.q4)?answers.q4:(answers.q4?[answers.q4]:[]);
+          if(!(q11arr.includes("volume")&&q4arr.includes("less"))) return null;
           const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
           const volProds=[
             findP("vital_aging","セグレタ シャンプー"),
