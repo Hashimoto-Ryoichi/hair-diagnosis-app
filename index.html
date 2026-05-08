@@ -611,7 +611,7 @@ function renderProdCard(p,key){
 const SURFACTANT_DETAIL=[
   {key:"betaine",cat:"ベタイン系",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
     types:["repair_mode","smooth_wave","skin_alert","vital_aging","bare_skin","aqua_sensitive"],
-    products:["ストレイン","SN repair","セラムイン","NOV DS","セグレタ","ボタニスト","イオニコ","プロリー","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル","イオ クレンジング","ミントベル"],
+    products:["ストレイン","SN repair","セラムイン","NOV DS","セグレタ","BOTANIST","IONICO","プロリー","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル","イオ クレンジング","ミントベル"],
     groups:[
       {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
       {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
@@ -619,7 +619,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"amino",cat:"アミノ酸系",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
-    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","NOV DS","ボタニスト","プロリー","MEMEME","ゴールドウェル","イオ クレンジング","ミントベル"],
+    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","NOV DS","BOTANIST","プロリー","MEMEME","ゴールドウェル","イオ クレンジング","ミントベル"],
     groups:[
       {sub:"グルタミン酸系",items:["ココイルグルタミン酸Na","ココイルグルタミン酸TEA","ココイルグルタミン酸K","ラウロイルグルタミン酸Na","ラウロイルグルタミン酸TEA"]},
       {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
@@ -647,7 +647,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"olefin",cat:"オレフィン系",rank:4,desc:"高洗浄力だがサルフェート不使用。硬水でも泡立つ",
     types:["oil_reset_short","oil_reset_long","smooth_wave"],
-    products:["スティーブンノル モイスチュアコントロール","イオニコ","プロリー","コスメデコルテ AQ"],
+    products:["スティーブンノル モイスチュアコントロール","IONICO","プロリー","コスメデコルテ AQ","BOTANIST"],
     groups:[
       {sub:"オレフィンスルホン酸系",items:["オレフィン(C14-16)スルホン酸Na"]},
     ]},
@@ -659,7 +659,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"laureth",cat:"ラウレス硫酸系",rank:4.5,desc:"高洗浄力。エトキシ化(EO)鎖により分子が大きく、ラウリル硫酸より皮膚浸透が抑えられている",
     types:["oil_reset_long","oil_reset_short","vital_aging","repair_mode","smooth_wave"],
-    products:["パンテーン","ラックス","ツバキ","ダヴ","セグレタ","UNOVE","ゴールドウェル","アデノバイタル"],
+    products:["パンテーン","ラックス","TSUBAKI","ダヴ","セグレタ","UNOVE","ゴールドウェル","アデノバイタル"],
     groups:[
       {sub:"ラウレス硫酸塩",items:["ラウレス硫酸Na","ラウレス硫酸アンモニウム","ラウレス硫酸TEA"]},
       {sub:"参考：EO付加数",items:["EO平均2〜3モルが主流","EO数が増えるほど起泡性↑・刺激↓・洗浄力はやや低下"]},
@@ -697,8 +697,8 @@ function SurfactantChart({typeKey}){
     // ── 5分類カード ──────────────────────────────
     SURFACTANT_DETAIL.map((g,gi)=>{
       const isOpen=openCat===gi;
-      const isMatch=typeKey&&g.types.includes(typeKey);
-      const matchedProducts=isMatch?g.products.filter(pn=>recNames.some(n=>n.includes(pn))):[];
+      const matchedProducts=g.products.filter(pn=>recNames.some(n=>n.includes(pn)));
+      const isMatch=matchedProducts.length>0;
       return h("div",{key:gi,className:"ingr-cat"+(isMatch&&matchedProducts.length>0?" ingr-cat-match":"")},
         h("button",{className:"ingr-cat-head",onClick:()=>setOpenCat(isOpen?null:gi)},
           h("div",{className:"ingr-cat-stars"},
