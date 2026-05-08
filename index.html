@@ -33,7 +33,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --cream:#F8F5F0;--ivory:#F2EBE0;--gold:#B8965A;--gold-l:#D4B896;--gold-d:#8A6843;
-  --char:#1a2744;--char2:#2c3e6e;--muted:#7c8aa3;--border:rgba(184,150,90,0.24);
+  --char:#1a2744;--char2:#2c3e6e;--muted:#5e6f8a;--border:rgba(184,150,90,0.24);
   --serif:"Cormorant Garamond",Georgia,serif;--sans:"Noto Sans JP",sans-serif;
   --r:3px;
 }
@@ -55,27 +55,27 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 @media(max-width:639px){.sp-br{display:inline}}
 .trust-bar{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;margin-bottom:1.8rem;display:flex;align-items:flex-start;gap:.6rem}
 .trust-bar-txt{font-size:.72rem;color:var(--char2);line-height:1.7}
-.btn-primary{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--char);color:var(--cream);border:none;border-radius:var(--r);padding:.95rem 1.5rem;font-family:var(--sans);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .25s;margin-top:1.8rem}
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--char);color:var(--cream);border:none;border-radius:var(--r);padding:.95rem 1.5rem;font-family:var(--sans);font-size:.8rem;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:background .25s;margin-top:1.8rem}
 .btn-primary:hover{background:var(--gold-d)}
 .btn-primary-lg{font-size:.9rem;letter-spacing:.08em;text-transform:none;padding:1.1rem 1.5rem;font-weight:400}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:var(--r);padding:.65rem 1rem;font-size:.7rem;letter-spacing:.1em;cursor:pointer;font-family:var(--sans);transition:all .2s;margin-top:.7rem;width:100%}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:var(--r);padding:.65rem 1rem;font-size:.76rem;letter-spacing:.1em;cursor:pointer;font-family:var(--sans);transition:all .2s;margin-top:.7rem;width:100%}
 .btn-ghost:hover{border-color:var(--gold-l);color:var(--char)}
 .dots{display:flex;gap:5px;justify-content:center;margin-bottom:2rem;flex-wrap:wrap}
 .dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s}
 .dot.active{background:var(--gold);transform:scale(1.4)}
 .dot.done{background:var(--gold-l)}
 .q-num{font-size:.58rem;letter-spacing:.15em;color:var(--gold);margin-bottom:.4rem}
-.q-text{font-family:var(--serif);font-size:1.12rem;font-weight:400;color:var(--char);margin-bottom:1rem;line-height:1.55}
+.q-text{font-family:var(--serif);font-size:1.18rem;font-weight:400;color:var(--char);margin-bottom:1rem;line-height:1.6}
 .q-cat{font-size:.62rem;letter-spacing:.12em;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase}
 .opts{display:grid;gap:.55rem}
-.opt{display:flex;align-items:flex-start;gap:.75rem;width:100%;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--sans);font-size:.82rem;font-weight:300;color:var(--char2);line-height:1.5;-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;outline:none}
+.opt{display:flex;align-items:flex-start;gap:.75rem;width:100%;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--sans);font-size:.9rem;font-weight:300;color:var(--char2);line-height:1.55;-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;outline:none}
 .opt:focus{outline:none}
 .opt:focus-visible{outline:2px solid var(--gold-l);outline-offset:2px}
 @media (hover:hover) and (pointer:fine){
   .opt:hover{border-color:var(--gold-l);background:var(--ivory)}
 }
 .opt.sel{border-color:var(--gold);background:var(--ivory);color:var(--char)}
-.opt-lt{flex-shrink:0;width:22px;height:22px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.62rem;color:var(--gold);font-family:var(--serif);font-style:italic;transition:all .2s}
+.opt-lt{flex-shrink:0;width:24px;height:24px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--gold);font-family:var(--serif);font-style:italic;transition:all .2s}
 .opt.sel .opt-lt{background:var(--gold);color:#fff}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .fade{animation:fadeUp .45s ease both}
@@ -91,7 +91,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .divider{border:none;border-top:1px solid var(--border);margin:1.8rem 0}
 .ai-box{background:var(--ivory);border-left:2px solid var(--gold);padding:1.2rem 1.2rem 1.2rem 1.4rem;border-radius:0 var(--r) var(--r) 0;margin-bottom:1.8rem}
 .ai-lbl{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;display:flex;align-items:center;gap:.35rem}
-.ai-txt{font-size:.83rem;line-height:1.9;color:var(--char2);white-space:pre-line}
+.ai-txt{font-size:.9rem;line-height:2.0;color:var(--char2);white-space:pre-line}
 .alert-box{background:#fff8f5;border:1px solid #f5c8b0;border-radius:var(--r);padding:1rem;margin-bottom:1.5rem;font-size:.82rem;color:#8a4020;line-height:1.7}
 .prod-hd{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--char);margin-bottom:.25rem}
 .prod-sub{font-size:.75rem;color:var(--muted);margin-bottom:1.3rem}
@@ -103,12 +103,12 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .prod-img{width:100%;height:100%;object-fit:contain}
 .prod-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
 .prod-info{flex:1;min-width:0}
-.prod-name{font-size:.84rem;font-weight:500;color:var(--char);margin-bottom:.25rem;line-height:1.4}
-.prod-for{display:flex;align-items:flex-start;gap:.3rem;font-size:.7rem;color:var(--gold-d);margin-bottom:.3rem;line-height:1.5;font-weight:500}
-.prod-desc{font-size:.73rem;color:var(--muted);margin-bottom:.5rem;line-height:1.5}
-.prod-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.68rem;color:var(--gold-d);background:var(--ivory);border-radius:var(--r);padding:.4rem .6rem;margin-bottom:.6rem;line-height:1.5}
+.prod-name{font-size:.92rem;font-weight:500;color:var(--char);margin-bottom:.25rem;line-height:1.4}
+.prod-for{display:flex;align-items:flex-start;gap:.3rem;font-size:.76rem;color:var(--gold-d);margin-bottom:.3rem;line-height:1.55;font-weight:500}
+.prod-desc{font-size:.8rem;color:var(--muted);margin-bottom:.5rem;line-height:1.6}
+.prod-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.73rem;color:var(--gold-d);background:var(--ivory);border-radius:var(--r);padding:.4rem .6rem;margin-bottom:.6rem;line-height:1.55}
 .prod-links{display:flex;gap:.5rem;flex-wrap:wrap}
-.prod-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;letter-spacing:.06em;padding:.3rem .7rem;border-radius:var(--r);text-decoration:none;transition:all .2s;border:1px solid var(--border);color:var(--char2)}
+.prod-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.74rem;letter-spacing:.06em;padding:.35rem .7rem;border-radius:var(--r);text-decoration:none;transition:all .2s;border:1px solid var(--border);color:var(--char2)}
 .prod-link:hover{border-color:var(--gold-l);background:var(--ivory)}
 .prod-link.amz{background:#FF9900;border-color:#FF9900;color:#111}
 .prod-link.amz:hover{background:#e68900;border-color:#e68900}
@@ -316,7 +316,7 @@ const TYPES={
       {name:"h&s スカルプ シャンプー",forWhom:"夕方になると頭皮の匂いやベタつきが気になる方",desc:"ピロクトンオラミン配合でマラセチア菌を抑制。脂性頭皮専用、洗浄力強め。",note:"香りや容量など複数あります。リンク先でお選びください。",top:true,otc:true,amz:"B0757NHNRY",rakUrl:rak1("360f53076a02e226e890e2ba28dd5d4f"),img_url:"https://m.media-amazon.com/images/P/B0757NHNRY.09.LZZZZZZZ.jpg"},
       {name:"デオコ 薬用スカルプケア シャンプー",forWhom:"頭皮の臭いが気になりはじめた方",desc:"頭皮の臭いと脂を同時にケア。",note:"",top:false,otc:true,amz:"B093B76QXY",rakUrl:rak1("ec66d0987e9db2681148d12f1972c99a"),img_url:"https://r.r10s.jp/g/gran_img/ko/PFB/I30/K9D/1P1/6f0cdc39f7a88256a0c654e72ad3cb81.jpg"},
       {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性だけど髪のダメージも気になる方",desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",note:"",top:false,otc:true,amz:"B0DJ1CY24Q",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFF/5IK/HXZ/9MT/566fa3d9688c45329c1072dbedb6b0d7.jpg"},
-      {name:"サンコール ミントベル マリンブルーシャンプー",forWhom:"汗・皮脂・蒸れによる頭皮のニオイやベタつきが気になる方",desc:"天然メントール配合のサロン専売品。タウリン・アミノ酸・ベタイン系の3種洗浄で皮脂をやさしくオフ。センブリエキス・海藻エキスで頭皮環境も整える。",note:"250ml・550ml・700mlがあります。リンク先でお選びください。",top:false,amz:"B0CDV1T6B1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/538286cc.4950ec75.538286cd.3c60699e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgramsky%2Fgram0f268nfq5%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B0CDV1T6B1.09.LZZZZZZZ.jpg"}]},
+      {name:"サンコール ミントベル マリンブルーシャンプー",forWhom:"ひんやり爽快な洗い上がりで頭皮をリフレッシュしたい方",desc:"サンコールの定番ひんやり系シャンプー。天然メントールがスーッと効く爽快な使用感が特徴。タウリン・アミノ酸・ベタイン系3種洗浄で汗・皮脂をやさしくリセット。",note:"250ml・550ml・700mlがあります。リンク先でお選びください。",top:false,amz:"B0CDV1T6B1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/538286cc.4950ec75.538286cd.3c60699e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgramsky%2Fgram0f268nfq5%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B0CDV1T6B1.09.LZZZZZZZ.jpg"}]},
   oil_reset_long:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ミディアム〜ロング",
     advice:["ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。","トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。","洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
