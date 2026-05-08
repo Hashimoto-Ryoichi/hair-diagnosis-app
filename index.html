@@ -274,6 +274,7 @@ const MATCH_TAGS=[
   {key:"ゴールドウェル",     tags:{q1:["oily"],q7:["color","bleach"],q11:["repair"],q8:["split","dry","frizz"],q10:["moist"]}},
   {key:"アデノバイタル",     tags:{q11:["aging"],q5:["clear","strong"],q10:["volume"],q1:["dry","normal","mix"]}},
   {key:"イオ クレンジング",  tags:{q1:["dry","mix"],q8:["dry"],q7:["none","color"]}},
+  {key:"ミントベル",          tags:{q1:["oily"],q11:["oily"]}},
 ];
 
 function scoreProduct(product,answers){
@@ -314,7 +315,8 @@ const TYPES={
     products:[
       {name:"h&s スカルプ シャンプー",forWhom:"夕方になると頭皮の匂いやベタつきが気になる方",desc:"ピロクトンオラミン配合でマラセチア菌を抑制。脂性頭皮専用、洗浄力強め。",note:"香りや容量など複数あります。リンク先でお選びください。",top:true,otc:true,amz:"B0757NHNRY",rakUrl:rak1("360f53076a02e226e890e2ba28dd5d4f"),img_url:"https://m.media-amazon.com/images/P/B0757NHNRY.09.LZZZZZZZ.jpg"},
       {name:"デオコ 薬用スカルプケア シャンプー",forWhom:"頭皮の臭いが気になりはじめた方",desc:"頭皮の臭いと脂を同時にケア。",note:"",top:false,otc:true,amz:"B093B76QXY",rakUrl:rak1("ec66d0987e9db2681148d12f1972c99a"),img_url:"https://r.r10s.jp/g/gran_img/ko/PFB/I30/K9D/1P1/6f0cdc39f7a88256a0c654e72ad3cb81.jpg"},
-      {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性だけど髪のダメージも気になる方",desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",note:"",top:false,otc:true,amz:"B0DJ1CY24Q",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFF/5IK/HXZ/9MT/566fa3d9688c45329c1072dbedb6b0d7.jpg"}]},
+      {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性だけど髪のダメージも気になる方",desc:"脂性でもダメージが気になる方向け。アミノ酸系でマイルドに。",note:"",top:false,otc:true,amz:"B0DJ1CY24Q",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFF/5IK/HXZ/9MT/566fa3d9688c45329c1072dbedb6b0d7.jpg"},
+      {name:"サンコール ミントベル マリンブルーシャンプー",forWhom:"汗・皮脂・蒸れによる頭皮のニオイやベタつきが気になる方",desc:"天然メントール配合のサロン専売品。タウリン・アミノ酸・ベタイン系の3種洗浄で皮脂をやさしくオフ。センブリエキス・海藻エキスで頭皮環境も整える。",note:"250ml・550ml・700mlがあります。リンク先でお選びください。",top:false,amz:"B0CDV1T6B1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/538286cc.4950ec75.538286cd.3c60699e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgramsky%2Fgram0f268nfq5%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B0CDV1T6B1.09.LZZZZZZZ.jpg"}]},
   oil_reset_long:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ミディアム〜ロング",
     advice:["ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。","トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。","洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
@@ -609,7 +611,7 @@ function renderProdCard(p,key){
 const SURFACTANT_DETAIL=[
   {key:"betaine",cat:"ベタイン系",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
     types:["repair_mode","smooth_wave","skin_alert","vital_aging","bare_skin","aqua_sensitive"],
-    products:["ストレイン","SN repair","セラムイン","NOV DS","セグレタ","ボタニスト","イオニコ","プロリー","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル","イオ クレンジング"],
+    products:["ストレイン","SN repair","セラムイン","NOV DS","セグレタ","ボタニスト","イオニコ","プロリー","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル","イオ クレンジング","ミントベル"],
     groups:[
       {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
       {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
@@ -617,7 +619,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"amino",cat:"アミノ酸系",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
-    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","NOV DS","ボタニスト","プロリー","MEMEME","ゴールドウェル","イオ クレンジング"],
+    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","NOV DS","ボタニスト","プロリー","MEMEME","ゴールドウェル","イオ クレンジング","ミントベル"],
     groups:[
       {sub:"グルタミン酸系",items:["ココイルグルタミン酸Na","ココイルグルタミン酸TEA","ココイルグルタミン酸K","ラウロイルグルタミン酸Na","ラウロイルグルタミン酸TEA"]},
       {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
@@ -625,7 +627,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"taurine",cat:"タウリン系",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging"],
-    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","NOV DS","MEMEME","コスメデコルテ AQ","アデノバイタル","イオ クレンジング"],
+    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","NOV DS","MEMEME","コスメデコルテ AQ","アデノバイタル","イオ クレンジング","ミントベル"],
     groups:[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
     ]},
