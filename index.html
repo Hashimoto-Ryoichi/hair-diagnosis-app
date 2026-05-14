@@ -566,25 +566,64 @@ function buildResultSummary(typeKey,answers){
 }
 
 // セカンドセクション：診断結果に対する補助的なおすすめ商品
-function findSecondarySection(typeKey,answers){
+function findSecondarySections(typeKey,answers){
   const q1=answers.q1;
+  const q6=answers.q6;
+  const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
   const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
   const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
+  const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
+  const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
   const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
+  const sections=[];
+
+  if(typeKey==="skin_alert"){
+    const hasDamage=q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")||q11arr.includes("repair")||q7arr.some(v=>v==="bleach"||v==="straight"||v==="perm");
+    const hasWave=q6==="some"||q6==="strong"||q11arr.includes("wave")||q10arr.includes("vdown");
+    const hasAging=q5arr.some(v=>v==="clear"||v==="strong")||q11arr.includes("aging")||q11arr.includes("volume")||q10arr.includes("volume");
+    const hasDry=q11arr.includes("dry")||(q1==="dry"&&!q11arr.includes("repair"));
+    const hasColorLight=q7arr.includes("color")&&!q8arr.some(v=>v==="split"||v==="frizz"||v==="spread");
+
+    if(hasDamage){
+      const ps=[findP("repair_mode","Straine（ストレイン）ストレートシャンプー BASIC"),findP("repair_mode","セラムイン")].filter(Boolean);
+      if(ps.length) sections.push({label:"毛先のダメージも気になる方へ",desc:"まずは薬用シャンプーで頭皮を整えるのが優先。頭皮の状態が落ち着いてきたら、毛先の補修ケアも選択肢に。",products:ps});
+    }
+    if(hasWave){
+      const ps=[findP("smooth_wave","Straine（ストレイン）ストレートシャンプー SOFT"),findP("smooth_wave","コスメデコルテ AQ")].filter(Boolean);
+      if(ps.length) sections.push({label:"くせ・うねりも気になる方へ",desc:"頭皮ケア優先のうえで、くせ毛ケアも取り入れたい方へ。",products:ps});
+    }
+    if(hasAging){
+      const ps=[findP("vital_aging","セグレタ シャンプー"),findP("vital_aging","PRORY")].filter(Boolean);
+      if(ps.length) sections.push({label:"ハリ・コシ・ボリュームが気になる方へ",desc:"頭皮環境が整ってきたら、エイジングケアシャンプーも候補に。",products:ps});
+    }
+    if(hasDry){
+      const ps=[findP("aqua_sensitive","ジュレーム"),findP("aqua_sensitive","BOTANIST ボタニカルシャンプー モイスト")].filter(Boolean);
+      if(ps.length) sections.push({label:"乾燥・パサつきも気になる方へ",desc:"地肌の症状が落ち着いてきたら、保湿重視のシャンプーも選択肢に。",products:ps});
+    }
+    if(hasColorLight){
+      const ps=[findP("bare_skin","ジアンサー"),findP("bare_skin","MEMEME")].filter(Boolean);
+      if(ps.length) sections.push({label:"カラー毛のケアも考えたい方へ",desc:"頭皮トラブルが落ち着いたら、カラー毛のダメージケアも併用したい方へ。",products:ps});
+    }
+    return sections;
+  }
 
   if(typeKey==="repair_mode"&&q1==="oily"){
-    return{label:"地肌のベタつきが気になる日に",desc:"週1〜2回の地肌リセット用に取り入れたい方へ。",products:[findP("oil_reset_short","WELLP"),findP("oil_reset_short","デオコ")].filter(Boolean)};
+    sections.push({label:"地肌のベタつきが気になる日に",desc:"週1〜2回の地肌リセット用に取り入れたい方へ。",products:[findP("oil_reset_short","WELLP"),findP("oil_reset_short","デオコ")].filter(Boolean)});
+    return sections;
   }
   if(typeKey==="bare_skin"&&q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")){
-    return{label:"毛先のダメージが深刻な場合は",desc:"より強い補修ケアに切り替えたい方へ。",products:[findP("repair_mode","Straine"),findP("repair_mode","SN repair")].filter(Boolean)};
+    sections.push({label:"毛先のダメージが深刻な場合は",desc:"より強い補修ケアに切り替えたい方へ。",products:[findP("repair_mode","Straine"),findP("repair_mode","SN repair")].filter(Boolean)});
+    return sections;
   }
   if(typeKey==="smooth_wave"&&q8arr.some(v=>v==="split"||v==="frizz")){
-    return{label:"毛先ダメージも気になる場合は",desc:"うねりケアに加えて、補修も強化したい方へ。",products:[findP("repair_mode","Straine")].filter(Boolean)};
+    sections.push({label:"毛先ダメージも気になる場合は",desc:"うねりケアに加えて、補修も強化したい方へ。",products:[findP("repair_mode","Straine")].filter(Boolean)});
+    return sections;
   }
   if((typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&q7arr.some(v=>v==="color"||v==="bleach")&&q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")){
-    return{label:"毛先のケアもしたい場合は",desc:"頭皮ケアと並行して、髪の補修も意識したい方へ。",products:[findP("bare_skin","ジアンサー")].filter(Boolean)};
+    sections.push({label:"毛先のケアもしたい場合は",desc:"頭皮ケアと並行して、髪の補修も意識したい方へ。",products:[findP("bare_skin","ジアンサー")].filter(Boolean)});
+    return sections;
   }
-  return null;
+  return sections;
 }
 
 const {createElement:h,useRef,useEffect,useState}=React;
@@ -998,14 +1037,14 @@ function App(){
           return scoreProduct(b,answers)-scoreProduct(a,answers);
         }).map((p,i)=>renderProdCard(p,"main_"+i)),
         (()=>{
-          const sec=findSecondarySection(typeKey,answers);
-          if(!sec||sec.products.length===0) return null;
-          return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
+          const secs=findSecondarySections(typeKey,answers).filter(s=>s&&s.products&&s.products.length>0);
+          if(secs.length===0) return null;
+          return secs.map((sec,si)=>h("div",{key:"secsec_"+si,style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
             h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"Optional"),
             h("p",{style:{fontFamily:"var(--serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--char)",marginBottom:".3rem",lineHeight:"1.4"}},sec.label),
             h("p",{style:{fontSize:".73rem",color:"var(--muted)",marginBottom:"1rem",lineHeight:"1.6"}},sec.desc),
-            sec.products.map((p,i)=>renderProdCard(p,"sec_"+i))
-          );
+            sec.products.map((p,i)=>renderProdCard(p,"sec_"+si+"_"+i))
+          ));
         })(),
         (()=>{
           const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
