@@ -257,7 +257,7 @@ const MATCH_TAGS=[
   {key:"ストレートシャンプー BASIC", tags:{q10:["smooth"],q11:["repair"],q7:["bleach","straight"]}},
   {key:"セラムイン",        tags:{q11:["repair"],q8:["dry","split"]}},
   {key:"SN repair",       tags:{q11:["repair"],q7:["bleach","straight","perm"]}},
-  {key:"ストレートシャンプー SOFT", tags:{q10:["smooth","gloss"],q11:["wave"],q6:["some","strong"]}},
+  {key:"ストレートシャンプー SOFT", tags:{q10:["smooth","gloss"],q11:["wave"],q6:["some","strong"],q5:["birth"]}},
   {key:"BOTANIST ボタニカルシャンプー モイスト", tags:{q10:["moist"]}},
   {key:"BOTANIST ボタニカルシャンプー スムース", tags:{q10:["smooth"]}},
   {key:"ジュレーム",        tags:{q10:["moist"],q5:["stable","early"]}},
@@ -270,7 +270,7 @@ const MATCH_TAGS=[
   {key:"IONICO",           tags:{q11:["repair"],q10:["moist"],q7:["color","bleach"],q8:["dry","split"]}},
   {key:"PRORY",            tags:{q11:["aging"],q5:["clear","strong"],q10:["moist"],q8:["dry"]}},
   {key:"MEMEME",           tags:{q7:["color","none"],q8:["dry","gloss"],q10:["moist","gloss"]}},
-  {key:"コスメデコルテ",     tags:{q6:["some","strong"],q10:["smooth","moist"],q8:["frizz","spread"]}},
+  {key:"コスメデコルテ",     tags:{q6:["some","strong"],q10:["smooth","moist"],q8:["frizz","spread"],q5:["birth"]}},
   {key:"UNOVE",            tags:{q11:["repair"],q8:["dry","frizz","spread"],q10:["moist","smooth"]}},
   {key:"ゴールドウェル",     tags:{q1:["oily"],q7:["color","bleach"],q11:["repair"],q8:["split","dry","frizz"],q10:["moist"]}},
   {key:"アデノバイタル",     tags:{q11:["aging"],q5:["clear","strong"],q10:["volume"],q1:["dry","normal","mix"]}},
@@ -579,7 +579,7 @@ function findSecondarySections(typeKey,answers){
 
   if(typeKey==="skin_alert"){
     const hasDamage=q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")||q11arr.includes("repair")||q7arr.some(v=>v==="bleach"||v==="straight"||v==="perm");
-    const hasWave=q6==="some"||q6==="strong"||q11arr.includes("wave")||q10arr.includes("vdown");
+    const hasWave=q6==="some"||q6==="strong"||q11arr.includes("wave")||q10arr.includes("vdown")||q5arr.includes("birth");
     const hasAging=q5arr.some(v=>v==="clear"||v==="strong")||q11arr.includes("aging")||q11arr.includes("volume")||q10arr.includes("volume");
     const hasDry=q11arr.includes("dry")||(q1==="dry"&&!q11arr.includes("repair"));
     const hasColorLight=q7arr.includes("color")&&!q8arr.some(v=>v==="split"||v==="frizz"||v==="spread");
