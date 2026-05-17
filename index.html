@@ -6,6 +6,11 @@
 <title>Hair Identity｜あなたに合うシャンプー診断</title>
 <meta name="description" content="現役美容師が現場経験から組み立てた、あなたの髪質に合うシャンプーが見つかる診断アプリ。11問で無料診断。">
 
+<!-- Favicon -->
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#B8965A">
+
 <!-- Open Graph (Facebook, LINE, note等) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hair-diagnosis-app.vercel.app/">
@@ -188,10 +193,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ingr-star.half::before{content:"★";position:absolute;left:0;top:0;color:var(--gold);clip-path:inset(0 50% 0 0);-webkit-clip-path:inset(0 50% 0 0)}
 
 /* ── B-5 トップページプロフィール ── */
-.profile-top{display:flex;align-items:center;gap:.85rem;background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem;margin-top:max(8rem,55vh)}
+.profile-top{display:flex;align-items:center;gap:.85rem;background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem;margin-top:2.5rem}
 .profile-top-photo{flex-shrink:0;width:48px;height:48px;border-radius:50%;overflow:hidden;border:1px solid var(--border);background:var(--cream)}
 .profile-top-photo img{width:100%;height:100%;object-fit:cover;display:block}
 .profile-top-info{flex:1;min-width:0}
+.profile-top-curated{font-size:.55rem;letter-spacing:.2em;color:var(--gold);margin-bottom:.35rem;font-weight:500}
 .profile-top-name{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--char);letter-spacing:.04em}
 .profile-top-role{font-size:.6rem;letter-spacing:.12em;color:var(--gold);margin-top:.2rem;margin-bottom:.55rem}
 .profile-top-btn{display:inline-flex;align-items:center;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.4rem .85rem;font-size:.66rem;letter-spacing:.08em;transition:background .2s}
@@ -210,6 +216,19 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .summary-box{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.2rem;margin-bottom:1.6rem}
 .summary-lbl{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;display:flex;align-items:center;gap:.35rem}
 .summary-txt{font-size:.86rem;line-height:1.95;color:var(--char2)}
+
+/* ── Share buttons ── */
+.share-row{display:flex;justify-content:center;gap:.6rem;margin-top:1rem}
+.share-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;flex:1;max-width:150px;border:none;border-radius:var(--r);padding:.6rem .9rem;font-family:var(--sans);font-size:.72rem;font-weight:500;letter-spacing:.05em;cursor:pointer;transition:opacity .2s,transform .2s}
+.share-btn:hover{opacity:.85;transform:translateY(-1px)}
+.share-btn-x{background:#000;color:#fff}
+.share-btn-line{background:#06C755;color:#fff}
+.share-btn svg{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+
+/* ── Intro message (想いセクション) ── */
+.intro-msg{margin-top:max(6rem,32vh);padding-top:2rem;border-top:1px solid var(--border)}
+.intro-msg-quote{font-family:var(--serif);font-size:1.2rem;font-weight:400;font-style:italic;color:var(--char);line-height:1.65;margin-bottom:1.4rem;letter-spacing:.02em}
+.intro-msg-body{font-size:.82rem;line-height:1.95;color:var(--char2);margin-bottom:.85rem}
 </style>
 </head>
 <body>
@@ -223,9 +242,9 @@ const QUESTIONS=[
   {id:"q1",cat:"頭皮",text:"夕方〜夜にかけて、頭皮はどんな状態になりやすいですか？",opts:[{k:"dry",l:"A",t:"カサつく・つっぱる感じがある"},{k:"normal",l:"B",t:"特に気にならない"},{k:"oily",l:"C",t:"ベタつく・脂っぽくなる"},{k:"mix",l:"D",t:"場所によって違う（Tゾーンだけベタつく等）"},{k:"red",l:"E",t:"かゆみ・赤み・湿疹が出ることがある"}]},
   {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
   {id:"q3",cat:"毛質",text:"髪の太さはどのくらいですか？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
-  {id:"q4",cat:"毛質",text:"髪の硬さ・毛量はどのくらいですか？（複数回答可）",opts:[{k:"soft",l:"A",t:"柔らかい"},{k:"normal",l:"B",t:"普通"},{k:"hard",l:"C",t:"硬い"},{k:"less",l:"D",t:"毛量が少ない"},{k:"vol_normal",l:"E",t:"毛量は普通"},{k:"more",l:"F",t:"毛量が多い"}]},
+  {id:"q4",cat:"毛量",text:"髪の毛量はどのくらいですか？",opts:[{k:"less",l:"A",t:"少ない"},{k:"vol_normal",l:"B",t:"普通"},{k:"more",l:"C",t:"多い"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
-  {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー・ハイライト"},{k:"perm",l:"C",t:"パーマ"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"straight",l:"E",t:"縮毛矯正・デジタルパーマ・ストレートパーマ"}]},
+  {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー・ハイライト"},{k:"perm",l:"C",t:"パーマ・デジタルパーマ"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"straight",l:"E",t:"縮毛矯正・ストレートパーマ"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？（複数回答可）",multi:true,opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"birth",l:"B",t:"出産を機に髪が変化したと感じる"},{k:"young",l:"C",t:"20代から少しずつ"},{k:"early",l:"D",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"E",t:"50代から実感"},{k:"strong",l:"F",t:"60代以降で強く実感"}]},
   {id:"q9",cat:"熱器具",text:"使っている熱器具はありますか？（複数回答可）",multi:true,opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"none",l:"F",t:"使わない"}]},
@@ -257,7 +276,7 @@ const MATCH_TAGS=[
   {key:"ストレートシャンプー BASIC", tags:{q10:["smooth"],q11:["repair"],q7:["bleach","straight"]}},
   {key:"セラムイン",        tags:{q11:["repair"],q8:["dry","split"]}},
   {key:"SN repair",       tags:{q11:["repair"],q7:["bleach","straight","perm"]}},
-  {key:"ストレートシャンプー SOFT", tags:{q10:["smooth","gloss"],q11:["wave"],q6:["some","strong"],q5:["birth"]}},
+  {key:"ストレートシャンプー SOFT", tags:{q10:["smooth","gloss","vdown"],q11:["wave"],q6:["some","strong"]}},
   {key:"BOTANIST ボタニカルシャンプー モイスト", tags:{q10:["moist"]}},
   {key:"BOTANIST ボタニカルシャンプー スムース", tags:{q10:["smooth"]}},
   {key:"ジュレーム",        tags:{q10:["moist"],q5:["stable","early"]}},
@@ -265,15 +284,15 @@ const MATCH_TAGS=[
   {key:"ジアンサー",        tags:{q7:["color"],q10:["moist","gloss","smooth"]}},
   {key:"エッセンシャル プレミアム", tags:{q7:["color"],q10:["smooth"]}},
   {key:"マッサージ美容クリーム", tags:{q1:["dry","mix"],q11:["aging","dry"],q5:["clear","strong"],q10:["moist"]}},
-  {key:"セグレタ",          tags:{q11:["aging"],q10:["volume"],q5:["clear","strong"]}},
+  {key:"セグレタ",          tags:{q11:["aging","gray"],q10:["volume"],q5:["clear","strong"]}},
   {key:"バウンシーボリューム", tags:{q10:["volume"]}},
   {key:"IONICO",           tags:{q11:["repair"],q10:["moist"],q7:["color","bleach"],q8:["dry","split"]}},
-  {key:"PRORY",            tags:{q11:["aging"],q5:["clear","strong"],q10:["moist"],q8:["dry"]}},
+  {key:"PRORY",            tags:{q11:["aging","gray"],q5:["clear","strong"],q10:["moist"],q8:["dry"]}},
   {key:"MEMEME",           tags:{q7:["color","none"],q8:["dry","gloss"],q10:["moist","gloss"]}},
-  {key:"コスメデコルテ",     tags:{q6:["some","strong"],q10:["smooth","moist"],q8:["frizz","spread"],q5:["birth"]}},
-  {key:"UNOVE",            tags:{q11:["repair"],q8:["dry","frizz","spread"],q10:["moist","smooth"]}},
+  {key:"コスメデコルテ",     tags:{q6:["some","strong"],q10:["smooth","moist","vdown"],q8:["frizz","spread"]}},
+  {key:"UNOVE",            tags:{q11:["repair"],q8:["dry","frizz","spread"],q10:["moist","smooth","vdown"]}},
   {key:"ゴールドウェル",     tags:{q1:["oily"],q7:["color","bleach"],q11:["repair"],q8:["split","dry","frizz"],q10:["moist"]}},
-  {key:"アデノバイタル",     tags:{q11:["aging"],q5:["clear","strong"],q10:["volume"],q1:["dry","normal","mix"]}},
+  {key:"アデノバイタル",     tags:{q11:["aging","gray"],q5:["clear","strong"],q10:["volume"],q1:["dry","normal","mix"]}},
   {key:"イオ クレンジング",  tags:{q1:["dry","mix"],q8:["dry"],q7:["none","color"]}},
   {key:"ミントベル",          tags:{q1:["oily"],q11:["oily"]}},
 ];
@@ -284,6 +303,10 @@ function isProductDisplayable(p,answers){
   if(p.name.includes("イオ クレンジング")&&answers.q1!=="dry") return false;
   if(p.summerOnly&&!isSummerSeason()) return false;
   if(p.q1Allow&&!p.q1Allow.includes(answers.q1)) return false;
+  if(p.curlAvoid){
+    const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
+    if(q7arr.includes("perm")&&!q7arr.includes("straight")) return false;
+  }
   return true;
 }
 
@@ -304,7 +327,9 @@ function scoreProduct(product,answers){
       if(q10arr.length>0&&entry.tags.q10.includes(q10arr[0])) s+=2;
       else if(q10arr.some(t=>entry.tags.q10.includes(t))) s++;
     } else {
-      if(entry.tags[q].includes(answers[q])) s++;
+      const val=answers[q];
+      const vals=Array.isArray(val)?val:(val?[val]:[]);
+      if(vals.some(v=>entry.tags[q].includes(v))) s++;
     }
   }
   return s;
@@ -317,7 +342,7 @@ const TYPES={
     products:[
       {name:"ミノン 全身シャンプー しっとりタイプ",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"髪に使うとキシキシしやすい場合があります。コンディショナー必須。ミディアム以上には不向きです。",top:true,otc:true,amz:"B00N3KJH58",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:"https://m.media-amazon.com/images/P/B00N3KJH58.09.LZZZZZZZ.jpg"},
       {name:"NOV ヘアシャンプー DS",forWhom:"皮膚科推奨レベルの低刺激処方を求める方",desc:"敏感肌ブランドNOVの化粧品シャンプー。アミノ酸系・ベタイン系・タウリン系の3つを組み合わせた低刺激処方。無香料・無着色。",note:"250ml・500mlの2サイズがあります。リンク先でお選びください。",top:false,otc:false,amz:"B00BTDV3FS",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9c12.6ce6773e.532e9c13.20592aa2/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fwebdrug%2F4934651574022%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B00BTDV3FS.09.LZZZZZZZ.jpg"},
-      {name:"コラージュフルフル ネクスト シャンプー",forWhom:"ヘルメット・帽子で頭皮が蒸れやすい方、かゆみや繰り返すフケが気になる方",desc:"持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩配合で、フケ・かゆみの原因菌の繁殖を防ぐ。",note:"本体・つめかえ、うるおいなめらか／すっきりさらさらの2タイプがあります。リンク先でお選びください。",top:false,otc:true,amz:"B002TEZ8U2",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532eb60f.8dafe5f6.532eb617.4f160360/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fenetroom%2F7337284%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B002TEZ8U2.09.LZZZZZZZ.jpg"},
+      {name:"コラージュフルフル ネクスト シャンプー",forWhom:"ヘルメット・帽子で頭皮が蒸れやすい方、かゆみや繰り返すフケが気になる方",desc:"持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩配合で、フケ・かゆみの原因菌の繁殖を防ぐ。",note:"本体・つめかえ、うるおいなめらか／すっきりさらさらの2タイプがあります。リンク先でお選びください。",secondaryOnly:true,top:false,otc:true,amz:"B002TEZ8U2",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532eb60f.8dafe5f6.532eb617.4f160360/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fenetroom%2F7337284%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B002TEZ8U2.09.LZZZZZZZ.jpg"},
       {name:"キュレル シャンプー",forWhom:"フケ・かゆみが気になる、乾燥性敏感肌の方",desc:"花王の医薬部外品シャンプー。グリチルリチン酸ジカリウム配合でフケ・かゆみを防ぐ。セラミドを守りながら洗う処方で、赤ちゃんから大人まで使える。弱酸性・無香料・無着色。",note:"ポンプ・つめかえ用・泡シャンプーなど複数あります。リンク先でお選びください。洗浄成分はラウレス硫酸Naがベースで、洗浄力はしっかりめ。乾燥性のフケが強い方は、よりマイルドなミノンを優先してください。",top:false,otc:true,amz:"B0777B5D9M",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9808.56d1a4c2.532e980a.fb0409e3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fyayoi-cosme%2Fkao276070%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0777B5D9M.09.LZZZZZZZ.jpg"}
     ]},
   oil_reset_short:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ショート",
@@ -336,23 +361,22 @@ const TYPES={
       {name:"ダヴ ボタニカルセレクション つややかストレート シャンプー",forWhom:"市販のボタニカル系で、コスパよく毎日使いたい方",desc:"市販の定番ボタニカルシャンプー。しっかりめの洗浄力で、コスパよく毎日使える。",note:"",top:false,amz:"B07969HHCQ",rakUrl:rak1("a606c025612d56c2d7f06006f551d2aa"),img_url:"https://m.media-amazon.com/images/P/B07969HHCQ.09.LZZZZZZZ.jpg"},
       {name:"BOTANIST ボタニカルシャンプー スカルプクレンズ",forWhom:"頭皮のベタつき・ニオイをすっきりリセットしたい方",desc:"全成分マイルド系のサルフェートフリー処方。クレイの吸着力＆ミントの爽快感で、頭皮のベタつきを優しくリセット。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CGJ66KVR",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
       {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性ロングで、頭皮ケアを優しめにしたい方",desc:"マイルドなベタイン・タウリン系を主体に、しっかり洗浄成分も配合した医薬部外品スカルプケア。脂性頭皮のフケ・かゆみ予防に。",note:"",top:false,otc:true,amz:"B0DJ1CY24Q",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFF/5IK/HXZ/9MT/566fa3d9688c45329c1072dbedb6b0d7.jpg"},
-      {name:"サンコール ミントベル マリンブルーシャンプー",forWhom:"頭皮のベタつきが気になるけど、洗いすぎず優しく整えたい方",desc:"サンコールの定番ひんやり系シャンプー。天然メントールがスーッと効く爽快な使用感が特徴。タウリン・アミノ酸・ベタイン系3種洗浄で汗・皮脂をやさしくリセット。",note:"250ml・550ml・700mlがあります。リンク先でお選びください。",season:"夏限定の頭皮クール体験。汗ばむ季節の頭皮ケアに、天然メントールでひんやり爽快な洗い上がり。",summerOnly:true,gentleBottom:true,top:false,amz:"B0CDV1T6B1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/538286cc.4950ec75.538286cd.3c60699e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgramsky%2Fgram0f268nfq5%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B0CDV1T6B1.09.LZZZZZZZ.jpg"},
-      {name:"Predia（プレディア）ファンゴ シャンプー",forWhom:"頭皮のベタつき・毛穴汚れが気になり、ホテルスパのような爽快感を求める方",desc:"KOSEのスパ系プレステージブランド。海洋性泥（フルボ酸）×天然ミネラル泥が皮脂・毛穴汚れを吸着しすっきりリセット。",note:"600ml本体・詰め替え・ヘアマスクとのセットなど複数あります。シリーズに「タラソ（ダメージ補修）」「アルゲ（カラーケア）」もあります。リンク先でお選びください。",top:false,amz:"B083Z7Y92F",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/53b26980.0e070bf9.53b26981.06ba80d2/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Filmondomall%2Fgr-e9txfna0qz%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://www.predia.net/resources/images/predia/items/haircare/fango-shampoo.jpg"}]},
+      {name:"サンコール ミントベル マリンブルーシャンプー",forWhom:"頭皮のベタつきが気になるけど、洗いすぎず優しく整えたい方",desc:"サンコールの定番ひんやり系シャンプー。天然メントールがスーッと効く爽快な使用感が特徴。タウリン・アミノ酸・ベタイン系3種洗浄で汗・皮脂をやさしくリセット。",note:"250ml・550ml・700mlがあります。リンク先でお選びください。",season:"夏限定の頭皮クール体験。汗ばむ季節の頭皮ケアに、天然メントールでひんやり爽快な洗い上がり。",summerOnly:true,gentleBottom:true,top:false,amz:"B0CDV1T6B1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/538286cc.4950ec75.538286cd.3c60699e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgramsky%2Fgram0f268nfq5%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B0CDV1T6B1.09.LZZZZZZZ.jpg"}]},
   repair_mode:{badge:"Hair Type — RM",title:"Repair Mode",sub:"ハイダメージ（パーマ・ブリーチ・縮毛矯正）",
     advice:["パーマ・ブリーチ・縮毛矯正などの薬剤処理は、髪のタンパク質（ケラチン）を変性させます。失ったタンパク質を補うことが修復の第一歩です。","トステア（アミノエチルチオコハク酸ジアンモニウム）配合のシャンプーは、髪のシスチン結合に着目した縮毛補修発想の成分。ブリーチや縮毛矯正で傷んだ髪に特におすすめです。","シャンプー後はすぐにトリートメントをつけ、5分程度時間をおいてから流しましょう。タオルドライは擦らず、押さえるように。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のダメージレベルに合ったケアを確認してみてください。"],
     products:[
-      {name:"Straine（ストレイン）ストレートシャンプー BASIC",forWhom:"縮毛矯正・ブリーチでダメージが蓄積し、広がりが気になる方",desc:"広がり・ダメージが気になる方向け。きしみを抑えしなやかで扱いやすい質感へ。",note:"シャンプー＋トリートメント＋コームのセット商品です。",top:true,amz:"B0FV2PQ11B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://shop.r10s.jp/straine-onlineshop/cabinet/thumbnails/0501/ss-r037_thu_2605.jpg"},
-      {name:"セラムイン シャンプー＆トリートメント",forWhom:"内部からしっかり補修したい、パサつきが深刻な方",desc:"PPT成分でダメージを内部から補修。",note:"シャンプー単体ではなくセット販売です。リンク先でご確認ください。",top:false,amz:"B0F4QGL5FD",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/dr365/cabinet/item/ph0004v01_1.jpg"},
-      {name:"SN repair シャンプー",forWhom:"本格的なサロン品質の補修を、自宅で試したい方",desc:"楽天限定。トステア×ヘマチン配合のプレミアムライン。",note:"楽天のみの取り扱いです。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/snrepair/cabinet/12764464/600000_r3.jpg?_ex=400x400"},
+      {name:"Straine（ストレイン）ストレートシャンプー BASIC",forWhom:"縮毛矯正・ブリーチでダメージが蓄積し、広がりが気になる方",desc:"広がり・ダメージが気になる方向け。きしみを抑えしなやかで扱いやすい質感へ。",note:"シャンプー＋トリートメント＋コームのセット商品です。",curlAvoid:true,top:true,amz:"B0FV2PQ11B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://shop.r10s.jp/straine-onlineshop/cabinet/thumbnails/0501/ss-r037_thu_2605.jpg"},
+      {name:"セラムイン シャンプー＆トリートメント",forWhom:"内部からしっかり補修したい、パサつきが深刻な方",desc:"トステア＋PPT成分でダメージを内部から補修。",note:"シャンプー単体ではなくセット販売です。リンク先でご確認ください。",tostera:true,top:false,amz:"B0F4QGL5FD",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/dr365/cabinet/item/ph0004v01_1.jpg"},
+      {name:"SN repair シャンプー",forWhom:"本格的なサロン品質の補修を、自宅で試したい方",desc:"楽天限定。トステア×ヘマチン配合のプレミアムライン。",note:"楽天のみの取り扱いです。",tostera:true,top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/snrepair/cabinet/12764464/600000_r3.jpg?_ex=400x400"},
       {name:"ゴールドウェル デュアルセンス リッチリペア シャンプー 250ml",forWhom:"カラー・ブリーチで深刻にダメージした髪を、サロン品質で内部補修したい方",desc:"ドイツ発のサロンブランド。18-MEA×マイクロプロテックコンプレックスがキューティクル表面の脂質をケア、イントラリピッドが髪内部を集中補修。傷んだカラーヘアにツヤとしっとり感。",note:"250mlサイズ。シリーズに1000ml・トリートメントもあります。リンク先でお選びください。",top:false,amz:"B01MS8928F",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/53763aa5.ec479cd9.53763aa6.a359c255/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpechka%2F30201002022%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B01MS8928F.09.LZZZZZZZ.jpg"},
       {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力はやや強め。",note:"500ml本体・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CB1SG31Z",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc132.0199f1e7.536fc133.e4e6f2ef/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fflytoyou%2F1097936315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09.LZZZZZZZ.jpg"}]},
   smooth_wave:{badge:"Hair Type — SW",title:"Smooth Wave",sub:"くせ毛 × 軽〜中ダメージ",
     advice:["くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。","シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。","ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。"],
     products:[
-      {name:"Straine（ストレイン）ストレートシャンプー SOFT",forWhom:"くせ・うねりが気になるけど、重くなりすぎたくない方",desc:"くせ毛・うねりが気になる方向け。ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",top:true,amz:"B0FQ55PDG6",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://tshop.r10s.jp/straine-onlineshop/cabinet/11885291/ss-r001_ldk.jpg"},
+      {name:"Straine（ストレイン）ストレートシャンプー SOFT",forWhom:"くせ・うねりが気になるけど、重くなりすぎたくない方",desc:"くせ毛・うねりが気になる方向け。ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",curlAvoid:true,top:true,amz:"B0FQ55PDG6",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://tshop.r10s.jp/straine-onlineshop/cabinet/11885291/ss-r001_ldk.jpg"},
       {name:"コスメデコルテ AQ リペア スムース シャンプー（KOSE）",forWhom:"うねり・広がりが気になり、サロン品質のホームケアを求める方",desc:"KOSEのプレステージブランド。オレフィン系×ベタイン系×タウリン系のバランス洗浄。白樺水・ホワイトムクナエキス配合で頭皮と髪をなめらかに整える。",note:"250ml・600mlがあります。リンク先でお選びください。",top:true,amz:"B095HG3WV2",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc036.f982ba48.536fc037.7a0cdd5d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgrandberry%2Fc37571-c37575-set%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://shop.r10s.jp/grandberry/cabinet/06443450/08725025/imgrc0122784839.jpg"},
       {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力はやや強め。",note:"500ml本体・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CB1SG31Z",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc132.0199f1e7.536fc133.e4e6f2ef/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fflytoyou%2F1097936315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09.LZZZZZZZ.jpg"},
-      {name:"unu（ウヌ）ウヌボレストレート シャンプー",forWhom:"うねり・くせを内側から整え、サラっとしたストレート髪を目指したい方",desc:"レブリン酸（酸熱ケア）×トステア配合。タウリン系＋PPT系の低刺激処方で、熱を味方にうねりを抑える新発想ヘアケア。",note:"トリートメント・ヘアミルクとのセット販売や詰め替えなど複数あります。リンク先でお選びください。",top:false,amz:"B0FGPMSWF9",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/53a382d9.8ecf53c7.53a382da.0f047298/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmagicnumber%2Funu-smptrtm-str%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/magicnumber/cabinet/unu/unu-smptrtm-rf-str/mv_02.jpg"}]},
+      {name:"unu（ウヌ）ウヌボレストレート シャンプー",forWhom:"うねり・くせを内側から整え、サラっとしたストレート髪を目指したい方",desc:"レブリン酸（酸熱ケア）×トステア配合。タウリン系＋PPT系の低刺激処方で、熱を味方にうねりを抑える新発想ヘアケア。",note:"トリートメント・ヘアミルクとのセット販売や詰め替えなど複数あります。リンク先でお選びください。",curlAvoid:true,tostera:true,top:false,amz:"B0FGPMSWF9",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/53a382d9.8ecf53c7.53a382da.0f047298/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmagicnumber%2Funu-smptrtm-str%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/magicnumber/cabinet/unu/unu-smptrtm-rf-str/mv_02.jpg"}]},
   aqua_sensitive:{badge:"Hair Type — AS",title:"Aqua Sensitive",sub:"乾燥・バージン毛・健康な髪",
     advice:["バージン毛や健康な髪の方は、過度なケアをしすぎないことが大切。洗浄力が強すぎるシャンプーで必要な皮脂まで落としてしまうと、逆に乾燥が進みます。","ジュレームなどのアミノ酸系・ベタイン系のサルフェートフリー（硫酸系不使用）シャンプーは、髪と頭皮を優しく洗いながら適度な潤いを残してくれます。","週に1〜2回スカルプマッサージを取り入れると血行が促進され、健康な髪の成長をサポートします。洗髪時の1〜2分が効果的。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪質に合ったケアを確認してみてください。"],
     products:[
@@ -405,9 +429,11 @@ function diagnose(ans){
   const q7arr=Array.isArray(ans.q7)?ans.q7:[ans.q7||"none"];
   const eq7=Q7_PRIORITY.find(p=>q7arr.includes(p))||"none";
 
-  // Q8は複数選択配列。先頭（最初に押した=最重視）を主回答として使用
+  // Q8は複数選択配列。深刻度優先で主回答を決定（タップ順依存を排除）
+  // 優先度：チリつき/枝毛 > 広がり/パサつき > ぺたんこ > ツヤあり
+  const Q8_PRIORITY=["frizz","split","spread","dry","flat","gloss"];
   const q8arr=Array.isArray(ans.q8)?ans.q8:(ans.q8?[ans.q8]:[]);
-  const q8=q8arr[0];
+  const q8=Q8_PRIORITY.find(v=>q8arr.includes(v))||q8arr[0];
 
   // Q10は複数選択配列。先頭（最初に押した=最重視）を主回答として使用
   const q10arr=Array.isArray(ans.q10)?ans.q10:(ans.q10?[ans.q10]:[]);
@@ -417,10 +443,7 @@ function diagnose(ans){
   if(q1==="red") return "skin_alert";
   if(q1==="oily"&&(eq7==="none"||eq7==="color")) return q2==="short"?"oil_reset_short":"oil_reset_long";
 
-  // ── Step2: 60代以降 or（50代＋出産後）→ Vital Aging 確定 ──
-  if(eq5==="strong") return "vital_aging";
-
-  // ── Step3: 薬剤ダメージ ────────────────────────────────
+  // ── Step2: 薬剤ダメージ（年齢より優先。ブリーチ・縮毛矯正・パーマは緊急度高）──────
   // 全体ブリーチ・インナーカラー
   // ショート：毛先ダメージ（パサつき・チリつき・枝毛・広がり）があればRepair、なければBare Skin
   // ミディアム以上：Repair確定
@@ -431,20 +454,26 @@ function diagnose(ans){
     }
     return "repair_mode";
   }
-  // 縮毛矯正 → トステア配合 Repair Mode 確定
+  // 縮毛矯正 → トステア配合 Repair Mode（直毛として S-S 再結合させる前提）
   if(eq7==="straight") return "repair_mode";
-  // パーマ → トステアの熱反応でカール持続にも有効 → Repair Mode 確定
+  // パーマ → Repair Mode（補修＋カール維持。ストレート訴求の curlAvoid 商品は isProductDisplayable で除外）
   if(eq7==="perm") return "repair_mode";
   // カラー + 深刻ダメージサイン → Q9で分岐
   // 高機能器具（リファ・ビューロン・レプロナイザー・ナノイー）でダメージ軽減 → Bare Skin
   // 普通器具・使わない → Repair Mode（補修強め）
   if(eq7==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
-    const goodTool=q9arr.some(v=>v==="refa"||v==="bio"||v==="repro"||v==="nanoe");
+    // 高機能熱器具（refa/bio/repro/nanoe）を主に使う場合のみダメージ軽減効果を期待
+    // "other"（その他のドライヤー・アイロン）併用時は使用頻度が分散している可能性が高く保守的に repair_mode へ
+    const goodTool=q9arr.some(v=>v==="refa"||v==="bio"||v==="repro"||v==="nanoe")&&!q9arr.includes("other");
     return goodTool?"bare_skin":"repair_mode";
   }
 
+  // ── Step3: 60代以降 → Vital Aging（薬剤ダメージ判定の後で確定）──
+  if(eq5==="strong") return "vital_aging";
+
   // 出産後の髪変化（単独）→ うねり由来として Smooth Wave
-  if(hasBirth) return "smooth_wave";
+  // ただし深刻ダメージサイン（枝毛・チリつき）や補修ニーズがある場合は上書きしない
+  if(hasBirth&&q8!=="split"&&q8!=="frizz"&&!q11arr.includes("repair")) return "smooth_wave";
 
   // ── Step4: くせ毛・うねりが主訴 ──────────────────────
   const hasKuse=q6==="some"||q6==="strong";
@@ -466,8 +495,8 @@ function diagnose(ans){
   }
 
   // ── Step6: Q3 太さ × Q4 硬さ ─────────────────────────
-  const isThickHard=(q3==="thick"||q4arr.includes("hard")||q4arr.includes("more"));
-  const isThinSoft =(q3==="thin"||q4arr.includes("soft")||q4arr.includes("less"));
+  const isThickHard=(q3==="thick"||q4arr.includes("more"));
+  const isThinSoft =(q3==="thin"||q4arr.includes("less"));
 
   if(isThickHard){
     if(q10==="vdown"||q10==="moist") return "smooth_wave";
@@ -552,7 +581,11 @@ function buildResultSummary(typeKey,answers){
       return `${skinLbl}と、ダメージの少ない健康な髪質をお持ちです。過度なケアを避け、やさしいシャンプーで潤いバランスを保ちましょう。`;
     }
     case "bare_skin":{
-      const dmgStr=q7arr.includes("color")?"カラーによる軽いダメージ":"軽めの薬剤ダメージ";
+      const dmgStr=q7arr.includes("color")
+        ?"カラーによる軽いダメージ"
+        :q7arr.some(v=>v==="bleach"||v==="perm"||v==="straight")
+          ?"薬剤施術による軽いダメージ"
+          :"乾燥や摩擦などによる軽めのダメージ";
       return `${dmgStr}がある髪質の方です。色持ちと補修を両立できるシャンプーで、ツヤのある仕上がりをキープしましょう。`;
     }
     case "vital_aging":{
@@ -566,64 +599,56 @@ function buildResultSummary(typeKey,answers){
 }
 
 // セカンドセクション：診断結果に対する補助的なおすすめ商品
-function findSecondarySections(typeKey,answers){
+function findSecondarySection(typeKey,answers){
+  const result=_findSecondarySectionRaw(typeKey,answers);
+  if(result&&Array.isArray(result.products)){
+    return {...result, products: result.products.filter(p=>p&&isProductDisplayable(p,answers))};
+  }
+  return result;
+}
+function _findSecondarySectionRaw(typeKey,answers){
   const q1=answers.q1;
-  const q6=answers.q6;
-  const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
   const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
   const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
-  const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
-  const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
   const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
-  const sections=[];
-
-  if(typeKey==="skin_alert"){
-    const hasDamage=q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")||q11arr.includes("repair")||q7arr.some(v=>v==="bleach"||v==="straight"||v==="perm");
-    const hasWave=q6==="some"||q6==="strong"||q11arr.includes("wave")||q10arr.includes("vdown")||q5arr.includes("birth");
-    const hasAging=q5arr.some(v=>v==="clear"||v==="strong")||q11arr.includes("aging")||q11arr.includes("volume")||q10arr.includes("volume");
-    const hasDry=q11arr.includes("dry")||(q1==="dry"&&!q11arr.includes("repair"));
-    const hasColorLight=q7arr.includes("color")&&!q8arr.some(v=>v==="split"||v==="frizz"||v==="spread");
-
-    if(hasDamage){
-      const ps=[findP("repair_mode","Straine（ストレイン）ストレートシャンプー BASIC"),findP("repair_mode","セラムイン")].filter(Boolean);
-      if(ps.length) sections.push({label:"毛先のダメージも気になる方へ",desc:"まずは薬用シャンプーで頭皮を整えるのが優先。頭皮の状態が落ち着いてきたら、毛先の補修ケアも選択肢に。",products:ps});
-    }
-    if(hasWave){
-      const ps=[findP("smooth_wave","Straine（ストレイン）ストレートシャンプー SOFT"),findP("smooth_wave","コスメデコルテ AQ")].filter(Boolean);
-      if(ps.length) sections.push({label:"くせ・うねりも気になる方へ",desc:"頭皮ケア優先のうえで、くせ毛ケアも取り入れたい方へ。",products:ps});
-    }
-    if(hasAging){
-      const ps=[findP("vital_aging","セグレタ シャンプー"),findP("vital_aging","PRORY")].filter(Boolean);
-      if(ps.length) sections.push({label:"ハリ・コシ・ボリュームが気になる方へ",desc:"頭皮環境が整ってきたら、エイジングケアシャンプーも候補に。",products:ps});
-    }
-    if(hasDry){
-      const ps=[findP("aqua_sensitive","ジュレーム"),findP("aqua_sensitive","BOTANIST ボタニカルシャンプー モイスト")].filter(Boolean);
-      if(ps.length) sections.push({label:"乾燥・パサつきも気になる方へ",desc:"地肌の症状が落ち着いてきたら、保湿重視のシャンプーも選択肢に。",products:ps});
-    }
-    if(hasColorLight){
-      const ps=[findP("bare_skin","ジアンサー"),findP("bare_skin","MEMEME")].filter(Boolean);
-      if(ps.length) sections.push({label:"カラー毛のケアも考えたい方へ",desc:"頭皮トラブルが落ち着いたら、カラー毛のダメージケアも併用したい方へ。",products:ps});
-    }
-    return sections;
-  }
 
   if(typeKey==="repair_mode"&&q1==="oily"){
-    sections.push({label:"地肌のベタつきが気になる日に",desc:"週1〜2回の地肌リセット用に取り入れたい方へ。",products:[findP("oil_reset_short","WELLP"),findP("oil_reset_short","デオコ")].filter(Boolean)});
-    return sections;
+    return{label:"地肌のベタつきが気になる日に",desc:"週1〜2回の地肌リセット用に取り入れたい方へ。",products:[findP("oil_reset_short","WELLP"),findP("oil_reset_short","デオコ")].filter(Boolean)};
   }
   if(typeKey==="bare_skin"&&q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")){
-    sections.push({label:"毛先のダメージが深刻な場合は",desc:"より強い補修ケアに切り替えたい方へ。",products:[findP("repair_mode","Straine"),findP("repair_mode","SN repair")].filter(Boolean)});
-    return sections;
+    return{label:"毛先のダメージが深刻な場合は",desc:"より強い補修ケアに切り替えたい方へ。",products:[findP("repair_mode","Straine"),findP("repair_mode","SN repair")].filter(Boolean)};
   }
   if(typeKey==="smooth_wave"&&q8arr.some(v=>v==="split"||v==="frizz")){
-    sections.push({label:"毛先ダメージも気になる場合は",desc:"うねりケアに加えて、補修も強化したい方へ。",products:[findP("repair_mode","Straine")].filter(Boolean)});
-    return sections;
+    return{label:"毛先ダメージも気になる場合は",desc:"うねりケアに加えて、補修も強化したい方へ。",products:[findP("repair_mode","Straine")].filter(Boolean)};
   }
   if((typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&q7arr.some(v=>v==="color"||v==="bleach")&&q8arr.some(v=>v==="dry"||v==="split"||v==="frizz"||v==="spread")){
-    sections.push({label:"毛先のケアもしたい場合は",desc:"頭皮ケアと並行して、髪の補修も意識したい方へ。",products:[findP("bare_skin","ジアンサー")].filter(Boolean)});
-    return sections;
+    return{label:"毛先のケアもしたい場合は",desc:"頭皮ケアと並行して、髪の補修も意識したい方へ。",products:[findP("bare_skin","ジアンサー")].filter(Boolean)};
   }
-  return sections;
+  if(typeKey==="skin_alert"){
+    const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
+    const hasWave=q11arr.includes("wave")||q8arr.some(v=>v==="spread"||v==="frizz")||q7arr.some(v=>v==="straight"||v==="perm");
+    const hasDamage=q7arr.some(v=>v==="color"||v==="bleach")||q8arr.some(v=>v==="dry"||v==="split");
+    const hasAging=q11arr.some(v=>v==="aging"||v==="volume")||q8arr.includes("flat");
+    if(hasWave){
+      // パーマ単独（縮毛矯正なし）→ カール維持優先、熱反応で直毛化するリスクのある unu は避け、保湿バランス型を推奨
+      const isPermOnly = q7arr.includes("perm") && !q7arr.includes("straight");
+      if(isPermOnly){
+        return{label:"カール・うねりを活かしたい場合は",desc:"頭皮ケアと並行して、保湿と軽補修でカールのまとまりを整えたい方へ。",products:[findP("smooth_wave","コスメデコルテ"),findP("repair_mode","セラムイン")].filter(Boolean)};
+      }
+      return{label:"うねり・くせが気になる場合は",desc:"頭皮ケアと並行して、うねりも整えたい方へ。",products:[findP("smooth_wave","unu"),findP("repair_mode","セラムイン")].filter(Boolean)};
+    }
+    if(hasDamage){
+      return{label:"髪のダメージが気になる場合は",desc:"頭皮ケアと並行して、低刺激でダメージ補修もしたい方へ。",products:[findP("bare_skin","ジアンサー"),findP("bare_skin","MEMEME")].filter(Boolean)};
+    }
+    if(hasAging){
+      return{label:"ハリ・コシ・ボリュームが気になる場合は",desc:"頭皮ケアと並行して、エイジングサインにもアプローチしたい方へ。",products:[findP("vital_aging","PRORY"),findP("vital_aging","セグレタ 地肌も髪も洗える")].filter(Boolean)};
+    }
+    const hasAnyConcern=q11arr.some(v=>v!=="none"&&v!=="")||q8arr.some(v=>v!=="gloss");
+    if(hasAnyConcern){
+      return{label:"髪のうるおい・まとまりが気になる場合は",desc:"頭皮ケアと並行して、毛先のケアもしたい方へ。",products:[findP("aqua_sensitive","ジュレーム"),findP("aqua_sensitive","BOTANIST")].filter(Boolean)};
+    }
+  }
+  return null;
 }
 
 const {createElement:h,useRef,useEffect,useState}=React;
@@ -704,7 +729,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"olefin",cat:"オレフィン系",rank:4,desc:"高洗浄力だがサルフェート不使用。硬水でも泡立つ",
     types:["oil_reset_short","oil_reset_long","smooth_wave"],
-    products:["スティーブンノル モイスチュアコントロール","IONICO","プロリー","コスメデコルテ AQ","BOTANIST","Predia ファンゴ"],
+    products:["スティーブンノル モイスチュアコントロール","IONICO","プロリー","コスメデコルテ AQ","BOTANIST"],
     groups:[
       {sub:"オレフィンスルホン酸系",items:["オレフィン(C14-16)スルホン酸Na"]},
     ]},
@@ -733,8 +758,11 @@ const SURFACTANT_DETAIL=[
 function SurfactantChart({typeKey,answers}){
   const td=typeKey?TYPES[typeKey]:null;
   const visibleProducts=td?td.products.filter(p=>isProductDisplayable(p,answers||{})):[];
-  const otcProducts=visibleProducts.filter(p=>p.otc).map(p=>p.name);
-  const recNames=visibleProducts.filter(p=>!p.otc).map(p=>p.name);
+  const sec=findSecondarySection(typeKey,answers||{});
+  const secProducts=(sec&&sec.products)?sec.products.filter(Boolean):[];
+  const allProducts=[...visibleProducts,...secProducts];
+  const otcProducts=allProducts.filter(p=>p.otc).map(p=>p.name);
+  const recNames=allProducts.filter(p=>!p.otc).map(p=>p.name);
   const [openCat,setOpenCat]=useState(null);
   return h("div",{className:"ingr-box"},
     // ── タイトル ──────────────────────────────
@@ -800,6 +828,15 @@ function SurfactantChart({typeKey,answers}){
 
 const PHOTO_SRC="data:image/jpeg;base64,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";
 
+function shareResult(platform,title){
+  const text=`Hair Identityで診断したら『${title}』でした。\nあなたに合うシャンプー、見つかります。\nhttps://hair-diagnosis-app.vercel.app\n#HairIdentity #橋元メソッド`;
+  const encoded=encodeURIComponent(text);
+  const url=platform==="x"
+    ? `https://x.com/intent/tweet?text=${encoded}`
+    : `https://line.me/R/share?text=${encoded}`;
+  window.open(url,"_blank","noopener");
+}
+
 function App(){
   const [step,setStep]=useState("intro");
   const [curQ,setCurQ]=useState(0);
@@ -824,9 +861,15 @@ function App(){
     },280);
   }
   function toggleQ4(k){
+    // 毛量軸（less/vol_normal/more）内で相互排他
+    const VOLUME=["less","vol_normal","more"];
     const cur=Array.isArray(answers.q4)?answers.q4:[];
-    const next=cur.includes(k)?cur.filter(v=>v!==k):[...cur,k];
-    setAnswers({...answers,q4:next});
+    if(cur.includes(k)){
+      setAnswers({...answers,q4:cur.filter(v=>v!==k)});
+      return;
+    }
+    const filtered=VOLUME.includes(k)?cur.filter(v=>!VOLUME.includes(v)):cur;
+    setAnswers({...answers,q4:[...filtered,k]});
   }
   function toggleQ5(k){
     const cur=Array.isArray(answers.q5)?answers.q5:[];
@@ -867,9 +910,15 @@ function App(){
     setAnswers({...answers,q9:next});
   }
   function toggleQ10(k){
+    // volume と vdown は相互排他（ボリュームアップ／ダウンは逆方向）
+    const VOLUME_AXIS=["volume","vdown"];
     const cur=Array.isArray(answers.q10)?answers.q10:[];
-    const next=cur.includes(k)?cur.filter(v=>v!==k):[...cur,k];
-    setAnswers({...answers,q10:next});
+    if(cur.includes(k)){
+      setAnswers({...answers,q10:cur.filter(v=>v!==k)});
+      return;
+    }
+    const filtered=VOLUME_AXIS.includes(k)?cur.filter(v=>!VOLUME_AXIS.includes(v)):cur;
+    setAnswers({...answers,q10:[...filtered,k]});
   }
   function toggleQ11(k){
     const cur=Array.isArray(answers.q11)?answers.q11:[];
@@ -950,12 +999,18 @@ function App(){
           "所要時間：約2〜3分"
         ),
         h("button",{className:"btn-primary",onClick:startQuiz},h(Icon,{name:"scissors",size:14}),h("span",{style:{marginLeft:".5rem"}},"診断をはじめる")),
+        h("div",{className:"intro-msg"},
+          h("p",{className:"intro-msg-quote"},"「シャンプー、何がおすすめですか？」"),
+          h("p",{className:"intro-msg-body"},"サロンで毎日のように受ける質問でした。膨大な数のシャンプーから、本当に合う一本を選び切れない歯がゆさが、ずっとありました。"),
+          h("p",{className:"intro-msg-body"},"水の次に多く含まれる「界面活性剤」と、近年進化する補修成分。この組み合わせが、髪と頭皮への影響を大きく左右します。"),
+          h("p",{className:"intro-msg-body"},"このアプリは、シャンプー選びをAIと一緒に見直すために作りました。あなたの最適解へ導きます。")
+        ),
         h("div",{className:"profile-top"},
           h("div",{className:"profile-top-photo"},
             h("img",{src:PHOTO_SRC,alt:"橋元リョウイチ"})
           ),
           h("div",{className:"profile-top-info"},
-            h("p",{style:{fontSize:".55rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".25rem",lineHeight:1.4}},"Hair Identity is curated by"),
+            h("p",{className:"profile-top-curated"},"HAIR IDENTITY CURATED BY"),
             h("p",{className:"profile-top-name"},"橋元リョウイチ"),
             h("p",{className:"profile-top-role"},"Freelance Hair Stylist"),
             h("a",{className:"profile-top-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},
@@ -976,20 +1031,20 @@ function App(){
           QUESTIONS[curQ].id==="q11"&&h("p",{className:"q11-hint"},"※ 一番気になる順にタップしてください。"),
           h("div",{className:"opts"},QUESTIONS[curQ].opts.map((opt,optIdx)=>{
             const qid=QUESTIONS[curQ].id;
-            const isMulti=qid==="q4"||qid==="q5"||qid==="q7"||qid==="q8"||qid==="q9"||qid==="q10"||qid==="q11";
+            const isMulti=qid==="q5"||qid==="q7"||qid==="q8"||qid==="q9"||qid==="q10"||qid==="q11";
             const arr=Array.isArray(answers[qid])?answers[qid]:[];
             const isSel=isMulti?arr.includes(opt.k):answers[qid]===opt.k;
             const order=(qid==="q8"||qid==="q10"||qid==="q11")&&isSel?arr.indexOf(opt.k)+1:0;
             const circled=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
             return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
-              qid==="q4"?toggleQ4(opt.k):qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),(opt.k==="none"||(opt.k==="other"&&!(Array.isArray(answers.q9)&&answers.q9.length>0)))&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q9:[opt.k]}));setStep("result");}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
+              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),(opt.k==="none"||(opt.k==="other"&&!(Array.isArray(answers.q9)&&answers.q9.length>0)))&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q9:[opt.k]}));setStep("result");}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
               order>0&&h("span",{style:{marginLeft:"auto",fontSize:"1.15rem",color:"var(--gold)",fontWeight:500,lineHeight:1}},circled[order-1]||`${order}`)
             );
           })),
-          (QUESTIONS[curQ].id==="q4"||QUESTIONS[curQ].id==="q5"||QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q9"||QUESTIONS[curQ].id==="q10"||QUESTIONS[curQ].id==="q11")&&h("button",{
+          (QUESTIONS[curQ].id==="q5"||QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q9"||QUESTIONS[curQ].id==="q10"||QUESTIONS[curQ].id==="q11")&&h("button",{
             className:"btn-primary",
             style:{marginTop:"1rem",opacity:(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0)?1:0.4},
             disabled:!(Array.isArray(answers[QUESTIONS[curQ].id])&&answers[QUESTIONS[curQ].id].length>0),
@@ -1021,7 +1076,44 @@ function App(){
         ),
         (typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&(Array.isArray(answers.q5)?answers.q5:[answers.q5||"stable"]).some(v=>v==="clear"||v==="strong")&&(Array.isArray(answers.q10)?answers.q10.includes("volume"):answers.q10==="volume")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ ボリュームアップの実感が得られない場合は、エイジングケア（Vital Aging）もご検討ください。"),
         ((answers.q1==="oily"||answers.q1==="mix")&&typeKey==="repair_mode"||answers.q1==="oily"&&typeKey==="bare_skin")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ 地肌は脂性・混合傾向があります。シャンプー後はシャワーでしっかりすすいでください。"),
+        (()=>{
+          const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
+          const hasStraight=q7arr.includes("straight");
+          const hasPerm=q7arr.includes("perm");
+          const style={background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"};
+          if(hasStraight&&hasPerm){
+            return h("div",{className:"alert-box",style},"※ 縮毛矯正部とパーマ部が混在しています。縮毛矯正部はブラシで真っ直ぐ整えながら、パーマ部は握り込みながら乾かしてください。シャンプー後は自然乾燥せず、すぐにドライヤーをかけるのが基本です。");
+          }
+          if(hasStraight){
+            return h("div",{className:"alert-box",style},"※ シャンプー後はすぐドライヤーで乾かしてください。ブラシで真っ直ぐ整えながら乾かすことで、トステア配合シャンプーの熱反応がシスチン結合を再結合し、ストレートが長持ちします。");
+          }
+          if(hasPerm){
+            return h("div",{className:"alert-box",style},"※ シャンプー後はすぐドライヤーで乾かしてください。ただしブラシで髪を引っ張って伸ばす乾かし方は避け、ディフューザーや手で握り込むように乾かすと、カールを保ったまま熱反応が働きます。");
+          }
+          return null;
+        })(),
+        (()=>{
+          const visibleProducts=td.products.filter(p=>isProductDisplayable(p,answers));
+          const sec=findSecondarySection(typeKey,answers);
+          const secProducts=(sec&&sec.products)?sec.products.filter(Boolean):[];
+          const allShown=[...visibleProducts,...secProducts];
+          const hasTostera=allShown.some(p=>p&&p.tostera);
+          if(!hasTostera) return null;
+          const baseMsg="※ 推奨シャンプーには「トステア」（アミノエチルチオコハク酸ジアンモニウム）配合品が含まれます。これは髪のシスチン結合（S-S結合）にアプローチする補修成分で、ドライヤーの熱で活性化します。上記の乾かし方と組み合わせることで補修効果が最大化します。";
+          const skinAlertNote=typeKey==="skin_alert"?" ただし、頭皮の赤み・炎症が落ち着いてから本格的に使うことをおすすめします。炎症期は低刺激のミノン等を優先してください。":"";
+          return h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},baseMsg+skinAlertNote);
+        })(),
         h("button",{className:"btn-primary btn-primary-lg",onClick:()=>setStep("products")},h("span",null,"おすすめのシャンプーを見る ↗")),
+        h("div",{className:"share-row"},
+          h("button",{type:"button",className:"share-btn share-btn-x","aria-label":"Xで診断結果をシェアする",onClick:()=>shareResult("x",td.title)},
+            h("svg",{viewBox:"0 0 24 24","aria-hidden":"true"},h("path",{d:"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"})),
+            h("span",null,"Xでシェア")
+          ),
+          h("button",{type:"button",className:"share-btn share-btn-line","aria-label":"LINEで診断結果をシェアする",onClick:()=>shareResult("line",td.title)},
+            h("svg",{viewBox:"0 0 24 24","aria-hidden":"true"},h("path",{d:"M19.365 9.863c.349 0 .631.285.631.631 0 .345-.282.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.282.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"})),
+            h("span",null,"LINEでシェア")
+          )
+        ),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する"),
         h("p",{style:{fontSize:".72rem",color:"var(--muted)",textAlign:"center",marginTop:".8rem",lineHeight:"1.6"}},"スクショで記録しておくと便利です")
       ),
@@ -1033,19 +1125,30 @@ function App(){
         h("hr",{className:"divider"}),
         h("p",{className:"prod-sub",style:{marginBottom:"1.3rem"}},"タイプ別に厳選したアイテムです。あなたの回答との相性が高い順に並んでいます。"),
         td.alert&&h("div",{className:"alert-box"},td.alert),
-        [...td.products].filter(p=>isProductDisplayable(p,answers)).sort((a,b)=>{
+        [...td.products].filter(p=>isProductDisplayable(p,answers)&&!p.secondaryOnly).sort((a,b)=>{
           if(!!a.gentleBottom!==!!b.gentleBottom) return a.gentleBottom?1:-1;
           return scoreProduct(b,answers)-scoreProduct(a,answers);
         }).map((p,i)=>renderProdCard(p,"main_"+i)),
         (()=>{
-          const secs=findSecondarySections(typeKey,answers).filter(s=>s&&s.products&&s.products.length>0);
-          if(secs.length===0) return null;
-          return secs.map((sec,si)=>h("div",{key:"secsec_"+si,style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
+          const sec=findSecondarySection(typeKey,answers);
+          if(!sec||sec.products.length===0) return null;
+          return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
             h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"Optional"),
             h("p",{style:{fontFamily:"var(--serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--char)",marginBottom:".3rem",lineHeight:"1.4"}},sec.label),
             h("p",{style:{fontSize:".73rem",color:"var(--muted)",marginBottom:"1rem",lineHeight:"1.6"}},sec.desc),
-            sec.products.map((p,i)=>renderProdCard(p,"sec_"+si+"_"+i))
-          ));
+            sec.products.map((p,i)=>renderProdCard(p,"sec_"+i))
+          );
+        })(),
+        (()=>{
+          if(typeKey!=="skin_alert") return null;
+          const fungalProds=td.products.filter(p=>p.secondaryOnly&&isProductDisplayable(p,answers));
+          if(fungalProds.length===0) return null;
+          return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
+            h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"Optional"),
+            h("p",{style:{fontFamily:"var(--serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--char)",marginBottom:".3rem",lineHeight:"1.4"}},"フケ・かゆみが目立つ場合は"),
+            h("p",{style:{fontSize:".73rem",color:"var(--muted)",marginBottom:"1rem",lineHeight:"1.6"}},"頭皮の赤みに加え、フケや繰り返すかゆみが気になる方への薬用シャンプー。"),
+            fungalProds.map((p,i)=>renderProdCard(p,"fung_"+i))
+          );
         })(),
         (()=>{
           const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
@@ -1062,7 +1165,11 @@ function App(){
         (()=>{
           const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
           const q4arr=Array.isArray(answers.q4)?answers.q4:(answers.q4?[answers.q4]:[]);
-          if(!(q11arr.includes("volume")&&q4arr.includes("less"))) return null;
+          const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
+          const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
+          const wantsVolume=q11arr.includes("volume")||q10arr.includes("volume");
+          const lowVolume=q4arr.includes("less")||q8arr.includes("flat");
+          if(!(wantsVolume&&lowVolume)) return null;
           const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
           const volProds=[
             findP("vital_aging","セグレタ シャンプー"),
