@@ -232,7 +232,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 </style>
 </head>
 <body>
-<div id="pbar" style="width:0%"></div>
+<div id="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:0%"></div>
 <div id="root"></div>
 <script type="text/babel">
 const ASSOC_ID="hassihair06-22";
@@ -734,7 +734,8 @@ function Icon({name,size=16,color}){
 
 // 商品カード描画（メイン・セカンドセクション共通）
 function renderProdCard(p,key){
-  return h("div",{key:key,className:"prod-card"},
+  return h("div",{key:key,className:"prod-card"+(p.top?" top-pick":"")},
+    p.top&&h("div",{className:"prod-top-badge"},"TOP PICK"),
     h("div",{className:"prod-card-inner"},
       h("div",{className:"prod-img-wrap"},
         p.img_url?h("img",{src:p.img_url,alt:p.name,className:"prod-img",loading:"lazy"}):h("div",{className:"prod-img-placeholder"},h(Icon,{name:"droplets",size:28,color:"var(--gold-l)"}))
@@ -915,8 +916,8 @@ function App(){
   const [prevCurQ,setPrevCurQ]=useState(0);
   const [prevTypeKey,setPrevTypeKey]=useState(null);
   const totalQ=QUESTIONS.length;
-  const prog=step==="quiz"?(curQ/totalQ*100):step==="result"||step==="products"?100:0;
-  useEffect(()=>{document.getElementById("pbar").style.width=prog+"%";},[prog]);
+  const prog=step==="quiz"?((curQ+1)/totalQ*100):step==="result"||step==="products"?100:0;
+  useEffect(()=>{const bar=document.getElementById("pbar");bar.style.width=prog+"%";bar.setAttribute("aria-valuenow",Math.round(prog));},[prog]);
   useEffect(()=>{window.scrollTo({top:0,behavior:"instant"});},[step]);
   function startQuiz(){setStep("quiz");setCurQ(0);setAnswers({});}
   function selectOpt(k){
