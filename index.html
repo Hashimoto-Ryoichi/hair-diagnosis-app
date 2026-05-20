@@ -142,7 +142,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ingr-products{font-size:.62rem;color:var(--gold);font-style:italic}
 .ingr-otc-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.65rem;color:var(--muted);margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border);line-height:1.6}
 
-/* ── 5分類カード（メイン表示）── */
+/* ── 9分類カード（メイン表示）── */
 .ingr-detail-intro{font-size:.65rem;color:var(--muted);line-height:1.7;margin-bottom:.9rem;padding:0 .2rem}
 .ingr-cat{margin-bottom:.5rem;background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:all .2s}
 .ingr-cat-match{border:1px solid var(--gold);background:rgba(184,149,106,0.08)}
@@ -390,16 +390,14 @@ function scoreProduct(product,answers){
   if(product.heavyMoisture){
     const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
     const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
-    const q4arr=Array.isArray(answers.q4)?answers.q4:(answers.q4?[answers.q4]:[]);
-    if(q11arr.includes("volume")||q10arr.includes("volume")||q4arr.includes("less")){
+    if(q11arr.includes("volume")||q10arr.includes("volume")||answers.q4==="less"){
       s-=2;
     }
   }
   // volumeUp: ボリュームを抑えたい・毛量多いユーザーにはボリュームアップ訴求商品を減点
   if(product.volumeUp){
     const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
-    const q4arr=Array.isArray(answers.q4)?answers.q4:(answers.q4?[answers.q4]:[]);
-    if(q10arr.includes("vdown")||q4arr.includes("more")){
+    if(q10arr.includes("vdown")||answers.q4==="more"){
       s-=2;
     }
   }
@@ -480,8 +478,7 @@ const TYPES={
 
 
 function diagnose(ans){
-  const {q1,q2,q3,q6}=ans;
-  const q4arr=Array.isArray(ans.q4)?ans.q4:(ans.q4?[ans.q4]:["normal"]);
+  const {q1,q2,q3,q4,q6}=ans;
   // Q11は複数選択配列。先頭（最初に押した=最重視）を主回答として使用
   const q11arr=Array.isArray(ans.q11)?ans.q11:(ans.q11?[ans.q11]:[]);
   const q11=q11arr[0]||"none";
@@ -565,9 +562,9 @@ function diagnose(ans){
     return eq7==="none"?"aqua_sensitive":"bare_skin";
   }
 
-  // ── Step6: Q3 太さ × Q4 硬さ ─────────────────────────
-  const isThickHard=(q3==="thick"||q4arr.includes("more"));
-  const isThinSoft =(q3==="thin"||q4arr.includes("less"));
+  // ── Step6: Q3 太さ × Q4 毛量 ─────────────────────────
+  const isThickHard=(q3==="thick"||q4==="more");
+  const isThinSoft =(q3==="thin"||q4==="less");
 
   if(isThickHard){
     if(q10==="vdown"||q10==="moist") return "smooth_wave";
@@ -613,7 +610,6 @@ function diagnose(ans){
 function buildResultSummary(typeKey,answers){
   const q1=answers.q1||"normal";
   const q2=answers.q2||"mid";
-  const q4arr=Array.isArray(answers.q4)?answers.q4:(answers.q4?[answers.q4]:["normal"]);
   const q6=answers.q6||"none";
   const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:["none"]);
   const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
@@ -662,7 +658,7 @@ function buildResultSummary(typeKey,answers){
     }
     case "vital_aging":{
       const when=q5arr.includes("strong")?"60代以降から":q5arr.includes("clear")?"50代から":"年齢とともに";
-      const wantVol=q11arr.includes("volume")||q4arr.includes("less")||q8arr.includes("flat");
+      const wantVol=q11arr.includes("volume")||answers.q4==="less"||q8arr.includes("flat");
       const tail=wantVol?"根元から立ち上がる、ふんわりとした仕上がりを取り戻しましょう。":"ハリ・コシを補い、エイジングのサインに寄り添うケアをしていきましょう。";
       return `${when}実感しやすい、ハリ・コシ・ボリューム不足が気になるタイプです。エイジングケアに特化したシャンプーで、${tail}`;
     }
@@ -758,8 +754,8 @@ function renderProdCard(p,key){
   );
 }
 
-// ── 詳細37成分（5分類別・洗浄力ランク★1〜★5）─────────
-// ── 5分類のメタデータ（系統ごとの紹介商品・タイプ連携・細分類）
+// ── 詳細37成分（9分類別・洗浄力ランク★1〜★5）─────────
+// ── 9分類のメタデータ（系統ごとの紹介商品・タイプ連携・細分類）
 // 化粧品表示名称ベース、シャンプー用途のみ、カチオン除外
 // items は細分類ごとにグループ化して表示
 const SURFACTANT_DETAIL=[
@@ -850,9 +846,9 @@ function SurfactantChart({typeKey,answers}){
       h("span",{className:"ingr-star-meaning-stars"},"★5"),
       "：高刺激）"
     ),
-    h("p",{className:"ingr-detail-intro"},"7系統に分類しています。系統名をタップすると、細分類と成分名がご覧いただけます。"),
+    h("p",{className:"ingr-detail-intro"},"9系統に分類しています。系統名をタップすると、細分類と成分名がご覧いただけます。"),
 
-    // ── 5分類カード ──────────────────────────────
+    // ── 9分類カード ──────────────────────────────
     SURFACTANT_DETAIL.map((g,gi)=>{
       const isOpen=openCat===gi;
       const matchedProducts=g.products.filter(pn=>recNames.some(n=>n.includes(pn)));
@@ -929,19 +925,8 @@ function App(){
     setAnswers(na);
     setTimeout(()=>{
       if(curQ<totalQ-1){setCurQ(curQ+1);}
-      else{setTypeKey(diagnose(na));setStep("result");}
+      else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose(na));setStep("result");},1000);}
     },280);
-  }
-  function toggleQ4(k){
-    // 毛量軸（less/vol_normal/more）内で相互排他
-    const VOLUME=["less","vol_normal","more"];
-    const cur=Array.isArray(answers.q4)?answers.q4:[];
-    if(cur.includes(k)){
-      setAnswers({...answers,q4:cur.filter(v=>v!==k)});
-      return;
-    }
-    const filtered=VOLUME.includes(k)?cur.filter(v=>!VOLUME.includes(v)):cur;
-    setAnswers({...answers,q4:[...filtered,k]});
   }
   function toggleQ5(k){
     const cur=Array.isArray(answers.q5)?answers.q5:[];
@@ -1036,7 +1021,7 @@ function App(){
     const arr=Array.isArray(na[qid])?na[qid]:[];
     if(arr.length===0) return;
     if(curQ<totalQ-1){setCurQ(curQ+1);}
-    else{setTypeKey(diagnose(na));setStep("result");}
+    else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose(na));setStep("result");},1000);}
   }
   function goBack(){if(curQ>0)setCurQ(curQ-1);else setStep("intro");}
   function retry(){setStep("intro");setAnswers({});setCurQ(0);setTypeKey(null);}
@@ -1109,7 +1094,7 @@ function App(){
             const order=(qid==="q8"||qid==="q10"||qid==="q11")&&isSel?arr.indexOf(opt.k)+1:0;
             const circled=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
             return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
-              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),(opt.k==="none"||(opt.k==="other"&&!(Array.isArray(answers.q9)&&answers.q9.length>0)))&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setTypeKey(diagnose({...answers,q9:[opt.k]}));setStep("result");}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
+              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");},1000);}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");},1000);}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),(opt.k==="none"||(opt.k==="other"&&!(Array.isArray(answers.q9)&&answers.q9.length>0)))&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose({...answers,q9:[opt.k]}));setStep("result");},1000);}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
@@ -1236,11 +1221,10 @@ function App(){
         })(),
         (()=>{
           const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
-          const q4arr=Array.isArray(answers.q4)?answers.q4:(answers.q4?[answers.q4]:[]);
           const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
           const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
           const wantsVolume=q11arr.includes("volume")||q10arr.includes("volume");
-          const lowVolume=q4arr.includes("less")||q8arr.includes("flat");
+          const lowVolume=answers.q4==="less"||q8arr.includes("flat");
           if(!(wantsVolume&&lowVolume)) return null;
           const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
           const volProds=[
