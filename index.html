@@ -256,7 +256,7 @@ const R1="https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f6
 const R2="&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9";
 function rak1(id){return R1+id+"/"+R2;}
 
-const CHAR_IMG={skin_alert:"char-skin-alert.png",oil_reset_short:"char-oil-reset-short.png",oil_reset_long:"char-oil-reset-long.png",repair_mode:"char-repair-mode.png",smooth_wave:"char-smooth-wave.png",aqua_sensitive:"char-aqua-sensitive.png",bare_skin:"char-bare-skin.png",vital_aging:"char-vital-aging.png",volume_grace:"char-volume-grace.png"};
+const CHAR_IMG={skin_alert:"char-skin-alert.png",oil_reset_short:"char-oil-reset-short.png",oil_reset_long:"char-oil-reset-long.png",repair_mode:"char-repair-mode.png",smooth_wave:"char-smooth-wave.png",aqua_sensitive:"char-aqua-sensitive.png",bare_skin:"char-bare-skin.png",vital_aging:"char-vital-aging.png",volume_grace:"char-volume-grace.png",pure_hair:"char-aqua-sensitive.png"};
 
 // 動的表示レイヤー（typeKeyは内部維持、表示のみ動的に切り替え）
 function getDisplayTitle(typeKey,answers){
@@ -308,7 +308,21 @@ function getDisplayCharImg(typeKey,answers){
     const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
     return isSenior?CHAR_IMG.vital_aging:CHAR_IMG.volume_grace;
   }
+  if(typeKey==="aqua_sensitive"){
+    return answers.q1==="dry"?CHAR_IMG.aqua_sensitive:CHAR_IMG.pure_hair;
+  }
   return CHAR_IMG[typeKey];
+}
+function getDisplayBadge(typeKey,answers){
+  if(typeKey==="vital_aging"){
+    const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
+    const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
+    return isSenior?"Hair Type — VA":"Hair Type — VG";
+  }
+  if(typeKey==="aqua_sensitive"){
+    return answers.q1==="dry"?"Hair Type — AS":"Hair Type — PH";
+  }
+  return (TYPES[typeKey]&&TYPES[typeKey].badge)||"";
 }
 
 // 商品マッチング用タグ：商品名のキーワードで紐付け、回答との一致数でスコアリング
@@ -1114,7 +1128,7 @@ function App(){
       step==="loading"&&h("div",{className:"loading"},h("div",{className:"spin"}),h("p",{className:"loading-txt"},"髪質を分析しています…")),
       step==="result"&&td&&h("div",{className:"fade"},
         getDisplayCharImg(typeKey,answers)&&h("img",{src:getDisplayCharImg(typeKey,answers),alt:getDisplayTitle(typeKey,answers),className:"char-img",loading:"lazy"}),
-        h("span",{className:"badge"},td.badge),
+        h("span",{className:"badge"},getDisplayBadge(typeKey,answers)),
         h("h2",{className:"res-title"},getDisplayTitle(typeKey,answers)),
         h("p",{className:"res-sub"},getDisplaySub(typeKey,answers)),
         td.alert&&h("div",{className:"alert-box"},td.alert),
@@ -1177,7 +1191,7 @@ function App(){
       ),
       step==="products"&&td&&h("div",{className:"fade"},
         getDisplayCharImg(typeKey,answers)&&h("img",{src:getDisplayCharImg(typeKey,answers),alt:getDisplayTitle(typeKey,answers),className:"char-img",loading:"lazy"}),
-        h("span",{className:"badge"},td.badge),
+        h("span",{className:"badge"},getDisplayBadge(typeKey,answers)),
         h("h2",{className:"res-title"},getDisplayTitle(typeKey,answers)),
         h("p",{className:"res-sub"},getDisplaySub(typeKey,answers)),
         h("hr",{className:"divider"}),
