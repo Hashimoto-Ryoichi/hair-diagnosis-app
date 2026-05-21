@@ -256,7 +256,7 @@ const R1="https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f6
 const R2="&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9";
 function rak1(id){return R1+id+"/"+R2;}
 
-const CHAR_IMG={skin_alert:"char-skin-alert.png",oil_reset_short:"char-oil-reset-short.png",oil_reset_long:"char-oil-reset-long.png",repair_mode:"char-repair-mode.png",smooth_wave:"char-smooth-wave.png",aqua_sensitive:"char-aqua-sensitive.png",bare_skin:"char-bare-skin.png",vital_aging:"char-vital-aging.png",volume_grace:"char-volume-grace.png",pure_hair:"char-aqua-sensitive.png"};
+const CHAR_IMG={skin_alert:"char-skin-alert.png",oil_reset_short:"char-oil-reset-short.png",oil_reset_long:"char-oil-reset-long.png",repair_mode:"char-repair-mode.png",smooth_wave:"char-smooth-wave.png",aqua_sensitive:"char-aqua-sensitive.png",bare_skin:"char-bare-skin.png",vital_aging:"char-vital-aging.png",volume_grace:"char-volume-grace.png"};
 
 // 動的表示レイヤー（typeKeyは内部維持、表示のみ動的に切り替え）
 function getDisplayTitle(typeKey,answers){
@@ -264,9 +264,6 @@ function getDisplayTitle(typeKey,answers){
     const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
     const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
     return isSenior?"Vital Aging":"Volume Grace";
-  }
-  if(typeKey==="aqua_sensitive"){
-    return answers.q1==="dry"?"Aqua Sensitive":"Pure Hair";
   }
   return (TYPES[typeKey]&&TYPES[typeKey].title)||"";
 }
@@ -277,11 +274,6 @@ function getDisplaySub(typeKey,answers){
     return isSenior
       ?"ハリ・コシ・ボリューム不足が気になる髪"
       :"細毛・少毛量・ボリュームケアが必要な髪";
-  }
-  if(typeKey==="aqua_sensitive"){
-    return answers.q1==="dry"
-      ?"乾燥・バージン毛・敏感肌向けケア"
-      :"健康な髪・バランス重視のケア";
   }
   if(typeKey==="smooth_wave"){
     const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
@@ -308,9 +300,6 @@ function getDisplayCharImg(typeKey,answers){
     const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
     return isSenior?CHAR_IMG.vital_aging:CHAR_IMG.volume_grace;
   }
-  if(typeKey==="aqua_sensitive"){
-    return answers.q1==="dry"?CHAR_IMG.aqua_sensitive:CHAR_IMG.pure_hair;
-  }
   return CHAR_IMG[typeKey];
 }
 function getDisplayBadge(typeKey,answers){
@@ -318,9 +307,6 @@ function getDisplayBadge(typeKey,answers){
     const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
     const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
     return isSenior?"Hair Type — VA":"Hair Type — VG";
-  }
-  if(typeKey==="aqua_sensitive"){
-    return answers.q1==="dry"?"Hair Type — AS":"Hair Type — PH";
   }
   return (TYPES[typeKey]&&TYPES[typeKey].badge)||"";
 }
@@ -683,10 +669,8 @@ function buildResultSummary(typeKey,answers){
       const kuseLbl=q6==="strong"?"強いくせ・うねり":q6==="some"?"くせやうねり":"うねりや広がり";
       return `${kuseLbl}が気になるタイプです。保湿ケアでうねりをコントロールしながら、まとまりのある髪へ導いていきましょう。`;
     }
-    case "aqua_sensitive":{
-      const skinLbl=q1==="dry"?"乾燥しやすい頭皮":q1==="mix"?"混合タイプの頭皮":"バランスのとれた頭皮";
-      return `${skinLbl}と、ダメージの少ない健康な髪質をお持ちです。過度なケアを避け、やさしいシャンプーで潤いバランスを保ちましょう。`;
-    }
+    case "aqua_sensitive":
+      return "ダメージの少ない健康な髪質をお持ちです。過度なケアを避け、やさしいシャンプーで潤いバランスを保ちましょう。";
     case "bare_skin":{
       const dmgStr=q7arr.includes("color")
         ?"カラーによる軽いダメージ"
