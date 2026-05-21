@@ -375,6 +375,9 @@ const MATCH_TAGS=[
   {key:"アデノバイタル",     tags:{q11:["aging","gray"],q5:["clear","strong"],q10:["volume"],q1:["dry","normal","mix"]}},
   {key:"イオ クレンジング",  tags:{q1:["dry","mix"],q8:["dry"],q7:["none","color"]}},
   {key:"ミントベル",          tags:{q1:["oily"],q11:["oily"]}},
+  {key:"unu",               tags:{q6:["some","strong"],q10:["smooth","vdown"],q11:["wave","repair"],q8:["frizz","spread"]}},
+  {key:"&PAIR",             tags:{q6:["some","strong"],q10:["smooth","moist"],q8:["dry","spread"],q11:["wave","repair"]}},
+  {key:"カウブランド",        tags:{q1:["dry","red"],q11:["dry"],q5:["stable","early"]}},
 ];
 
 // 商品の表示可否ルール（タイプ別主リスト・界面活性剤チャートで共通利用）
@@ -427,6 +430,10 @@ function scoreProduct(product,answers){
     if(q10arr.includes("vdown")||answers.q4==="more"){
       s-=2;
     }
+  }
+  // top: キュレーターが選んだ推奨商品にボーナス加点（通常は先頭に来るが、強いクエリ一致には負ける可能性あり）
+  if(product.top){
+    s+=2;
   }
   return s;
 }
@@ -775,9 +782,9 @@ function Icon({name,size=16,color}){
 }
 
 // 商品カード描画（メイン・セカンドセクション共通）
-function renderProdCard(p,key){
-  return h("div",{key:key,className:"prod-card"+(p.top?" top-pick":"")},
-    p.top&&h("div",{className:"prod-top-badge"},"TOP PICK"),
+function renderProdCard(p,key,isTopPick){
+  return h("div",{key:key,className:"prod-card"+(isTopPick?" top-pick":"")},
+    isTopPick&&h("div",{className:"prod-top-badge"},"TOP PICK"),
     h("div",{className:"prod-card-inner"},
       h("div",{className:"prod-img-wrap"},
         p.img_url?h("img",{src:p.img_url,alt:p.name,className:"prod-img",loading:"lazy"}):h("div",{className:"prod-img-placeholder"},h(Icon,{name:"droplets",size:28,color:"var(--gold-l)"}))
@@ -1252,7 +1259,7 @@ function App(){
         [...td.products].filter(p=>isProductDisplayable(p,answers)&&!p.secondaryOnly).sort((a,b)=>{
           if(!!a.gentleBottom!==!!b.gentleBottom) return a.gentleBottom?1:-1;
           return scoreProduct(b,answers)-scoreProduct(a,answers);
-        }).map((p,i)=>renderProdCard(p,"main_"+i)),
+        }).map((p,i)=>renderProdCard(p,"main_"+i,i===0)),
         (()=>{
           const sec=findSecondarySection(typeKey,answers);
           if(!sec||sec.products.length===0) return null;
