@@ -324,6 +324,22 @@ function getDisplayBadge(typeKey,answers){
   }
   return (TYPES[typeKey]&&TYPES[typeKey].badge)||"";
 }
+function getDisplayAdvice(typeKey,answers){
+  if(typeKey==="vital_aging"){
+    const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
+    const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
+    if(!isSenior){
+      // Volume Grace 向け：年齢ではなく細毛・ぺたんこ・ボリューム不足が主訴
+      return [
+        "細毛・少毛量・ハリ不足が気になる方は、シャンプー前のブラッシングと、シャンプー中の頭皮マッサージで血流を促すと、根元のふんわり感が出やすくなります。",
+        "シャンプーは1回目で汚れを落とし、2回目でしっかり泡立てて頭皮を洗うダブル洗いがおすすめ。皮脂が毛穴に溜まっていると、根元が圧迫されてペタンとしやすくなります。",
+        "ノンシリコン処方やボリュームアップ系のシャンプーと相性◎。コンディショナーは毛先〜中間に留め、頭皮にはつけないことで根元の立ち上がりが保てます。",
+        "※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪のボリューム感に合ったケアを確認してみてください。"
+      ];
+    }
+  }
+  return (TYPES[typeKey]&&TYPES[typeKey].advice)||[];
+}
 
 // 商品マッチング用タグ：商品名のキーワードで紐付け、回答との一致数でスコアリング
 const MATCH_TAGS=[
@@ -567,11 +583,20 @@ function diagnose(ans){
     return "smooth_wave";
   }
 
+  // ── Step4.5: Q11で明示的に「補修」を最優先したい × 深刻ダメージサイン → Repair Mode 優先 ──
+  // （Step5の bare_skin/smooth_wave 振り分けに preempt されるのを防ぐ）
+  if(q11==="repair"&&(q8==="split"||q8==="frizz"||q8==="spread")){
+    return "repair_mode";
+  }
+
   // ── Step5: Q8 現在の髪の状態 ─────────────────────────
   if(q8==="frizz"||q8==="split"){
     return "bare_skin";
   }
   if(q8==="flat"){
+    // 細毛・少毛量 × ボリューム志向 → Vital Aging（ボリューム対応商品が揃うため）
+    const isThinSoftEarly=(q3==="thin"||q4==="less");
+    if(isThinSoftEarly&&(wantVolume||q11arr.includes("volume"))) return "vital_aging";
     if(wantVolume) return "aqua_sensitive";
     return eq7==="none"?"aqua_sensitive":"bare_skin";
   }
@@ -671,8 +696,14 @@ function buildResultSummary(typeKey,answers){
       return `${dmgStr}がある髪質の方です。色持ちと補修を両立できるシャンプーで、ツヤのある仕上がりをキープしましょう。`;
     }
     case "vital_aging":{
-      const when=q5arr.includes("strong")?"60代以降から":q5arr.includes("clear")?"50代から":"年齢とともに";
+      const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
       const wantVol=q11arr.includes("volume")||answers.q4==="less"||q8arr.includes("flat");
+      if(!isSenior){
+        // Volume Grace 向け（年齢ではなく細毛・ぺたんこ・ボリューム不足）
+        const reasonLbl=q8arr.includes("flat")?"ぺたんとしがちな根元":answers.q4==="less"?"細毛・少毛量":"髪のボリューム不足";
+        return `${reasonLbl}が気になるタイプです。頭皮環境を整えながら、根元から立ち上がるふんわりとした仕上がりを目指しましょう。`;
+      }
+      const when=q5arr.includes("strong")?"60代以降から":"50代から";
       const tail=wantVol?"根元から立ち上がる、ふんわりとした仕上がりを取り戻しましょう。":"ハリ・コシを補い、エイジングのサインに寄り添うケアをしていきましょう。";
       return `${when}実感しやすい、ハリ・コシ・ボリューム不足が気になるタイプです。エイジングケアに特化したシャンプーで、${tail}`;
     }
@@ -1139,9 +1170,9 @@ function App(){
         h("hr",{className:"divider"}),
         h("div",{className:"ai-box"},
           h("p",{className:"ai-lbl"},h(Icon,{name:"sparkles",size:11,color:"var(--gold)"}),h("span",null,"Hair Advice — Ryoichi Hashimoto")),
-          td.advice.map((txt,i)=>{
+          getDisplayAdvice(typeKey,answers).map((txt,i,arr)=>{
             const isNote=txt.startsWith("※");
-            return h("p",{key:i,className:"ai-txt",style:{marginBottom:i<td.advice.length-1?".9rem":"0",paddingLeft:"0",...(isNote?{fontSize:".76rem",color:"var(--muted)",borderTop:"1px solid var(--border)",paddingTop:".75rem",marginTop:".25rem"}:{})}},
+            return h("p",{key:i,className:"ai-txt",style:{marginBottom:i<arr.length-1?".9rem":"0",paddingLeft:"0",...(isNote?{fontSize:".76rem",color:"var(--muted)",borderTop:"1px solid var(--border)",paddingTop:".75rem",marginTop:".25rem"}:{})}},
               isNote?txt:h(React.Fragment,null,h("span",{style:{color:"var(--gold)",fontFamily:"var(--serif)",fontStyle:"italic",marginRight:".4rem"}},`${i+1}.`),txt)
             );
           })
