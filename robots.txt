@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hair-diagnosis-app.vercel.app/sitemap.xml

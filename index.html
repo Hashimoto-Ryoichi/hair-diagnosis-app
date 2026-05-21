@@ -5,8 +5,9 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests;">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hair Identity｜あなたに合うシャンプー診断</title>
-<meta name="description" content="現役美容師が現場経験から組み立てた、あなたの髪質に合うシャンプーが見つかる診断アプリ。11問で無料診断。">
+<title>シャンプー診断｜髪質に合うヘアケアを11問で無料診断｜Hair Identity by Ryoichi Hashimoto</title>
+<meta name="description" content="髪質・頭皮・年齢悩みを11問で分析し、現役美容師の視点で合うシャンプーとヘアケア方針を無料提案。頭皮ケアから傷み・くせ毛まで対応。原宿の美容師予約にも進めます。">
+<link rel="canonical" href="https://hair-diagnosis-app.vercel.app/">
 
 <!-- Favicon -->
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -16,8 +17,8 @@
 <!-- Open Graph (Facebook, LINE, note等) -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://hair-diagnosis-app.vercel.app/">
-<meta property="og:title" content="Hair Identity｜あなたに合うシャンプー診断">
-<meta property="og:description" content="現役美容師が現場経験から組み立てた、あなたの髪質に合うシャンプーが見つかる診断アプリ。11問で無料診断。">
+<meta property="og:title" content="シャンプー診断｜髪質に合うヘアケアを11問で無料診断｜Hair Identity">
+<meta property="og:description" content="髪質・頭皮・年齢悩みを11問で分析し、現役美容師の視点で合うシャンプーとヘアケア方針を無料提案。頭皮ケアから傷み・くせ毛まで対応。">
 <meta property="og:image" content="https://hair-diagnosis-app.vercel.app/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -26,9 +27,45 @@
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Hair Identity｜あなたに合うシャンプー診断">
-<meta name="twitter:description" content="現役美容師が現場経験から組み立てた、あなたの髪質に合うシャンプーが見つかる診断アプリ。11問で無料診断。">
+<meta name="twitter:title" content="シャンプー診断｜髪質に合うヘアケアを11問で無料診断｜Hair Identity">
+<meta name="twitter:description" content="髪質・頭皮・年齢悩みを11問で分析し、現役美容師の視点で合うシャンプーとヘアケア方針を無料提案。">
 <meta name="twitter:image" content="https://hair-diagnosis-app.vercel.app/og-image.jpg">
+<meta name="twitter:image:alt" content="Hair Identity シャンプー診断アプリ — 11問で髪質に合うヘアケアを提案">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Hair Identity シャンプー診断",
+  "alternateName": "Hair Identity by Ryoichi Hashimoto",
+  "url": "https://hair-diagnosis-app.vercel.app/",
+  "description": "髪質・頭皮・年齢悩みを11問で分析し、現役美容師の視点で合うシャンプーとヘアケア方針を無料提案。頭皮ケアから傷み・くせ毛まで対応。",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Web",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "JPY"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "橋元リョウイチ",
+    "jobTitle": "美容師",
+    "worksFor": {
+      "@type": "HairSalon",
+      "name": "VIRGO",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "原宿",
+        "addressRegion": "東京都",
+        "addressCountry": "JP"
+      },
+      "url": "https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/"
+    }
+  },
+  "inLanguage": "ja",
+  "isAccessibleForFree": true
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
@@ -63,6 +100,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .hdr{text-align:center;padding:3.5rem 1.5rem 2rem;border-bottom:1px solid var(--border)}
 .hdr-eye{font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
 .hdr-h1{font-family:var(--serif);font-size:clamp(2rem,6vw,3.4rem);font-weight:300;letter-spacing:.06em;line-height:1.1;color:var(--char);margin-bottom:.4rem}
+.hdr-h1-ja{display:block;font-family:var(--sans);font-size:clamp(.65rem,1.8vw,.8rem);font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
 .hdr-sub{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--muted)}
 .gold-line{width:36px;height:1px;background:var(--gold);margin:1.4rem auto 0}
 .wrap{max-width:680px;margin:0 auto;padding:2.5rem 1.4rem}
@@ -1103,7 +1141,7 @@ function App(){
     ),
     h("header",{className:"hdr",onClick:handleHeaderClick,style:{cursor:step!=="intro"?"pointer":"default"}},
       h("p",{className:"hdr-eye"},"Hair Care Diagnosis"),
-      h("h1",{className:"hdr-h1"},"Hair Identity")
+      h("h1",{className:"hdr-h1"},h("span",{className:"hdr-h1-ja"},"シャンプー診断")," Hair Identity")
     ),
     h("main",{className:"wrap"},
       h("h2",{className:"visually-hidden"},"ヘアケア診断アプリ"),
