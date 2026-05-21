@@ -38,12 +38,23 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --cream:#F8F5F0;--ivory:#F2EBE0;--gold:#B8965A;--gold-l:#D4B896;--gold-d:#8A6843;
-  --char:#1a2744;--char2:#2c3e6e;--muted:#5e6f8a;--border:rgba(184,150,90,0.24);
+  --char:#1a2744;--char2:#1f2f5a;--muted:#4a5870;--border:rgba(184,150,90,0.24);
   --serif:"Cormorant Garamond",Georgia,serif;--sans:"Noto Sans JP",sans-serif;
   --r:3px;
 }
 html{scroll-behavior:smooth;font-size:17px}
-body{background:var(--cream);color:var(--char);font-family:var(--sans);font-weight:300;min-height:100vh;overflow-x:hidden}
+html[data-font-size="normal"]{font-size:17px}
+html[data-font-size="large"]{font-size:19.5px}
+html[data-font-size="xlarge"]{font-size:22px}
+body{background:var(--cream);color:var(--char);font-family:var(--sans);font-weight:400;min-height:100vh;overflow-x:hidden}
+.fs-selector{margin-top:1.4rem;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.5rem;padding:.7rem .6rem;border:1px dashed var(--border);border-radius:var(--r);background:rgba(255,255,255,.4)}
+.fs-selector-lbl{font-size:.78rem;color:var(--char2);letter-spacing:.05em;margin-right:.2rem}
+.fs-btn{background:#fff;border:1px solid var(--border);color:var(--char2);font-family:var(--sans);padding:.4rem .9rem;border-radius:999px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.fs-btn-normal{font-size:.85rem}
+.fs-btn-large{font-size:.98rem}
+.fs-btn-xlarge{font-size:1.15rem}
+.fs-btn.active{background:var(--gold);border-color:var(--gold);color:#fff;font-weight:500}
+@media (hover:hover) and (pointer:fine){.fs-btn:hover{border-color:var(--gold-l)}}
 body::before{content:"";position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.85%27 numOctaves=%274%27 stitchTiles=%27stitch%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27 opacity=%270.028%27/%3E%3C/svg%3E");pointer-events:none;z-index:0}
 #root{position:relative;z-index:1}
 #pbar{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-l));z-index:999;transition:width .4s ease}
@@ -935,6 +946,13 @@ function shareResult(platform,title){
   window.open(url,"_blank","noopener");
 }
 
+const FONT_SIZE_KEY="hairIdentityFontSize";
+const FONT_SIZE_OPTIONS=[
+  {key:"normal",label:"標準",btnClass:"fs-btn-normal"},
+  {key:"large",label:"大",btnClass:"fs-btn-large"},
+  {key:"xlarge",label:"特大",btnClass:"fs-btn-xlarge"}
+];
+
 function App(){
   const [step,setStep]=useState("intro");
   const [curQ,setCurQ]=useState(0);
@@ -944,6 +962,13 @@ function App(){
   const [prevStep,setPrevStep]=useState(null);
   const [prevCurQ,setPrevCurQ]=useState(0);
   const [prevTypeKey,setPrevTypeKey]=useState(null);
+  const [fontSize,setFontSize]=useState(()=>{
+    try{return localStorage.getItem(FONT_SIZE_KEY)||"normal";}catch(e){return "normal";}
+  });
+  useEffect(()=>{
+    document.documentElement.dataset.fontSize=fontSize;
+    try{localStorage.setItem(FONT_SIZE_KEY,fontSize);}catch(e){}
+  },[fontSize]);
   const totalQ=QUESTIONS.length;
   const prog=step==="quiz"?((curQ+1)/totalQ*100):step==="result"||step==="products"?100:0;
   useEffect(()=>{const bar=document.getElementById("pbar");bar.style.width=prog+"%";bar.setAttribute("aria-valuenow",Math.round(prog));},[prog]);
@@ -1086,6 +1111,16 @@ function App(){
           "所要時間：約2〜3分"
         ),
         h("button",{className:"btn-primary",onClick:startQuiz},h(Icon,{name:"scissors",size:14}),h("span",{style:{marginLeft:".5rem"}},"診断をはじめる")),
+        h("div",{className:"fs-selector",role:"group","aria-label":"文字サイズの選択"},
+          h("span",{className:"fs-selector-lbl"},"文字サイズ"),
+          FONT_SIZE_OPTIONS.map(opt=>h("button",{
+            key:opt.key,
+            type:"button",
+            className:"fs-btn "+opt.btnClass+(fontSize===opt.key?" active":""),
+            "aria-pressed":fontSize===opt.key,
+            onClick:(e)=>{e.currentTarget.blur();setFontSize(opt.key);}
+          },opt.label))
+        ),
         h("div",{className:"intro-msg"},
           h("p",{className:"intro-msg-quote"},"「シャンプー、何がおすすめですか？」"),
           h("p",{className:"intro-msg-body"},"サロンで毎日のように受ける質問でした。膨大な数のシャンプーから、本当に合う一本を選び切れない歯がゆさが、ずっとありました。"),
