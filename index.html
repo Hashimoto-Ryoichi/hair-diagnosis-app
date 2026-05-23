@@ -311,23 +311,11 @@ function rak1(id){return R1+id+"/"+R2;}
 
 const CHAR_IMG={skin_alert:"char-skin-alert.png",oil_reset_short:"char-oil-reset-short.png",oil_reset_long:"char-oil-reset-long.png",repair_mode:"char-repair-mode.png",smooth_wave:"char-smooth-wave.png",aqua_sensitive:"char-aqua-sensitive.png",bare_skin:"char-bare-skin.png",vital_aging:"char-vital-aging.png",volume_grace:"char-volume-grace.png"};
 
-// 動的表示レイヤー（typeKeyは内部維持、表示のみ動的に切り替え）
+// 動的表示レイヤー（typeKeyは内部維持。一部タイプは回答内容で補助的に sub のみ切替）
 function getDisplayTitle(typeKey,answers){
-  if(typeKey==="vital_aging"){
-    const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
-    const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
-    return isSenior?"Vital Aging":"Volume Grace";
-  }
   return (TYPES[typeKey]&&TYPES[typeKey].title)||"";
 }
 function getDisplaySub(typeKey,answers){
-  if(typeKey==="vital_aging"){
-    const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
-    const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
-    return isSenior
-      ?"ハリ・コシ・ボリューム不足が気になる髪"
-      :"細毛・少毛量・ボリュームケアが必要な髪";
-  }
   if(typeKey==="smooth_wave"){
     const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
     if(q5arr.includes("birth")&&answers.q6==="none") return "出産後の変化が気になる髪";
@@ -348,35 +336,12 @@ function getDisplaySub(typeKey,answers){
   return (TYPES[typeKey]&&TYPES[typeKey].sub)||"";
 }
 function getDisplayCharImg(typeKey,answers){
-  if(typeKey==="vital_aging"){
-    const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
-    const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
-    return isSenior?CHAR_IMG.vital_aging:CHAR_IMG.volume_grace;
-  }
   return CHAR_IMG[typeKey];
 }
 function getDisplayBadge(typeKey,answers){
-  if(typeKey==="vital_aging"){
-    const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
-    const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
-    return isSenior?"Hair Type — VA":"Hair Type — VG";
-  }
   return (TYPES[typeKey]&&TYPES[typeKey].badge)||"";
 }
 function getDisplayAdvice(typeKey,answers){
-  if(typeKey==="vital_aging"){
-    const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
-    const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
-    if(!isSenior){
-      // Volume Grace 向け：年齢ではなく細毛・ぺたんこ・ボリューム不足が主訴
-      return [
-        "細毛・少毛量・ハリ不足が気になる方は、シャンプー前のブラッシングと、シャンプー中の頭皮マッサージで血流を促すと、根元のふんわり感が出やすくなります。",
-        "シャンプーは1回目で汚れを落とし、2回目でしっかり泡立てて頭皮を洗うダブル洗いがおすすめ。皮脂が毛穴に溜まっていると、根元が圧迫されてペタンとしやすくなります。",
-        "ノンシリコン処方やボリュームアップ系のシャンプーと相性◎。コンディショナーは毛先〜中間に留め、頭皮にはつけないことで根元の立ち上がりが保てます。",
-        "※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪のボリューム感に合ったケアを確認してみてください。"
-      ];
-    }
-  }
   return (TYPES[typeKey]&&TYPES[typeKey].advice)||[];
 }
 
@@ -546,11 +511,20 @@ const TYPES={
   vital_aging:{badge:"Hair Type — VA",title:"Vital Aging",sub:"ハリ・コシ・ボリューム不足が気になる髪",
     advice:["年齢とともに髪は細く・コシがなくなり、トップやサイドのボリュームが出にくくなります。これは髪内部の脂質が減少し空洞化が進むため。内部補修できるエイジングケアシャンプーが効果的です。","シャンプー時は頭皮マッサージを意識しましょう。指の腹で円を描くように揉みほぐすことで血流が促進され、健やかな髪が育つ土台が整います。","シリコン蓄積による根元のペタンコ感が気になる場合は、ノンシリコン処方も選択肢です。ただし髪質によってはキシみが出やすいので、トリートメントとの併用がおすすめ。コンディショナーは毛先〜中間に留め、頭皮にはつけないのがコツ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪のエイジングサインに合ったケアを確認してみてください。"],
     products:[
-      {name:"セグレタ シャンプー 根元からふんわり",forWhom:"トップやサイドのボリューム不足、髪のハリ・コシ低下が気になる方",desc:"花王のエイジングケアブランド。セラミドSが髪内部に浸透・補修する内部密度ケア処方。ノンシリコンで根元から立ち上がり、ふんわりとした仕上がりに。6種の植物エキス配合。",note:"本体・つめかえ用、シリーズに「うねる髪もまとまる」など複数あります。リンク先でお選びください。",volumeUp:true,top:true,amz:"B0DH7WD8W5",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fsegreta-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DH7WD8W5.09.LZZZZZZZ.jpg"},
       {name:"セグレタ 地肌も髪も洗えるマッサージ美容クリーム",forWhom:"地肌の乾燥・かたさが気になる方、洗いながら頭皮ケアもしたい方",desc:"シャンプー・コンディショナー・マッサージクリームが1本に。泡立たないクリーム処方で、地肌にうるおいを与えながら皮脂・汚れをやさしく浮き上がらせる。石けん不使用。",note:"本体360ml・つめかえ用285ml、ブラシ付きセットもあります。リンク先でお選びください。",top:false,amz:"B07CZR5V1K",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308471c.a06cce71.5308471d.8a4cd11e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmorro%2F20251102211340_94%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B07CZR5V1K.09.LZZZZZZZ.jpg"},
-      {name:"BOTANIST ボタニカルシャンプー バウンシーボリューム",forWhom:"髪のボリューム不足、ぺたんとしがちな根元が気になる方",desc:"ボタニカル成分配合のノンシリコン処方。髪にハリ・コシを与え、根元から軽やかに立ち上げる。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",volumeUp:true,top:false,amz:"B0CGJ5H5L8",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
       {name:"PRORY プロリー モイストリペア シャンプー",forWhom:"年齢とともに増えるパサつき・広がり・ツヤ不足が気になる方",desc:"ロート製薬のエイジングダメージケア。アミノ酸系主体の低刺激処方で、ステムプロテインCP配合。素髪に近づける機能性ヘアケア。",note:"本体450ml・つめかえ400mlがあります。リンク先でお選びください。",top:true,amz:"B0D839PQQH",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/535d7459.7d6d16ca.535d745a.0cc051ff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frohto610%2F19659r%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://www.shop.rohto.co.jp/on/demandware.static/-/Sites-all-master-catalog/default/dw112a6f5a/images/product/64_prory/195305_1.jpg"},
       {name:"資生堂プロフェッショナル アデノバイタル シャンプー 250ml",forWhom:"頭皮環境を整えながら、ハリ・コシ・ボリューム不足にアプローチしたい方",desc:"資生堂サロン専売。育毛有効成分アデノシン（医薬部外品）配合で頭皮環境にアプローチ。ベタイン系・タウリン系・アミドエーテル硫酸系のバランス洗浄で、頭皮にやさしく洗い上げる。",note:"250ml・500ml・1000mlがあります。サブリミック版・ザ・ヘアケア版もあります。リンク先でお選びください。",volumeUp:true,top:true,amz:"B0091RREJI",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc5bd.71bb7364.536fc5be.074eca82/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbraceshop%2F4909978937508%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0091RREJI.09.LZZZZZZZ.jpg"}
+    ]},
+  volume_grace:{badge:"Hair Type — VG",title:"Volume Grace",sub:"細毛・少毛量・ボリュームケアが必要な髪",
+    advice:[
+      "細毛・少毛量・ハリ不足が気になる方は、シャンプー前のブラッシングと、シャンプー中の頭皮マッサージで血流を促すと、根元のふんわり感が出やすくなります。",
+      "シャンプーは1回目で汚れを落とし、2回目でしっかり泡立てて頭皮を洗うダブル洗いがおすすめ。皮脂が毛穴に溜まっていると、根元が圧迫されてペタンとしやすくなります。",
+      "ノンシリコン処方やボリュームアップ系のシャンプーと相性◎。コンディショナーは毛先〜中間に留め、頭皮にはつけないことで根元の立ち上がりが保てます。",
+      "※ 詳しくは担当の美容師さんに相談しながら、ご自身の髪のボリューム感に合ったケアを確認してみてください。"
+    ],
+    products:[
+      {name:"セグレタ シャンプー 根元からふんわり",forWhom:"トップやサイドのボリューム不足、髪のハリ・コシ低下が気になる方",desc:"花王のエイジングケアブランド。セラミドSが髪内部に浸透・補修する内部密度ケア処方。ノンシリコンで根元から立ち上がり、ふんわりとした仕上がりに。6種の植物エキス配合。",note:"本体・つめかえ用、シリーズに「うねる髪もまとまる」など複数あります。リンク先でお選びください。",volumeUp:true,top:true,amz:"B0DH7WD8W5",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fsegreta-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DH7WD8W5.09.LZZZZZZZ.jpg"},
+      {name:"BOTANIST ボタニカルシャンプー バウンシーボリューム",forWhom:"髪のボリューム不足、ぺたんとしがちな根元が気になる方",desc:"ボタニカル成分配合のノンシリコン処方。髪にハリ・コシを与え、根元から軽やかに立ち上げる。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",volumeUp:true,top:true,amz:"B0CGJ5H5L8",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"}
     ]}
 };
 
@@ -585,11 +559,25 @@ function diagnose(ans){
   const q10arr=Array.isArray(ans.q10)?ans.q10:(ans.q10?[ans.q10]:[]);
   const q10=q10arr[0];
 
-  // ── Step1: 頭皮トラブル・脂性は最優先 ──────────────────
+  // ── Step1: 頭皮トラブル ────────────────────────────
   if(q1==="red") return "skin_alert";
+
+  // ── Step1.5: Q11「補修」を最優先 × 深刻ダメージサイン → Repair Mode を最初に確定 ──
+  // （以降の脂性・くせ毛・bare_skin 等の分岐で吸い取られるのを防ぐ）
+  if(q11arr.includes("repair")&&q8arr.some(v=>v==="split"||v==="frizz"||v==="spread")){
+    return "repair_mode";
+  }
+
+  // ── Step1.6: Q11「ベタつき」主訴 → Oil Reset を前倒し（薬剤ブリーチ/縮毛矯正は除外）──
+  // 太毛/多毛で smooth_wave に流れるのを防ぐ
+  if(q11arr.includes("oily")&&eq7!=="bleach"&&eq7!=="straight"&&eq7!=="perm"){
+    return q2==="short"?"oil_reset_short":"oil_reset_long";
+  }
+
+  // ── Step2: 脂性頭皮（薬剤なし or カラーのみ）→ Oil Reset ─────────
   if(q1==="oily"&&(eq7==="none"||eq7==="color")) return q2==="short"?"oil_reset_short":"oil_reset_long";
 
-  // ── Step2: 薬剤ダメージ（年齢より優先。ブリーチ・縮毛矯正・パーマは緊急度高）──────
+  // ── Step3: 薬剤ダメージ（年齢より優先。ブリーチ・縮毛矯正・パーマは緊急度高）──────
   // 全体ブリーチ・インナーカラー
   // ショート：毛先ダメージ（パサつき・チリつき・枝毛・広がり）があればRepair、なければBare Skin
   // ミディアム以上：Repair確定
@@ -614,14 +602,14 @@ function diagnose(ans){
     return goodTool?"bare_skin":"repair_mode";
   }
 
-  // ── Step3: 60代以降 → Vital Aging（薬剤ダメージ判定の後で確定）──
+  // ── Step4: 60代以降で強く実感 → Vital Aging（薬剤ダメージ判定の後で確定）──
   if(eq5==="strong") return "vital_aging";
 
   // 出産後の髪変化（単独）→ うねり由来として Smooth Wave
   // ただし深刻ダメージサイン（枝毛・チリつき）や補修ニーズがある場合は上書きしない
   if(hasBirth&&q8!=="split"&&q8!=="frizz"&&!q11arr.includes("repair")) return "smooth_wave";
 
-  // ── Step4: くせ毛・うねりが主訴 ──────────────────────
+  // ── Step5: くせ毛・うねりが主訴 ──────────────────────
   const hasKuse=q6==="some"||q6==="strong";
   const hasSpread=q8==="spread";
   const wantVolume=q10==="volume";
@@ -631,25 +619,21 @@ function diagnose(ans){
     return "smooth_wave";
   }
 
-  // ── Step4.5: Q11で明示的に「補修」を最優先したい × 深刻ダメージサイン → Repair Mode 優先 ──
-  // （Step5の bare_skin/smooth_wave 振り分けに preempt されるのを防ぐ）
-  if(q11==="repair"&&(q8==="split"||q8==="frizz"||q8==="spread")){
-    return "repair_mode";
-  }
-
-  // ── Step5: Q8 現在の髪の状態 ─────────────────────────
+  // ── Step6: Q8 現在の髪の状態 ─────────────────────────
   if(q8==="frizz"||q8==="split"){
     return "bare_skin";
   }
   if(q8==="flat"){
-    // 細毛・少毛量 × ボリューム志向 → Vital Aging（ボリューム対応商品が揃うため）
+    // ぺたんとしてボリュームが出ない × ボリューム志向 → Volume Grace（細毛・ボリューム不足ケア）
     const isThinSoftEarly=(q3==="thin"||q4==="less");
-    if(isThinSoftEarly&&(wantVolume||q11arr.includes("volume"))) return "vital_aging";
-    if(wantVolume) return "aqua_sensitive";
+    if(isThinSoftEarly&&(wantVolume||q11arr.includes("volume"))) return "volume_grace";
+    // 50代から実感 × ぺたんこ × ボリューム志向 → Vital Aging
+    if(hasClear&&(wantVolume||q11arr.includes("volume"))) return "vital_aging";
+    if(wantVolume) return "volume_grace";
     return eq7==="none"?"aqua_sensitive":"bare_skin";
   }
 
-  // ── Step6: Q3 太さ × Q4 毛量 ─────────────────────────
+  // ── Step7: Q3 太さ × Q4 毛量 ─────────────────────────
   const isThickHard=(q3==="thick"||q4==="more");
   const isThinSoft =(q3==="thin"||q4==="less");
 
@@ -659,14 +643,16 @@ function diagnose(ans){
     return "smooth_wave";
   }
   if(isThinSoft){
-    // 細毛・少毛量＋ボリューム志向 → Vital Aging（ボリューム対応商品が揃っているため）
-    if(wantVolume||q11arr.includes("volume")) return "vital_aging";
+    // 細毛・少毛量＋ボリューム志向 → Volume Grace（年齢非依存のボリュームケア）
+    // ただし50代から実感ありの場合は Vital Aging（エイジングサイン優先）
+    if(wantVolume||q11arr.includes("volume")){
+      return hasClear?"vital_aging":"volume_grace";
+    }
     if(eq7==="none") return "aqua_sensitive";
     return "bare_skin";
   }
 
-  // ── Step7: Q11 悩みで最終決定 ────────────────────────
-  if(q11==="oily") return q2==="short"?"oil_reset_short":"oil_reset_long";
+  // ── Step8: Q11 悩みで最終決定 ────────────────────────
   if(q11==="wave"){
     return "smooth_wave";
   }
@@ -677,18 +663,18 @@ function diagnose(ans){
   }
   if(q11==="aging") return "vital_aging";
   if(q11==="volume"){
-    // ボリュームが欲しい：細毛・少毛量は年齢関係なくVital Aging（ボリューム対応商品で対応）
-    if(isThinSoft) return "vital_aging";
-    return "aqua_sensitive";
+    // ボリュームが欲しい：細毛・少毛量は年齢関係なく Volume Grace（50代からの実感ありなら Vital Aging）
+    if(isThinSoft) return hasClear?"vital_aging":"volume_grace";
+    return hasClear?"vital_aging":"volume_grace";
   }
 
-  // ── Step8: Q10 なりたい髪質を最終反映 ───────────────
+  // ── Step9: Q10 なりたい髪質を最終反映 ───────────────
   if(q10==="volume"){
-    return "aqua_sensitive";
+    return hasClear?"vital_aging":"volume_grace";
   }
   if(q10==="vdown") return "smooth_wave";
 
-  // ── Step9: デフォルト ─────────────────────────────
+  // ── Step10: デフォルト ─────────────────────────────
   if(eq7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
   return "bare_skin";
 }
@@ -742,16 +728,14 @@ function buildResultSummary(typeKey,answers){
       return `${dmgStr}がある髪質の方です。色持ちと補修を両立できるシャンプーで、ツヤのある仕上がりをキープしましょう。`;
     }
     case "vital_aging":{
-      const isSenior=q5arr.includes("strong")||q5arr.includes("clear");
       const wantVol=q11arr.includes("volume")||answers.q4==="less"||q8arr.includes("flat");
-      if(!isSenior){
-        // Volume Grace 向け（年齢ではなく細毛・ぺたんこ・ボリューム不足）
-        const reasonLbl=q8arr.includes("flat")?"ぺたんとしがちな根元":answers.q4==="less"?"細毛・少毛量":"髪のボリューム不足";
-        return `${reasonLbl}が気になるタイプです。頭皮環境を整えながら、根元から立ち上がるふんわりとした仕上がりを目指しましょう。`;
-      }
-      const when=q5arr.includes("strong")?"60代以降から":"50代から";
+      const when=q5arr.includes("strong")?"60代以降から":q5arr.includes("clear")?"50代から":"年齢とともに";
       const tail=wantVol?"根元から立ち上がる、ふんわりとした仕上がりを取り戻しましょう。":"ハリ・コシを補い、エイジングのサインに寄り添うケアをしていきましょう。";
       return `${when}実感しやすい、ハリ・コシ・ボリューム不足が気になるタイプです。エイジングケアに特化したシャンプーで、${tail}`;
+    }
+    case "volume_grace":{
+      const reasonLbl=q8arr.includes("flat")?"ぺたんとしがちな根元":answers.q4==="less"?"細毛・少毛量":"髪のボリューム不足";
+      return `${reasonLbl}が気になるタイプです。頭皮環境を整えながら、根元から立ち上がるふんわりとした仕上がりを目指しましょう。`;
     }
     default: return "";
   }
@@ -852,7 +836,7 @@ function renderProdCard(p,key,isTopPick){
 // items は細分類ごとにグループ化して表示
 const SURFACTANT_DETAIL=[
   {key:"betaine",cat:"ベタイン系",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
-    types:["repair_mode","smooth_wave","skin_alert","vital_aging","bare_skin","aqua_sensitive"],
+    types:["repair_mode","smooth_wave","skin_alert","vital_aging","volume_grace","bare_skin","aqua_sensitive"],
     products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR"],
     groups:[
       {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
@@ -868,7 +852,7 @@ const SURFACTANT_DETAIL=[
       {sub:"グリシン系・サルコシン系",items:["ココイルグリシンK","ココイルグリシンNa","ラウロイルサルコシンNa","ラウロイルサルコシンTEA"]},
     ]},
   {key:"taurine",cat:"タウリン系",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
-    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging"],
+    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging","volume_grace"],
     products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","コスメデコルテ AQ","アデノバイタル","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR"],
     groups:[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
@@ -894,13 +878,13 @@ const SURFACTANT_DETAIL=[
       {sub:"オレフィンスルホン酸系",items:["オレフィン(C14-16)スルホン酸Na"]},
     ]},
   {key:"amido_sulfate",cat:"アミドエーテル硫酸系",rank:4,desc:"硫酸系の中では比較的マイルド。アミド構造で皮膚刺激を緩和",
-    types:["vital_aging"],
+    types:["vital_aging","volume_grace"],
     products:["アデノバイタル"],
     groups:[
       {sub:"アミドエーテル硫酸系",items:["ラウラミドエーテル硫酸Na","ココアミドエーテル硫酸Na"]},
     ]},
   {key:"laureth",cat:"ラウレス硫酸系",rank:4.5,desc:"高洗浄力。エトキシ化(EO)鎖により分子が大きく、ラウリル硫酸より皮膚浸透が抑えられている",
-    types:["oil_reset_long","oil_reset_short","vital_aging","repair_mode","smooth_wave"],
+    types:["oil_reset_long","oil_reset_short","vital_aging","volume_grace","repair_mode","smooth_wave"],
     products:["パンテーン","ラックス スーパーリッチ","TSUBAKI","ダヴ","セグレタ","UNOVE","ゴールドウェル","アデノバイタル"],
     groups:[
       {sub:"ラウレス硫酸塩",items:["ラウレス硫酸Na","ラウレス硫酸アンモニウム","ラウレス硫酸TEA"]},
@@ -1016,6 +1000,22 @@ function App(){
   const [fontSize,setFontSize]=useState(()=>{
     try{return localStorage.getItem(FONT_SIZE_KEY)||"normal";}catch(e){return "normal";}
   });
+  // 進行中タイマー（遷移用 setTimeout）を集約管理。途中で「戻る」「ヘッダーから再開」が押されたらキャンセル
+  const timersRef=useRef([]);
+  function setTracedTimeout(fn,ms){
+    const id=setTimeout(()=>{
+      timersRef.current=timersRef.current.filter(t=>t!==id);
+      fn();
+    },ms);
+    timersRef.current.push(id);
+    return id;
+  }
+  function clearAllTimers(){
+    timersRef.current.forEach(id=>clearTimeout(id));
+    timersRef.current=[];
+  }
+  // アンマウント時にタイマー解放
+  useEffect(()=>()=>clearAllTimers(),[]);
   useEffect(()=>{
     document.documentElement.dataset.fontSize=fontSize;
     try{localStorage.setItem(FONT_SIZE_KEY,fontSize);}catch(e){}
@@ -1024,14 +1024,17 @@ function App(){
   const prog=step==="quiz"?((curQ+1)/totalQ*100):step==="result"||step==="products"?100:0;
   useEffect(()=>{const bar=document.getElementById("pbar");bar.style.width=prog+"%";bar.setAttribute("aria-valuenow",Math.round(prog));},[prog]);
   useEffect(()=>{window.scrollTo({top:0,behavior:"instant"});},[step]);
-  function startQuiz(){setStep("quiz");setCurQ(0);setAnswers({});}
+  // 再開モーダル表示時に「再開する」ボタンへ自動フォーカス（アクセシビリティ）
+  const resumeBtnRef=useRef(null);
+  useEffect(()=>{if(resumeModal&&resumeBtnRef.current){resumeBtnRef.current.focus();}},[resumeModal]);
+  function startQuiz(){clearAllTimers();setStep("quiz");setCurQ(0);setAnswers({});}
   function selectOpt(k){
     const q=QUESTIONS[curQ];
     const na={...answers,[q.id]:k};
     setAnswers(na);
-    setTimeout(()=>{
+    setTracedTimeout(()=>{
       if(curQ<totalQ-1){setCurQ(curQ+1);}
-      else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose(na));setStep("result");},1000);}
+      else{setStep("loading");setTracedTimeout(()=>{setTypeKey(diagnose(na));setStep("result");},1000);}
     },280);
   }
   function toggleQ5(k){
@@ -1096,6 +1099,7 @@ function App(){
   }
   function handleHeaderClick(){
     if(step==="intro") return;
+    clearAllTimers();
     if(Object.keys(answers).length>0){
       setPrevStep(step);
       setPrevCurQ(curQ);
@@ -1107,12 +1111,14 @@ function App(){
     }
   }
   function resumeQuiz(){
+    clearAllTimers();
     setStep(prevStep||"quiz");
     setCurQ(prevCurQ||0);
     if(prevTypeKey) setTypeKey(prevTypeKey);
     setResumeModal(false);
   }
   function freshStart(){
+    clearAllTimers();
     setAnswers({});
     setCurQ(0);
     setTypeKey(null);
@@ -1127,21 +1133,29 @@ function App(){
     const arr=Array.isArray(na[qid])?na[qid]:[];
     if(arr.length===0) return;
     if(curQ<totalQ-1){setCurQ(curQ+1);}
-    else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose(na));setStep("result");},1000);}
+    else{setStep("loading");setTracedTimeout(()=>{setTypeKey(diagnose(na));setStep("result");},1000);}
   }
-  function goBack(){if(curQ>0)setCurQ(curQ-1);else setStep("intro");}
-  function retry(){setStep("intro");setAnswers({});setCurQ(0);setTypeKey(null);}
+  function goBack(){clearAllTimers();if(curQ>0)setCurQ(curQ-1);else setStep("intro");}
+  function retry(){clearAllTimers();setStep("intro");setAnswers({});setCurQ(0);setTypeKey(null);}
   const td=typeKey?TYPES[typeKey]:null;
   return h("div",null,
-    resumeModal&&h("div",{className:"modal-overlay",role:"dialog","aria-modal":"true"},
+    resumeModal&&h("div",{className:"modal-overlay",role:"dialog","aria-modal":"true","aria-labelledby":"resume-modal-title"},
       h("div",{className:"modal-box"},
-        h("p",{className:"modal-title"},"前回の診断を再開しますか？"),
+        h("p",{className:"modal-title",id:"resume-modal-title"},"前回の診断を再開しますか？"),
         h("p",{className:"modal-desc"},"途中までの回答が残っています。"),
-        h("button",{className:"btn-primary",onClick:resumeQuiz},h("span",null,"再開する")),
+        h("button",{className:"btn-primary",onClick:resumeQuiz,ref:resumeBtnRef},h("span",null,"再開する")),
         h("button",{className:"btn-ghost",onClick:freshStart},"最初からやり直す")
       )
     ),
-    h("header",{className:"hdr",onClick:handleHeaderClick,style:{cursor:step!=="intro"?"pointer":"default"}},
+    h("header",{
+      className:"hdr",
+      onClick:handleHeaderClick,
+      onKeyDown:(e)=>{ if(step!=="intro"&&(e.key==="Enter"||e.key===" ")){e.preventDefault();handleHeaderClick();} },
+      role:step!=="intro"?"button":undefined,
+      tabIndex:step!=="intro"?0:undefined,
+      "aria-label":step!=="intro"?"トップに戻る":undefined,
+      style:{cursor:step!=="intro"?"pointer":"default"}
+    },
       h("p",{className:"hdr-eye"},"Hair Care Diagnosis"),
       h("h1",{className:"hdr-h1"},h("span",{className:"hdr-h1-ja"},"シャンプー診断")," Hair Identity")
     ),
@@ -1199,9 +1213,9 @@ function App(){
           h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
           h("p",{className:"q-text"},QUESTIONS[curQ].text),
-          QUESTIONS[curQ].id==="q8"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 一番気になる状態から順にタップしてください。"),
-          QUESTIONS[curQ].id==="q10"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 一番気になる仕上がりから順にタップしてください。"),
-          QUESTIONS[curQ].id==="q11"&&h("p",{className:"q11-hint"},"※ 一番気になる順にタップしてください。"),
+          QUESTIONS[curQ].id==="q8"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 気になる状態をすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
+          QUESTIONS[curQ].id==="q10"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ なりたい仕上がりをすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
+          QUESTIONS[curQ].id==="q11"&&h("p",{className:"q11-hint"},"※ 気になるお悩みをすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
           h("div",{className:"opts"},QUESTIONS[curQ].opts.map((opt,optIdx)=>{
             const qid=QUESTIONS[curQ].id;
             const isMulti=qid==="q5"||qid==="q7"||qid==="q8"||qid==="q9"||qid==="q10"||qid==="q11";
@@ -1209,8 +1223,8 @@ function App(){
             const isSel=isMulti?arr.includes(opt.k):answers[qid]===opt.k;
             const order=(qid==="q8"||qid==="q10"||qid==="q11")&&isSel?arr.indexOf(opt.k)+1:0;
             const circled=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
-            return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),onClick:(e)=>{e.currentTarget.blur();
-              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");},1000);}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");},1000);}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),(opt.k==="none"||(opt.k==="other"&&!(Array.isArray(answers.q9)&&answers.q9.length>0)))&&setTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTimeout(()=>{setTypeKey(diagnose({...answers,q9:[opt.k]}));setStep("result");},1000);}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
+            return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),"aria-pressed":isSel,onClick:(e)=>{e.currentTarget.blur();
+              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{setTypeKey(diagnose({...answers,q5:["stable"]}));setStep("result");},1000);}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{setTypeKey(diagnose({...answers,q7:["none"]}));setStep("result");},1000);}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),(opt.k==="none"||(opt.k==="other"&&!(Array.isArray(answers.q9)&&answers.q9.length>0)))&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{setTypeKey(diagnose({...answers,q9:[opt.k]}));setStep("result");},1000);}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
@@ -1248,7 +1262,7 @@ function App(){
           })
         ),
         (typeKey==="oil_reset_short"||typeKey==="oil_reset_long")&&(Array.isArray(answers.q5)?answers.q5:[answers.q5||"stable"]).some(v=>v==="clear"||v==="strong")&&(Array.isArray(answers.q10)?answers.q10.includes("volume"):answers.q10==="volume")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ ボリュームアップの実感が得られない場合は、エイジングケア（Vital Aging）もご検討ください。"),
-        ((answers.q1==="oily"||answers.q1==="mix")&&typeKey==="repair_mode"||answers.q1==="oily"&&typeKey==="bare_skin")&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ 地肌は脂性・混合傾向があります。シャンプー後はシャワーでしっかりすすいでください。"),
+        ((answers.q1==="oily"||answers.q1==="mix")&&(typeKey==="repair_mode"||typeKey==="bare_skin"))&&h("div",{className:"alert-box",style:{background:"#fdf8f0",borderColor:"var(--gold-l)",color:"var(--gold-d)",marginTop:"1.2rem"}},"※ 地肌は脂性・混合傾向があります。シャンプー後はシャワーでしっかりすすいでください。"),
         (()=>{
           const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
           const hasStraight=q7arr.includes("straight");
@@ -1325,8 +1339,8 @@ function App(){
         })(),
         (()=>{
           const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
-          if(!q5arr.includes("clear")||typeKey==="vital_aging") return null;
-          const vaProds=[TYPES.vital_aging.products.find(p=>p.name.includes("セグレタ シャンプー")),TYPES.vital_aging.products.find(p=>p.name.includes("PRORY"))].filter(Boolean);
+          if(!q5arr.includes("clear")||typeKey==="vital_aging"||typeKey==="volume_grace") return null;
+          const vaProds=[TYPES.volume_grace.products.find(p=>p.name.includes("セグレタ シャンプー")),TYPES.vital_aging.products.find(p=>p.name.includes("PRORY"))].filter(Boolean);
           if(vaProds.length===0) return null;
           return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
             h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"Optional"),
@@ -1341,11 +1355,13 @@ function App(){
           const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
           const wantsVolume=q11arr.includes("volume")||q10arr.includes("volume");
           const lowVolume=answers.q4==="less"||q8arr.includes("flat");
+          // Volume Grace / Vital Aging 自体に振り分けられた場合は重複になるので非表示
+          if(typeKey==="volume_grace"||typeKey==="vital_aging") return null;
           if(!(wantsVolume&&lowVolume)) return null;
           const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
           const volProds=[
-            findP("vital_aging","セグレタ シャンプー"),
-            findP("vital_aging","バウンシーボリューム")
+            findP("volume_grace","セグレタ シャンプー"),
+            findP("volume_grace","バウンシーボリューム")
           ].filter(Boolean);
           if(volProds.length===0) return null;
           return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
