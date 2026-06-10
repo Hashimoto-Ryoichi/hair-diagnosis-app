@@ -736,10 +736,11 @@ function diagnose(ans){
   if(eq7==="straight") return "repair_mode";
   // パーマ → Repair Mode（補修＋カール維持。ストレート訴求の curlAvoid 商品は isProductDisplayable で除外）
   if(eq7==="perm") return "repair_mode";
-  // カラー + 深刻ダメージサイン → Q9で分岐
+  // カラー + 深刻ダメージサイン（チリつき・枝毛のみ）→ Q9で分岐
+  // 広がり(spread)は髪質由来が多く、カラーのみでハイダメージ扱いは過剰なため除外 → Step5のSmooth Waveで受ける
   // 高機能器具（リファ・ビューロン・レプロナイザー・ナノイー）でダメージ軽減 → Bare Skin
   // 普通器具・使わない → Repair Mode（補修強め）
-  if(eq7==="color"&&(q8==="split"||q8==="frizz"||q8==="spread")){
+  if(eq7==="color"&&(q8==="split"||q8==="frizz")){
     // 高機能熱器具（refa/bio/repro/nanoe）を主に使う場合のみダメージ軽減効果を期待
     // "other"（その他のドライヤー・アイロン）併用時は使用頻度が分散している可能性が高く保守的に repair_mode へ
     const goodTool=q9arr.some(v=>v==="refa"||v==="bio"||v==="repro"||v==="nanoe")&&!q9arr.includes("other");
@@ -1082,7 +1083,7 @@ function buildTrace(ans,typeKey){
     trace.push({step:"Step3",condition:"Q7=縮毛矯正",result:"repair_mode確定",weight:"高"});
   }else if(eq7==="perm"){
     trace.push({step:"Step3",condition:"Q7=パーマ",result:"repair_mode確定",weight:"高"});
-  }else if(eq7==="color"&&q8arr.some(v=>["split","frizz","spread"].includes(v))){
+  }else if(eq7==="color"&&q8arr.some(v=>["split","frizz"].includes(v))){
     const q9arr=Array.isArray(ans.q9)?ans.q9:[ans.q9||"none"];
     const goodTool=q9arr.some(v=>["refa","bio","repro","nanoe"].includes(v))&&!q9arr.includes("other");
     trace.push({step:"Step3",condition:`Q7=カラー ∧ 深刻ダメージ ∧ 高機能器具=${goodTool?"あり":"なし"}`,result:`${goodTool?"bare_skin":"repair_mode"}確定`,weight:"中高"});
