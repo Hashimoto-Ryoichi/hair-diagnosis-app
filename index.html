@@ -463,6 +463,9 @@ function getDisplaySub(typeKey,answers){
     const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
     if(q7arr.includes("perm")&&!q7arr.includes("straight")&&!q7arr.includes("bleach"))
       return "パーマ × カール維持ケア";
+    // 強薬剤（ブリーチ・縮毛矯正・パーマ）なしでRepair Modeになった場合、「ハイダメージ」表記は実態と合わないため切替
+    if(!q7arr.some(v=>v==="bleach"||v==="straight"||v==="perm"))
+      return q7arr.includes("color")?"カラーダメージ集中補修":"熱・乾燥ダメージ集中補修";
     return TYPES[typeKey].sub;
   }
   return (TYPES[typeKey]&&TYPES[typeKey].sub)||"";
@@ -474,6 +477,17 @@ function getDisplayBadge(typeKey,answers){
   return (TYPES[typeKey]&&TYPES[typeKey].badge)||"";
 }
 function getDisplayAdvice(typeKey,answers){
+  // repair_mode: 強薬剤なし → 先頭の薬剤ダメージ解説を実態（カラー／熱・摩擦）に合わせて差し替え
+  if(typeKey==="repair_mode"){
+    const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
+    if(!q7arr.some(v=>v==="bleach"||v==="straight"||v==="perm")){
+      const rest=(TYPES.repair_mode.advice||[]).slice(2);
+      const first=q7arr.includes("color")
+        ?"カラーの薬剤も、繰り返すほど髪のタンパク質（ケラチン）を少しずつ変性させます。失ったタンパク質を補うことが修復の第一歩です。"
+        :"高温のアイロン・コテや日々の摩擦・乾燥でも、髪のタンパク質は少しずつ変性してダメージが蓄積します。失ったタンパク質を補うことが修復の第一歩です。";
+      return [first,"ケラチンやアミノ酸などの補修成分が配合されたシャンプーなら、髪の内部に栄養を補いながら優しく洗えます。",...rest];
+    }
+  }
   // bare_skin: 薬剤なし（colorを含まない）→ 健康な髪向けアドバイスに切替
   if(typeKey==="bare_skin"){
     const q7arr=Array.isArray(answers.q7)?answers.q7:(answers.q7?[answers.q7]:[]);
@@ -755,7 +769,8 @@ function diagnose(ans){
   if(q11arr.includes("aging")||q11arr.includes("gray")){
     const isThinSoft=ans.q3==="thin"||ans.q4==="less";
     const wantVol=q10arr.includes("volume");
-    return (isThinSoft||wantVol)?"volume_grace":"vital_aging";
+    // ボリュームダウンが第一希望の人を、細毛だけを理由にボリュームケアへ振らない（回答を尊重）
+    return (wantVol||(isThinSoft&&q10arr[0]!=="vdown"))?"volume_grace":"vital_aging";
   }
 
   // ── Step5: くせ毛・うねりが主訴 ──────────────────────
@@ -763,15 +778,18 @@ function diagnose(ans){
   const hasSpread=q8==="spread";
   const wantVolume=q10==="volume";
 
+  // 「ボリュームが欲しい」回答はQ10でもQ11でも尊重（頭頂部だけぺたんこの接客例）。ただしQ10第一希望がvdownなら抑える方を優先
+  const wantVolAny=wantVolume||(q11arr.includes("volume")&&q10!=="vdown");
+
   if(hasKuse||hasSpread){
     // ボリューム志望が併発するとaqua_sensitiveでは弱い → Volume Grace に
-    if(wantVolume) return "volume_grace";
+    if(wantVolAny) return "volume_grace";
     return "smooth_wave";
   }
 
-  // 出産後の髪変化（フォールバック）→ うねり由来として Smooth Wave
+  // 出産後の髪変化（フォールバック）→ うねり由来として Smooth Wave（ボリューム希望があればVolume Grace）
   // 主訴がエイジング・くせ毛・薬剤ダメージ等に該当しない場合のみ適用
-  if(hasBirth&&q8!=="split"&&q8!=="frizz"&&!q11arr.includes("repair")) return "smooth_wave";
+  if(hasBirth&&q8!=="split"&&q8!=="frizz"&&!q11arr.includes("repair")) return wantVolAny?"volume_grace":"smooth_wave";
 
   // ── Step6: Q8 現在の髪の状態 ─────────────────────────
   if(q8==="frizz"||q8==="split"){
@@ -792,7 +810,10 @@ function diagnose(ans){
   const isThinSoft =(q3==="thin"||q4==="less");
 
   if(isThickHard){
-    if(q10==="vdown"||q10==="moist") return "smooth_wave";
+    if(q10==="vdown") return "smooth_wave";
+    // 太毛・多毛でも「ボリュームが欲しい」回答があれば尊重（頭頂部だけボリュームが出ない接客例）
+    if(wantVolAny) return hasClear?"vital_aging":"volume_grace";
+    if(q10==="moist") return "smooth_wave";
     if(q8==="dry"&&eq7==="color") return "bare_skin";
     return "smooth_wave";
   }
@@ -808,7 +829,7 @@ function diagnose(ans){
 
   // ── Step8: Q11 悩みで最終決定 ────────────────────────
   if(q11==="wave"){
-    return "smooth_wave";
+    return wantVolAny?"volume_grace":"smooth_wave";
   }
   if(q11==="repair"){
     // 自覚あり + Q8深刻ダメージサイン → Repair Mode、それ以外 Bare Skin
@@ -858,7 +879,7 @@ function buildResultSummary(typeKey,answers){
       if(q7arr.includes("straight")) causes.push("縮毛矯正");
       if(q7arr.includes("perm")) causes.push("パーマ");
       if(causes.length===0&&q7arr.includes("color")) causes.push("カラー");
-      const causeStr=causes.length>0?causes.join("・")+"による":"薬剤処理による";
+      const causeStr=causes.length>0?causes.join("・")+"による":"熱や摩擦・乾燥の蓄積による";
       const dmgList=[];
       if(q8arr.includes("split")) dmgList.push("枝毛");
       if(q8arr.includes("frizz")) dmgList.push("チリつき");
@@ -868,6 +889,12 @@ function buildResultSummary(typeKey,answers){
       return `${causeStr}${dmgStr}髪質の方です。補修成分が豊富なシャンプーで、内側からしっかりとケアしていきましょう。`;
     }
     case "smooth_wave":{
+      // うねり・広がりの入力がない場合（出産後フォールバック・太毛/多毛・ボリュームダウン希望）は文言を実態に合わせる
+      const noWaveInput=q6==="none"&&!q8arr.includes("spread")&&!q11arr.includes("wave");
+      if(noWaveInput){
+        if(q5arr.includes("birth")) return "出産を機に髪質が変化しやすい時期です。うねりや広がりが出てくる前に、保湿ケアで髪のまとまりを守っていきましょう。";
+        return "ボリュームや広がりを落ち着かせたい方向けのタイプです。保湿ケアで髪を落ち着かせながら、まとまりのある髪へ導いていきましょう。";
+      }
       const kuseLbl=q6==="strong"?"強いくせ・うねり":q6==="some"?"くせやうねり":"うねりや広がり";
       return `${kuseLbl}が気になるタイプです。保湿ケアでうねりをコントロールしながら、まとまりのある髪へ導いていきましょう。`;
     }
@@ -1063,6 +1090,10 @@ function buildTrace(ans,typeKey){
   const q5arr=Array.isArray(ans.q5)?ans.q5:(ans.q5?[ans.q5]:[]);
   const q8arr=Array.isArray(ans.q8)?ans.q8:(ans.q8?[ans.q8]:[]);
   const q10arr=Array.isArray(ans.q10)?ans.q10:(ans.q10?[ans.q10]:[]);
+  // diagnose関数と同じ優先度解決（複数選択時のズレ防止）
+  const Q8_PRIORITY=["frizz","split","spread","dry","flat","gloss"];
+  const q8main=Q8_PRIORITY.find(v=>q8arr.includes(v))||q8arr[0];
+  const wantVolAny=q10arr[0]==="volume"||(q11arr.includes("volume")&&q10arr[0]!=="vdown");
 
   if(ans.q1==="red"){
     trace.push({step:"Step1",condition:"Q1=赤み・湿疹",result:"skin_alert確定",weight:"最優先"});
@@ -1092,13 +1123,14 @@ function buildTrace(ans,typeKey){
   }else if((q11arr.includes("aging")||q11arr.includes("gray"))){
     const isThinSoft=ans.q3==="thin"||ans.q4==="less";
     const wantVol=q10arr.includes("volume");
-    trace.push({step:"Step4.5",condition:`Q11=エイジング/白髪 ∧ 細毛=${isThinSoft} ∧ ボリューム希望=${wantVol}`,result:`${(isThinSoft||wantVol)?"volume_grace":"vital_aging"}確定`,weight:"中"});
-  }else if(ans.q6==="some"||ans.q6==="strong"||q8arr.includes("spread")){
-    const wantVolume=q10arr[0]==="volume";
-    trace.push({step:"Step5",condition:`くせ毛/広がり ∧ ボリューム希望=${wantVolume}`,result:`${wantVolume?"volume_grace":"smooth_wave"}確定`,weight:"中"});
-  }else if(q8arr.includes("frizz")||q8arr.includes("split")){
+    trace.push({step:"Step4.5",condition:`Q11=エイジング/白髪 ∧ 細毛=${isThinSoft} ∧ ボリューム希望=${wantVol}`,result:`${(wantVol||(isThinSoft&&q10arr[0]!=="vdown"))?"volume_grace":"vital_aging"}確定`,weight:"中"});
+  }else if(ans.q6==="some"||ans.q6==="strong"||q8main==="spread"){
+    trace.push({step:"Step5",condition:`くせ毛/広がり ∧ ボリューム希望=${wantVolAny}`,result:`${wantVolAny?"volume_grace":"smooth_wave"}確定`,weight:"中"});
+  }else if(q5arr.includes("birth")&&q8main!=="split"&&q8main!=="frizz"&&!q11arr.includes("repair")){
+    trace.push({step:"Step5.5",condition:`出産後の髪変化（フォールバック）∧ ボリューム希望=${wantVolAny}`,result:`${wantVolAny?"volume_grace":"smooth_wave"}確定`,weight:"中"});
+  }else if(q8main==="frizz"||q8main==="split"){
     trace.push({step:"Step6",condition:"Q8=チリつき/枝毛",result:"bare_skin確定",weight:"低中"});
-  }else if(q8arr.includes("flat")){
+  }else if(q8main==="flat"){
     trace.push({step:"Step6",condition:"Q8=ぺたんこ",result:`${typeKey}確定`,weight:"低中"});
   }else if(ans.q3==="thick"||ans.q4==="more"){
     trace.push({step:"Step7",condition:"太毛/多毛",result:`${typeKey}確定`,weight:"低"});
@@ -1118,6 +1150,7 @@ function explainExcluded(ans,selectedTypeKey){
   const q11arr=Array.isArray(ans.q11)?ans.q11:(ans.q11?[ans.q11]:[]);
   const q5arr=Array.isArray(ans.q5)?ans.q5:(ans.q5?[ans.q5]:[]);
   const q10arr=Array.isArray(ans.q10)?ans.q10:(ans.q10?[ans.q10]:[]);
+  const q8arr=Array.isArray(ans.q8)?ans.q8:(ans.q8?[ans.q8]:[]);
   const reasons=[];
   for(const t of ALL_TYPE_KEYS){
     if(t===selectedTypeKey) continue;
@@ -1125,12 +1158,17 @@ function explainExcluded(ans,selectedTypeKey){
     if(t==="skin_alert") r=ans.q1==="red"?"":"Q1=赤み・湿疹に該当せず";
     else if(t==="oil_reset_short") r=((ans.q1==="oily"||q11arr.includes("oily"))&&ans.q2==="short")?"":"脂性ショート条件に該当せず";
     else if(t==="oil_reset_long") r=((ans.q1==="oily"||q11arr.includes("oily"))&&ans.q2!=="short")?"":"脂性ミディアム以上条件に該当せず";
-    else if(t==="repair_mode") r=q7arr.some(v=>["bleach","straight","perm"].includes(v))?"":"ハイダメージ薬剤の経験なし";
-    else if(t==="smooth_wave") r=(ans.q6==="some"||ans.q6==="strong"||q11arr.includes("wave"))?"":"くせ毛・うねり主訴なし";
+    else if(t==="repair_mode"){
+      const strongChem=q7arr.some(v=>["bleach","straight","perm"].includes(v));
+      const colorSerious=q7arr.includes("color")&&q8arr.some(v=>v==="split"||v==="frizz");
+      const selfRepair=q11arr.includes("repair")&&q8arr.some(v=>["split","frizz","spread"].includes(v));
+      r=(strongChem||colorSerious||selfRepair)?"":"ハイダメージ薬剤・深刻ダメージサインの該当なし";
+    }
+    else if(t==="smooth_wave") r=(ans.q6==="some"||ans.q6==="strong"||q11arr.includes("wave")||q8arr.includes("spread")||q10arr.includes("vdown")||q5arr.includes("birth")||ans.q3==="thick"||ans.q4==="more")?"":"くせ毛・うねり・広がり・太毛/多毛等の該当なし";
     else if(t==="aqua_sensitive") r=q7arr.includes("none")?"":"バージン毛・健康毛条件に該当せず";
-    else if(t==="bare_skin") r=q7arr.includes("color")?"":"カラー経験なし";
-    else if(t==="vital_aging") r=(q5arr.includes("strong")||q11arr.includes("aging"))?"":"エイジング主訴なし";
-    else if(t==="volume_grace") r=((q11arr.includes("aging")||q11arr.includes("gray"))&&((ans.q3==="thin"||ans.q4==="less")||q10arr.includes("volume")))?"":"エイジング×細毛/ボリューム希望条件に該当せず";
+    else if(t==="bare_skin") r=(q7arr.includes("color")||q7arr.includes("none")||q7arr.includes("bleach"))?"":"強薬剤（パーマ・縮毛矯正）はRepair Mode優先";
+    else if(t==="vital_aging") r=(q5arr.includes("strong")||q5arr.includes("clear")||q11arr.includes("aging")||q11arr.includes("gray"))?"":"エイジングサイン（50代以降の実感・主訴）なし";
+    else if(t==="volume_grace") r=(q10arr.includes("volume")||q11arr.includes("volume")||((q11arr.includes("aging")||q11arr.includes("gray"))&&(ans.q3==="thin"||ans.q4==="less")))?"":"「ボリュームが欲しい」回答・細毛×エイジング条件に該当せず";
     if(r) reasons.push({type:t,name:(TYPES[t]&&TYPES[t].title)||t,reason:r});
   }
   return reasons;
