@@ -506,14 +506,14 @@ function getDisplayAdvice(typeKey,answers){
 // 商品マッチング用タグ：商品名のキーワードで紐付け、回答との一致数でスコアリング
 const MATCH_TAGS=[
   {key:"ミノン",          tags:{q1:["red","dry"],q11:["dry"]}},
-  {key:"NOV",             tags:{q1:["red"],q11:["repair"]}},
+  {key:"NOV ヘアシャンプー",tags:{q1:["red"],q11:["repair"]}},
   {key:"コラージュフルフル", tags:{q1:["oily"],q11:["oily"]}},
   {key:"キュレル",         tags:{q1:["dry"],q11:["dry"]}},
   {key:"h&s",             tags:{q11:["oily"],q10:["smooth"]}},
   {key:"デオコ",           tags:{q11:["oily"]}},
   {key:"WELLP",           tags:{q11:["oily","repair"],q8:["dry"]}},
-  {key:"パンテーン",        tags:{q10:["moist"],q11:["oily"]}},
-  {key:"ラックス",          tags:{q10:["gloss"]}},
+  {key:"パンテーン",        tags:{q10:["moist"],q8:["dry"]}},
+  {key:"ラックス スーパーリッチ",tags:{q10:["gloss"]}},
   {key:"TSUBAKI",         tags:{q10:["moist"]}},
   {key:"スカルプクレンズ",   tags:{q11:["oily"]}},
   {key:"スティーブンノル",   tags:{q10:["moist","gloss"]}},
@@ -544,6 +544,97 @@ const MATCH_TAGS=[
   {key:"カウブランド",        tags:{q1:["dry","red"],q11:["dry"],q5:["stable","early"]}},
 ];
 
+// 成分プロファイル（2026-06 全34商品成分解析レポートに基づく。新商品追加時は必ず成分解析→採点→ここに追加）
+// w=洗浄力 m=低刺激性 o=しっとり度(仕上がりの重さ) r=補修力 f=特化機能 fl=特化強度（各5点満点）
+const ING_PROFILES=[
+  {key:"ミノン",w:1.5,m:5,o:4,r:1,f:"sensitive",fl:5},
+  {key:"NOV ヘアシャンプー",w:2,m:5,o:2,r:1,f:"sensitive",fl:5},
+  {key:"コラージュフルフル",w:2.5,m:4,o:3,r:1,f:"fungal",fl:5},
+  {key:"キュレル",w:4,m:2.5,o:2,r:1,f:"scalp",fl:3},
+  {key:"h&s",w:4.5,m:2,o:1.5,r:1,f:"scalp",fl:5},
+  {key:"デオコ",w:4.5,m:2,o:1.5,r:1.5,f:"odor",fl:5},
+  {key:"WELLP",w:3,m:4,o:2,r:2.5,f:"scalp",fl:4},
+  {key:"ミントベル",w:2.5,m:4,o:2,r:2,f:"cool",fl:5},
+  {key:"パンテーン",w:2.5,m:4,o:3,r:2,f:"repair",fl:3},
+  {key:"ラックス スーパーリッチ",w:4,m:2,o:3.5,r:1.5,f:"gloss",fl:4},
+  {key:"TSUBAKI",w:4,m:2,o:3.5,r:2,f:"gloss",fl:3},
+  {key:"スカルプクレンズ",w:3,m:4,o:2,r:2,f:"scalp",fl:4},
+  {key:"ストレートシャンプー BASIC",w:2,m:4.5,o:3,r:4.5,f:"repair",fl:5},
+  {key:"セラムイン",w:3.5,m:3,o:3,r:4.5,f:"repair",fl:5},
+  {key:"SN repair",w:2.5,m:4,o:3,r:4.5,f:"curl",fl:5},
+  {key:"ゴールドウェル",w:4,m:2.5,o:3.5,r:3,f:"repair",fl:3.5},
+  {key:"UNOVE",w:4.5,m:2,o:3,r:3,f:"repair",fl:3},
+  {key:"ストレートシャンプー SOFT",w:2.5,m:4.5,o:2,r:4,f:"curl",fl:5},
+  {key:"コスメデコルテ",w:3.5,m:3,o:2.5,r:2,f:"curl",fl:3},
+  {key:"unu",w:2,m:4.5,o:2.5,r:4.5,f:"curl",fl:5},
+  {key:"&PAIR",w:2.5,m:4,o:2.5,r:3.5,f:"curl",fl:4},
+  {key:"BOTANIST ボタニカルシャンプー モイスト",w:2,m:4,o:4,r:2,f:"moisture",fl:4},
+  {key:"BOTANIST ボタニカルシャンプー スムース",w:2.5,m:4,o:2,r:2,f:"light",fl:3},
+  {key:"ジュレーム",w:2,m:4.5,o:3,r:2.5,f:"moisture",fl:3.5},
+  {key:"カウブランド",w:2.5,m:4.5,o:2.5,r:2,f:"sensitive",fl:4.5},
+  {key:"BOTANIST ボタニカルシャンプー ダメージケア",w:2.5,m:4,o:3,r:3,f:"repair",fl:3},
+  {key:"スティーブンノル",w:3.5,m:3,o:3,r:2.5,f:"gloss",fl:3},
+  {key:"ジアンサー",w:2.5,m:4,o:3,r:4,f:"repair",fl:5},
+  {key:"エッセンシャル",w:2.5,m:4,o:3,r:3,f:"moisture",fl:3.5},
+  {key:"IONICO",w:3,m:3.5,o:3,r:4,f:"repair",fl:4.5},
+  {key:"MEMEME",w:2.5,m:4,o:3,r:3.5,f:"gloss",fl:3.5},
+  {key:"イオ クレンジング",w:2,m:4.5,o:2.5,r:1.5,f:"dryscalp",fl:4},
+  {key:"マッサージ美容クリーム",w:1.5,m:3.5,o:4.5,r:2,f:"aging",fl:4.5},
+  {key:"PRORY",w:2.5,m:4,o:3,r:4,f:"aging",fl:4.5},
+  {key:"アデノバイタル",w:4,m:2.5,o:2,r:1.5,f:"aging",fl:5},
+  {key:"セグレタ シャンプー",w:4,m:2,o:1.5,r:2,f:"volume",fl:4.5},
+  {key:"バウンシーボリューム",w:2.5,m:4,o:1.5,r:2,f:"volume",fl:4},
+];
+
+// 回答から「求める成分プロファイル」を算出する（Top Pick判定の中核）
+function desiredProfile(answers){
+  const arr=k=>{const v=answers[k];return Array.isArray(v)?v:(v?[v]:[]);};
+  const q7=arr("q7"),q8=arr("q8"),q10=arr("q10"),q11=arr("q11");
+  // 洗浄力の要求値: 頭皮状態で決まる
+  let wash=3;
+  if(answers.q1==="oily")wash=4.2;
+  else if(answers.q1==="mix")wash=3.4;
+  else if(answers.q1==="normal")wash=2.8;
+  else if(answers.q1==="dry")wash=2;
+  else if(answers.q1==="red")wash=1.8;
+  // 低刺激性の要求値: 敏感・乾燥ほど高い
+  let mild=3;
+  if(answers.q1==="red")mild=5;
+  else if(answers.q1==="dry")mild=4.2;
+  else if(answers.q1==="mix")mild=3.4;
+  // 補修力の要求値: 薬剤履歴＋ダメージ実感
+  let repair=1.5;
+  if(q7.includes("bleach"))repair+=2;
+  else if(q7.includes("straight")||q7.includes("perm"))repair+=1.5;
+  else if(q7.includes("color"))repair+=1;
+  const dmg=q8.filter(t=>["dry","split","frizz","spread"].includes(t)).length;
+  repair+=Math.min(1.5,dmg*0.7);
+  if(repair>5)repair=5;
+  // 仕上がりの重さの要求値: なりたい髪質（第一希望を優先）
+  let moist=2.8;
+  const q10first=q10[0];
+  if(q10first==="moist")moist=4.2;
+  else if(q10first==="gloss")moist=3.2;
+  else if(q10first==="smooth")moist=2.4;
+  else if(q10first==="volume")moist=1.8;
+  else if(q10first==="vdown")moist=3.6;
+  if(q11.includes("volume")||answers.q4==="less")moist=Math.min(moist,2);
+  // 特化機能の要求: 悩み・頭皮状態から
+  const focus=[];
+  if(q11.includes("oily")||answers.q1==="oily")focus.push("scalp","odor","cool");
+  if(q11.includes("dry")||answers.q1==="dry")focus.push("moisture","dryscalp");
+  if(answers.q1==="red")focus.push("sensitive","fungal");
+  if(answers.q1==="dry")focus.push("sensitive");
+  if(q11.includes("repair")||q7.includes("bleach"))focus.push("repair");
+  if(q11.includes("wave")||arr("q6").some(v=>v==="some"||v==="strong"))focus.push("curl");
+  if(q11.includes("aging")||q11.includes("gray"))focus.push("aging");
+  if(q11.includes("volume")||q10.includes("volume")||q8.includes("flat"))focus.push("volume");
+  if(q10.includes("gloss"))focus.push("gloss");
+  if(q10.includes("smooth"))focus.push("light");
+  if(q10.includes("moist"))focus.push("moisture");
+  return{wash,mild,moist,repair,focus};
+}
+
 // 商品の表示可否ルール（タイプ別主リスト・界面活性剤チャートで共通利用）
 function isSummerSeason(){const m=new Date().getMonth()+1;return m>=5&&m<=10;}
 function isProductDisplayable(p,answers){
@@ -559,6 +650,19 @@ function isProductDisplayable(p,answers){
 
 function scoreProduct(product,answers){
   let s=0;
+  // ① 成分プロファイル一致（軸ごとに要求値との距離で加点。最大8点＋特化最大3点）
+  const want=desiredProfile(answers);
+  const ing=ING_PROFILES.find(m=>product.name.includes(m.key));
+  if(ing){
+    s+=2-Math.min(2,Math.abs(want.wash-ing.w));
+    s+=2-Math.min(2,Math.abs(want.mild-ing.m));
+    s+=2-Math.min(2,Math.abs(want.moist-ing.o));
+    s+=2-Math.min(2,Math.abs(want.repair-ing.r));
+    if(want.focus.includes(ing.f)) s+=ing.fl*0.6;
+    // 安全ルール: 敏感・乾燥頭皮(Q1=red/dry)に洗浄力4以上の商品は大幅減点
+    if((answers.q1==="red"||answers.q1==="dry")&&ing.w>=4) s-=3;
+  }
+  // ② 既存タグによる微調整（商品固有の相性）
   const entry=MATCH_TAGS.find(m=>product.name.includes(m.key));
   if(entry){
     for(const q in entry.tags){
@@ -595,11 +699,11 @@ function scoreProduct(product,answers){
       s-=2;
     }
   }
-  // top: キュレーターが選んだ推奨商品にボーナス加点（通常は先頭に来るが、強いクエリ一致には負ける可能性あり）
+  // top: キュレーター定番ボーナス（+1。同点時の決め手。主導権は成分プロファイル一致が持つ）
   if(product.top){
-    s+=2;
+    s+=1;
   }
-  return s;
+  return Math.round(s*10)/10;
 }
 
 const TYPES={
@@ -622,10 +726,10 @@ const TYPES={
   oil_reset_long:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ミディアム〜ロング",
     advice:["ミディアム〜ロングの脂性頭皮の方は「頭皮はべたつくのに毛先は乾燥する」という悩みが多いです。シャンプーは頭皮に、トリートメントは毛先だけに使い分けましょう。","トリートメントが頭皮についてしまうと皮脂+トリートメント成分でさらにべたつきが悪化します。根元から2〜3cm離してつけるのがポイントです。","洗い流さないオイルやミルクは毛先のみに使用。頭皮に触れないよう意識して使いましょう。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
-      {name:"パンテーン ミラクルズ シャンプー",forWhom:"頭皮のベタつきが気になるけど、毛先はしっとりさせたい方",desc:"日常使いの定番。脂性頭皮でも毛先はしっとり。",note:"シリーズによって仕上がりが異なります。リンク先でご確認のうえお選びください。",heavyMoisture:true,top:true,amz:"B0DF23Q9FK",rakUrl:rak1("61af1323f75fa2d1d3cbf8d6a180004f"),img_url:"https://m.media-amazon.com/images/P/B0DF23Q9FK.09.LZZZZZZZ.jpg"},
+      {name:"パンテーン ミラクルズ シャンプー",forWhom:"頭皮のベタつきが気になるけど、毛先はしっとりさせたい方",desc:"サルフェートフリーのマイルド洗浄×プロビタミン補修。日常使いの定番で、脂性寄りでもダメージやパサつきが気になる方に。",note:"シリーズによって仕上がりが異なります。リンク先でご確認のうえお選びください。",heavyMoisture:true,top:true,amz:"B0DF23Q9FK",rakUrl:rak1("61af1323f75fa2d1d3cbf8d6a180004f"),img_url:"https://m.media-amazon.com/images/P/B0DF23Q9FK.09.LZZZZZZZ.jpg"},
       {name:"ラックス スーパーリッチシャイン ダメージリペア シャンプー",forWhom:"ツヤのある仕上がりを求める方",desc:"べたつきを抑えながら輝く仕上がり。",note:"シリーズ・香りのバリエーションが複数あります。リンク先でご確認ください。",top:false,amz:"B0FR41V4KS",rakUrl:rak1("3e1872af0708329c9eb97f57ef2b0e16"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFO/IMT/A9U/DKF/22636cb954b1f9bda241306b4be7ef09.jpg"},
       {name:"TSUBAKI プレミアムモイスト＆リペア シャンプー",forWhom:"和の成分にこだわりたい、しっとりまとめたい方",desc:"和の美容成分・ツバキ油配合。",note:"リンク先はコンディショナーとのボトルセットです。",top:false,amz:"B0DBHRQHFH",rakUrl:rak1("5fb3ca4a3bfaaf3cd253023c37723698"),img_url:"https://m.media-amazon.com/images/P/B0DBHRQHFH.09.LZZZZZZZ.jpg"},
-      {name:"BOTANIST ボタニカルシャンプー スカルプクレンズ",forWhom:"頭皮のベタつき・ニオイをすっきりリセットしたい方",desc:"全成分マイルド系のサルフェートフリー処方。クレイの吸着力＆ミントの爽快感で、頭皮のベタつきを優しくリセット。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CGJ66KVR",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
+      {name:"BOTANIST ボタニカルシャンプー スカルプクレンズ",forWhom:"頭皮のベタつき・ニオイをすっきりリセットしたい方",desc:"全成分マイルド系のサルフェートフリー処方。酸性石けん系×アミノ酸系のマイルド洗浄で、頭皮のベタつきを優しくリセット。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CGJ66KVR",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
       {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"脂性ロングで、頭皮ケアを優しめにしたい方",desc:"マイルドなベタイン・タウリン系を主体に、しっかり洗浄成分も配合した医薬部外品スカルプケア。脂性頭皮のフケ・かゆみ予防に。",note:"",top:false,otc:true,amz:"B0DJ1CY24Q",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFF/5IK/HXZ/9MT/566fa3d9688c45329c1072dbedb6b0d7.jpg"},
       {name:"サンコール ミントベル マリンブルーシャンプー",forWhom:"頭皮のベタつきが気になるけど、洗いすぎず優しく整えたい方",desc:"サンコールの定番ひんやり系シャンプー。天然メントールがスーッと効く爽快な使用感が特徴。タウリン・アミノ酸・ベタイン系3種洗浄で汗・皮脂をやさしくリセット。",note:"250ml・550ml・700mlがあります。リンク先でお選びください。",season:"夏限定の頭皮クール体験。汗ばむ季節の頭皮ケアに、天然メントールでひんやり爽快な洗い上がり。",summerOnly:true,gentleBottom:true,top:false,amz:"B0CDV1T6B1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/538286cc.4950ec75.538286cd.3c60699e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgramsky%2Fgram0f268nfq5%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B0CDV1T6B1.09.LZZZZZZZ.jpg"}]},
   repair_mode:{badge:"Hair Type — RM",title:"Repair Mode",sub:"ハイダメージ（パーマ・ブリーチ・縮毛矯正）",
@@ -633,15 +737,15 @@ const TYPES={
     products:[
       {name:"Straine（ストレイン）ストレートシャンプー BASIC",forWhom:"縮毛矯正・ブリーチでダメージが蓄積し、広がりが気になる方",desc:"トステア（アミノエチルチオコハク酸ジアンモニウム）配合。広がり・ダメージが気になる方向けで、きしみを抑えしなやかで扱いやすい質感へ。",note:"シャンプー＋トリートメント＋コームのセット商品です。",curlAvoid:true,tostera:true,top:true,amz:"B0FV2PQ11B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://shop.r10s.jp/straine-onlineshop/cabinet/thumbnails/0501/ss-r037_thu_2605.jpg"},
       {name:"セラムイン シャンプー＆トリートメント",forWhom:"内部からしっかり補修したい、パサつきが深刻な方",desc:"トステア＋PPT成分でダメージを内部から補修。",note:"シャンプー単体ではなくセット販売です。リンク先でご確認ください。",tostera:true,top:false,amz:"B0F4QGL5FD",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/dr365/cabinet/item/ph0004v01_1.jpg"},
-      {name:"SN repair シャンプー",forWhom:"本格的なサロン品質の補修を、自宅で試したい方",desc:"楽天限定。トステア×ヘマチン配合のプレミアムライン。",note:"楽天のみの取り扱いです。",tostera:true,top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/snrepair/cabinet/12764464/600000_r3.jpg?_ex=400x400"},
-      {name:"ゴールドウェル デュアルセンス リッチリペア シャンプー",forWhom:"カラー・ブリーチで深刻にダメージした髪を、サロン品質で内部補修したい方",desc:"ドイツ発のサロンブランド。18-MEA×マイクロプロテックコンプレックスがキューティクル表面の脂質をケア、イントラリピッドが髪内部を集中補修。傷んだカラーヘアにツヤとしっとり感。",note:"Amazonリンクは1000mlの大容量サイズです。シリーズにトリートメントもあります。",top:false,amz:"B01MZALRVO",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/53763aa5.ec479cd9.53763aa6.a359c255/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpechka%2F30201002022%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B01MZALRVO.09.LZZZZZZZ.jpg"},
-      {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力はやや強め。",note:"500ml本体・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CB1SG31Z",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc132.0199f1e7.536fc133.e4e6f2ef/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fflytoyou%2F1097936315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09.LZZZZZZZ.jpg"}]},
+      {name:"SN repair シャンプー",forWhom:"本格的なサロン品質の補修を、自宅で試したい方",desc:"楽天限定。トステア×レブリン酸×エクソソーム・NMN配合のプレミアムライン。",note:"楽天のみの取り扱いです。",tostera:true,top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a5be.c1481a15.5308a5bf.155cd3cf/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsnrepair%2F600000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/snrepair/cabinet/12764464/600000_r3.jpg?_ex=400x400"},
+      {name:"ゴールドウェル デュアルセンス リッチリペア シャンプー",forWhom:"カラー・ブリーチで深刻にダメージした髪を、サロン品質で内部補修したい方",desc:"ドイツ発のサロンブランド。18-MEA×マイクロプロテックコンプレックスがキューティクル表面の脂質をケア、イントラリピッドが髪内部を集中補修。傷んだカラーヘアにツヤとしっとり感。",note:"Amazonリンクは1000mlの大容量サイズです。シリーズにトリートメントもあります。洗浄力はしっかりめです。",top:false,amz:"B01MZALRVO",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/53763aa5.ec479cd9.53763aa6.a359c255/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpechka%2F30201002022%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B01MZALRVO.09.LZZZZZZZ.jpg"},
+      {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力は強めなので、細い髪・敏感な頭皮の方はご注意ください。",note:"500ml本体・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CB1SG31Z",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc132.0199f1e7.536fc133.e4e6f2ef/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fflytoyou%2F1097936315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09.LZZZZZZZ.jpg"}]},
   smooth_wave:{badge:"Hair Type — SW",title:"Smooth Wave",sub:"くせ毛 × 軽〜中ダメージ",
     advice:["くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。","シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。","ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。"],
     products:[
       {name:"Straine（ストレイン）ストレートシャンプー SOFT",forWhom:"くせ・うねりが気になるけど、重くなりすぎたくない方",desc:"トステア（アミノエチルチオコハク酸ジアンモニウム）配合。くせ毛・うねりが気になる方向けで、ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。",note:"同シリーズのトリートメントとセットでお使いいただくとより効果的です。",curlAvoid:true,tostera:true,top:true,amz:"B0FQ55PDG6",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://tshop.r10s.jp/straine-onlineshop/cabinet/11885291/ss-r001_ldk.jpg"},
       {name:"コスメデコルテ AQ リペア スムース シャンプー（KOSE）",forWhom:"うねり・広がりが気になり、サロン品質のホームケアを求める方",desc:"KOSEのプレステージブランド。オレフィン系×ベタイン系×タウリン系のバランス洗浄。白樺水・ホワイトムクナエキス配合で頭皮と髪をなめらかに整える。",note:"Amazonリンクは詰替え用500mLのページです。",top:false,amz:"B095K6B4XM",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc036.f982ba48.536fc037.7a0cdd5d/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgrandberry%2Fc37571-c37575-set%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://shop.r10s.jp/grandberry/cabinet/06443450/08725025/imgrc0122784839.jpg"},
-      {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力はやや強め。",note:"500ml本体・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CB1SG31Z",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc132.0199f1e7.536fc133.e4e6f2ef/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fflytoyou%2F1097936315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09.LZZZZZZZ.jpg"},
+      {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力は強めなので、細い髪・敏感な頭皮の方はご注意ください。",note:"500ml本体・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CB1SG31Z",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc132.0199f1e7.536fc133.e4e6f2ef/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fflytoyou%2F1097936315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09.LZZZZZZZ.jpg"},
       {name:"unu（ウヌ）ウヌボレストレート シャンプー",forWhom:"うねり・くせを内側から整え、サラっとしたストレート髪を目指したい方",desc:"レブリン酸（酸熱ケア）×トステア配合。タウリン系＋PPT系の低刺激処方で、熱を味方にうねりを抑える新発想ヘアケア。",note:"トリートメント・ヘアミルクとのセット販売や詰め替えなど複数あります。リンク先でお選びください。",curlAvoid:true,tostera:true,top:false,amz:"B0FGPMSWF9",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/53a382d9.8ecf53c7.53a382da.0f047298/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmagicnumber%2Funu-smptrtm-str%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/magicnumber/cabinet/unu/unu-smptrtm-rf-str/mv_02.jpg"},
       {name:"&PAIR（アンドペア）コントロール リペア シャンプー",forWhom:"うねり・パサつきを同時にケアしたい、タイパ重視の方",desc:"LDK 2026年1月号「ベストバイ・オブ・ザ・イヤー」／2025年9月号 U2000円シャンプー＆トリートメント部門1位。アミノ酸系（アラニン）×タウリン系×ベタイン系のオイルフリー処方で、保湿＆うねりケア成分90%超。ナノバブル技術でうねりとダメージを同時にケア。",note:"本体450ml・つめかえ用、ペアトリートメントとのセット販売もあります。リンク先でお選びください。",curlAvoid:true,top:false,amz:"B0DZX256QP",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5402bed3.9db1c36d.5402bed4.b6521a25/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000209876%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DZX256QP.09.LZZZZZZZ.jpg"}]},
   aqua_sensitive:{badge:"Hair Type — AS",title:"Aqua Sensitive",sub:"乾燥・バージン毛・健康な髪",
@@ -657,10 +761,10 @@ const TYPES={
       {name:"BOTANIST ボタニカルシャンプー ダメージケア",forWhom:"カラーやアイロンで毛先のダメージ・パサつきが気になる方",desc:"ボタニカル成分配合。傷んだ髪をなめらかに整え、しなやかな質感へ。サルフェートフリー処方。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",top:false,amz:"B0CGHY3YKX",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
       {name:"スティーブンノル モイスチュアコントロール シャンプー",forWhom:"サロンブランドで、しっとりまとまるツヤ髪を目指したい方",desc:"サロン発の保湿・補修ライン。乾燥・パサつきをなめらかに整える。",note:"現行モデル「W」のシャンプー＆コンディショナーのセット販売です。フォルムコントロール等の姉妹品もあります。リンク先でお選びください。",heavyMoisture:true,top:false,amz:"B0C8928QDQ",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/534c566f.271e2b3b.534c5670.51046129/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsian%2F299878skny%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0C8928QDQ.09.LZZZZZZZ.jpg"},
       {name:"WELLP（ウェルプ）薬用スムースシャンプー",forWhom:"カラー軽ダメージで頭皮のベタつきが気になる方",desc:"マイルドなベタイン・タウリン系を主体に、しっかり洗浄成分も配合した医薬部外品スカルプケア。脂性頭皮のフケ・かゆみ予防に。",note:"",q1Allow:["oily","mix"],top:false,otc:true,amz:"B0DJ1CY24Q",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFF/5IK/HXZ/9MT/566fa3d9688c45329c1072dbedb6b0d7.jpg"},
-      {name:"BOTANIST ボタニカルシャンプー スカルプクレンズ",forWhom:"カラー軽ダメージで頭皮のベタつきも気になる方",desc:"全成分マイルド系のサルフェートフリー処方。クレイの吸着力＆ミントの爽快感で、頭皮のベタつきを優しくリセット。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",q1Allow:["oily","mix"],top:false,amz:"B0CGJ66KVR",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
+      {name:"BOTANIST ボタニカルシャンプー スカルプクレンズ",forWhom:"カラー軽ダメージで頭皮のベタつきも気になる方",desc:"全成分マイルド系のサルフェートフリー処方。酸性石けん系×アミノ酸系のマイルド洗浄で、頭皮のベタつきを優しくリセット。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",q1Allow:["oily","mix"],top:false,amz:"B0CGJ66KVR",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
       {name:"花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー＆EXトリートメント",forWhom:"カラー毛のツヤとまとまりを、次世代ケアで叶えたい方",desc:"@cosmeベストコスメアワード2025 上半期新作 総合大賞（ヘアケア品では史上初）／日経優秀製品・サービス賞2025 トレンド部門賞。花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。",note:"リンク先はシャンプー400ml＋EXヘアトリートメント220gのセットページです。",top:true,amz:"B0GYZQ4N4N",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fanswer-03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51oNeAhwhjL._AC_SL1080_.jpg"},
       {name:"エッセンシャル プレミアム うるおいバリア シャンプー",forWhom:"カラーしてるけど、ベタつきもパサつきも気になる方",desc:"カラー毛のパサつき・軽ダメージに。",note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",top:false,amz:"B0CXH1FRTT",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CXH1FRTT.09.LZZZZZZZ.jpg"},
-      {name:"IONICO プレミアムイオン ダメージケアシャンプー モイスト＆リペア",forWhom:"カラーやアイロンによるダメージで、しっとりまとまる仕上がりが好みの方",desc:"プレミアムイオン処方でダメージ部に集中補修。ベタイン系×オレフィン系のバランス洗浄でしっとりまとまる仕上がり。ノンシリコン。",note:"本体・つめかえ用、シリーズに「スムース＆シャイン」もあります。リンク先でお選びください。",top:false,amz:"B0859SPJ7B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333f2bc.d29748d5.5333f2bd.3d588382/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fakakabeshop%2F4573492151315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0859SPJ7B.09.LZZZZZZZ.jpg"},
+      {name:"IONICO プレミアムイオン ダメージケアシャンプー モイスト＆リペア",forWhom:"カラーやアイロンによるダメージで、しっとりまとまる仕上がりが好みの方",desc:"プレミアムイオン処方でダメージ部に集中補修。ヘマチン×3種セラミド×シルク配合、ベタイン系×オレフィン系のバランス洗浄でしっとりまとまる仕上がり。ノンシリコン。",note:"本体・つめかえ用、シリーズに「スムース＆シャイン」もあります。リンク先でお選びください。",top:false,amz:"B0859SPJ7B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333f2bc.d29748d5.5333f2bd.3d588382/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fakakabeshop%2F4573492151315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0859SPJ7B.09.LZZZZZZZ.jpg"},
       {name:"MEMEME（ミーミーミー）モイストブースト シャンプー",forWhom:"カラー毛のうるおいとツヤを、サルフェートフリー処方で叶えたい方",desc:"花王の新ブランド。タウリン系×アミノ酸系×ベタイン系のサルフェートフリー処方。ノンシリコンで根元ふんわり、毛先しっとり。レッドキウイ×フリージアの香り。",note:"本体・つめかえ用、トリートメントとのセット販売もあります。リンク先でお選びください。",top:false,amz:"B0FF43JRKK",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fbe50.2571929c.536fbe51.a47f0fb9/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fzagzag%2Fg4901301455093_setz%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0FF43JRKK.09.LZZZZZZZ.jpg"},
       {name:"ルベル イオ クレンジング リラックスメント シャンプー",forWhom:"乾燥頭皮でダメージによる絡まりが気になる方",desc:"タウリン＆アミノ酸系洗浄のノンシリコン。乾燥頭皮とからまりやすいダメージ毛に",note:"",top:false,otc:false,amz:"B004ATOB7K",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/538286cc.4950ec75.538286cd.3c60699e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgramsky%2Fgram0045mx77m%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B004ATOB7K.09.LZZZZZZZ.jpg"},
       {name:"サンコール ミントベル マリンブルーシャンプー",forWhom:"カラー毛で頭皮のベタつき・蒸れが気になる方",desc:"サンコールの定番ひんやり系シャンプー。天然メントールがスーッと効く爽快な使用感が特徴。タウリン・アミノ酸・ベタイン系3種洗浄で汗・皮脂をやさしくリセット。",note:"250ml・550ml・700mlがあります。リンク先でお選びください。",season:"夏限定の頭皮クール体験。汗ばむ季節の頭皮ケアに、天然メントールでひんやり爽快な洗い上がり。",summerOnly:true,gentleBottom:true,q1Allow:["oily","mix"],top:false,amz:"B0CDV1T6B1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/538286cc.4950ec75.538286cd.3c60699e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fgramsky%2Fgram0f268nfq5%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B0CDV1T6B1.09.LZZZZZZZ.jpg"}]},
@@ -1183,9 +1287,23 @@ function explainExcluded(ans,selectedTypeKey){
 function explainProductScoring(typeKey,ans){
   if(!TYPES[typeKey]) return [];
   const products=TYPES[typeKey].products||[];
+  const want=desiredProfile(ans);
   return products.map(p=>{
     const visible=isProductDisplayable(p,ans);
     const score=scoreProduct(p,ans);
+    const ingp=ING_PROFILES.find(m=>p.name.includes(m.key));
+    let fitDetail=null;
+    if(ingp){
+      const r1=x=>Math.round(x*10)/10;
+      fitDetail={
+        wash:r1(2-Math.min(2,Math.abs(want.wash-ingp.w))),
+        mild:r1(2-Math.min(2,Math.abs(want.mild-ingp.m))),
+        moist:r1(2-Math.min(2,Math.abs(want.moist-ingp.o))),
+        repair:r1(2-Math.min(2,Math.abs(want.repair-ingp.r))),
+        focus:want.focus.includes(ingp.f)?r1(ingp.fl*0.6):0,
+        safety:((ans.q1==="red"||ans.q1==="dry")&&ingp.w>=4)?-3:0
+      };
+    }
     const entry=MATCH_TAGS.find(m=>p.name.includes(m.key));
     const matched=[];
     if(entry){
@@ -1214,7 +1332,7 @@ function explainProductScoring(typeKey,ans){
       else if(p.name.includes("イオ クレンジング")&&ans.q1!=="dry") excludedReason="乾燥頭皮(Q1=dry)以外は対象外";
       else excludedReason="個別ルール除外";
     }
-    return{name:p.name,visible,score,topBoost:!!p.top,matchedTags:matched,penalties,excludedReason};
+    return{name:p.name,visible,score,topBoost:!!p.top,fitDetail,matchedTags:matched,penalties,excludedReason};
   }).sort((a,b)=>b.score-a.score);
 }
 
@@ -1696,7 +1814,8 @@ function AdminPanel({record}){
         h("div",{className:"prod-score-rank"},`#${i+1}`),
         h("div",{className:"prod-score-name"},
           p.name,
-          p.topBoost?h("span",{style:{color:"#f5d59a",fontSize:"0.66rem",marginLeft:"0.4rem"}},"[TOP+2]"):null,
+          p.topBoost?h("span",{style:{color:"#f5d59a",fontSize:"0.66rem",marginLeft:"0.4rem"}},"[TOP+1]"):null,
+          p.fitDetail?h("div",{className:"prod-score-tags"},"成分フィット: 洗浄"+p.fitDetail.wash+" やさしさ"+p.fitDetail.mild+" 仕上がり"+p.fitDetail.moist+" 補修"+p.fitDetail.repair+" 特化+"+p.fitDetail.focus+(p.fitDetail.safety<0?" 安全"+p.fitDetail.safety:"")):null,
           p.matchedTags.length>0?h("div",{className:"prod-score-tags"},`一致: ${p.matchedTags.join(" / ")}`):null,
           p.penalties.length>0?h("div",{className:"prod-score-tags"},`減点: ${p.penalties.join(" / ")}`):null,
           p.excludedReason?h("div",{className:"prod-score-excl"},`除外: ${p.excludedReason}`):null
