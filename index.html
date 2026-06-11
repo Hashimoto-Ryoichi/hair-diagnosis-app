@@ -821,7 +821,9 @@ function diagnose(ans){
     if(wantVolume||q11arr.includes("volume")){
       return hasClear?"vital_aging":"volume_grace";
     }
-    if(eq7==="none") return "aqua_sensitive";
+    // ショート×1年以内薬剤なしは伸長（月1〜1.2cm）的にほぼ新生毛 → バージン毛ケア確定
+    // ミディアム以上は毛先に1年以上前の既染部が残る可能性 → パサつきがあれば Bare Skin
+    if(eq7==="none"&&(q2==="short"||q8==="gloss")) return "aqua_sensitive";
     return "bare_skin";
   }
 
@@ -848,7 +850,8 @@ function diagnose(ans){
   if(q10==="vdown") return "smooth_wave";
 
   // ── Step10: デフォルト ─────────────────────────────
-  if(eq7==="none"&&(q8==="gloss"||q8==="dry")) return "aqua_sensitive";
+  // パサつきありの場合、新生毛と判断できるのはショート×薬剤なしのみ（ミディアム以上は毛先既染部の可能性 → Bare Skin）
+  if(eq7==="none"&&(q8==="gloss"||(q8==="dry"&&q2==="short"))) return "aqua_sensitive";
   return "bare_skin";
 }
 
@@ -1163,7 +1166,11 @@ function explainExcluded(ans,selectedTypeKey){
       r=(strongChem||colorSerious||selfRepair)?"":"ハイダメージ薬剤・深刻ダメージサインの該当なし";
     }
     else if(t==="smooth_wave") r=(ans.q6==="some"||ans.q6==="strong"||q11arr.includes("wave")||q8arr.includes("spread")||q10arr.includes("vdown")||q5arr.includes("birth")||ans.q3==="thick"||ans.q4==="more")?"":"くせ毛・うねり・広がり・太毛/多毛等の該当なし";
-    else if(t==="aqua_sensitive") r=q7arr.includes("none")?"":"バージン毛・健康毛条件に該当せず";
+    else if(t==="aqua_sensitive"){
+      if(!q7arr.includes("none")) r="バージン毛・健康毛条件に該当せず";
+      else if(ans.q2!=="short"&&q8arr.includes("dry")) r="1年以内の薬剤処理なしでも、ミディアム以上の長さは毛先に過去の既染部が残る可能性あり（新生毛と判断できるのはショートのみ）";
+      else r="";
+    }
     else if(t==="bare_skin") r=(q7arr.includes("color")||q7arr.includes("none")||q7arr.includes("bleach"))?"":"強薬剤（パーマ・縮毛矯正）はRepair Mode優先";
     else if(t==="vital_aging") r=(q5arr.includes("strong")||q5arr.includes("clear")||q11arr.includes("aging")||q11arr.includes("gray"))?"":"エイジングサイン（50代以降の実感・主訴）なし";
     else if(t==="volume_grace") r=(q10arr.includes("volume")||q11arr.includes("volume")||((q11arr.includes("aging")||q11arr.includes("gray"))&&(ans.q3==="thin"||ans.q4==="less")))?"":"「ボリュームが欲しい」回答・細毛×エイジング条件に該当せず";
