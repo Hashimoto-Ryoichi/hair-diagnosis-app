@@ -1,0 +1,7 @@
+# バックアップ・一時ファイルは絶対にコミットしない
+# （旧アフィリID hassihair06-22 を含む .bak からの復元・混入事故を防ぐ）
+*.bak
+*.bak.*
+index.html.bak.*
+*.tmp
+.DS_Store

@@ -1,0 +1,16 @@
+#!/bin/sh
+# Hair Identity pre-commit: index.html のステージ済み内容にAmazonアフィリチェックをかける。
+# チェック本体は .githooks/check-affiliate.sh（フックとdeployスキルで共有する単一の正本）。
+# --no-verify で飛ばさないこと。フック・スクリプトの削除/無効化はしない。
+if git diff --cached --name-only | grep -q '^index\.html$'; then
+  root=$(git rev-parse --show-toplevel)
+  tmp=$(mktemp)
+  git show :index.html > "$tmp"
+  if ! "$root/.githooks/check-affiliate.sh" "$tmp"; then
+    rm -f "$tmp"
+    echo "✗ pre-commit: Amazonアフィリチェックに失敗。コミットを中止しました。" >&2
+    exit 1
+  fi
+  rm -f "$tmp"
+fi
+exit 0
