@@ -1879,6 +1879,13 @@ function App(){
   const [fontSize,setFontSize]=useState(()=>{
     try{return localStorage.getItem(FONT_SIZE_KEY)||"normal";}catch(e){return "normal";}
   });
+  // --- Vercel Analytics カスタムイベント（診断完走率・離脱箇所の計測）---
+  // diag_start=診断開始 / q_reach=各質問への到達 / diag_complete=結果到達。
+  // 完走率=diag_complete÷diag_start、離脱箇所=q_reach(q:N)の減り方で把握。
+  const maxQReachedRef=useRef(-1);
+  function vaTrack(name,data){
+    try{if(typeof window!=="undefined"&&typeof window.va==="function"){window.va("event",{name,...(data||{})});}}catch(e){}
+  }
   // 診断実行＋透明化レコード構築＋ログ保存を一括
   function runDiagnosisFull(ans){
     const tk=diagnose(ans);
@@ -1886,6 +1893,7 @@ function App(){
     setTypeKey(tk);
     setDiagRecord(rec);
     saveLog(rec);
+    vaTrack("diag_complete",{type:tk});
     return tk;
   }
   // 進行中タイマー（遷移用 setTimeout）を集約管理。途中で「戻る」「ヘッダーから再開」が押されたらキャンセル
@@ -1912,6 +1920,13 @@ function App(){
   const prog=step==="quiz"?((curQ+1)/totalQ*100):step==="result"||step==="products"?100:0;
   useEffect(()=>{const bar=document.getElementById("pbar");bar.style.width=prog+"%";bar.setAttribute("aria-valuenow",Math.round(prog));},[prog]);
   useEffect(()=>{window.scrollTo({top:0,behavior:"instant"});},[step]);
+  // 質問到達を計測（最大到達問のみ＝「戻る」での二重計上を防ぐ）
+  useEffect(()=>{
+    if(step==="quiz"&&curQ>maxQReachedRef.current){
+      maxQReachedRef.current=curQ;
+      vaTrack("q_reach",{q:curQ+1});
+    }
+  },[step,curQ]);
   // 再開モーダル表示時に「再開する」ボタンへ自動フォーカス（アクセシビリティ）
   const resumeBtnRef=useRef(null);
   useEffect(()=>{
@@ -1920,7 +1935,7 @@ function App(){
     else{document.body.style.overflow='';}
     return ()=>{document.body.style.overflow='';};
   },[resumeModal]);
-  function startQuiz(){clearAllTimers();setStep("quiz");setCurQ(0);setAnswers({});}
+  function startQuiz(){clearAllTimers();setStep("quiz");setCurQ(0);setAnswers({});maxQReachedRef.current=-1;vaTrack("diag_start");}
   function selectOpt(k){
     const q=QUESTIONS[curQ];
     const na={...answers,[q.id]:k};
@@ -2020,6 +2035,8 @@ function App(){
     setPrevTypeKey(null);
     setResumeModal(false);
     setStep("quiz");
+    maxQReachedRef.current=-1;
+    vaTrack("diag_start");
   }
   function confirmMulti(qid){
     const na={...answers};
