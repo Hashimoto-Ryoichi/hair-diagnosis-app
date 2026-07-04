@@ -878,9 +878,14 @@ function diagnose(ans){
   // ── Step4: 60代以降で強く実感 → Vital Aging（薬剤ダメージ判定の後で確定）──
   if(eq5==="strong") return "vital_aging";
 
-  // ── Step4.5: Q11 主訴がエイジングサイン（aging/gray）→ Vital Aging ──
+  // ── Step4.5: Q11 主訴（第一タップ）がエイジングサイン（aging/gray）→ Vital Aging ──
+  // 2番目以降のタップは Q5=50代以降の実感（clear/strong）がある場合のみエイジング系へ。
+  // 白髪・エイジングの副次タップだけでは、くせ毛等の主訴を上書きしない
+  // （染色不可の注記・商品スコア加点は従来通り機能する）
   // 細毛・少毛量・ボリュームほしい併発時は Volume Grace に振り直し
-  if(q11arr.includes("aging")||q11arr.includes("gray")){
+  const agingMain=q11arr[0]==="aging"||q11arr[0]==="gray";
+  const agingWithAge=(q11arr.includes("aging")||q11arr.includes("gray"))&&(hasClear||hasStrong);
+  if(agingMain||agingWithAge){
     const isThinSoft=ans.q3==="thin"||ans.q4==="less";
     const wantVol=q10arr.includes("volume");
     // ボリュームダウンが第一希望の人を、細毛だけを理由にボリュームケアへ振らない（回答を尊重）
@@ -1237,10 +1242,11 @@ function buildTrace(ans,typeKey){
     trace.push({step:"Step3",condition:`Q7=カラー ∧ 深刻ダメージ ∧ 高機能器具=${goodTool?"あり":"なし"}`,result:`${goodTool?"bare_skin":"repair_mode"}確定`,weight:"中高"});
   }else if(q5arr.includes("strong")&&typeKey==="vital_aging"){
     trace.push({step:"Step4",condition:"Q5=60代以降強く実感",result:"vital_aging確定",weight:"中"});
-  }else if((q11arr.includes("aging")||q11arr.includes("gray"))){
+  }else if((q11arr[0]==="aging"||q11arr[0]==="gray")||((q11arr.includes("aging")||q11arr.includes("gray"))&&(q5arr.includes("clear")||q5arr.includes("strong")))){
     const isThinSoft=ans.q3==="thin"||ans.q4==="less";
     const wantVol=q10arr.includes("volume");
-    trace.push({step:"Step4.5",condition:`Q11=エイジング/白髪 ∧ 細毛=${isThinSoft} ∧ ボリューム希望=${wantVol}`,result:`${(wantVol||(isThinSoft&&q10arr[0]!=="vdown"))?"volume_grace":"vital_aging"}確定`,weight:"中"});
+    const agingMain=q11arr[0]==="aging"||q11arr[0]==="gray";
+    trace.push({step:"Step4.5",condition:`Q11=エイジング/白髪（${agingMain?"主訴":"Q5=50代以降実感"}） ∧ 細毛=${isThinSoft} ∧ ボリューム希望=${wantVol}`,result:`${(wantVol||(isThinSoft&&q10arr[0]!=="vdown"))?"volume_grace":"vital_aging"}確定`,weight:"中"});
   }else if(ans.q6==="some"||ans.q6==="strong"||q8main==="spread"){
     trace.push({step:"Step5",condition:`くせ毛/広がり ∧ ボリューム希望=${wantVolAny}`,result:`${wantVolAny?"volume_grace":"smooth_wave"}確定`,weight:"中"});
   }else if(q5arr.includes("birth")&&q8main!=="split"&&q8main!=="frizz"&&!q11arr.includes("repair")){
@@ -1288,8 +1294,8 @@ function explainExcluded(ans,selectedTypeKey){
       else r="";
     }
     else if(t==="bare_skin") r=(q7arr.includes("color")||q7arr.includes("none")||q7arr.includes("bleach"))?"":"強薬剤（パーマ・縮毛矯正）はRepair Mode優先";
-    else if(t==="vital_aging") r=(q5arr.includes("strong")||q5arr.includes("clear")||q11arr.includes("aging")||q11arr.includes("gray"))?"":"エイジングサイン（50代以降の実感・主訴）なし";
-    else if(t==="volume_grace") r=(q10arr.includes("volume")||q11arr.includes("volume")||((q11arr.includes("aging")||q11arr.includes("gray"))&&(ans.q3==="thin"||ans.q4==="less")))?"":"「ボリュームが欲しい」回答・細毛×エイジング条件に該当せず";
+    else if(t==="vital_aging") r=(q5arr.includes("strong")||q5arr.includes("clear")||q11arr[0]==="aging"||q11arr[0]==="gray")?"":"エイジングサイン（主訴のエイジング/白髪・50代以降の実感）なし";
+    else if(t==="volume_grace") r=(q10arr.includes("volume")||q11arr.includes("volume")||((q11arr[0]==="aging"||q11arr[0]==="gray"||((q11arr.includes("aging")||q11arr.includes("gray"))&&(q5arr.includes("clear")||q5arr.includes("strong"))))&&(ans.q3==="thin"||ans.q4==="less")))?"":"「ボリュームが欲しい」回答・細毛×エイジング条件に該当せず";
     if(r) reasons.push({type:t,name:(TYPES[t]&&TYPES[t].title)||t,reason:r});
   }
   return reasons;
