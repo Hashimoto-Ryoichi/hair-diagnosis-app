@@ -65,5 +65,17 @@ if [ -n "$rakbad" ]; then
   echo "$rakbad" >&2
 fi
 
+# 9) 楽天: rak1() 経由のリンク（直書きrakUrlを見るチェック7・8では検査されない死角）
+#    rak1 は R1+商品ハッシュ+R2 でURLを組み立てるため、R1/R2の構造と引数の形式を検証する
+if grep -q 'rakUrl:rak1(' "$FILE"; then
+  grep -q 'const R1="https://hb\.afl\.rakuten\.co\.jp/ichiba/' "$FILE" || fail "rak1用のR1がアフィリエイトラッパー(hb.afl.rakuten.co.jp/ichiba/)で始まっていません"
+  grep -q 'const R2="[^"]*link_type=hybrid_url' "$FILE" || fail "rak1用のR2に link_type=hybrid_url がありません"
+  badrak1=$(grep -oE 'rakUrl:rak1\([^)]*\)' "$FILE" | grep -vE 'rakUrl:rak1\("[0-9a-f]{32}"\)')
+  if [ -n "$badrak1" ]; then
+    fail "rak1()の引数が商品ハッシュ(半角英数字32桁)の形式ではありません:"
+    echo "$badrak1" >&2
+  fi
+fi
+
 if [ "$err" = "0" ]; then echo "✓ アフィリエイトチェック通過（Amazon＋楽天 / $FILE）"; fi
 exit "$err"
