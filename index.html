@@ -533,6 +533,7 @@ const MATCH_TAGS=[
   {key:"マッサージ美容クリーム", tags:{q1:["dry","mix"],q11:["aging","dry"],q5:["clear","strong"],q10:["moist"]}},
   {key:"セグレタ",          tags:{q11:["aging","gray"],q10:["volume"],q5:["clear","strong"]}},
   {key:"バウンシーボリューム", tags:{q10:["volume"]}},
+  {key:"KUNDAL", tags:{q10:["volume"]}},
   {key:"IONICO",           tags:{q11:["repair"],q10:["moist"],q7:["color","bleach"],q8:["dry","split"]}},
   {key:"PRORY",            tags:{q11:["aging","gray"],q5:["clear","strong"],q10:["moist"],q8:["dry"]}},
   {key:"ボーテ",            tags:{q11:["aging","gray","volume"],q5:["clear","strong"],q10:["moist","volume"],q8:["dry"]}},
@@ -591,6 +592,7 @@ const ING_PROFILES=[
   {key:"アデノバイタル",w:4,m:2.5,o:2,r:1.5,f:"aging",fl:5},
   {key:"セグレタ シャンプー",w:4,m:2,o:1.5,r:2,f:"volume",fl:4.5},
   {key:"バウンシーボリューム",w:2.5,m:4,o:1.5,r:2,f:"volume",fl:4},
+  {key:"KUNDAL",w:2.5,m:4,o:2,r:2,f:"volume",fl:4},
   {key:"メルト",w:2,m:4.5,o:3,r:3.5,f:"curl",fl:4.5},
   {key:"アルジェラン",w:3,m:4,o:2,r:2,f:"scalp",fl:4},
 ];
@@ -796,7 +798,8 @@ const TYPES={
     ],
     products:[
       {name:"セグレタ シャンプー 根元からふんわり",forWhom:"トップやサイドのボリューム不足、髪のハリ・コシ低下が気になる方",desc:"花王のエイジングケアブランド。セラミドSが髪内部に浸透・補修する内部密度ケア処方。ノンシリコンで根元から立ち上がり、ふんわりとした仕上がりに。6種の植物エキス配合。",note:"本体・つめかえ用、シリーズに「うねる髪もまとまる」など複数あります。リンク先でお選びください。",volumeUp:true,top:false,amz:"B0DH7WD8W5",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fsegreta-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DH7WD8W5.09.LZZZZZZZ.jpg"},
-      {name:"BOTANIST ボタニカルシャンプー バウンシーボリューム",forWhom:"髪のボリューム不足、ぺたんとしがちな根元が気になる方",desc:"ボタニカル成分配合のノンシリコン処方。髪にハリ・コシを与え、根元から軽やかに立ち上げる。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",volumeUp:true,top:true,amz:"B0CGJ5H5L8",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"}
+      {name:"BOTANIST ボタニカルシャンプー バウンシーボリューム",forWhom:"髪のボリューム不足、ぺたんとしがちな根元が気になる方",desc:"ボタニカル成分配合のノンシリコン処方。髪にハリ・コシを与え、根元から軽やかに立ち上げる。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",volumeUp:true,top:true,amz:"B0CGJ5H5L8",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
+      {name:"KUNDAL エアリーボリューム ヒアルロンシャンプー",forWhom:"細い髪で根元がぺたんとしやすく、軽い洗い上がりでふんわり感を出したい方",desc:"韓国発KUNDALのボリュームケアライン。スルホコハク酸系＋ベタイン系のマイルド洗浄で、ノンシリコンの軽い仕上がり。8種のヒアルロン酸と海藻エキスが頭皮と髪にうるおいを与え、根元からエアリーな髪へ。",note:"香りのバリエーションや詰め替え、トリートメントとのセットがあります。リンク先でお選びください。",volumeUp:true,top:false,amz:"B0DGFQXTNQ",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/559a5c04.ca294d84.559a5c05.bb393bff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkundal-japan%2Fhyaluron_sale%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DGFQXTNQ.09.LZZZZZZZ.jpg"}
     ]}
 };
 
@@ -1484,8 +1487,8 @@ const SURFACTANT_DETAIL=[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
     ]},
   {key:"acid",cat:"その他のマイルド系",rank:2,desc:"弱酸性で頭皮に近く、低刺激な補助系",
-    types:["bare_skin","aqua_sensitive","smooth_wave"],
-    products:["MEMEME","カウブランド","&PAIR","メルト"],
+    types:["bare_skin","aqua_sensitive","smooth_wave","volume_grace"],
+    products:["MEMEME","カウブランド","&PAIR","メルト","KUNDAL"],
     groups:[
       {sub:"カルボン酸系",items:["ラウレス-4カルボン酸Na","ラウレス-5カルボン酸Na","ラウレス-11カルボン酸Na"]},
       {sub:"スルホコハク酸系",items:["スルホコハク酸ラウレス2Na","スルホコハク酸(C12-14)パレス-2Na","スルホコハク酸ラウリル2Na"]},
