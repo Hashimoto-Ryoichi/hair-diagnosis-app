@@ -11,6 +11,12 @@ if git diff --cached --name-only | grep -q '^index\.html$'; then
     echo "✗ pre-commit: Amazonアフィリチェックに失敗。コミットを中止しました。" >&2
     exit 1
   fi
+  # Top Pick設計整合チェック（ING_PROFILES登録漏れ・key衝突・top重複・topボーナス改変を検出）
+  if ! node "$root/.githooks/check-design.js" "$tmp"; then
+    rm -f "$tmp"
+    echo "✗ pre-commit: 設計整合チェックに失敗。コミットを中止しました。" >&2
+    exit 1
+  fi
   rm -f "$tmp"
 fi
 exit 0
