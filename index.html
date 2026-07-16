@@ -536,6 +536,7 @@ const MATCH_TAGS=[
   {key:"KUNDAL", tags:{q10:["volume"]}},
   {key:"KERAGENIC", tags:{q11:["repair"],q8:["dry","split"],q10:["moist"]}},
   {key:"ReFa", tags:{q11:["repair"],q7:["bleach","straight","perm"],q10:["moist"],q8:["dry","frizz"]}},
+  {key:"アユーラ", tags:{q11:["aging","gray","wave"],q6:["some","strong"],q8:["frizz","dry"]}},
   {key:"IONICO",           tags:{q11:["repair"],q10:["moist"],q7:["color","bleach"],q8:["dry","split"]}},
   {key:"PRORY",            tags:{q11:["aging","gray"],q5:["clear","strong"],q10:["moist"],q8:["dry"]}},
   {key:"ボーテ",            tags:{q11:["aging","gray","volume"],q5:["clear","strong"],q10:["moist","volume"],q8:["dry"]}},
@@ -597,6 +598,7 @@ const ING_PROFILES=[
   {key:"KUNDAL",w:2.5,m:4,o:2,r:2,f:"volume",fl:4},
   {key:"KERAGENIC",w:2.5,m:4,o:3,r:4.5,f:"repair",fl:4},
   {key:"ReFa",w:3.5,m:3,o:3.5,r:4,f:"repair",fl:4},
+  {key:"アユーラ",w:2.5,m:4.5,o:2.5,r:3,f:"aging",fl:4},
   {key:"メルト",w:2,m:4.5,o:3,r:3.5,f:"curl",fl:4.5},
   {key:"アルジェラン",w:3,m:4,o:2,r:2,f:"scalp",fl:4},
 ];
@@ -793,7 +795,8 @@ const TYPES={
       {name:"セグレタ 地肌も髪も洗えるマッサージ美容クリーム",forWhom:"地肌の乾燥・かたさが気になる方、洗いながら頭皮ケアもしたい方",desc:"シャンプー・コンディショナー・マッサージクリームが1本に。泡立たないクリーム処方で、地肌にうるおいを与えながら皮脂・汚れをやさしく浮き上がらせる。石けん不使用。",note:"Amazonリンクはつめかえ用285mlのページです。本体ボトルは現在品薄です。",top:false,amz:"B07B5BKJGQ",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308471c.a06cce71.5308471d.8a4cd11e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmorro%2F20251102211340_94%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjAsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/P/B07B5BKJGQ.09.LZZZZZZZ.jpg"},
       {name:"PRORY プロリー モイストリペア シャンプー",forWhom:"年齢とともに増えるパサつき・広がり・ツヤ不足が気になる方",desc:"ロート製薬のエイジングダメージケア。トステア（アミノエチルチオコハク酸ジアンモニウム）×アミノ酸系主体の低刺激処方で、ステムプロテインCP配合。素髪に近づける機能性ヘアケア。",note:"本体450ml・つめかえ400mlがあります。リンク先でお選びください。",tostera:true,top:true,amz:"B0D839PQQH",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/535d7459.7d6d16ca.535d745a.0cc051ff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Frohto610%2F19659r%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://www.shop.rohto.co.jp/on/demandware.static/-/Sites-all-master-catalog/default/dw112a6f5a/images/product/64_prory/195305_1.jpg"},
       {name:"PREMIUM LABO ボーテシャンプー",forWhom:"年齢とともに髪が細く・ペタッとしやすくなり、根元のふんわり感とハリ・コシを取り戻したい方",desc:"安井友梨プロデュースのサロン発想シャンプー。硫酸系不使用で、アミノ酸系（ココイルグルタミン酸）＋ベタイン系の低刺激処方。カチオン化ケラチン（羊毛）と熱補修成分γ-ドコサラクトンが、ドライヤーの熱を利用して髪に密度感とハリ・コシを与える。18種のアミノ酸＋PCAで保湿し、ノンシリコンで根元からふんわり。",note:"300ml。トリートメントとのセット販売もあります。Amazon取り扱いはなく楽天のみです。",top:false,otc:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/555955f2.48bc35b4.555955f3.362b67ea/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ffavolink%2Fbeauty03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/favolink/cabinet/haircare01/11291261/btsqs.jpg?_ex=400x400"},
-      {name:"資生堂プロフェッショナル アデノバイタル シャンプー",forWhom:"頭皮環境を整えながら、ハリ・コシ・ボリューム不足にアプローチしたい方",desc:"資生堂サロン専売のエイジングケアライン。アデノシン配合で頭皮環境を整えながら、ハリ・コシ・ボリューム不足にアプローチする。洗浄成分はラウレス硫酸Na×ベタイン系のしっかりタイプ。",note:"Amazonリンクは後継の「サブリミック」版（250mL・500mLあり）、楽天リンクは従来のザ・ヘアケア版（在庫限り）です。リンク先でご確認ください。",volumeUp:true,top:false,amz:"B0GFSKBNBB",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc5bd.71bb7364.536fc5be.074eca82/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbraceshop%2F4909978937508%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/31-xlpP2VEL._AC_SL1040_.jpg"}
+      {name:"資生堂プロフェッショナル アデノバイタル シャンプー",forWhom:"頭皮環境を整えながら、ハリ・コシ・ボリューム不足にアプローチしたい方",desc:"資生堂サロン専売のエイジングケアライン。アデノシン配合で頭皮環境を整えながら、ハリ・コシ・ボリューム不足にアプローチする。洗浄成分はラウレス硫酸Na×ベタイン系のしっかりタイプ。",note:"Amazonリンクは後継の「サブリミック」版（250mL・500mLあり）、楽天リンクは従来のザ・ヘアケア版（在庫限り）です。リンク先でご確認ください。",volumeUp:true,top:false,amz:"B0GFSKBNBB",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc5bd.71bb7364.536fc5be.074eca82/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbraceshop%2F4909978937508%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/31-xlpP2VEL._AC_SL1040_.jpg"},
+      {name:"アユーラ ウェルバイタル シャンプー（AYURA）",forWhom:"年齢とともに増えてきたうねり・ハリコシ不足を、頭皮からやさしく整えたい方",desc:"アユーラが「エイジングうねり」に着目して2026年4月に発売した新ライン。タウリン系×ベタイン系のマイルド洗浄（硫酸系不使用）に、補修成分ペリセア（ジラウロイルグルタミン酸リシンNa）とココイル加水分解コラーゲンKを配合。センブリエキス・シラカンバ樹液が頭皮をうるおいで整える。ノンシリコン・弱酸性。",note:"Amazon・楽天（アユーラ公式店）とも本体300mLです。同シリーズのトリートメントもあります。",top:false,amz:"B0GWJ1ZZ7R",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55d06508.22ed3319.55d06509.44ef82c1/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fayura%2F73062%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51V70pTRmML._AC_SL1500_.jpg"}
     ]},
   volume_grace:{badge:"Hair Type — VG",title:"Volume Grace",sub:"細毛・少毛量・ボリュームケアが必要な髪",
     advice:[
@@ -1472,7 +1475,7 @@ function renderProdCard(p,key,isTopPick){
 const SURFACTANT_DETAIL=[
   {key:"betaine",cat:"ベタイン系",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
     types:["repair_mode","smooth_wave","skin_alert","vital_aging","volume_grace","bare_skin","aqua_sensitive"],
-    products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","PREMIUM LABO","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","ReFa"],
+    products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","PREMIUM LABO","MEMEME","コスメデコルテ AQ","UNOVE","ゴールドウェル","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","ReFa","アユーラ"],
     groups:[
       {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
       {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
@@ -1487,8 +1490,8 @@ const SURFACTANT_DETAIL=[
       {sub:"グリシン系・サルコシン系",items:["ココイルグリシンK","ココイルグリシンNa","ラウロイルサルコシンNa","ラウロイルサルコシンTEA"]},
     ]},
   {key:"taurine",cat:"タウリン系",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
-    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
-    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","コスメデコルテ AQ","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC"],
+    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging"],
+    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","コスメデコルテ AQ","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","アユーラ"],
     groups:[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
     ]},
