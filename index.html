@@ -534,6 +534,8 @@ const MATCH_TAGS=[
   {key:"セグレタ シャンプー", tags:{q11:["aging","gray"],q10:["volume"],q5:["clear","strong"]}},
   {key:"バウンシーボリューム", tags:{q10:["volume"]}},
   {key:"KUNDAL", tags:{q10:["volume"]}},
+  {key:"スカルプD ボーテ", tags:{q10:["volume"],q11:["volume"],q1:["oily","mix"]}},
+  {key:"haru kurokami", tags:{q10:["volume"],q11:["aging","gray"]}},
   {key:"KERAGENIC", tags:{q11:["repair"],q8:["dry","split"],q10:["moist"]}},
   {key:"ReFa", tags:{q11:["repair"],q7:["bleach","straight","perm"],q10:["moist"],q8:["dry","frizz"]}},
   {key:"アユーラ", tags:{q11:["aging","gray","wave"],q6:["some","strong"],q8:["frizz","dry"]}},
@@ -541,7 +543,7 @@ const MATCH_TAGS=[
   {key:"＆be", tags:{q11:["repair"],q7:["color","bleach"],q8:["dry","split"]}},
   {key:"IONICO",           tags:{q11:["repair"],q10:["moist"],q7:["color","bleach"],q8:["dry","split"]}},
   {key:"PRORY",            tags:{q11:["aging","gray"],q5:["clear","strong"],q10:["moist"],q8:["dry"]}},
-  {key:"ボーテ",            tags:{q11:["aging","gray","volume"],q5:["clear","strong"],q10:["moist","volume"],q8:["dry"]}},
+  {key:"ボーテシャンプー",    tags:{q11:["aging","gray","volume"],q5:["clear","strong"],q10:["moist","volume"],q8:["dry"]}},
   {key:"MEMEME",           tags:{q7:["color","none"],q8:["dry","gloss"],q10:["moist","gloss"]}},
   {key:"AQ リペア スムース",  tags:{q6:["some","strong"],q10:["smooth","moist","vdown"],q8:["frizz","spread"]}},
   {key:"AQ リペア エッセンス", tags:{q10:["moist","gloss"],q11:["dry"],q1:["dry"]}},
@@ -597,11 +599,13 @@ const ING_PROFILES=[
   {key:"イオ クレンジング",w:2,m:4.5,o:2.5,r:1.5,f:"dryscalp",fl:4},
   {key:"マッサージ美容クリーム",w:1.5,m:3.5,o:4.5,r:2,f:"aging",fl:4.5},
   {key:"PRORY",w:2.5,m:4,o:3,r:4,f:"aging",fl:4.5},
-  {key:"ボーテ",w:2,m:4.5,o:3,r:4,f:"aging",fl:4},
+  {key:"ボーテシャンプー",w:2,m:4.5,o:3,r:4,f:"aging",fl:4},
   {key:"アデノバイタル",w:4,m:2.5,o:2,r:1.5,f:"aging",fl:5},
   {key:"セグレタ シャンプー",w:4,m:2,o:1.5,r:2,f:"volume",fl:4.5},
   {key:"バウンシーボリューム",w:2.5,m:4,o:1.5,r:2,f:"volume",fl:4},
   {key:"KUNDAL",w:2.5,m:4,o:2,r:2,f:"volume",fl:4},
+  {key:"スカルプD ボーテ",w:2.5,m:3.5,o:1.5,r:2.5,f:"volume",fl:4.5},
+  {key:"haru kurokami",w:2,m:4,o:2.5,r:2.5,f:"volume",fl:3},
   {key:"KERAGENIC",w:2.5,m:4,o:3,r:4.5,f:"repair",fl:4},
   {key:"ReFa",w:3.5,m:3,o:3.5,r:4,f:"repair",fl:4},
   {key:"アユーラ",w:2.5,m:4.5,o:2.5,r:3,f:"aging",fl:4},
@@ -820,7 +824,9 @@ const TYPES={
     products:[
       {name:"セグレタ シャンプー 根元からふんわり",forWhom:"トップやサイドのボリューム不足、髪のハリ・コシ低下が気になる方",desc:"花王のエイジングケアブランド。セラミドSが髪内部に浸透・補修する内部密度ケア処方。ノンシリコンで根元から立ち上がり、ふんわりとした仕上がりに。6種の植物エキス配合。",note:"本体・つめかえ用、シリーズに「うねる髪もまとまる」など複数あります。リンク先でお選びください。",volumeUp:true,top:false,amz:"B0DH7WD8W5",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fsegreta-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DH7WD8W5.09.LZZZZZZZ.jpg"},
       {name:"BOTANIST ボタニカルシャンプー バウンシーボリューム",forWhom:"髪のボリューム不足、ぺたんとしがちな根元が気になる方",desc:"ボタニカル成分配合のノンシリコン処方。髪にハリ・コシを与え、根元から軽やかに立ち上げる。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",volumeUp:true,top:true,amz:"B0CGJ5H5L8",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg"},
-      {name:"KUNDAL エアリーボリューム ヒアルロンシャンプー",forWhom:"細い髪で根元がぺたんとしやすく、軽い洗い上がりでふんわり感を出したい方",desc:"韓国発KUNDALのボリュームケアライン。スルホコハク酸系＋ベタイン系のマイルド洗浄で、ノンシリコンの軽い仕上がり。8種のヒアルロン酸と海藻エキスが頭皮と髪にうるおいを与え、根元からエアリーな髪へ。",note:"香りのバリエーションや詰め替え、トリートメントとのセットがあります。リンク先でお選びください。",volumeUp:true,top:false,amz:"B0DGFQXTNQ",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/559a5c04.ca294d84.559a5c05.bb393bff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkundal-japan%2Fhyaluron_sale%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/411UaS7kHEL._AC_SL1000_.jpg"}
+      {name:"KUNDAL エアリーボリューム ヒアルロンシャンプー",forWhom:"細い髪で根元がぺたんとしやすく、軽い洗い上がりでふんわり感を出したい方",desc:"韓国発KUNDALのボリュームケアライン。スルホコハク酸系＋ベタイン系のマイルド洗浄で、ノンシリコンの軽い仕上がり。8種のヒアルロン酸と海藻エキスが頭皮と髪にうるおいを与え、根元からエアリーな髪へ。",note:"香りのバリエーションや詰め替え、トリートメントとのセットがあります。リンク先でお選びください。",volumeUp:true,top:false,amz:"B0DGFQXTNQ",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/559a5c04.ca294d84.559a5c05.bb393bff/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkundal-japan%2Fhyaluron_sale%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/411UaS7kHEL._AC_SL1000_.jpg"},
+      {name:"スカルプD ボーテ 薬用スカルプシャンプー ボリューム",forWhom:"根元のぺたんこ感に加えて、頭皮のベタつきやハリ・コシ低下も気になる方",desc:"アンファーの女性用薬用スカルプシャンプー（医薬部外品）。有効成分ピロクトンオラミン＋グリチルリチン酸2Kが頭皮環境を整え、洗浄はアミノ酸系＋ベタイン系のマイルド処方。豆乳発酵液と浸透補修成分ペリセア、ハリコシ成分セラキュートＶを配合し、ノンシリコンで根元からふんわり立ち上げる。",note:"本体350mL・つめかえ用・トリートメントとのセットがあります。リンク先でお選びください。殺菌成分配合のため、頭皮がとても敏感な方は様子を見ながらお使いください。",volumeUp:true,top:false,otc:true,amz:"B09S3C8MRB",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55dffb0d.2f56f2a9.55dffb0e.e186dc47/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2F0101marui%2Fcc006508300101%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://shop.r10s.jp/0101marui/cabinet/cc006/508/304580688634019.jpg"},
+      {name:"haru kurokamiスカルプ シャンプー",forWhom:"細毛・ハリコシ不足が気になり、時短ケアでも頭皮からふんわりさせたい方",desc:"100%天然由来・アミノ酸系（ココイルグルタミン酸TEA主体）のオールインワンシャンプー。リンス・コンディショナー不要の1本で、キャピキシル・ヘマチン・加水分解シルクが頭皮と髪を整えてハリ・コシをサポート。ノンシリコンで根元から軽やかに仕上がる。",note:"オリジナル・グリーンブレンド・ラベンダーブレンドの3種類があります。リンク先でお選びください。",volumeUp:true,top:false,amz:"B07ZB81Q8J",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55dffb88.4a9567a0.55dffb89.319642e3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosme21%2Fharu3-1%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://shop.r10s.jp/cosme21/cabinet/f/haru3-1_001.jpg"}
     ]}
 };
 
@@ -1494,8 +1500,8 @@ const SURFACTANT_DETAIL=[
       {sub:"イミダゾリン系",items:["ココアンホジ酢酸2Na"]},
     ]},
   {key:"amino",cat:"アミノ酸系",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
-    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert"],
-    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","BOTANIST","プロリー","PREMIUM LABO","MEMEME","ゴールドウェル","イオ クレンジング","ミントベル","&PAIR","NOV ヘアシャンプー","KERAGENIC","ReFa","Re:KERATIN","RAFRA"],
+    types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","volume_grace"],
+    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","BOTANIST","プロリー","PREMIUM LABO","MEMEME","ゴールドウェル","イオ クレンジング","ミントベル","&PAIR","NOV ヘアシャンプー","KERAGENIC","ReFa","Re:KERATIN","RAFRA","haru"],
     groups:[
       {sub:"グルタミン酸系",items:["ココイルグルタミン酸Na","ココイルグルタミン酸TEA","ココイルグルタミン酸K","ラウロイルグルタミン酸Na","ラウロイルグルタミン酸TEA"]},
       {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
