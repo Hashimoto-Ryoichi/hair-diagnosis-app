@@ -160,6 +160,10 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .q-text{font-family:var(--serif);font-size:1.25rem;font-weight:400;color:var(--char);margin-bottom:1rem;line-height:1.6}
 .q-cat{font-size:.72rem;letter-spacing:.1em;color:var(--muted);margin-bottom:.35rem;text-transform:uppercase}
 .opts{display:grid;gap:.55rem}
+.opt-group{display:flex;align-items:center;gap:.6rem;font-size:.74rem;font-weight:600;color:var(--gold-d);letter-spacing:.03em;margin:.5rem 0 .05rem}
+.opt-group:first-child{margin-top:0}
+.opt-group::before,.opt-group::after{content:"";flex:1;height:1px;background:var(--border)}
+.opt-group-spacer{height:.35rem}
 .opt{display:flex;align-items:flex-start;gap:.75rem;width:100%;background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:.9rem 1rem;cursor:pointer;transition:all .2s;text-align:left;font-family:var(--sans);font-size:1rem;font-weight:300;color:var(--char2);line-height:1.55;-webkit-tap-highlight-color:transparent;-webkit-appearance:none;appearance:none;outline:none}
 .opt:focus{outline:none}
 .opt:focus-visible{outline:2px solid var(--gold-l);outline-offset:2px}
@@ -434,7 +438,7 @@ const QUESTIONS=[
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
   {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー・ハイライト"},{k:"perm",l:"C",t:"パーマ・デジタルパーマ"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"straight",l:"E",t:"縮毛矯正・ストレートパーマ"}]},
   {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？（複数回答可）",multi:true,opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"birth",l:"B",t:"出産を機に髪が変化したと感じる"},{k:"young",l:"C",t:"20代から少しずつ"},{k:"early",l:"D",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"E",t:"50代から実感"},{k:"strong",l:"F",t:"60代以降で強く実感"}]},
-  {id:"q9",cat:"熱器具・セット剤",text:"使っている熱器具・セット剤はありますか？（複数回答可）",multi:true,opts:[{k:"refa",l:"A",t:"リファ"},{k:"bio",l:"B",t:"ヘアビューロン"},{k:"repro",l:"C",t:"レプロナイザー"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン"},{k:"stylers",l:"F",t:"ワックス・バーム・ハードスプレーをほぼ毎日使う"},{k:"none",l:"G",t:"使わない"}]},
+  {id:"q9",cat:"熱器具・セット剤",text:"毎日の乾かし方・仕上げについて、当てはまるものを教えてください（複数回答可）",multi:true,opts:[{k:"refa",l:"A",t:"リファ",grp:"熱器具（ドライヤー・アイロン）"},{k:"bio",l:"B",t:"ヘアビューロン",grp:"熱器具（ドライヤー・アイロン）"},{k:"repro",l:"C",t:"レプロナイザー",grp:"熱器具（ドライヤー・アイロン）"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）",grp:"熱器具（ドライヤー・アイロン）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン",grp:"熱器具（ドライヤー・アイロン）"},{k:"stylers",l:"F",t:"ワックス・バーム・ハードスプレーをほぼ毎日使う",grp:"スタイリング剤"},{k:"none",l:"G",t:"使わない",grp:""}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質はどれですか？（複数回答可）",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
   {id:"q11",cat:"悩み",text:"特に気になるお悩みはどれですか？（複数回答可）",multi:true,opts:[{k:"dry",l:"A",t:"パサつき"},{k:"repair",l:"B",t:"ダメージ修復"},{k:"wave",l:"C",t:"うねり・広がり"},{k:"volume",l:"D",t:"ボリュームが欲しい"},{k:"oily",l:"E",t:"ベタつき"},{k:"aging",l:"F",t:"エイジング（ハリ・コシ・ボリューム不足）"},{k:"gray",l:"G",t:"白髪が気になる"},{k:"none",l:"H",t:"特にない"}]},
@@ -2180,13 +2184,21 @@ function App(){
             const isSel=isMulti?arr.includes(opt.k):answers[qid]===opt.k;
             const order=(qid==="q8"||qid==="q10"||qid==="q11")&&isSel?arr.indexOf(opt.k)+1:0;
             const circled=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
-            return h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),"aria-pressed":isSel,onClick:(e)=>{e.currentTarget.blur();
-              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q5:["stable"]});setStep("result");},1000);}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q7:["none"]});setStep("result");},1000);}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),(opt.k==="none"||(opt.k==="other"&&!(Array.isArray(answers.q9)&&answers.q9.length>0)))&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q9:[opt.k]});setStep("result");},1000);}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
+            const btn=h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),"aria-pressed":isSel,onClick:(e)=>{e.currentTarget.blur();
+              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q5:["stable"]});setStep("result");},1000);}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q7:["none"]});setStep("result");},1000);}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q9:["none"]});setStep("result");},1000);}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t),
               order>0&&h("span",{style:{marginLeft:"auto",fontSize:"1.15rem",color:"var(--gold)",fontWeight:500,lineHeight:1}},circled[order-1]||`${order}`)
             );
+            if(qid==="q9"&&opt.grp!==undefined){
+              const prevGrp=optIdx>0?QUESTIONS[curQ].opts[optIdx-1].grp:null;
+              if(opt.grp!==prevGrp){
+                const label=opt.grp?h("div",{className:"opt-group"},opt.grp):h("div",{className:"opt-group-spacer"});
+                return h(React.Fragment,{key:"g-"+opt.k},label,btn);
+              }
+            }
+            return btn;
           })),
           (QUESTIONS[curQ].id==="q5"||QUESTIONS[curQ].id==="q7"||QUESTIONS[curQ].id==="q8"||QUESTIONS[curQ].id==="q9"||QUESTIONS[curQ].id==="q10"||QUESTIONS[curQ].id==="q11")&&h("button",{
             className:"btn-primary",
