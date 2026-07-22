@@ -173,6 +173,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .opt.sel{border-color:var(--gold);background:var(--ivory);color:var(--char)}
 .opt-lt{flex-shrink:0;width:24px;height:24px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:var(--gold);font-family:var(--serif);font-style:italic;transition:all .2s}
 .opt.sel .opt-lt{background:var(--gold);color:#fff}
+.opt-desc{display:block;font-size:.74rem;color:var(--muted);margin-top:.15rem;line-height:1.4}
+.opt.sel .opt-desc{color:var(--char2)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .fade{animation:fadeUp .45s ease both}
 .loading{text-align:center;padding:5rem 1.5rem}
@@ -182,6 +184,8 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .badge{display:inline-block;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);border:1px solid var(--border);padding:.32rem .85rem;border-radius:20px;margin-bottom:1.4rem}
 .char-img{display:block;width:100%;max-width:240px;height:auto;margin:0 auto 1.4rem;object-fit:contain}
 @media (max-width:480px){.char-img{max-width:180px;margin-bottom:1.1rem}}
+.len-guide{display:block;width:100%;max-width:300px;height:auto;margin:.2rem auto 1.2rem}
+@media (max-width:480px){.len-guide{max-width:250px;margin-bottom:1rem}}
 .res-title{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.6rem);font-weight:300;color:var(--char);margin-bottom:.4rem;white-space:pre-line;line-height:1.2}
 .res-sub{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:var(--muted);margin-bottom:1.8rem}
 .divider{border:none;border-top:1px solid var(--border);margin:1.8rem 0}
@@ -432,7 +436,7 @@ const HPB_URL="https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/";
 
 const QUESTIONS=[
   {id:"q1",cat:"頭皮",text:"夕方〜夜にかけて、頭皮はどんな状態になりやすいですか？",opts:[{k:"dry",l:"A",t:"カサつく・つっぱる感じがある"},{k:"normal",l:"B",t:"特に気にならない"},{k:"oily",l:"C",t:"ベタつく・脂っぽくなる"},{k:"mix",l:"D",t:"場所によって違う（Tゾーンだけベタつく等）"},{k:"red",l:"E",t:"かゆみ・赤み・湿疹が出ることがある"}]},
-  {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"short",l:"A",t:"ベリーショート・ショート"},{k:"mid",l:"B",t:"ミディアム"},{k:"semi",l:"C",t:"セミロング"},{k:"long",l:"D",t:"ロング"}]},
+  {id:"q2",cat:"長さ",text:"髪の長さはどのくらいですか？",opts:[{k:"vshort",l:"A",t:"ベリーショート",d:"耳が見えるスタイル"},{k:"short",l:"B",t:"ショート",d:"耳下〜アゴ下"},{k:"mid",l:"C",t:"ミディアム",d:"アゴ下〜肩"},{k:"semi",l:"D",t:"セミロング",d:"肩〜バストトップ"},{k:"long",l:"E",t:"ロング",d:"バストトップより下"}]},
   {id:"q3",cat:"毛質",text:"髪の太さはどのくらいですか？",opts:[{k:"thin",l:"A",t:"細い"},{k:"normal",l:"B",t:"普通"},{k:"thick",l:"C",t:"太い"}]},
   {id:"q4",cat:"毛量",text:"髪の毛量はどのくらいですか？",opts:[{k:"less",l:"A",t:"少ない"},{k:"vol_normal",l:"B",t:"普通"},{k:"more",l:"C",t:"多い"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
@@ -444,6 +448,7 @@ const QUESTIONS=[
   {id:"q11",cat:"悩み",text:"特に気になるお悩みはどれですか？（複数回答可）",multi:true,opts:[{k:"dry",l:"A",t:"パサつき"},{k:"repair",l:"B",t:"ダメージ修復"},{k:"wave",l:"C",t:"うねり・広がり"},{k:"volume",l:"D",t:"ボリュームが欲しい"},{k:"oily",l:"E",t:"ベタつき"},{k:"aging",l:"F",t:"エイジング（ハリ・コシ・ボリューム不足）"},{k:"gray",l:"G",t:"白髪が気になる"},{k:"none",l:"H",t:"特にない"}]},
 ];
 
+// ===== Q2 髪の長さ一覧図（1枚のSVG・耳下/アゴ下/肩/バストの基準線＋範囲矢印・ちびキャラ風） =====
 const R1="https://hb.afl.rakuten.co.jp/ichiba/5308366d.e1b1edc0.5308366e.f6470f69/?pc=https%3A%2F%2Fproduct.rakuten.co.jp%2Fproduct%2F-%2F";
 const R2="&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjEsImFtcCI6ZmFsc2V9";
 function rak1(id){return R1+id+"/"+R2;}
@@ -843,8 +848,12 @@ const TYPES={
 };
 
 
+// 長さの正規化：ベリーショート(vshort)は診断上ショート(short)と同じ扱い
+const normLen=v=>v==="vshort"?"short":v;
+
 function diagnose(ans){
-  const {q1,q2,q3,q4,q6}=ans;
+  const {q1,q3,q4,q6}=ans;
+  const q2=normLen(ans.q2);
   // Q11は複数選択配列。先頭（最初に押した=最重視）を主回答として使用
   const q11arr=Array.isArray(ans.q11)?ans.q11:(ans.q11?[ans.q11]:[]);
   const q11=q11arr[0]||"none";
@@ -1028,7 +1037,7 @@ function buildResultSummary(typeKey,answers){
   const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:["stable"]);
   const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:["none"]);
 
-  const lengthLbl=q2==="short"?"ショート":q2==="mid"?"ミディアム":q2==="semi"?"セミロング":"ロング";
+  const lengthLbl=q2==="vshort"?"ベリーショート":q2==="short"?"ショート":q2==="mid"?"ミディアム":q2==="semi"?"セミロング":"ロング";
 
   switch(typeKey){
     case "skin_alert":
@@ -1264,11 +1273,11 @@ function buildTrace(ans,typeKey){
   }else if(q11arr.includes("repair")&&q8arr.some(v=>["split","frizz","spread"].includes(v))){
     trace.push({step:"Step1.5",condition:"Q11=ダメージ修復 ∧ Q8=深刻サイン",result:"repair_mode確定",weight:"高優先"});
   }else if(q11arr.includes("oily")&&!["bleach","straight","perm"].includes(eq7)){
-    trace.push({step:"Step1.6",condition:"Q11=ベタつき ∧ 強薬剤なし",result:`oil_reset_${ans.q2==="short"?"short":"long"}確定`,weight:"高優先"});
+    trace.push({step:"Step1.6",condition:"Q11=ベタつき ∧ 強薬剤なし",result:`oil_reset_${normLen(ans.q2)==="short"?"short":"long"}確定`,weight:"高優先"});
   }else if(ans.q1==="oily"&&(eq7==="none"||eq7==="color")){
-    trace.push({step:"Step2",condition:"Q1=脂性 ∧ (薬剤なし ∨ カラーのみ)",result:`oil_reset_${ans.q2==="short"?"short":"long"}確定`,weight:"中"});
+    trace.push({step:"Step2",condition:"Q1=脂性 ∧ (薬剤なし ∨ カラーのみ)",result:`oil_reset_${normLen(ans.q2)==="short"?"short":"long"}確定`,weight:"中"});
   }else if(eq7==="bleach"){
-    if(ans.q2==="short"){
+    if(normLen(ans.q2)==="short"){
       const hasEndDmg=q8arr.some(v=>["dry","frizz","split","spread"].includes(v));
       trace.push({step:"Step3",condition:`Q7=ブリーチ ∧ ショート ∧ 毛先ダメージ${hasEndDmg?"あり":"なし"}`,result:`${hasEndDmg?"repair_mode":"bare_skin"}確定`,weight:"高"});
     }else{
@@ -1321,8 +1330,8 @@ function explainExcluded(ans,selectedTypeKey){
     if(t===selectedTypeKey) continue;
     let r="他タイプが優先された";
     if(t==="skin_alert") r=ans.q1==="red"?"":"Q1=赤み・湿疹に該当せず";
-    else if(t==="oil_reset_short") r=((ans.q1==="oily"||q11arr.includes("oily"))&&ans.q2==="short")?"":"脂性ショート条件に該当せず";
-    else if(t==="oil_reset_long") r=((ans.q1==="oily"||q11arr.includes("oily"))&&ans.q2!=="short")?"":"脂性ミディアム以上条件に該当せず";
+    else if(t==="oil_reset_short") r=((ans.q1==="oily"||q11arr.includes("oily"))&&normLen(ans.q2)==="short")?"":"脂性ショート条件に該当せず";
+    else if(t==="oil_reset_long") r=((ans.q1==="oily"||q11arr.includes("oily"))&&normLen(ans.q2)!=="short")?"":"脂性ミディアム以上条件に該当せず";
     else if(t==="repair_mode"){
       const strongChem=q7arr.some(v=>["bleach","straight","perm"].includes(v));
       const colorSerious=q7arr.includes("color")&&q8arr.some(v=>v==="split"||v==="frizz");
@@ -1332,7 +1341,7 @@ function explainExcluded(ans,selectedTypeKey){
     else if(t==="smooth_wave") r=(ans.q6==="some"||ans.q6==="strong"||q11arr.includes("wave")||q8arr.includes("spread")||q10arr.includes("vdown")||q5arr.includes("birth")||ans.q3==="thick"||ans.q4==="more")?"":"くせ毛・うねり・広がり・太毛/多毛等の該当なし";
     else if(t==="aqua_sensitive"){
       if(!q7arr.includes("none")) r="バージン毛・健康毛条件に該当せず";
-      else if(ans.q2!=="short"&&q8arr.includes("dry")) r="1年以内の薬剤処理なしでも、ミディアム以上の長さは毛先に過去の既染部が残る可能性あり（新生毛と判断できるのはショートのみ）";
+      else if(normLen(ans.q2)!=="short"&&q8arr.includes("dry")) r="1年以内の薬剤処理なしでも、ミディアム以上の長さは毛先に過去の既染部が残る可能性あり（新生毛と判断できるのはショートのみ）";
       else r="";
     }
     else if(t==="bare_skin") r=(q7arr.includes("color")||q7arr.includes("none")||q7arr.includes("bleach"))?"":"強薬剤（パーマ・縮毛矯正）はRepair Mode優先";
@@ -1744,7 +1753,7 @@ function ScoreLog({log}){
 
 const TM_OPTIONS={
   q1:[{k:"dry",l:"乾燥"},{k:"normal",l:"普通"},{k:"oily",l:"脂性"},{k:"mix",l:"混合"},{k:"red",l:"赤み・湿疹"}],
-  q2:[{k:"short",l:"ショート"},{k:"mid",l:"ミディアム"},{k:"semi",l:"セミロング"},{k:"long",l:"ロング"}],
+  q2:[{k:"vshort",l:"ベリーショート"},{k:"short",l:"ショート"},{k:"mid",l:"ミディアム"},{k:"semi",l:"セミロング"},{k:"long",l:"ロング"}],
   q3:[{k:"thin",l:"細い"},{k:"normal",l:"普通"},{k:"thick",l:"太い"}],
   q4:[{k:"less",l:"少ない"},{k:"vol_normal",l:"普通"},{k:"more",l:"多い"}],
   q5:[{k:"stable",l:"変化なし"},{k:"birth",l:"出産後"},{k:"young",l:"20代から"},{k:"early",l:"30後半〜40代"},{k:"clear",l:"50代から"},{k:"strong",l:"60代以降"}],
@@ -2174,6 +2183,7 @@ function App(){
           h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
           h("p",{className:"q-text"},QUESTIONS[curQ].text),
+          QUESTIONS[curQ].id==="q2"&&h("img",{className:"len-guide",src:"length-guide.jpg",alt:"髪の長さの目安（ベリーショート〜ロング）",loading:"lazy"}),
           QUESTIONS[curQ].id==="q8"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 気になる状態をすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
           QUESTIONS[curQ].id==="q10"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ なりたい仕上がりをすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
           QUESTIONS[curQ].id==="q11"&&h("p",{className:"q11-hint"},"※ 気になるお悩みをすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
@@ -2188,7 +2198,7 @@ function App(){
               qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q5:["stable"]});setStep("result");},1000);}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q7:["none"]});setStep("result");},1000);}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q9:["none"]});setStep("result");},1000);}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
-              h("span",{style:{flex:1}},opt.t),
+              h("span",{style:{flex:1}},opt.t,opt.d&&h("span",{className:"opt-desc"},opt.d)),
               order>0&&h("span",{style:{marginLeft:"auto",fontSize:"1.15rem",color:"var(--gold)",fontWeight:500,lineHeight:1}},circled[order-1]||`${order}`)
             );
             if(qid==="q9"&&opt.grp!==undefined){
