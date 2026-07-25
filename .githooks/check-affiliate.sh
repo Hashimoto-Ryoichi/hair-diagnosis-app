@@ -4,14 +4,15 @@
 # 経緯: 旧ID hassihair06-22 がアソシエイトアカウント未登録のまま本番に載り、
 #       「トラフィックのソースを特定できない」としてAmazon審査却下＋収益喪失（2026-06-11）。
 #       楽天は素URL(item.rakuten.co.jp)を貼ると報酬が付かない＝同種の収益喪失リスク。
-# 正式ID(Amazon): hairidentity-22 ／ 楽天: hb.afl.rakuten.co.jp/ichiba/... のhybrid_urlのみ許可
+# 正式ID(Amazon): 下のEXPECTが単一の正本（ID変更は scripts/rotate-assoc-id.sh で行う）
+# 楽天: hb.afl.rakuten.co.jp/ichiba/... のhybrid_urlのみ許可
 # このスクリプトは pre-commit フックと deploy スキル Step 0 の両方から呼ばれる。
 # 使い方: check-affiliate.sh [チェック対象ファイル]   （省略時は index.html）
 
 FILE="${1:-index.html}"
-EXPECT="hairidentity-22"
+EXPECT="hairidentit0b-22"
 # 過去に使って廃止したID（半角スペース区切りで追記していく。ID変更時はrotate-assoc-id.shを使う）
-OLDS="hassihair06-22"
+OLDS="hairidentity-22 hassihair06-22"
 err=0
 fail() { echo "✗ Amazonアフィリチェック: $1" >&2; err=1; }
 
