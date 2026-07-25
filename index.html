@@ -277,6 +277,12 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 @media (max-width:480px){.ftr-rsv-btn{width:100%;padding:1rem 1.4rem}}
 @media (hover:hover) and (pointer:fine){.ftr-rsv-btn:hover{background:var(--gold-d);color:var(--cream)}}
 .ftr-note{font-size:.82rem;color:var(--muted);line-height:1.8;white-space:pre-line}
+/* ── 静的フッター（Amazonアソシエイト審査用：クローラーがJSなしで確認できる商品リンク一覧） ── */
+.static-ftr{max-width:680px;margin:0 auto;padding:1.4rem 1.5rem 2.6rem;border-top:1px solid var(--border)}
+.static-ftr-details{margin-top:.6rem}
+.static-ftr-details summary{cursor:pointer;font-size:.82rem;color:var(--gold-d);letter-spacing:.04em;-webkit-tap-highlight-color:transparent}
+.static-ftr-list{margin:.6rem 0 0;padding-left:1.2em;font-size:.78rem;color:var(--muted);line-height:1.8}
+.static-ftr-list a{color:var(--gold-d)}
 .visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ── B-1 再開モーダル ── */
@@ -2418,5 +2424,62 @@ function App(){
 }
 ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 </script>
+<footer id="amazon-product-list" class="static-ftr">
+<p class="ftr-note">Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。</p>
+<details class="static-ftr-details">
+<summary>掲載商品一覧（Amazon取扱・48商品）</summary>
+<p class="ftr-note">Hair Identityの診断で提案しているシャンプーの一覧です。各商品の選定理由・成分解析は診断結果ページでご覧いただけます。</p>
+<ul class="static-ftr-list">
+<li><a href="https://www.amazon.co.jp/dp/B00N0C0B9U?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">ミノン 全身シャンプー しっとりタイプ</a>｜アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。</li>
+<li><a href="https://www.amazon.co.jp/dp/B00BTDV3FS?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">NOV ヘアシャンプー DS</a>｜敏感肌ブランドNOVの化粧品シャンプー。アミノ酸系・ベタイン系・タウリン系の3つを組み合わせた低刺激処方。無香料・無着色。</li>
+<li><a href="https://www.amazon.co.jp/dp/B002TEZ8U2?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">コラージュフルフル ネクスト シャンプー</a>｜持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩配合で、フケ・かゆみの原因菌の繁殖を防ぐ。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0777B5D9M?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">キュレル シャンプー</a>｜花王の医薬部外品シャンプー。グリチルリチン酸ジカリウム配合でフケ・かゆみを防ぐ。セラミドを守りながら洗う処方で、赤ちゃんから大人まで使える。弱酸性・無香料・無着色。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CJP1C9TC?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">h&s スカルプ シャンプー</a>｜ピロクトンオラミン配合でマラセチア菌を抑制。脂性頭皮専用、洗浄力強め。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CW3C9TYD?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">デオコ スカルプケアシャンプー</a>｜頭皮のニオイ・ベタつきが気になる方向けのスカルプケア。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0DJ1CY24Q?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">WELLP（ウェルプ）薬用スムースシャンプー</a>｜マイルドなベタイン・タウリン系を主体に、しっかり洗浄成分も配合した医薬部外品スカルプケア。脂性頭皮のフケ・かゆみ予防に。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0F268NFQ5?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">サンコール ミントベル マリンブルーシャンプー</a>｜サンコールの定番ひんやり系シャンプー。天然メントールがスーッと効く爽快な使用感が特徴。タウリン・アミノ酸・ベタイン系3種洗浄で汗・皮脂をやさしくリセット。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0DF23Q9FK?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">パンテーン ミラクルズ シャンプー</a>｜サルフェートフリーのマイルド洗浄×プロビタミン補修。日常使いの定番で、脂性寄りでもダメージやパサつきが気になる方に。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FR41V4KS?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">ラックス スーパーリッチシャイン ダメージリペア シャンプー</a>｜べたつきを抑えながら輝く仕上がり。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0DBHRQHFH?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">TSUBAKI プレミアムモイスト＆リペア シャンプー</a>｜和の美容成分・ツバキ油配合。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CGJ66KVR?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー スカルプクレンズ</a>｜全成分マイルド系のサルフェートフリー処方。酸性石けん系×アミノ酸系のマイルド洗浄で、頭皮のベタつきを優しくリセット。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FV2PQ11B?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">Straine（ストレイン）ストレートシャンプー BASIC</a>｜トステア（アミノエチルチオコハク酸ジアンモニウム）配合。広がり・ダメージが気になる方向けで、きしみを抑えしなやかで扱いやすい質感へ。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0F4QGL5FD?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">セラムイン シャンプー＆トリートメント</a>｜トステア＋PPT成分でダメージを内部から補修。</li>
+<li><a href="https://www.amazon.co.jp/dp/B01GR3HAGA?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">ゴールドウェル デュアルセンス リッチリペア シャンプー</a>｜ドイツ発のサロンブランド。18-MEA×マイクロプロテックコンプレックスがキューティクル表面の脂質をケア、イントラリピッドが髪内部を集中補修。傷んだカラーヘアにツヤとしっとり感。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CB1SG31Z?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">UNOVE（アノブ）ディープダメージリペア シャンプー</a>｜韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力は強めなので、細い髪・敏感な頭皮の方はご注意ください。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FMQWPG1N?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">ReFa（リファ）ミルクプロテインシャンプー ロイヤル</a>｜美容機器で知られるReFa（MTG）のヘアケア最高峰ライン。LDK 2026年1月号「2000円以上部門ベストバイ」。アミノ酸系（アラニン）×ベタイン系にオレフィン系を合わせたしっかりめの洗浄で、ラクトフェリン・加水分解乳タンパクなどのミルク由来成分＋ケラチン・シルク等のPPT＋熱補修成分γ-ドコサラクトンがハイダメージを補修。しっとり重めの仕上がり。洗浄力はやや強めなので、細い髪・敏感な頭皮の方はご注意ください。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GXBMVHJM?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">Re:KERATIN（リケラチン）リバーシ リペア シャンプー</a>｜&honeyのヴィークレアが2026年4月に発売したケラチン特化の新ブランド。PPT系洗浄成分（ココイル加水分解ケラチンK）を配合2番目に高配合し、4種のケラチン＋シスチン・シルクアミノ酸で洗いながら補修。アミノ酸系×タウリン系×ベタイン系のマイルド洗浄で、オイル・シリコーンに頼らないさらっと軽い仕上がり。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FVFH5LSP?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">＆be（アンドビー）ダメージケアシャンプー</a>｜ヘアメイク河北裕介さんプロデュースの＆beが2025年秋に出したヘアケアライン。髪のCMC（細胞膜複合体）に着目し、ペリセア＋3種のケラチン＋トステア＋3種のセラミドで内部と表面を補修。ベタイン系×タウリン系主体のサルフェートフリー洗浄・シリコーンフリーで、軽やかにまとまる仕上がり。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0H38GNTS5?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">アリミノ エクラリティ フォーブリーチ シャンプー</a>｜アリミノが2025年秋に立ち上げたサロン発の新ブランド『エクラリティ』のダメージヘア用ライン。毛髪最表面の脂質18-MEAに着目したダイヤボンドMEA技術で、洗うたびに傷つきにくいツヤ髪へ導く設計。（クロロフィリン／銅）複合体（ヘマチン類似）も配合。ただし主洗浄はオレフィン系＋アミノ酸系＋ベタイン系で、ブリーチ毛向けとしては洗浄力しっかりめのため、細い髪・敏感な頭皮の方はご注意ください。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FQ55PDG6?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">Straine（ストレイン）ストレートシャンプー SOFT</a>｜トステア（アミノエチルチオコハク酸ジアンモニウム）配合。くせ毛・うねりが気になる方向けで、ナノレベルの成分が髪内部に浸透し、軽やかなハリ・コシのある仕上がりへ。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FGPMSWF9?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">unu（ウヌ）ウヌボレストレート シャンプー</a>｜レブリン酸（酸熱ケア）×トステア配合。タウリン系＋PPT系の低刺激処方で、熱を味方にうねりを抑える新発想ヘアケア。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0DZX256QP?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">&PAIR（アンドペア）コントロール リペア シャンプー</a>｜LDK 2026年1月号「ベストバイ・オブ・ザ・イヤー」／2025年9月号 U2000円シャンプー＆トリートメント部門1位。アミノ酸系（アラニン）×タウリン系×ベタイン系のオイルフリー処方で、保湿＆うねりケア成分90%超。ナノバブル技術でうねりとダメージを同時にケア。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0DVG8C6S1?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">花王 melt（メルト）スムースシャンプー</a>｜花王が2025年に投入したうねりケアの新ブランド。世界初の酸性うねりケア成分（コハク酸・乳酸・リンゴ酸）を、ラウリルグルコシド・タウリン系・カルボン酸系によるサルフェートフリーの弱酸性洗浄で安定配合。加水分解ケラチン・シルク・コラーゲンなど複数のPPTで補修も両立し、シリコーンフリーでも軽やかにまとまる。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GV3F3V1F?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">KERAGENIC（ケラジェニック）マイクロ モイストリペア シャンプー</a>｜2026年4月発売、髪の主成分ケラチンに着目した新ブランド。アミノ酸系（アラニン）×タウリン系×ベタイン系のマイルド洗浄に、洗いながら補修するPPT系洗浄成分（ココイル加水分解ケラチンK）を高配合。トステア（アミノエチルチオコハク酸ジアンモニウム）・ヘマチン・4種のセラミドで、うねり・パサつきを内側から整える。ノンシリコン。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CGJ5KQG8?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー モイスト</a>｜ボタニカル成分配合のサルフェートフリー処方。乾燥した髪をしっとりまとめる保湿ケア。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CGHXF9Q8?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー スムース</a>｜ボタニカル成分配合。軽やかでサラサラの仕上がり。バランスの良い定番タイプ。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0BWY57FM9?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">ジュレーム リラックス ミッドナイトリペア シャンプー＆トリートメント</a>｜アミノ酸系（ココイルグルタミン酸TEA）＋ベタイン系のマイルド処方。しっとりまとまる保湿ケア。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FR95T8KX?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">アルジェラン ピュアバランシング オーガニックスカルプ シャンプー</a>｜マツモトキヨシのオーガニックブランド『アルジェラン』のスカルプライン。コカミドプロピルベタイン（ベタイン系）＋ココイルメチルタウリンNa（タウリン系）を主体に、オレフィン系で適度な洗浄力を足したサルフェートフリー処方。チャ葉水・サフラン花エキス・エゴマ葉エキスなどで頭皮環境を整える『菌活』設計。シリコーンフリー。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FZ42R733?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">コスメデコルテ AQ リペア エッセンスシャンプー（KOSE）</a>｜KOSEのプレステージブランドが2025年10月に出した「塗る美容液99%」シャンプー。泡立て不要のエッセンスベースで、一般的な洗浄剤を使わない超マイルドなクリーム洗浄。ハチミツ・コメ発酵液・シラカンバ樹液などの保湿成分で、しっとり重めのツヤ仕上がり。洗浄力はごく穏やかなので、皮脂が多い方・軽い仕上がりが好きな方には不向きです。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GFWN5NTB?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">RAFRA（ラフラ）アロマセラムシャンプー モイスト</a>｜美容液成分81%・天然由来成分97%のアロマセラムライン。ラウロイルメチルアラニンNa（アミノ酸系）×ベタイン系だけのマイルド洗浄（サルフェート・シリコーンフリー）に、ケラチン・コラーゲン・シルクのPPT3種を上位配合。熱補修のγ-ドコサラクトン＋3種のセラミド＋18-MEAも入り、しっとりうるおうツヤ仕上がり。天然精油100%のオレンジの香り。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FHNWW4NS?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">THE PUBLIC ORGANIC ディープリーエンブレイス スムースモイスト 精油シャンプー</a>｜@cosmeベストコスメアワード2026上半期・新作ベスト受賞。ザ パブリック オーガニックが2025年7月に出したプレミアムライン。ココイルメチルタウリンNa（タウリン系）×コカミドプロピルベタイン（ベタイン系）×デシルグルコシド（グルコシド系）のマイルド洗浄に、マルラオイル・アルガンオイル・シアバターなどの保湿油を配合。サルフェート・シリコーンフリー。精油の香りが強めなので、香りに敏感な方・精油アレルギーのある方はご注意ください。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CGHY3YKX?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー ダメージケア</a>｜ボタニカル成分配合。傷んだ髪をなめらかに整え、しなやかな質感へ。サルフェートフリー処方。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0C8928QDQ?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">スティーブンノル モイスチュアコントロール シャンプー</a>｜サロン発の保湿・補修ライン。乾燥・パサつきをなめらかに整える。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0DSFQNXR9?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー</a>｜@cosmeベストコスメアワード2025 上半期新作 総合大賞（ヘアケア品では史上初）／日経優秀製品・サービス賞2025 トレンド部門賞。花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CXH1FRTT?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">エッセンシャル プレミアム うるおいバリア シャンプー</a>｜カラー毛のパサつき・軽ダメージに。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0859SPJ7B?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">IONICO プレミアムイオン ダメージケアシャンプー モイスト＆リペア</a>｜プレミアムイオン処方でダメージ部に集中補修。ヘマチン×3種セラミド×シルク配合、ベタイン系×オレフィン系のバランス洗浄でしっとりまとまる仕上がり。ノンシリコン。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0FF43JRKK?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">MEMEME（ミーミーミー）モイストブースト シャンプー</a>｜花王の新ブランド。タウリン系×アミノ酸系×ベタイン系のサルフェートフリー処方。ノンシリコンで根元ふんわり、毛先しっとり。レッドキウイ×フリージアの香り。</li>
+<li><a href="https://www.amazon.co.jp/dp/B004ATOB7K?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">ルベル イオ クレンジング リラックスメント シャンプー</a>｜タウリン＆アミノ酸系洗浄のノンシリコン。乾燥頭皮とからまりやすいダメージ毛に</li>
+<li><a href="https://www.amazon.co.jp/dp/B07B5BKJGQ?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">セグレタ 地肌も髪も洗えるマッサージ美容クリーム</a>｜シャンプー・コンディショナー・マッサージクリームが1本に。泡立たないクリーム処方で、地肌にうるおいを与えながら皮脂・汚れをやさしく浮き上がらせる。石けん不使用。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0D839PQQH?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">PRORY プロリー モイストリペア シャンプー</a>｜ロート製薬のエイジングダメージケア。トステア（アミノエチルチオコハク酸ジアンモニウム）×アミノ酸系主体の低刺激処方で、ステムプロテインCP配合。素髪に近づける機能性ヘアケア。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GFSKBNBB?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">資生堂プロフェッショナル アデノバイタル シャンプー</a>｜資生堂サロン専売のエイジングケアライン。アデノシン配合で頭皮環境を整えながら、ハリ・コシ・ボリューム不足にアプローチする。洗浄成分はラウレス硫酸Na×ベタイン系のしっかりタイプ。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GWJ1ZZ7R?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">アユーラ ウェルバイタル シャンプー（AYURA）</a>｜アユーラが「エイジングうねり」に着目して2026年4月に発売した新ライン。タウリン系×ベタイン系のマイルド洗浄（硫酸系不使用）に、補修成分ペリセア（ジラウロイルグルタミン酸リシンNa）とココイル加水分解コラーゲンKを配合。センブリエキス・シラカンバ樹液が頭皮をうるおいで整える。ノンシリコン・弱酸性。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0DH7WD8W5?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">セグレタ シャンプー 根元からふんわり</a>｜花王のエイジングケアブランド。セラミドSが髪内部に浸透・補修する内部密度ケア処方。ノンシリコンで根元から立ち上がり、ふんわりとした仕上がりに。6種の植物エキス配合。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0CGJ5H5L8?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー バウンシーボリューム</a>｜ボタニカル成分配合のノンシリコン処方。髪にハリ・コシを与え、根元から軽やかに立ち上げる。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0DGFQXTNQ?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">KUNDAL エアリーボリューム ヒアルロンシャンプー</a>｜韓国発KUNDALのボリュームケアライン。スルホコハク酸系＋ベタイン系のマイルド洗浄で、ノンシリコンの軽い仕上がり。8種のヒアルロン酸と海藻エキスが頭皮と髪にうるおいを与え、根元からエアリーな髪へ。</li>
+<li><a href="https://www.amazon.co.jp/dp/B09S3C8MRB?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">スカルプD ボーテ 薬用スカルプシャンプー ボリューム</a>｜アンファーの女性用薬用スカルプシャンプー（医薬部外品）。有効成分ピロクトンオラミン＋グリチルリチン酸2Kが頭皮環境を整え、洗浄はアミノ酸系＋ベタイン系のマイルド処方。豆乳発酵液と浸透補修成分ペリセア、ハリコシ成分セラキュートＶを配合し、ノンシリコンで根元からふんわり立ち上げる。</li>
+<li><a href="https://www.amazon.co.jp/dp/B07ZB81Q8J?tag=hairidentity-22" target="_blank" rel="nofollow sponsored noopener">haru kurokamiスカルプ シャンプー</a>｜100%天然由来・アミノ酸系（ココイルグルタミン酸TEA主体）のオールインワンシャンプー。リンス・コンディショナー不要の1本で、キャピキシル・ヘマチン・加水分解シルクが頭皮と髪を整えてハリ・コシをサポート。ノンシリコンで根元から軽やかに仕上がる。</li>
+</ul>
+</details>
+</footer>
 </body>
 </html>

@@ -10,7 +10,8 @@
 
 FILE="${1:-index.html}"
 EXPECT="hairidentity-22"
-OLD="hassihair06-22"
+# 過去に使って廃止したID（半角スペース区切りで追記していく。ID変更時はrotate-assoc-id.shを使う）
+OLDS="hassihair06-22"
 err=0
 fail() { echo "✗ Amazonアフィリチェック: $1" >&2; err=1; }
 
@@ -24,7 +25,9 @@ n=$(grep -c "const ASSOC_ID=\"$EXPECT\"" "$FILE")
 [ "$n" = "1" ] || fail "ASSOC_ID が正式ID($EXPECT)で1回定義されていません（検出: $n 回）"
 
 # 2) 旧IDがどこにも混入していない（.bak復元・コピペ事故対策）
-if grep -q "$OLD" "$FILE"; then fail "旧ID($OLD)が混入しています"; fi
+for old in $OLDS; do
+  if grep -q "$old" "$FILE"; then fail "旧ID($old)が混入しています"; fi
+done
 
 # 3) Amazon規約必須の開示文言が残っている
 grep -q '適格販売により収入を得ています' "$FILE" || fail "Amazon規約の開示文言が見つかりません"
@@ -76,6 +79,31 @@ if grep -q 'rakUrl:rak1(' "$FILE"; then
     echo "$badrak1" >&2
   fi
 fi
+
+# 10) Amazon審査対策: 静的商品一覧セクションが存在し、商品データの全ASINと1:1で一致している
+#     経緯: 2026-07-25 Amazon審査却下（2度目）。リンクが全てJS生成のため審査クローラーが
+#     「トラッキングID付きリンクが1本も無い」と判定＝トラフィックソース特定不可となった。
+#     審査はJSを実行せず生HTMLをクロールする（運営規約12条(b)にクロール調査の明記あり）。
+if ! grep -q 'id="amazon-product-list"' "$FILE"; then
+  fail "静的商品一覧セクション(id=\"amazon-product-list\")がありません（Amazon審査に必須）"
+else
+  data_asins=$(grep -oE 'amz:"[A-Z0-9]{10}"' "$FILE" | grep -oE '[A-Z0-9]{10}' | sort -u)
+  static_asins=$(grep -oE 'href="https://www\.amazon\.co\.jp/dp/[A-Z0-9]{10}\?tag='"$EXPECT"'"' "$FILE" | grep -oE '[A-Z0-9]{10}' | sort -u)
+  missing=$(printf '%s\n' "$data_asins" | while read -r a; do printf '%s\n' "$static_asins" | grep -qx "$a" || echo "$a"; done)
+  stale=$(printf '%s\n' "$static_asins" | while read -r a; do printf '%s\n' "$data_asins" | grep -qx "$a" || echo "$a"; done)
+  if [ -n "$missing" ]; then
+    fail "静的商品一覧に載っていないASINがあります（商品追加時は静的一覧にも追記）:"
+    echo "$missing" >&2
+  fi
+  if [ -n "$stale" ]; then
+    fail "商品データに存在しないASINが静的一覧に残っています（商品削除時は静的一覧からも削除）:"
+    echo "$stale" >&2
+  fi
+fi
+
+# 11) Amazon規約5条: 開示文言が静的HTML（静的フッター内）にも存在する（JS描画のみでは審査側に見えない）
+awk '/id="amazon-product-list"/,/<\/footer>/' "$FILE" | grep -q '適格販売により収入を得ています' \
+  || fail "静的フッター内にAmazon開示文言（適格販売により収入を得ています）がありません"
 
 if [ "$err" = "0" ]; then echo "✓ アフィリエイトチェック通過（Amazon＋楽天 / $FILE）"; fi
 exit "$err"
