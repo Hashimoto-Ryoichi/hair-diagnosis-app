@@ -117,5 +117,12 @@ if [ -n "$badref" ]; then
   echo "$badref" >&2
 fi
 
+# 13) 【審査期間中のみ】静的商品一覧が開いた状態（details open）であること
+#     経緯: 2026-07-26。折りたたみだとHTMLには存在してもブラウザで見た審査員がリンクに気づけない。
+#     却下理由が「リンクが確認できない」である以上、審査中は開いておく。
+#     ※ 審査通過後は open を外して折りたたみに戻してよい。その際はこのチェック13も削除すること。
+grep -q '<details class="static-ftr-details" open>' "$FILE" \
+  || fail "静的商品一覧が開いた状態(details ... open)になっていません（審査期間中は必須）"
+
 if [ "$err" = "0" ]; then echo "✓ アフィリエイトチェック通過（Amazon＋楽天 / $FILE）"; fi
 exit "$err"
