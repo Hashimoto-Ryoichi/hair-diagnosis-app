@@ -106,5 +106,16 @@ fi
 awk '/id="amazon-product-list"/,/<\/footer>/' "$FILE" | grep -q '適格販売により収入を得ています' \
   || fail "静的フッター内にAmazon開示文言（適格販売により収入を得ています）がありません"
 
+# 12) アフィリエイトリンクに rel="noreferrer" を付けない（リファラー遮断＝流入元がAmazon/楽天から見えなくなる）
+#     経緯: 2026-07-26、商品ボタンが rel:"noopener noreferrer" のままだと判明。noreferrer はリンク先に
+#     「どのサイトから来たか」を一切送らないため、却下文言「トラフィックのソースを特定できませんでした」を
+#     技術的に再現しうる状態だった。規約 参加要件6(v)（サイトURLをクローク・ハイドしてはならない）にも抵触。
+#     セキュリティ上必要なのは noopener のみ（window.opener 対策）。noreferrer は不要。
+badref=$(grep -nE '(amazon\.co\.jp/dp/|prod-link (amz|rak)|hb\.afl\.rakuten)' "$FILE" | grep 'noreferrer')
+if [ -n "$badref" ]; then
+  fail "アフィリエイトリンクに noreferrer が付いています（noopenerのみにする）:"
+  echo "$badref" >&2
+fi
+
 if [ "$err" = "0" ]; then echo "✓ アフィリエイトチェック通過（Amazon＋楽天 / $FILE）"; fi
 exit "$err"

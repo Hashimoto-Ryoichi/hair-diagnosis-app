@@ -1506,8 +1506,8 @@ function renderProdCard(p,key,isTopPick){
         p.season&&h("p",{className:"prod-season"},h(Icon,{name:"snowflake",size:11,color:"#1a8fc4"}),h("span",{style:{marginLeft:".3rem"}},p.season)),
         p.note&&h("p",{className:"prod-note"},h(Icon,{name:"info",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},p.note)),
         h("div",{className:"prod-links"},
-          p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
-          p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
+          p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"nofollow sponsored noopener"},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
+          p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"nofollow sponsored noopener"},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
         )
       )
     )
