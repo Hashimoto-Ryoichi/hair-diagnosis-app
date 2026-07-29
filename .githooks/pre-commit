@@ -18,6 +18,12 @@ if git diff --cached --name-only | grep -q '^index\.html$'; then
     exit 1
   fi
   rm -f "$tmp"
+  # 検査を通ったので、sitemap.xml の lastmod を今日に揃えてコミットに含める。
+  # （Amazon審査の「60日以内に更新」基準に対し、更新実態と申告がズレるのを機械で防ぐ）
+  if ! "$root/.githooks/sync-sitemap.sh"; then
+    echo "✗ pre-commit: sitemapのlastmod同期に失敗。コミットを中止しました。" >&2
+    exit 1
+  fi
 fi
 # 参照ドキュメントの腐り検査（廃止IDのベタ書き・index.htmlのコピーを検出）
 root=$(git rev-parse --show-toplevel)
