@@ -279,6 +279,9 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ftr-note{font-size:.82rem;color:var(--muted);line-height:1.8;white-space:pre-line}
 /* ── 静的フッター（Amazonアソシエイト審査用：クローラーがJSなしで確認できる商品リンク一覧） ── */
 .static-ftr{max-width:680px;margin:0 auto;padding:1.4rem 1.5rem 2.6rem;border-top:1px solid var(--border)}
+/* Amazonリンクが実在する画面（result／products）以外では隠す。既定は表示なので、JSを実行しない
+   審査クローラーが見る生HTMLは従来どおり開示文言＋タグ付きリンク全件が入ったままになる。 */
+body.hide-static-ftr .static-ftr{display:none}
 .static-ftr-details{margin-top:.6rem}
 .static-ftr-details summary{cursor:pointer;font-size:.82rem;color:var(--gold-d);letter-spacing:.04em;-webkit-tap-highlight-color:transparent}
 .static-ftr-list{margin:.6rem 0 0;padding-left:1.2em;font-size:.78rem;color:var(--muted);line-height:1.8}
@@ -1996,6 +1999,11 @@ function App(){
   const prog=step==="quiz"?((curQ+1)/totalQ*100):step==="result"||step==="products"?100:0;
   useEffect(()=>{const bar=document.getElementById("pbar");bar.style.width=prog+"%";bar.setAttribute("aria-valuenow",Math.round(prog));},[prog]);
   useEffect(()=>{window.scrollTo({top:0,behavior:"instant"});},[step]);
+  // 静的フッター（アソシエイト開示文言＋商品一覧）は、Amazonリンクが実際にある画面だけに出す。
+  // トップ・質問11問・分析中では邪魔になるだけなので隠す（HTML上は常に存在＝クローラーには見える）。
+  useEffect(()=>{
+    document.body.classList.toggle("hide-static-ftr",!(step==="result"||step==="products"));
+  },[step]);
   // 質問到達を計測（最大到達問のみ＝「戻る」での二重計上を防ぐ）
   useEffect(()=>{
     if(step==="quiz"&&curQ>maxQReachedRef.current){
