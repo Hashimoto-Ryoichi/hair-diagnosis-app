@@ -104,6 +104,34 @@ for (const tk in TYPES) {
 }
 if (!scenNg) ok("シナリオ実走: 全タイプで順位計算が正常（1位スコア正常値）");
 
+// ---- 7. 界面活性剤チャートの網羅（2026-08-04追加） ----
+// おすすめに出るのにチャートのどの系統にも名前が出ない商品は、見た人が理由を確認できない。
+// 例外は otc:true（医薬部外品＝下の注記で説明）と noSurf:true（界面活性剤を主体にしない処方＝専用注記で説明）。
+const sdStart = src.indexOf("const SURFACTANT_DETAIL=");
+const sdEnd = src.indexOf("function SurfactantChart(");
+if (sdStart < 0 || sdEnd < 0 || sdEnd <= sdStart) {
+  fail("SURFACTANT_DETAIL の抽出に失敗（チャートの構造が変わった可能性）");
+} else {
+  let SURFACTANT_DETAIL;
+  try {
+    SURFACTANT_DETAIL = new Function(src.slice(sdStart, sdEnd) + "\nreturn SURFACTANT_DETAIL;")();
+  } catch (e) {
+    fail("SURFACTANT_DETAIL の eval に失敗: " + e.message);
+  }
+  if (SURFACTANT_DETAIL) {
+    let chartNg = 0;
+    for (const tk in TYPES) for (const p of TYPES[tk].products) {
+      if (p.otc || p.noSurf) continue;
+      const hit = SURFACTANT_DETAIL.some((g) => g.products.some((pn) => p.name.includes(pn)));
+      if (!hit) {
+        fail(`界面活性剤チャートに出ない商品: [${tk}] ${p.name} — 該当系統の products に追記するか、界面活性剤を主体にしない処方なら noSurf:true を付ける`);
+        chartNg++;
+      }
+    }
+    if (!chartNg) ok("界面活性剤チャート: おすすめ商品がすべていずれかの系統に出る");
+  }
+}
+
 // ---- 結果 ----
 if (ng) {
   console.error(`\n✗ 設計整合チェック失敗: ${ng} 件。Top Pick設計（回答主導）が壊れる恐れがあります。修正してから commit してください。`);
