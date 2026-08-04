@@ -2189,7 +2189,19 @@ function App(){
     if(curQ<totalQ-1){setCurQ(curQ+1);}
     else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull(na);setStep("result");},1000);}
   }
-  function goBack(){clearAllTimers();if(curQ>0)setCurQ(curQ-1);else setStep("intro");}
+  // 「前の質問に戻る」＝戻った質問は白紙に戻す。
+  // 前の選択が残ったままだと、タップが足し算になって何を答えたのか分からなくなるため
+  // （特に自動遷移する質問では、増えた選択を外す機会がない）。
+  function goBack(){
+    clearAllTimers();
+    if(curQ>0){
+      const backId=QUESTIONS[curQ-1].id;
+      setAnswers(prev=>{const next={...prev};delete next[backId];return next;});
+      setCurQ(curQ-1);
+    } else {
+      setStep("intro");
+    }
+  }
   function retry(){clearAllTimers();setStep("intro");setAnswers({});setCurQ(0);setTypeKey(null);setDiagRecord(null);}
   const td=typeKey?TYPES[typeKey]:null;
   return h("div",null,
