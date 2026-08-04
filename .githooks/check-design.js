@@ -119,16 +119,76 @@ if (sdStart < 0 || sdEnd < 0 || sdEnd <= sdStart) {
     fail("SURFACTANT_DETAIL の eval に失敗: " + e.message);
   }
   if (SURFACTANT_DETAIL) {
+    const inChart = (p) => SURFACTANT_DETAIL.some((g) => g.products.some((pn) => p.name.includes(pn)));
     let chartNg = 0;
     for (const tk in TYPES) for (const p of TYPES[tk].products) {
       if (p.otc || p.noSurf) continue;
-      const hit = SURFACTANT_DETAIL.some((g) => g.products.some((pn) => p.name.includes(pn)));
-      if (!hit) {
+      if (!inChart(p)) {
         fail(`界面活性剤チャートに出ない商品: [${tk}] ${p.name} — 該当系統の products に追記するか、界面活性剤を主体にしない処方なら noSurf:true を付ける`);
         chartNg++;
       }
     }
     if (!chartNg) ok("界面活性剤チャート: おすすめ商品がすべていずれかの系統に出る");
+
+    // ---- 8. 実際の描画セットとの照合（2026-08-04追加） ----
+    // 経緯: 「ボリュームアップをお望みの方へ」等の追加セクションの商品選定が描画側にベタ書きで、
+    // チャートの集計対象から漏れていた（画面には出ているのに系統に名前が出ない）。
+    // allShownProducts が結果画面の商品の単一の正本。描画とチャートが両方これを使う。
+    const hStart = src.indexOf("function findSecondarySection(");
+    const hEnd = src.indexOf("// 🔬 診断透明化エンジン");
+    if (hStart < 0 || hEnd < 0 || hEnd <= hStart) {
+      fail("allShownProducts の抽出に失敗（結果画面の商品選定の構造が変わった可能性）");
+    } else {
+      let H = {};
+      try {
+        H = new Function("TYPES", "isProductDisplayable", src.slice(hStart, hEnd) +
+          "\nreturn {allShownProducts,findSecondarySection,findFungalProducts,findVitalAgingProducts,findVolumeProducts};")(TYPES, isProductDisplayable);
+      } catch (e) {
+        fail("結果画面の商品選定（allShownProducts 一式）の eval に失敗: " + e.message);
+      }
+      if (typeof H.allShownProducts === "function") {
+        // 追加セクション（フケかゆみ／ハリコシ／ボリューム）が出る回答も混ぜて走らせる
+        const variants = (base) => [
+          base,
+          { ...base, q5: ["clear"] },
+          { ...base, q4: "less", q8: [...(base.q8 || []), "flat"], q10: [...(base.q10 || []), "volume"], q11: [...(base.q11 || []), "volume"] },
+        ];
+        let shownNg = 0, aggNg = 0;
+        for (const tk in TYPES) for (const ans of variants(SCENARIOS[tk] || {})) {
+          const shown = H.allShownProducts(tk, ans);
+          // (a) 集計されている商品は必ずチャートに出る
+          for (const p of shown) {
+            if (p.otc || p.noSurf || inChart(p)) continue;
+            fail(`結果画面に出るのにチャートに出ない商品: [${tk}] ${p.name}`);
+            shownNg++;
+          }
+          // (b) 各セクションの商品が漏れなく集計に入っている（今回のバグの本体）
+          const sec = H.findSecondarySection(tk, ans);
+          const parts = [
+            ...TYPES[tk].products.filter((p) => isProductDisplayable(p, ans)),
+            ...((sec && sec.products) ? sec.products.filter(Boolean) : []),
+            ...H.findFungalProducts(tk, ans),
+            ...H.findVitalAgingProducts(tk, ans),
+            ...H.findVolumeProducts(tk, ans),
+          ];
+          const names = new Set(shown.map((p) => p.name));
+          for (const p of parts) {
+            if (names.has(p.name)) continue;
+            fail(`allShownProducts が取りこぼしているセクション商品: [${tk}] ${p.name}`);
+            aggNg++;
+          }
+        }
+        if (!shownNg && !aggNg) ok("界面活性剤チャート: 追加セクションを含む結果画面の全商品を集計できている");
+      }
+      // 新しい商品セクションを足したのに allShownProducts へ繋ぎ忘れる事故を防ぐ
+      // （renderProdCard の呼び出し箇所: 定義1 + 呼び出し5 = 6）
+      const cardRefs = (src.match(/renderProdCard\(/g) || []).length;
+      if (cardRefs !== 6) {
+        fail(`renderProdCard の出現数が ${cardRefs} 件（想定6件＝定義1＋呼び出し5）。商品セクションを増減したなら、その商品を allShownProducts にも通したうえでこの数を更新すること`);
+      } else {
+        ok("商品セクションの数に変化なし（新セクションの集計漏れなし）");
+      }
+    }
   }
 }
 

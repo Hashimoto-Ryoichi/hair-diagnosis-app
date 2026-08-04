@@ -1166,6 +1166,43 @@ function _findSecondarySectionRaw(typeKey,answers){
   return null;
 }
 
+// ── 結果画面の「追加セクション」の商品選定 ──────────────────────────────
+// 2026-08-04: 選定ロジックが描画側にベタ書きされていたため、界面活性剤チャートが
+// これらの商品を集計できず「おすすめに出ているのに系統に名前が無い」状態になっていた。
+// 描画とチャートが必ず同じ商品を見るよう、選定をここに集約する。
+function findFungalProducts(typeKey,answers){
+  if(typeKey!=="skin_alert") return [];
+  const td=TYPES[typeKey];
+  return td?td.products.filter(p=>p.secondaryOnly&&isProductDisplayable(p,answers)):[];
+}
+function findVitalAgingProducts(typeKey,answers){
+  const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
+  if(!q5arr.includes("clear")||typeKey==="vital_aging"||typeKey==="volume_grace") return [];
+  return [TYPES.volume_grace.products.find(p=>p.name.includes("セグレタ シャンプー")),TYPES.vital_aging.products.find(p=>p.name.includes("PRORY"))].filter(Boolean);
+}
+function findVolumeProducts(typeKey,answers){
+  const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
+  const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
+  const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
+  const wantsVolume=q11arr.includes("volume")||q10arr.includes("volume");
+  const lowVolume=answers.q4==="less"||q8arr.includes("flat");
+  // Volume Grace / Vital Aging 自体に振り分けられた場合は重複になるので非表示
+  if(typeKey==="volume_grace"||typeKey==="vital_aging") return [];
+  if(!(wantsVolume&&lowVolume)) return [];
+  const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
+  return [findP("volume_grace","セグレタ シャンプー"),findP("volume_grace","バウンシーボリューム")].filter(Boolean);
+}
+// 結果画面に出る商品すべて（メイン＋追加セクション）。チャートの集計はこれを使う。
+function allShownProducts(typeKey,answers){
+  const td=typeKey?TYPES[typeKey]:null;
+  const main=td?td.products.filter(p=>isProductDisplayable(p,answers)):[];
+  const sec=findSecondarySection(typeKey,answers);
+  const secProducts=(sec&&sec.products)?sec.products.filter(Boolean):[];
+  const list=[...main,...secProducts,...findFungalProducts(typeKey,answers),...findVitalAgingProducts(typeKey,answers),...findVolumeProducts(typeKey,answers)];
+  const seen=new Set();
+  return list.filter(p=>{ if(!p||seen.has(p.name)) return false; seen.add(p.name); return true; });
+}
+
 // ════════════════════════════════════════════════════════════════════
 // 🔬 診断透明化エンジン（管理者検証用・一般UIには信頼度のみ反映）
 // ════════════════════════════════════════════════════════════════════
@@ -1596,11 +1633,9 @@ const SURFACTANT_DETAIL=[
 ];
 
 function SurfactantChart({typeKey,answers}){
-  const td=typeKey?TYPES[typeKey]:null;
-  const visibleProducts=td?td.products.filter(p=>isProductDisplayable(p,answers||{})):[];
-  const sec=findSecondarySection(typeKey,answers||{});
-  const secProducts=(sec&&sec.products)?sec.products.filter(Boolean):[];
-  const allProducts=[...visibleProducts,...secProducts];
+  // 結果画面に実際に出ている商品すべてを集計する（メインだけでなく、フケ・かゆみ／
+  // ハリコシ／ボリュームの追加セクションも含む。ここが漏れると系統に名前が出ない）
+  const allProducts=allShownProducts(typeKey,answers||{});
   const otcProducts=allProducts.filter(p=>p.otc).map(p=>p.name);
   // noSurf: 一般的な洗浄剤（アニオン界面活性剤）を主体にしない処方＝9系統のどれにも該当しない商品。
   // 何も言わないと「おすすめなのにチャートに名前が無い」状態になるので、理由を明示する。
@@ -2343,8 +2378,7 @@ function App(){
           );
         })(),
         (()=>{
-          if(typeKey!=="skin_alert") return null;
-          const fungalProds=td.products.filter(p=>p.secondaryOnly&&isProductDisplayable(p,answers));
+          const fungalProds=findFungalProducts(typeKey,answers);
           if(fungalProds.length===0) return null;
           return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
             h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"Optional"),
@@ -2354,9 +2388,7 @@ function App(){
           );
         })(),
         (()=>{
-          const q5arr=Array.isArray(answers.q5)?answers.q5:(answers.q5?[answers.q5]:[]);
-          if(!q5arr.includes("clear")||typeKey==="vital_aging"||typeKey==="volume_grace") return null;
-          const vaProds=[TYPES.volume_grace.products.find(p=>p.name.includes("セグレタ シャンプー")),TYPES.vital_aging.products.find(p=>p.name.includes("PRORY"))].filter(Boolean);
+          const vaProds=findVitalAgingProducts(typeKey,answers);
           if(vaProds.length===0) return null;
           return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
             h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"Optional"),
@@ -2366,19 +2398,7 @@ function App(){
           );
         })(),
         (()=>{
-          const q11arr=Array.isArray(answers.q11)?answers.q11:(answers.q11?[answers.q11]:[]);
-          const q8arr=Array.isArray(answers.q8)?answers.q8:(answers.q8?[answers.q8]:[]);
-          const q10arr=Array.isArray(answers.q10)?answers.q10:(answers.q10?[answers.q10]:[]);
-          const wantsVolume=q11arr.includes("volume")||q10arr.includes("volume");
-          const lowVolume=answers.q4==="less"||q8arr.includes("flat");
-          // Volume Grace / Vital Aging 自体に振り分けられた場合は重複になるので非表示
-          if(typeKey==="volume_grace"||typeKey==="vital_aging") return null;
-          if(!(wantsVolume&&lowVolume)) return null;
-          const findP=(tk,kw)=>TYPES[tk]&&TYPES[tk].products.find(p=>p.name.includes(kw));
-          const volProds=[
-            findP("volume_grace","セグレタ シャンプー"),
-            findP("volume_grace","バウンシーボリューム")
-          ].filter(Boolean);
+          const volProds=findVolumeProducts(typeKey,answers);
           if(volProds.length===0) return null;
           return h("div",{style:{marginTop:"2rem",paddingTop:"1.5rem",borderTop:"1px dashed var(--border)"}},
             h("p",{style:{fontSize:".58rem",letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:".4rem"}},"For Volume"),
