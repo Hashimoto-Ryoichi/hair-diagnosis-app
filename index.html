@@ -2087,6 +2087,18 @@ function App(){
       next=cur.includes(k)?without:[...without,k];
     }
     setAnswers({...answers,q5:next});
+    return next;
+  }
+  // 複数選択の質問で、選んだ直後に自動で次へ進む（最後の問なら診断へ）
+  function advanceMulti(qid,next){
+    setTracedTimeout(()=>{
+      if(curQ<totalQ-1){
+        setCurQ(curQ+1);
+      } else {
+        setStep("loading");
+        setTracedTimeout(()=>{runDiagnosisFull({...answers,[qid]:next});setStep("result");},1000);
+      }
+    },280);
   }
   function toggleQ7(k){
     const cur=Array.isArray(answers.q7)?answers.q7:[];
@@ -2264,7 +2276,13 @@ function App(){
             const order=(qid==="q8"||qid==="q10"||qid==="q11")&&isSel?arr.indexOf(opt.k)+1:0;
             const circled=["①","②","③","④","⑤","⑥","⑦","⑧","⑨","⑩"];
             const btn=h("button",{key:opt.k,className:"opt"+(isSel?" sel":""),"aria-pressed":isSel,onClick:(e)=>{e.currentTarget.blur();
-              qid==="q5"?(toggleQ5(opt.k),opt.k==="stable"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q5:["stable"]});setStep("result");},1000);}},280)):qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q7:["none"]});setStep("result");},1000);}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q9:["none"]});setStep("result");},1000);}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
+              qid==="q5"?(()=>{
+                // 「出産を機に」だけは時期の選択を待つので自動で進めない。
+                // それ以外は選んだ時点で進む（＝出産を選んだ人は2つ目のタップで進む）。
+                // 選択を外したタップでは進めない（戻ってきて選び直す動線を潰さないため）。
+                const nx=toggleQ5(opt.k);
+                if(opt.k!=="birth"&&nx.includes(opt.k)) advanceMulti("q5",nx);
+              })():qid==="q7"?(toggleQ7(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q7:["none"]});setStep("result");},1000);}},280)):qid==="q8"?toggleQ8(opt.k):qid==="q9"?(toggleQ9(opt.k),opt.k==="none"&&setTracedTimeout(()=>{if(curQ<totalQ-1)setCurQ(curQ+1);else{setStep("loading");setTracedTimeout(()=>{runDiagnosisFull({...answers,q9:["none"]});setStep("result");},1000);}},280)):qid==="q10"?toggleQ10(opt.k):qid==="q11"?toggleQ11(opt.k):selectOpt(opt.k);
             }},
               h("span",{className:"opt-lt"},opt.l),
               h("span",{style:{flex:1}},opt.t,opt.d&&h("span",{className:"opt-desc"},opt.d)),
