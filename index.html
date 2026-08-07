@@ -439,6 +439,10 @@ body.hide-static-ftr .static-ftr{display:none}
 <div id="root"></div>
 <script type="text/babel">
 const ASSOC_ID="hairidentit0b-22";
+// Vercel Analytics カスタムイベント送信。商品カードは App の外で描画するのでモジュール直下に置く
+function vaEvent(name,data){
+  try{if(typeof window!=="undefined"&&typeof window.va==="function"){window.va("event",{name,...(data||{})});}}catch(e){}
+}
 const HPB_URL="https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/";
 
 const QUESTIONS=[
@@ -1555,8 +1559,8 @@ function renderProdCard(p,key,isTopPick){
         p.season&&h("p",{className:"prod-season"},h(Icon,{name:"snowflake",size:11,color:"#1a8fc4"}),h("span",{style:{marginLeft:".3rem"}},p.season)),
         p.note&&h("p",{className:"prod-note"},h(Icon,{name:"info",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},p.note)),
         h("div",{className:"prod-links"},
-          p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"nofollow sponsored noopener"},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
-          p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"nofollow sponsored noopener"},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
+          p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>vaEvent("shop_click",{store:"amazon",product:p.name,asin:p.amz})},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
+          p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>vaEvent("shop_click",{store:"rakuten",product:p.name})},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
         )
       )
     )
@@ -2008,11 +2012,11 @@ function App(){
   });
   // --- Vercel Analytics カスタムイベント（診断完走率・離脱箇所の計測）---
   // diag_start=診断開始 / q_reach=各質問への到達 / diag_complete=結果到達。
+  // products_view=結果から商品一覧へ進んだ / shop_click=Amazon・楽天ボタンのクリック。
   // 完走率=diag_complete÷diag_start、離脱箇所=q_reach(q:N)の減り方で把握。
+  // 商品到達率=products_view÷diag_complete、購買導線=shop_click÷products_view。
   const maxQReachedRef=useRef(-1);
-  function vaTrack(name,data){
-    try{if(typeof window!=="undefined"&&typeof window.va==="function"){window.va("event",{name,...(data||{})});}}catch(e){}
-  }
+  function vaTrack(name,data){return vaEvent(name,data);}
   // 診断実行＋透明化レコード構築＋ログ保存を一括
   function runDiagnosisFull(ans){
     const tk=diagnose(ans);
@@ -2340,7 +2344,7 @@ function App(){
             h("p",{className:"ai-txt"},firstAdvice)
           );
         })(),
-        h("button",{className:"btn-primary btn-primary-lg",onClick:()=>setStep("products")},h("span",null,"おすすめのシャンプーを見る ↗")),
+        h("button",{className:"btn-primary btn-primary-lg",onClick:()=>{vaTrack("products_view",{type:typeKey});setStep("products");}},h("span",null,"おすすめのシャンプーを見る ↗")),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
       ),
       step==="products"&&td&&h("div",{className:"fade"},
