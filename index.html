@@ -49,7 +49,7 @@
     "@type": "Person",
     "name": "橋元リョウイチ",
     "jobTitle": "フリーランス美容師",
-    "url": "https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/",
+    "url": "https://lit.link/ryoichi_hashimoto",
     "workLocation": {
       "@type": "Place",
       "address": {
@@ -81,7 +81,7 @@
     "@type": "Person",
     "name": "橋元リョウイチ",
     "jobTitle": "フリーランス美容師",
-    "url": "https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/",
+    "url": "https://lit.link/ryoichi_hashimoto",
     "workLocation": {
       "@type": "Place",
       "address": {
@@ -443,7 +443,7 @@ const ASSOC_ID="hairidentit0b-22";
 function vaEvent(name,data){
   try{if(typeof window!=="undefined"&&typeof window.va==="function"){window.va("event",{name,...(data||{})});}}catch(e){}
 }
-const HPB_URL="https://beauty.hotpepper.jp/slnH000167350/stylist/T000118121/";
+const RESERVE_URL="https://lin.ee/tazRvbX";
 
 const QUESTIONS=[
   {id:"q1",cat:"頭皮",text:"夕方〜夜にかけて、頭皮はどんな状態になりやすいですか？",opts:[{k:"dry",l:"A",t:"カサつく・つっぱる感じがある"},{k:"normal",l:"B",t:"特に気にならない"},{k:"oily",l:"C",t:"ベタつく・脂っぽくなる"},{k:"mix",l:"D",t:"場所によって違う（Tゾーンだけベタつく等）"},{k:"red",l:"E",t:"かゆみ・赤み・湿疹が出ることがある"}]},
@@ -2451,7 +2451,7 @@ function App(){
             h("p",{className:"consult-bar-ttl"},"どれを選べばいいか迷ったら"),
             h("p",{className:"consult-bar-sub"},"カットやカラーをしながら、あなたの髪を直接見てご提案します。")
           ),
-          h("a",{className:"consult-bar-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"サロンで相談する"))
+          h("a",{className:"consult-bar-btn",href:RESERVE_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"サロンで相談する"))
         ),
         h(SurfactantChart,{typeKey,answers}),
         // ── トステア解説（結果画面から移動）──
@@ -2497,7 +2497,7 @@ function App(){
           h("p",{className:"ftr-profile-label"},"カットやカラーの時間こそ、髪のお悩みを解く一番のチャンス。施術しながら、あなたに本当に合うケアを一緒に見つけていきましょう。"),
           h("p",{className:"ftr-name"},"橋元 リョウイチ"),
           h("p",{className:"ftr-salon"},"Freelance Hair Stylist"),
-          h("a",{className:"ftr-rsv-btn",href:HPB_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"calendar-check",size:17,color:"var(--gold-l)"}),h("span",null,"ご予約はこちら"))
+          h("a",{className:"ftr-rsv-btn",href:RESERVE_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"calendar-check",size:17,color:"var(--gold-l)"}),h("span",null,"ご予約・ご相談はLINEから"))
         )
       ),
       h("p",{className:"ftr-note"},"Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。\nこのサイトは楽天アフィリエイトプログラムにも参加しており、掲載リンクから商品を購入された場合、紹介料を受け取る場合があります。\n診断結果はあくまで参考情報です。頭皮の症状が続く場合は皮膚科を受診してください。")
