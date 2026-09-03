@@ -584,6 +584,8 @@ const MATCH_TAGS=[
   {key:"RINGS",             tags:{q6:["some","strong"],q10:["smooth","vdown","gloss"],q11:["wave","repair"],q8:["frizz","spread"]}},
   {key:"セラティス",         tags:{q10:["smooth"],q8:["dry"],q7:["none","color"]}},
   {key:"シーズナルケア",      tags:{q6:["some","strong"],q10:["smooth"],q11:["wave"],q8:["frizz","spread"]}},
+  {key:"ikue",              tags:{q1:["dry","mix"],q7:["color"],q11:["dry"],q8:["dry"]}},
+  {key:"SIL.KAURA",         tags:{q6:["some","strong"],q10:["gloss","smooth"],q11:["wave"],q8:["spread","frizz"]}},
 ];
 
 // 成分プロファイル（2026-06 全34商品成分解析レポートに基づく。新商品追加時は必ず成分解析→採点→ここに追加）
@@ -645,6 +647,8 @@ const ING_PROFILES=[
   {key:"RINGS",w:2.5,m:4.5,o:3,r:4.5,f:"curl",fl:4.5},
   {key:"セラティス",w:2,m:4,o:2,r:3.5,f:"light",fl:3},
   {key:"シーズナルケア",w:2.5,m:4,o:3,r:4,f:"curl",fl:3.5},
+  {key:"ikue",w:2.5,m:4,o:3,r:3,f:"dryscalp",fl:4},
+  {key:"SIL.KAURA",w:2,m:4.5,o:2.5,r:4.5,f:"curl",fl:5},
 ];
 
 // 回答から「求める成分プロファイル」を算出する（Top Pick判定の中核）
@@ -818,6 +822,7 @@ const TYPES={
       {name:"unu（ウヌ）ウヌボレストレート シャンプー",scent:"ベルガモット＆スイートミュゲ",forWhom:"うねり・くせを内側から整え、サラっとしたストレート髪を目指したい方",desc:"レブリン酸（酸熱ケア）×トステア配合。タウリン系＋PPT系の低刺激処方で、熱を味方にうねりを抑える新発想ヘアケア。",note:"トリートメント・ヘアミルクとのセット販売や詰め替えなど複数あります。リンク先でお選びください。",curlAvoid:true,tostera:true,top:false,amz:"B0FGPMSWF9",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/53a382d9.8ecf53c7.53a382da.0f047298/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmagicnumber%2Funu-smptrtm-str%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/magicnumber/cabinet/unu/unu-smptrtm-rf-str/mv_02.jpg?_ex=200x200"},
       {name:"&PAIR（アンドペア）コントロール リペア シャンプー",scent:"ピンクローズ＆ブルーバーベナ",forWhom:"うねり・パサつきを同時にケアしたい、タイパ重視の方",desc:"LDK 2026年1月号「ベストバイ・オブ・ザ・イヤー」／2025年9月号 U2000円シャンプー＆トリートメント部門1位。アミノ酸系（アラニン）×タウリン系×ベタイン系のオイルフリー処方で、保湿＆うねりケア成分90%超。ナノバブル技術でうねりとダメージを同時にケア。",note:"本体450ml・つめかえ用、ペアトリートメントとのセット販売もあります。リンク先でお選びください。",curlAvoid:true,top:false,amz:"B0DZX256QP",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5402bed3.9db1c36d.5402bed4.b6521a25/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000209876%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/61X0DedFsiL._AC_SL200_.jpg"},
       {name:"花王 melt（メルト）スムースシャンプー",scent:"ピオニー＆フィグ",forWhom:"年齢とともに気になるうねり・広がりを、低刺激ケアで穏やかに抑えたい方",desc:"花王が2025年に投入したうねりケアの新ブランド。世界初の酸性うねりケア成分（コハク酸・乳酸・リンゴ酸）を、ラウリルグルコシド・タウリン系・カルボン酸系によるサルフェートフリーの弱酸性洗浄で安定配合。加水分解ケラチン・シルク・コラーゲンなど複数のPPTで補修も両立し、シリコーンフリーでも軽やかにまとまる。",note:"Amazonは本体480ml（ピオニー＆フィグの香り）、楽天は花王公式店でシャンプー単品〜トリートメントとのセットが選べます。詰め替え・モイストタイプもあります。",curlAvoid:true,top:false,amz:"B0DVG8C6S1",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fmelt-02%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DVG8C6S1.09._SL200_.jpg"},
+      {name:"SIL.KAURA（シル クオーラ）メロウストレート シャンプー",scent:"スマートホワイトリリー",forWhom:"うねり・広がりを抑えつつ、重くならずサラッと仕上げたい方",desc:"2026年4月発売。補修成分のラウロイル加水分解シルクNaを全成分の2番目に置いた「補修ファースト設計」。洗浄はアミノ酸系（アラニン・グルタミン酸）×タウリン系×ベタイン系2種で、サルフェート・オレフィン・シリコーンは不使用。トステア（アミノエチルチオコハク酸ジアンモニウム）にγ-ドコサラクトン、メドウフォーム-δ-ラクトンを重ね、シルク・コラーゲン・ケラチン・コンキオリンなどPPTを多層に配合。グリチルリチン酸2K・アラントインも入ります。",note:"Amazonは本体380mL単品のページです。楽天は「メロウストレート／ハグモイスト」×「シャンプー／トリートメント」から選ぶ単品ページなので、メロウストレートのシャンプーをお選びください。",curlAvoid:true,tostera:true,top:false,amz:"B0GTPPQV22",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/571740ec.81667462.571740ed.f06cff26/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fjpslabo%2Fih201%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjgweDgwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/I/21EZO7e7DaL._AC_SL200_.jpg"},
       {name:"KERAGENIC（ケラジェニック）マイクロ モイストリペア シャンプー",scent:"アクアピオニー＆ロータス",forWhom:"くせ・うねりに加えて、ダメージによるパサつきを補修重視でケアしたい方",desc:"2026年4月発売、髪の主成分ケラチンに着目した新ブランド。アミノ酸系（アラニン）×タウリン系×ベタイン系のマイルド洗浄に、洗いながら補修するPPT系洗浄成分（ココイル加水分解ケラチンK）を高配合。トステア（アミノエチルチオコハク酸ジアンモニウム）・ヘマチン・4種のセラミドで、うねり・パサつきを内側から整える。ノンシリコン。",note:"Amazonは本体380mL単品、楽天は公式店のシャンプー＆トリートメント本体セットのページです。詰め替えもあります。",tostera:true,top:false,amz:"B0GV3F3V1F",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55cf446d.0bb6af90.55cf446e.b5ea05d1/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fbridgeonline-shop%2Fkgg102%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/619GFbIfKGL._AC_SL200_.jpg"},
       {name:"ISSHI（イッシ）ケラリス ノワール シャンプー スムージングリペアモイスト",scent:"シトラスから穏やかなムスクへ（グラースの調香師監修）",forWhom:"カラーやブリーチのダメージも、うねり・広がりも、まとめて立て直したい方",desc:"サロン発想のダメージケアブランドISSHIの上位ライン。洗浄はココイルメチルタウリンNa（タウリン系）×ベタイン系2種×ラウロイルメチルアラニンNa（アミノ酸系）のミックスで、サルフェートは不使用。補修側は8番目という高い位置にヘマチンを置き、ケラチン3種（加水分解ケラチン・カチオン化ケラチン・加水分解ウールキューティクルタンパク）＋トステア（アミノエチルチオコハク酸ジアンモニウム）＋ペリセア＋リピジュア＋γ-ドコサラクトンを重ねています。グリセリンや油剤にはほとんど頼らない処方なので、しっかり補修するわりに仕上がりは軽め。シリコーン不使用。",note:"Amazon・楽天とも、シャンプー400mLとトリートメント400gのセットページです。",tostera:true,top:false,amz:"B0GF6BQDPP",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/562a24bf.8212aced.562a24c0.8d61d3e8/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fjgplaza%2F10000199%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjEwMHgxMDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/71FRN02OJ8L._AC_SL200_.jpg"},
       {name:"RINGS（リングス）モイストリペア シャンプー",scent:"クラシカルサボン（国産ヒノキ精油をブレンド）",forWhom:"湿気でうねる・広がる髪を、内側から締めてストンとまとめたい方",desc:"100年続く木材メーカーが立ち上げたヘアケアブランド。洗浄はラウロイルメチルアラニンNa（アミノ酸系）×ココイルメチルタウリンNa（タウリン系）×ベタイン系2種で、硫酸系・オレフィン系は不使用。うねりケアはトステア（アミノエチルチオコハク酸ジアンモニウム）×レブリン酸のW配合で、補修は加水分解ケラチン（羊毛）・吸着型ケラチン2種・ココイル加水分解ケラチンK・コラーゲン・シルク2種とPPTを7種、さらにセラミドを5種重ねています。シャンプー側はシリコーン不使用なので、しっかり補修するわりに仕上がりは重くなりません。",note:"楽天のみの取り扱いです。シャンプー／トリートメント、本体400mL／詰め替え340mLが同じページで選べます。",curlAvoid:true,tostera:true,top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/564ec250.b8c01c00.564ec252.eed62fa4/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fringsbymt%2Frgs000%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/ringsbymt/cabinet/biiino/item/sku-image/20260220131801_1.jpg?_ex=200x200"},
@@ -842,6 +847,7 @@ const TYPES={
       {name:"WELLP（ウェルプ）薬用スムースシャンプー",scent:"レモングラス＆スズラン",forWhom:"カラー軽ダメージで頭皮のベタつきが気になる方",desc:"マイルドなベタイン・タウリン系を主体に、しっかり洗浄成分も配合した医薬部外品スカルプケア。脂性頭皮のフケ・かゆみ予防に。",note:"",q1Allow:["oily","mix"],top:false,otc:true,amz:"B0DJ1CY24Q",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFF/5IK/HXZ/9MT/566fa3d9688c45329c1072dbedb6b0d7.jpg?_ex=200x200"},
       {name:"BOTANIST ボタニカルシャンプー スカルプクレンズ",scent:"ライム＆リーフグリーン",forWhom:"カラー軽ダメージで頭皮のベタつきも気になる方",desc:"全成分マイルド系のサルフェートフリー処方。酸性石けん系×アミノ酸系のマイルド洗浄で、頭皮のベタつきを優しくリセット。",note:"詰め替え・トリートメントとのセットなど複数あります。リンク先でお選びください。",q1Allow:["oily","mix"],top:false,amz:"B0CGJ66KVR",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fbota-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/kobe-beauty-labo/cabinet/12884786/bota-01/01.jpg?_ex=200x200"},
       {name:"花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー",scent:"ベルガモット＆ダフネ",forWhom:"カラー毛のツヤとまとまりを、次世代ケアで叶えたい方",desc:"@cosmeベストコスメアワード2025 上半期新作 総合大賞（ヘアケア品では史上初）／日経優秀製品・サービス賞2025 トレンド部門賞。花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。",note:"リンク先はシャンプーポンプ400mlのページです。EXトリートメントはシリーズで別売りされています。",top:true,amz:"B0DSFQNXR9",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fanswer-03%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0DSFQNXR9.09._SL200_.jpg"},
+      {name:"ikue（幾重）ベースケアシャンプー",scent:"ブランシュブーケ",forWhom:"カラーの軽ダメージと、地肌の乾燥を同時にケアしたい方",desc:"美容室ディアローグが8年かけて開発したサロン専売ライン（2026年4月発売）。洗浄はココアンホ酢酸Na・コカミドプロピルベタイン（ベタイン系）を主体に、タウリン系・アミノ酸系（アラニン）・カルボン酸系を重ねた設計で、サルフェートは不使用。ヘマチン・加水分解コラーゲン・ヒアルロン酸Na・PCA-Na・乳酸Na・アミノ酸17種を配合し、地肌と髪の保水を同時に立て直します。",note:"Amazonは本体ボトル450mLのページです（詰め替え450mL・1,000mLもあります）。楽天はシャンプー＋デイリーケアトリートメントのボトルセットのページです。",top:false,amz:"B0GGP4W8QJ",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/57173f3e.ab0e818b.57173f3f.1bea0c4a/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdlcosme%2F20000001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjgweDgwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/I/31xd41D2gEL._AC_SL200_.jpg"},
       {name:"エッセンシャル プレミアム うるおいバリア シャンプー",scent:"種類により異なる",forWhom:"カラーしてるけど、ベタつきもパサつきも気になる方",desc:"カラー毛のパサつき・軽ダメージに。",note:"シリーズによって仕上がりが異なります。リンク先でお好みのタイプをお選びください。",top:false,amz:"B0CXH1FRTT",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fessential-01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CXH1FRTT.09._SL200_.jpg"},
       {name:"IONICO プレミアムイオン ダメージケアシャンプー モイスト＆リペア",scent:"オレンジフラワー",forWhom:"カラーやアイロンによるダメージで、しっとりまとまる仕上がりが好みの方",desc:"プレミアムイオン処方でダメージ部に集中補修。ヘマチン×3種セラミド×シルク配合、ベタイン系×オレフィン系のバランス洗浄でしっとりまとまる仕上がり。ノンシリコン。",note:"本体・つめかえ用、シリーズに「スムース＆シャイン」もあります。リンク先でお選びください。",top:false,amz:"B0859SPJ7B",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333f2bc.d29748d5.5333f2bd.3d588382/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fakakabeshop%2F4573492151315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0859SPJ7B.09._SL200_.jpg"},
       {name:"MEMEME（ミーミーミー）モイストブースト シャンプー",scent:"レッドキウイ＆フリージア",forWhom:"カラー毛のうるおいとツヤを、サルフェートフリー処方で叶えたい方",desc:"花王の新ブランド。タウリン系×アミノ酸系×ベタイン系のサルフェートフリー処方。ノンシリコンで根元ふんわり、毛先しっとり。レッドキウイ×フリージアの香り。",note:"本体・つめかえ用、トリートメントとのセット販売もあります。リンク先でお選びください。",top:false,amz:"B0FF43JRKK",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fbe50.2571929c.536fbe51.a47f0fb9/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fzagzag%2Fg4901301455093_setz%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0FF43JRKK.09._SL200_.jpg"},
@@ -1577,7 +1583,7 @@ function renderProdCard(p,key,isTopPick){
 const SURFACTANT_DETAIL=[
   {key:"betaine",cat:"ベタイン系",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
     types:["repair_mode","smooth_wave","skin_alert","vital_aging","volume_grace","bare_skin","aqua_sensitive"],
-    products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","PREMIUM LABO","MEMEME","AQ リペア スムース","UNOVE","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","ReFa","アユーラ","Re:KERATIN","＆be","RAFRA","エクラリティ","ディープリーエンブレイス","ululis","ケラリス","RINGS","セラティス","シーズナルケア"],
+    products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","PREMIUM LABO","MEMEME","AQ リペア スムース","UNOVE","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","ReFa","アユーラ","Re:KERATIN","＆be","RAFRA","エクラリティ","ディープリーエンブレイス","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA"],
     groups:[
       {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
       {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
@@ -1585,7 +1591,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"amino",cat:"アミノ酸系",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","volume_grace"],
-    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","BOTANIST","プロリー","PREMIUM LABO","MEMEME","イオ クレンジング","ミントベル","&PAIR","NOV ヘアシャンプー","KERAGENIC","ReFa","Re:KERATIN","RAFRA","haru","エクラリティ","ululis","ケラリス","RINGS","セラティス","シーズナルケア"],
+    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","BOTANIST","プロリー","PREMIUM LABO","MEMEME","イオ クレンジング","ミントベル","&PAIR","NOV ヘアシャンプー","KERAGENIC","ReFa","Re:KERATIN","RAFRA","haru","エクラリティ","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA"],
     groups:[
       {sub:"グルタミン酸系",items:["ココイルグルタミン酸Na","ココイルグルタミン酸TEA","ココイルグルタミン酸K","ラウロイルグルタミン酸Na","ラウロイルグルタミン酸TEA"]},
       {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
@@ -1593,13 +1599,13 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"taurine",cat:"タウリン系",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging"],
-    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","AQ リペア スムース","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","アユーラ","Re:KERATIN","＆be","ディープリーエンブレイス","ululis","ケラリス","RINGS","シーズナルケア"],
+    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","AQ リペア スムース","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","アユーラ","Re:KERATIN","＆be","ディープリーエンブレイス","ululis","ケラリス","RINGS","シーズナルケア","ikue","SIL.KAURA"],
     groups:[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
     ]},
   {key:"acid",cat:"その他のマイルド系",rank:2,desc:"弱酸性で頭皮に近く、低刺激な補助系",
     types:["bare_skin","aqua_sensitive","smooth_wave","volume_grace","repair_mode"],
-    products:["MEMEME","カウブランド","&PAIR","メルト","KUNDAL","エクラリティ","ululis","RINGS","セラティス","シーズナルケア"],
+    products:["MEMEME","カウブランド","&PAIR","メルト","KUNDAL","エクラリティ","ululis","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA"],
     groups:[
       {sub:"カルボン酸系",items:["ラウレス-4カルボン酸Na","ラウレス-5カルボン酸Na","ラウレス-6カルボン酸Na","ラウレス-11カルボン酸Na"]},
       {sub:"スルホコハク酸系",items:["スルホコハク酸ラウレス2Na","スルホコハク酸(C12-14)パレス-2Na","スルホコハク酸ラウリル2Na"]},
@@ -1612,8 +1618,8 @@ const SURFACTANT_DETAIL=[
       {sub:"アルカリ石けん",items:["石ケン素地","カリ石ケン素地","ラウリン酸K","ミリスチン酸K","パルミチン酸K","オレイン酸K","ラウリン酸Na","ステアリン酸Na"]},
     ]},
   {key:"olefin",cat:"オレフィン系",rank:4,desc:"高洗浄力だがサルフェート不使用。硬水でも泡立つ",
-    types:["oil_reset_short","oil_reset_long","smooth_wave","repair_mode"],
-    products:["スティーブンノル モイスチュアコントロール","IONICO","プロリー","AQ リペア スムース","BOTANIST","アルジェラン","ReFa","＆be","エクラリティ"],
+    types:["oil_reset_short","oil_reset_long","smooth_wave","repair_mode","bare_skin"],
+    products:["スティーブンノル モイスチュアコントロール","IONICO","プロリー","AQ リペア スムース","BOTANIST","アルジェラン","ReFa","＆be","エクラリティ","ikue"],
     groups:[
       {sub:"オレフィンスルホン酸系",items:["オレフィン(C14-16)スルホン酸Na"]},
     ]},
@@ -2512,7 +2518,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <footer id="amazon-product-list" class="static-ftr">
 <p class="ftr-note">Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。</p>
 <details class="static-ftr-details" open>
-<summary>掲載商品一覧（Amazon取扱・50商品）</summary>
+<summary>掲載商品一覧（Amazon取扱・52商品）</summary>
 <p class="ftr-note">Hair Identityの診断で提案しているシャンプーの一覧です。各商品の選定理由・成分解析は診断結果ページでご覧いただけます。</p>
 <ul class="static-ftr-list">
 <li><a href="https://www.amazon.co.jp/dp/B00N0C0B9U?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">ミノン 全身シャンプー しっとりタイプ</a>｜アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。</li>
@@ -2540,6 +2546,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <li><a href="https://www.amazon.co.jp/dp/B0DZX256QP?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">&PAIR（アンドペア）コントロール リペア シャンプー</a>｜LDK 2026年1月号「ベストバイ・オブ・ザ・イヤー」／2025年9月号 U2000円シャンプー＆トリートメント部門1位。アミノ酸系（アラニン）×タウリン系×ベタイン系のオイルフリー処方で、保湿＆うねりケア成分90%超。ナノバブル技術でうねりとダメージを同時にケア。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0DVG8C6S1?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">花王 melt（メルト）スムースシャンプー</a>｜花王が2025年に投入したうねりケアの新ブランド。世界初の酸性うねりケア成分（コハク酸・乳酸・リンゴ酸）を、ラウリルグルコシド・タウリン系・カルボン酸系によるサルフェートフリーの弱酸性洗浄で安定配合。加水分解ケラチン・シルク・コラーゲンなど複数のPPTで補修も両立し、シリコーンフリーでも軽やかにまとまる。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0GMD8VDW6?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">花王 THE ANSWER シーズナルケア SS スーパーラメラシャンプー</a>｜花王のTHE ANSWERが2026年4月に出した春夏向けのライン。ココイルメチルタウリンNa（タウリン系）×ラウロイルメチルアラニンNa（アミノ酸系）×ベタイン系×カルボン酸系のサルフェートフリー洗浄。通年版との違いはマンニトールで、湿度が高い環境でも髪の水分バランスを保ちやすくする設計。加水分解ケラチン・セラミドα・γ-ドコサラクトンで補修も両立し、シリコーン不使用。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GTPPQV22?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">SIL.KAURA（シル クオーラ）メロウストレート シャンプー</a>｜2026年4月発売。補修成分のラウロイル加水分解シルクNaを全成分の2番目に配合。アミノ酸系×タウリン系×ベタイン系のマイルド洗浄で、サルフェート・オレフィン・シリコーン不使用。トステア・γ-ドコサラクトン・メドウフォーム-δ-ラクトンでうねりをケアする。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0GV3F3V1F?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">KERAGENIC（ケラジェニック）マイクロ モイストリペア シャンプー</a>｜2026年4月発売、髪の主成分ケラチンに着目した新ブランド。アミノ酸系（アラニン）×タウリン系×ベタイン系のマイルド洗浄に、洗いながら補修するPPT系洗浄成分（ココイル加水分解ケラチンK）を高配合。トステア（アミノエチルチオコハク酸ジアンモニウム）・ヘマチン・4種のセラミドで、うねり・パサつきを内側から整える。ノンシリコン。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0CGJ5KQG8?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー モイスト</a>｜ボタニカル成分配合のサルフェートフリー処方。乾燥した髪をしっとりまとめる保湿ケア。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0CGHXF9Q8?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー スムース</a>｜ボタニカル成分配合。軽やかでサラサラの仕上がり。バランスの良い定番タイプ。</li>
@@ -2552,6 +2559,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <li><a href="https://www.amazon.co.jp/dp/B0CGHY3YKX?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー ダメージケア</a>｜ボタニカル成分配合。傷んだ髪をなめらかに整え、しなやかな質感へ。サルフェートフリー処方。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0C8928QDQ?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">スティーブンノル モイスチュアコントロール シャンプー</a>｜サロン発の保湿・補修ライン。乾燥・パサつきをなめらかに整える。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0DSFQNXR9?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー</a>｜@cosmeベストコスメアワード2025 上半期新作 総合大賞（ヘアケア品では史上初）／日経優秀製品・サービス賞2025 トレンド部門賞。花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GGP4W8QJ?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">ikue（幾重）ベースケアシャンプー</a>｜美容室ディアローグが8年かけて開発したサロン専売ライン（2026年4月発売）。ベタイン系主体にタウリン系・アミノ酸系・カルボン酸系を重ねた設計でサルフェート不使用。ヘマチン・加水分解コラーゲン・ヒアルロン酸Na・アミノ酸17種を配合。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0CXH1FRTT?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">エッセンシャル プレミアム うるおいバリア シャンプー</a>｜カラー毛のパサつき・軽ダメージに。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0859SPJ7B?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">IONICO プレミアムイオン ダメージケアシャンプー モイスト＆リペア</a>｜プレミアムイオン処方でダメージ部に集中補修。ヘマチン×3種セラミド×シルク配合、ベタイン系×オレフィン系のバランス洗浄でしっとりまとまる仕上がり。ノンシリコン。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0FF43JRKK?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">MEMEME（ミーミーミー）モイストブースト シャンプー</a>｜花王の新ブランド。タウリン系×アミノ酸系×ベタイン系のサルフェートフリー処方。ノンシリコンで根元ふんわり、毛先しっとり。レッドキウイ×フリージアの香り。</li>
