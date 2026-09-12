@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ページが見つかりません｜橋元リョウイチ</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F8F5F0; --ivory:#F2EBE0; --gold:#B8956A; --gold-l:#D4B896; --gold-d:#8A6843;
+  --char:#28221C; --char2:#4A3E34; --muted:#8A7A6A; --border:rgba(184,149,106,0.22);
+  --serif:"Cormorant Garamond",Georgia,serif; --sans:"Noto Sans JP",sans-serif;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; background:var(--cream); color:var(--char);
+  font-family:var(--sans); font-weight:300; line-height:1.9;
+  display:flex; align-items:center; justify-content:center; padding:2rem 1.25rem;
+}
+.wrap{width:100%; max-width:520px; text-align:center}
+.code{font-family:var(--serif); font-size:clamp(3.5rem,14vw,5.5rem); line-height:1; color:var(--gold-l); letter-spacing:.06em; margin:0}
+.rule{width:48px; height:1px; background:var(--gold); margin:1.6rem auto; opacity:.6}
+h1{font-size:1.05rem; font-weight:500; margin:0 0 .9rem; letter-spacing:.04em}
+p{font-size:.9rem; color:var(--char2); margin:0 auto 2rem; max-width:26rem}
+.links{display:flex; flex-direction:column; gap:.75rem}
+a.btn{
+  display:block; padding:.95rem 1.25rem; border:1px solid var(--border); border-radius:2px;
+  background:#fff; color:var(--char); text-decoration:none; font-size:.92rem; letter-spacing:.03em;
+  transition:border-color .2s, background .2s;
+}
+a.btn .sub{display:block; font-size:.76rem; color:var(--muted); margin-top:.2rem}
+a.btn.primary{background:var(--char); color:var(--cream); border-color:var(--char)}
+a.btn.primary .sub{color:var(--gold-l)}
+@media (hover:hover) and (pointer:fine){
+  a.btn:hover{border-color:var(--gold)}
+  a.btn.primary:hover{background:var(--gold-d); border-color:var(--gold-d)}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="code">404</p>
+  <div class="rule"></div>
+  <h1>ページが見つかりませんでした</h1>
+  <p>お探しのページは移動したか、URLが変わった可能性があります。下のどちらかからお進みください。</p>
+  <div class="links">
+    <a class="btn primary" href="/shampoo/">シャンプー診断をはじめる<span class="sub">11問で、あなたの髪質タイプを診断します</span></a>
+    <a class="btn" href="/">橋元リョウイチについて<span class="sub">東京・原宿のフリーランス美容師</span></a>
+  </div>
+</main>
+</body>
+</html>
