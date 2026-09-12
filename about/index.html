@@ -37,6 +37,12 @@ body{background:var(--cream);color:var(--char2);font-family:var(--sans);font-wei
 img{max-width:100%}
 
 header{padding:72px 0 48px;border-bottom:1px solid var(--border)}
+.hero{display:grid;grid-template-columns:212px 1fr;gap:34px;align-items:start}
+.portrait{position:relative}
+.portrait img{display:block;width:100%;height:auto;border-radius:2px;
+              box-shadow:0 1px 0 rgba(40,34,28,.06)}
+.portrait::after{content:"";position:absolute;inset:-7px;border:1px solid var(--border);
+                 border-radius:2px;pointer-events:none}
 .eyebrow{font-family:var(--serif);font-size:13px;letter-spacing:.22em;color:var(--gold);
          text-transform:uppercase;margin-bottom:18px}
 h1{font-family:var(--sans);font-weight:400;font-size:27px;line-height:1.55;color:var(--char);
@@ -75,6 +81,10 @@ p+p{margin-top:1.3em}
 footer{padding:40px 0 64px;font-size:12.5px;color:var(--muted);text-align:center;letter-spacing:.04em}
 footer a{color:var(--gold-d)}
 
+@media(max-width:640px){
+  .hero{grid-template-columns:1fr;gap:26px}
+  .portrait{width:164px}
+}
 @media(max-width:520px){
   header{padding:52px 0 38px}
   h1{font-size:22px}
@@ -89,14 +99,22 @@ footer a{color:var(--gold-d)}
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">Hairstylist</div>
-  <h1>橋元リョウイチ
-    <span class="sub">はしもと りょういち ／ Ryoichi Hashimoto</span>
-  </h1>
-  <p class="lede">
-    東京・原宿のフリーランス美容師です。<br>
-    GO TODAY SHAiRE SALON 原宿本店で、カウンセリングから仕上げまで一人で担当しています。
-  </p>
+  <div class="hero">
+    <div class="portrait">
+      <img src="/ryoichi-hashimoto.jpg" width="900" height="1190"
+           alt="美容師 橋元リョウイチ（東京・原宿）">
+    </div>
+    <div>
+      <div class="eyebrow">Hairstylist</div>
+      <h1>橋元リョウイチ
+        <span class="sub">はしもと りょういち ／ Ryoichi Hashimoto</span>
+      </h1>
+      <p class="lede">
+        東京・原宿のフリーランス美容師です。<br>
+        GO TODAY SHAiRE SALON 原宿本店で、カウンセリングから仕上げまで一人で担当しています。
+      </p>
+    </div>
+  </div>
 </header>
 
 <section>
@@ -195,7 +213,7 @@ footer a{color:var(--gold-d)}
   "jobTitle": "フリーランス美容師",
   "description": "東京・原宿のフリーランス美容師。うねり・広がり・まとまらない髪を、髪質のせいにせず構造から整える。成分・pH・薬剤設計をふまえた説明と、来店前カウンセリングによる事前の薬剤準備が特徴。シャンプー診断「Hair Identity」開発者。",
   "url": "https://hair-diagnosis-app.vercel.app/about/",
-  "image": "https://hair-diagnosis-app.vercel.app/og-image.jpg",
+  "image": "https://hair-diagnosis-app.vercel.app/ryoichi-hashimoto.jpg",
   "knowsAbout": ["ヘアケア", "毛髪科学", "界面活性剤", "シャンプーの成分", "縮毛矯正", "くせ毛・うねり", "髪質改善", "ショートカット", "ヘアカラー"],
   "areaServed": [
     { "@type": "Place", "name": "原宿" },
