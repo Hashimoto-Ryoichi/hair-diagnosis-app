@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Hair Identity 設計整合チェック（Top Pick＝回答主導設計の守り）
-// 使い方: node .githooks/check-design.js [index.htmlのパス]
+// 使い方: node .githooks/check-design.js [検査対象のパス]（省略時 shampoo/index.html）
 // pre-commit から自動実行される。--no-verify で飛ばさないこと。
 //
 // 検査項目:
@@ -13,7 +13,7 @@
 
 "use strict";
 const fs = require("fs");
-const file = process.argv[2] || "index.html";
+const file = process.argv[2] || "shampoo/index.html";
 const src = fs.readFileSync(file, "utf8");
 let ng = 0;
 const fail = (msg) => { console.error("✗ " + msg); ng++; };

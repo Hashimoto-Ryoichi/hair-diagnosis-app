@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Hair Identity — 本番 index.html からタイプ別の商品一覧を出力する。
+// Hair Identity — 本番 shampoo/index.html からタイプ別の商品一覧を出力する。
 //
 // ドキュメントに商品表を書き写すと必ず腐り、腐った記述が事故になる（2026-07-29の教訓）。
 // 「一覧が見たい」ときは書き写しを読まず、これを実行すること。
@@ -11,7 +11,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const INDEX = path.join(__dirname, "..", "index.html");
+const INDEX = path.join(__dirname, "..", "shampoo", "index.html");
 const src = fs.readFileSync(INDEX, "utf8");
 const block = src.slice(src.indexOf("const MATCH_TAGS="), src.indexOf("function diagnose("));
 const R1 = (src.match(/const R1="([^"]*)"/) || [])[1] || "";

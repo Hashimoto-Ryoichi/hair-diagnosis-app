@@ -7,9 +7,9 @@
 # 正式ID(Amazon): 下のEXPECTが単一の正本（ID変更は scripts/rotate-assoc-id.sh で行う）
 # 楽天: hb.afl.rakuten.co.jp/ichiba/... のhybrid_urlのみ許可
 # このスクリプトは pre-commit フックと deploy スキル Step 0 の両方から呼ばれる。
-# 使い方: check-affiliate.sh [チェック対象ファイル]   （省略時は index.html）
+# 使い方: check-affiliate.sh [チェック対象ファイル]   （省略時は shampoo/index.html）
 
-FILE="${1:-index.html}"
+FILE="${1:-shampoo/index.html}"
 EXPECT="hairidentit0b-22"
 # 過去に使って廃止したID（半角スペース区切りで追記していく。ID変更時はrotate-assoc-id.shを使う）
 OLDS="hairidentity-22 hassihair06-22"

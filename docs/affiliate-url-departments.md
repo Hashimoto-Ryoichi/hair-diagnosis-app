@@ -22,8 +22,10 @@ Hair Identity（hair-diagnosis-app）のアフィリエイト収益を「URLの�
 ### Amazon（`amz`）
 - **入れるのはASINだけ**。例: `amz:"B00BTDV3FS"`
 - ASINは **英大文字＋数字の10桁**（多くは `B0...` で始まる）。Amazon商品ページURLの `/dp/XXXXXXXXXX/` の部分。
-- 本番URLは `const ASSOC_ID="hairidentity-22"` から **自動生成**される:
-  `https://www.amazon.co.jp/dp/{ASIN}?tag=hairidentity-22`（[index.html](../index.html) の描画部）
+- 本番URLは `const ASSOC_ID` から **自動生成**される:
+  `https://www.amazon.co.jp/dp/{ASIN}?tag={正式ID}`（[shampoo/index.html](../shampoo/index.html) の描画部）
+  正式IDをここに書き写さないこと（書いた瞬間に腐る）。正本は `.githooks/check-affiliate.sh` の `EXPECT=` 行:
+  `sed -n 's/^EXPECT="\(.*\)"$/\1/p' .githooks/check-affiliate.sh`
 - **やってはいけない**:
   - `tag=` を手書き・ハードコードする（IDは ASSOC_ID 経由のみ）
   - 旧ID `hassihair06-22` を使う（永久に禁止）
@@ -55,14 +57,14 @@ Hair Identity（hair-diagnosis-app）のアフィリエイト収益を「URLの�
 
 ### 実行
 ```sh
-sh .githooks/check-affiliate.sh            # index.html を検査
+sh .githooks/check-affiliate.sh            # shampoo/index.html を検査
 sh .githooks/check-affiliate.sh path.html  # 任意ファイルを検査
 ```
 
 ### 検査項目（全8項目）
 | # | 対象 | 内容 |
 |---|---|---|
-| 1 | Amazon | `ASSOC_ID` が正式ID `hairidentity-22` でちょうど1回定義 |
+| 1 | Amazon | `ASSOC_ID` が正式ID（`EXPECT=` 行が正本）でちょうど1回定義 |
 | 2 | Amazon | 旧ID `hassihair06-22` がどこにも混入していない |
 | 3 | Amazon | 規約必須の開示文言「適格販売により収入を得ています」が残っている |
 | 4 | Amazon | 全 `amazon.co.jp/dp/` リンクが正式タグを通っている（タグ無し・別タグ禁止） |

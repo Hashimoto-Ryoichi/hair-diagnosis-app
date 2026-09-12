@@ -54,20 +54,20 @@ AI側は「審査中なので通過後にやる方が安全」と進言したが
 
 ## 実装済みの再発防止策（2026-07-25）
 
-1. **静的商品一覧**: index.html 末尾に `<footer id="amazon-product-list">` として全商品のタグ付き `<a>` リンクを生HTMLで常設。JSを実行しないクローラーにも見える
+1. **静的商品一覧**: shampoo/index.html 末尾に `<footer id="amazon-product-list">` として全商品のタグ付き `<a>` リンクを生HTMLで常設。JSを実行しないクローラーにも見える
 2. **開示文言の静的化**: 規約5条の「Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。」を静的フッターにも明示
 3. **check-affiliate.sh 強化**（pre-commit＋デプロイ時に自動実行）
    - チェック10: 静的一覧の存在＋商品データの全ASINと1:1一致（商品追加・削除時の載せ忘れ/消し忘れを停止）
    - チェック11: 静的フッター内に開示文言があること
-4. **ID一括更新スクリプト**: `sh scripts/rotate-assoc-id.sh 新ID`（index.html＋チェックスクリプトをまとめて更新）
+4. **ID一括更新スクリプト**: `sh scripts/rotate-assoc-id.sh 新ID`（shampoo/index.html＋チェックスクリプトをまとめて更新）
 
 ## 再申請の手順（この順番を厳守。審査は一発勝負＝却下された申請の再審査は不可）
 
 1. **申請前の状態確認**
-   - [ ] 本番 https://hair-diagnosis-app.vercel.app のソース表示（Cmd+Option+U）で `tag=` 付き静的リンクが見えること
+   - [ ] 本番 https://hashimoto-ryoichi.com/shampoo/ のソース表示（Cmd+Option+U）で `tag=` 付き静的リンクが見えること
    - [ ] サイトが60日以内に更新されていること（コンテンツ鮮度の審査基準）
 2. **新規申請**（却下メール内の「別途申請」リンクから）
-   - [ ] 登録サイト一覧に、Amazonリンクを置く場所を**全部**入れる（vercel.appのURL。note等に貼るならそのURLも）
+   - [ ] 登録サイト一覧に、Amazonリンクを置く場所を**全部**入れる（hashimoto-ryoichi.com のURL。note等に貼るならそのURLも）
    - [ ] Amazonリンクは登録サイト以外に貼らない（LINEトーク・メール・PDFへの直貼りは規約違反）
 3. **新トラッキングIDの反映**（申請直後・審査が始まる前に）
    - [ ] 管理画面で新IDを**現物確認**（推測・記憶での入力は禁止）

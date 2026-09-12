@@ -55,5 +55,29 @@ done < "$tmplist"
 if [ -f "$tmplist.ng" ]; then err=1; fi
 rm -f "$tmplist" "$tmplist.ng"
 
-[ "$err" = "0" ] && echo "✓ ドキュメント検査通過（スキルに廃止ID・コピーなし）"
+# 3) リポジトリ内 docs/ の腐り（2026-09-13 追加）
+#    スキルだけ見ていたため、docs/affiliate-url-departments.md が廃止ID hairidentity-22 を
+#    「現行ID」として書いたまま放置されていた。スキルと同じ基準でここも見張る。
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+if [ -d "$ROOT/docs" ]; then
+  for old in $OLDS; do
+    hits=$(grep -rn "$old" "$ROOT/docs" 2>/dev/null | grep -v "廃止\|却下\|旧ID\|OLDS\|再発\|永久に禁止\|混入して")
+    if [ -n "$hits" ]; then
+      echo "✗ ドキュメント検査: docs/ に廃止ID($old)がベタ書きされています" >&2
+      echo "$hits" >&2
+      echo "  → IDは書かず「check-affiliate.sh の EXPECT= 行が正本」と書くこと" >&2
+      err=1
+    fi
+  done
+  # アプリの置き場所（shampoo/index.html）の書き間違い
+  stale=$(grep -rn "hair-diagnosis-app/index\.html\|(\.\./index\.html)" "$ROOT/docs" 2>/dev/null)
+  if [ -n "$stale" ]; then
+    echo "✗ ドキュメント検査: docs/ が旧パス（ルートの index.html）を指しています" >&2
+    echo "$stale" >&2
+    echo "  → アプリ本体は shampoo/index.html。ルートの index.html は本人ページ" >&2
+    err=1
+  fi
+fi
+
+[ "$err" = "0" ] && echo "✓ ドキュメント検査通過（スキル・docs に廃止ID・コピー・旧パスなし）"
 exit "$err"

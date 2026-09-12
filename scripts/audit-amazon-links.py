@@ -29,7 +29,7 @@ import sys
 import time
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INDEX = os.path.join(REPO, "index.html")
+INDEX = os.path.join(REPO, "shampoo", "index.html")
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/125.0 Safari/537.36")
 
@@ -52,7 +52,7 @@ def fetch(url, tries=3):
 
 
 def load_products():
-    """index.html の TYPES を Node で評価して商品リストを取り出す。
+    """shampoo/index.html の TYPES を Node で評価して商品リストを取り出す。
 
     正規表現で切り出すと入れ子やエスケープで壊れるため、実際に評価する
     （check-design.js と同じやり方）。
@@ -74,7 +74,7 @@ process.stdout.write(JSON.stringify([...seen.values()]));
 """
     r = subprocess.run(["node", "-e", script, INDEX], capture_output=True, text=True)
     if r.returncode != 0:
-        sys.exit("✗ index.html の読み取りに失敗しました:\n" + r.stderr)
+        sys.exit("✗ shampoo/index.html の読み取りに失敗しました:\n" + r.stderr)
     return json.loads(r.stdout)
 
 
@@ -260,7 +260,7 @@ def main():
     print("\n在庫切れは一時的なこともあります。数日おいて戻らなければ、"
           "同じ商品の別ASIN（本体/詰め替え/セット）に差し替えてください。")
     print("差し替えたら静的商品一覧の <li> と <summary> の件数も直し、"
-          "sh .githooks/check-affiliate.sh index.html を通すこと。")
+          "sh .githooks/check-affiliate.sh shampoo/index.html を通すこと。")
     return 1
 
 
