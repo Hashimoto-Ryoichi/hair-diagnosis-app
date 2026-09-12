@@ -2290,7 +2290,7 @@ function App(){
           h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
           h("p",{className:"q-text"},QUESTIONS[curQ].text),
-          QUESTIONS[curQ].id==="q2"&&h("img",{className:"len-guide",src:"length-guide.jpg",alt:"髪の長さの目安（ベリーショート〜ロング）",loading:"lazy"}),
+          QUESTIONS[curQ].id==="q2"&&h("img",{className:"len-guide",src:"/length-guide.jpg",alt:"髪の長さの目安（ベリーショート〜ロング）",loading:"lazy"}),
           QUESTIONS[curQ].id==="q8"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ 気になる状態をすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
           QUESTIONS[curQ].id==="q10"&&h("p",{style:{fontSize:".78rem",color:"var(--muted)",marginBottom:".4rem"}},"※ なりたい仕上がりをすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
           QUESTIONS[curQ].id==="q11"&&h("p",{className:"q11-hint"},"※ 気になるお悩みをすべて選択してください（複数選択可）。タップ順は番号で表示されます。"),
