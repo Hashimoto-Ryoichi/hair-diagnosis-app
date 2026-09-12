@@ -8,7 +8,7 @@
 #   docs/amazon-reapplication-checklist.md に「更新したら lastmod も更新」と書いたが、
 #   2026-07-30 に人間（AI含む）が再び忘れたため、機械で止めることにした。
 #
-# 発火条件: index.html がステージされているコミットのみ（pre-commit 側で判定）。
+# 発火条件: shampoo/index.html がステージされているコミットのみ（pre-commit 側で判定）。
 #   ドキュメントだけの変更で日付を動かすと、更新実態と申告がまた食い違うため。
 
 set -e

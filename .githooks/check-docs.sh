@@ -45,7 +45,7 @@ while IFS= read -r dir; do
   if [ -n "$copies" ]; then
     echo "✗ ドキュメント検査: スキル内に index.html のコピーがあります（必ず腐ります）" >&2
     echo "$copies" >&2
-    echo "  → 削除し、本番 ~/hair-diagnosis-app/index.html を読ませること" >&2
+    echo "  → 削除し、本番 ~/hair-diagnosis-app/shampoo/index.html を読ませること" >&2
     err=1
   fi
   # パイプ内サブシェルだとerrが親に返らないため、失敗をファイルに残す
