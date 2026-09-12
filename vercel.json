@@ -14,16 +14,6 @@
       "source": "/about/(.*)",
       "destination": "https://hashimoto-ryoichi.com/",
       "permanent": true
-    },
-    {
-      "source": "/",
-      "destination": "https://hashimoto-ryoichi.com/shampoo/",
-      "permanent": true
-    },
-    {
-      "source": "/(.*)",
-      "destination": "https://hashimoto-ryoichi.com/$1",
-      "permanent": true
     }
   ],
   "headers": [
