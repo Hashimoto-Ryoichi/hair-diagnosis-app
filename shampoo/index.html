@@ -535,7 +535,8 @@ const MATCH_TAGS=[
   {key:"ミノン",          tags:{q1:["red","dry"],q11:["dry"]}},
   {key:"ululis",          tags:{q11:["repair"],q7:["color","bleach"],q8:["dry","split"],q10:["moist"]}},
   {key:"NOV ヘアシャンプー",tags:{q1:["red"],q11:["repair"]}},
-  {key:"コラージュフルフル", tags:{q1:["oily"],q11:["oily"]}},
+  {key:"コラージュフルフル ネクスト", tags:{q1:["oily"],q11:["oily"]}},
+  {key:"コラージュフルフルプラス", tags:{q1:["red"],q11:["oily"]}},
   {key:"キュレル",         tags:{q1:["dry"],q11:["dry"]}},
   {key:"h&s",             tags:{q11:["oily"],q10:["smooth"]}},
   {key:"デオコ",           tags:{q11:["oily"]}},
@@ -598,7 +599,8 @@ const ING_PROFILES=[
   {key:"ミノン",w:1.5,m:5,o:4,r:1,f:"sensitive",fl:5},
   {key:"ululis",w:2,m:4.5,o:3,r:4.5,f:"repair",fl:4.5},
   {key:"NOV ヘアシャンプー",w:2,m:5,o:2,r:1,f:"sensitive",fl:5},
-  {key:"コラージュフルフル",w:2.5,m:4,o:3,r:1,f:"fungal",fl:5},
+  {key:"コラージュフルフル ネクスト",w:2.5,m:4,o:3,r:1,f:"fungal",fl:5},
+  {key:"コラージュフルフルプラス",w:3,m:4.5,o:2.5,r:2,f:"fungal",fl:5},
   {key:"キュレル",w:4,m:2.5,o:2,r:1,f:"scalp",fl:3},
   {key:"h&s",w:4.5,m:2,o:1.5,r:1,f:"scalp",fl:5},
   {key:"デオコ",w:4.5,m:2,o:1.5,r:1.5,f:"odor",fl:5},
@@ -785,6 +787,7 @@ const TYPES={
       {name:"ミノン 全身シャンプー しっとりタイプ",scent:"微香性",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"髪に使うとキシキシしやすい場合があります。コンディショナー必須。ミディアム以上には不向きです。",top:true,otc:true,amz:"B00N0C0B9U",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:"https://m.media-amazon.com/images/P/B00N0C0B9U.09._SL200_.jpg"},
       {name:"NOV ヘアシャンプー DS",scent:"無香料",forWhom:"皮膚科推奨レベルの低刺激処方を求める方",desc:"敏感肌ブランドNOVの化粧品シャンプー。アミノ酸系・ベタイン系・タウリン系の3つを組み合わせた低刺激処方。無香料・無着色。",note:"250ml・500mlの2サイズがあります。リンク先でお選びください。",top:false,otc:false,amz:"B00BTDV3FS",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9c12.6ce6773e.532e9c13.20592aa2/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fwebdrug%2F4934651574022%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B00BTDV3FS.09._SL200_.jpg"},
       {name:"コラージュフルフル ネクスト シャンプー",scent:"無香料",forWhom:"ヘルメット・帽子で頭皮が蒸れやすい方、かゆみや繰り返すフケが気になる方",desc:"持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩配合で、フケ・かゆみの原因菌の繁殖を防ぐ。",note:"本体・つめかえ、うるおいなめらか／すっきりさらさらの2タイプがあります。リンク先でお選びください。",secondaryOnly:true,top:false,otc:true,amz:"B002TEZ8U2",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532eb60f.8dafe5f6.532eb617.4f160360/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fenetroom%2F7337284%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B002TEZ8U2.09._SL200_.jpg"},
+      {name:"コラージュフルフルプラス シャンプー すっきり",scent:"無香料",forWhom:"フケ・かゆみが続いているけれど、洗浄力の強いシャンプーは頭皮にしみる方",desc:"持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩・ピロクトンオラミン・グリチルリチン酸2Kの有効成分3種でフケ・かゆみを防ぐ。洗浄成分はアミノ酸系とベタイン系で、硫酸系は使っていません。",note:"「すっきり」と「うるおい」の2タイプ、本体200mLとつめかえ340mLがあります。Amazonは「すっきり」200mL単品、楽天は200mLとつめかえの選択ページです。地肌の乾燥やつっぱりが強い方は「うるおい」の方が穏やかです。",top:false,otc:true,amz:"B0H24QPMVF",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/578a2aa0.49073a44.578a2aa1.2357f805/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpycno%2F10133-012%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjgweDgwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/I/61-DOKRzILL._AC_SL200_.jpg"},
       {name:"キュレル シャンプー",scent:"無香料",forWhom:"フケ・かゆみが気になる、乾燥性敏感肌の方",desc:"花王の医薬部外品シャンプー。グリチルリチン酸ジカリウム配合でフケ・かゆみを防ぐ。セラミドを守りながら洗う処方で、赤ちゃんから大人まで使える。弱酸性・無香料・無着色。",note:"ポンプ・つめかえ用・泡シャンプーなど複数あります。リンク先でお選びください。洗浄成分はラウレス硫酸Naがベースで、洗浄力はしっかりめ。乾燥性のフケが強い方は、よりマイルドなミノンを優先してください。",top:false,otc:true,amz:"B0777B5D9M",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9808.56d1a4c2.532e980a.fb0409e3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fyayoi-cosme%2Fkao276070%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0777B5D9M.09._SL200_.jpg"}
     ]},
   oil_reset_short:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ショート",
@@ -2522,12 +2525,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <footer id="amazon-product-list" class="static-ftr">
 <p class="ftr-note">Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。</p>
 <details class="static-ftr-details" open>
-<summary>掲載商品一覧（Amazon取扱・51商品）</summary>
+<summary>掲載商品一覧（Amazon取扱・52商品）</summary>
 <p class="ftr-note">Hair Identityの診断で提案しているシャンプーの一覧です。各商品の選定理由・成分解析は診断結果ページでご覧いただけます。</p>
 <ul class="static-ftr-list">
 <li><a href="https://www.amazon.co.jp/dp/B00N0C0B9U?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">ミノン 全身シャンプー しっとりタイプ</a>｜アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。</li>
 <li><a href="https://www.amazon.co.jp/dp/B00BTDV3FS?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">NOV ヘアシャンプー DS</a>｜敏感肌ブランドNOVの化粧品シャンプー。アミノ酸系・ベタイン系・タウリン系の3つを組み合わせた低刺激処方。無香料・無着色。</li>
 <li><a href="https://www.amazon.co.jp/dp/B002TEZ8U2?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">コラージュフルフル ネクスト シャンプー</a>｜持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩配合で、フケ・かゆみの原因菌の繁殖を防ぐ。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0H24QPMVF?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">コラージュフルフルプラス シャンプー すっきり</a>｜持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩・ピロクトンオラミン・グリチルリチン酸2Kの有効成分3種でフケ・かゆみを防ぐ。洗浄成分はアミノ酸系とベタイン系で、硫酸系は使っていません。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0777B5D9M?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">キュレル シャンプー</a>｜花王の医薬部外品シャンプー。グリチルリチン酸ジカリウム配合でフケ・かゆみを防ぐ。セラミドを守りながら洗う処方で、赤ちゃんから大人まで使える。弱酸性・無香料・無着色。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0CJP1C9TC?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">h&s スカルプ シャンプー</a>｜ピロクトンオラミン配合でマラセチア菌を抑制。脂性頭皮専用、洗浄力強め。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0CW3C9TYD?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">デオコ スカルプケアシャンプー</a>｜頭皮のニオイ・ベタつきが気になる方向けのスカルプケア。</li>
