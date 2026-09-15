@@ -82,6 +82,8 @@ const SCENARIOS = {
   oil_reset_short: { q1: "oily", q2: "short", q3: "normal", q4: "normal", q5: "stable", q6: "none", q7: ["none"], q8: [], q10: ["smooth"], q11: ["oily"] },
   oil_reset_long:  { q1: "oily", q2: "long", q3: "normal", q4: "normal", q5: "stable", q6: "none", q7: ["color"], q8: ["dry"], q10: ["moist"], q11: ["oily"] },
   repair_mode:     { q1: "normal", q2: "medium", q3: "normal", q4: "normal", q5: "stable", q6: "none", q7: ["bleach"], q8: ["dry", "split"], q10: ["moist"], q11: ["repair"] },
+  curl_repair:     { q1: "normal", q2: "medium", q3: "normal", q4: "normal", q5: "stable", q6: "strong", q7: ["straight"], q8: ["frizz"], q10: ["smooth"], q11: ["wave"] },
+  silk_restore:    { q1: "normal", q2: "medium", q3: "normal", q4: "normal", q5: "stable", q6: "none", q7: ["straight"], q8: ["dry"], q10: ["moist"], q11: ["repair"] },
   smooth_wave:     { q1: "normal", q2: "medium", q3: "normal", q4: "normal", q5: "stable", q6: "strong", q7: ["none"], q8: ["frizz"], q10: ["smooth"], q11: ["wave"] },
   aqua_sensitive:  { q1: "normal", q2: "medium", q3: "normal", q4: "normal", q5: "stable", q6: "none", q7: ["none"], q8: [], q10: ["moist"], q11: [] },
   bare_skin:       { q1: "normal", q2: "medium", q3: "normal", q4: "normal", q5: "stable", q6: "none", q7: ["color"], q8: ["dry"], q10: ["gloss"], q11: [] },
