@@ -1231,6 +1231,16 @@ function allShownProducts(typeKey,answers){
   const seen=new Set();
   return list.filter(p=>{ if(!p||seen.has(p.name)) return false; seen.add(p.name); return true; });
 }
+// メイン商品を「回答との相性が高い順」に並べる。並べ替えの正本はこの1本だけ。
+// 結果画面のTOP PICK（先頭1件）と商品一覧の両方がここを参照する＝順位がズレない。
+function mainProductsSorted(typeKey,answers){
+  const td=typeKey?TYPES[typeKey]:null;
+  if(!td) return [];
+  return [...td.products].filter(p=>isProductDisplayable(p,answers)&&!p.secondaryOnly).sort((a,b)=>{
+    if(!!a.gentleBottom!==!!b.gentleBottom) return a.gentleBottom?1:-1;
+    return scoreProduct(b,answers)-scoreProduct(a,answers);
+  });
+}
 
 // ════════════════════════════════════════════════════════════════════
 // 🔬 診断透明化エンジン（管理者検証用・一般UIには信頼度のみ反映）
@@ -2369,6 +2379,11 @@ function App(){
             h("p",{className:"ai-txt"},firstAdvice)
           );
         })(),
+        (()=>{
+          const top=mainProductsSorted(typeKey,answers)[0];
+          if(!top) return null;
+          return h("div",{style:{marginTop:"2rem"}},renderProdCard(top,"top_0",true));
+        })(),
         h("button",{className:"btn-primary btn-primary-lg",onClick:()=>{vaTrack("products_view",{type:typeKey});setStep("products");}},h("span",null,"おすすめのシャンプーを見る ↗")),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
       ),
@@ -2422,10 +2437,7 @@ function App(){
         })(),
         h("p",{className:"prod-sub",style:{marginBottom:"1.3rem",marginTop:"2rem"}},"タイプ別に厳選したアイテムです。あなたの回答との相性が高い順に並んでいます。"),
         td.alert&&h("div",{className:"alert-box"},td.alert),
-        [...td.products].filter(p=>isProductDisplayable(p,answers)&&!p.secondaryOnly).sort((a,b)=>{
-          if(!!a.gentleBottom!==!!b.gentleBottom) return a.gentleBottom?1:-1;
-          return scoreProduct(b,answers)-scoreProduct(a,answers);
-        }).map((p,i)=>renderProdCard(p,"main_"+i,i===0)),
+        mainProductsSorted(typeKey,answers).map((p,i)=>renderProdCard(p,"main_"+i,i===0)),
         (()=>{
           const sec=findSecondarySection(typeKey,answers);
           if(!sec||sec.products.length===0) return null;

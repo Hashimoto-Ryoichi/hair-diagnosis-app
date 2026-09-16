@@ -183,10 +183,13 @@ if (sdStart < 0 || sdEnd < 0 || sdEnd <= sdStart) {
         if (!shownNg && !aggNg) ok("界面活性剤チャート: 追加セクションを含む結果画面の全商品を集計できている");
       }
       // 新しい商品セクションを足したのに allShownProducts へ繋ぎ忘れる事故を防ぐ
-      // （renderProdCard の呼び出し箇所: 定義1 + 呼び出し5 = 6）
+      // （renderProdCard の呼び出し箇所: 定義1 + 呼び出し6 = 7）
+      // 呼び出し6本目は結果画面のTOP PICK直出し（2026-09-16追加）。
+      // これは新セクションではなくメイン商品の1位を再掲しているだけなので、
+      // allShownProducts の集計対象は増えていない。
       const cardRefs = (src.match(/renderProdCard\(/g) || []).length;
-      if (cardRefs !== 6) {
-        fail(`renderProdCard の出現数が ${cardRefs} 件（想定6件＝定義1＋呼び出し5）。商品セクションを増減したなら、その商品を allShownProducts にも通したうえでこの数を更新すること`);
+      if (cardRefs !== 7) {
+        fail(`renderProdCard の出現数が ${cardRefs} 件（想定7件＝定義1＋呼び出し6）。商品セクションを増減したなら、その商品を allShownProducts にも通したうえでこの数を更新すること`);
       } else {
         ok("商品セクションの数に変化なし（新セクションの集計漏れなし）");
       }
