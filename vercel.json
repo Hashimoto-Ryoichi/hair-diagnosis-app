@@ -19,6 +19,11 @@
       "source": "/",
       "destination": "https://hashimoto-ryoichi.com/shampoo/",
       "permanent": true
+    },
+    {
+      "source": "/:path((?!google2beba886222325d8\\.html|BingSiteAuth\\.xml).*)",
+      "destination": "https://hashimoto-ryoichi.com/:path*",
+      "permanent": true
     }
   ],
   "headers": [
