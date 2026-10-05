@@ -146,6 +146,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 @media(max-width:639px){.sp-br{display:inline}}
 .trust-bar{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:.8rem 1rem;margin-bottom:1.8rem;display:flex;align-items:flex-start;gap:.6rem}
 .trust-bar-txt{font-size:.82rem;color:var(--char2);line-height:1.7}
+.trust-bar>span:first-child{height:calc(.82rem*1.7)}/* アイコンを文の1行目の真ん中に置く（行の高さに合わせる） */
 .btn-primary{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;background:var(--char);color:var(--cream);border:none;border-radius:var(--r);padding:.95rem 1.5rem;font-family:var(--sans);font-size:.92rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:background .25s;margin-top:1.8rem;-webkit-tap-highlight-color:transparent}
 @media (hover:hover) and (pointer:fine){.btn-primary:hover{background:var(--gold-d)}}
 .btn-primary-lg{font-size:1rem;letter-spacing:.06em;text-transform:none;padding:1.1rem 1.5rem;font-weight:400}
@@ -204,9 +205,11 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .prod-info{flex:1;min-width:0}
 .prod-name{font-size:1rem;font-weight:500;color:var(--char);margin-bottom:.25rem;line-height:1.4}
 .prod-for{display:flex;align-items:flex-start;gap:.3rem;font-size:1rem;color:var(--gold-d);margin-bottom:.35rem;line-height:1.55;font-weight:500}
+.prod-for>span:first-child{height:1.55em}
 .prod-set{display:inline-block;font-size:.8rem;font-weight:500;color:var(--gold-d);border:1px solid var(--gold-l);border-radius:var(--r);padding:.15rem .6rem;margin-bottom:.45rem;line-height:1.5}
 .prod-desc{font-size:.9rem;color:var(--muted);margin-bottom:.5rem;line-height:1.6}
 .prod-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.82rem;color:var(--gold-d);background:var(--ivory);border-radius:var(--r);padding:.45rem .7rem;margin-bottom:.6rem;line-height:1.6}
+.prod-note>span:first-child,.prod-season>span:first-child{height:1.6em}
 .prod-season{display:flex;align-items:flex-start;gap:.3rem;font-size:.82rem;color:#0e6a92;background:linear-gradient(135deg,#e6f4fb 0%,#f5fbfd 100%);border-left:2px solid #1a8fc4;border-radius:var(--r);padding:.5rem .7rem;margin-bottom:.5rem;line-height:1.6;font-weight:500}
 .prod-links{display:flex;gap:.5rem;flex-wrap:wrap}
 .prod-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.88rem;letter-spacing:.04em;padding:.42rem .85rem;border-radius:var(--r);text-decoration:none;transition:all .2s;border:1px solid var(--border);color:var(--char2)}
@@ -221,8 +224,10 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .consult-bar-sub{font-size:.88rem;color:var(--gold-l);line-height:1.6}
 .consult-bar-btn{flex-shrink:0;display:inline-flex;align-items:center;gap:.35rem;background:var(--gold);color:#fff;text-decoration:none;border-radius:var(--r);padding:.55rem 1.1rem;font-size:.78rem;letter-spacing:.06em;white-space:nowrap;transition:background .2s;-webkit-tap-highlight-color:transparent}
 @media (hover:hover) and (pointer:fine){.consult-bar-btn:hover{background:var(--gold-d)}}
+@media (max-width:480px){.consult-bar{flex-direction:column;align-items:stretch}.consult-bar-btn{justify-content:center}}/* スマホは横並びだと文が細い列になるので、ボタンを文の下へ */
 .ingr-box{background:var(--ivory);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem;margin-top:2rem}
-.ingr-ttl{font-size:.85rem;font-weight:500;color:var(--char2);margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.ingr-ttl{font-size:.85rem;font-weight:500;color:var(--char2);margin-bottom:.8rem;display:flex;align-items:flex-start;gap:.4rem;line-height:1.5}
+.ingr-ttl>span:first-child{height:1.5em}
 .ingr-legend{display:inline-flex;align-items:center;gap:.3rem;font-size:.74rem;color:var(--gold-d);font-weight:400;margin-left:auto}
 .ingr-legend-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0}
 .ingr-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;padding:.2rem .3rem;border-radius:var(--r);transition:background .2s}
@@ -237,6 +242,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ingr-hl{font-weight:500;color:var(--gold-d)}
 .ingr-products{font-size:.74rem;color:var(--gold);font-style:italic}
 .ingr-otc-note{display:flex;align-items:flex-start;gap:.3rem;font-size:.76rem;color:var(--muted);margin-top:.9rem;padding-top:.8rem;border-top:1px solid var(--border);line-height:1.7}
+.ingr-otc-note>span:first-child{height:1.7em}
 
 /* ── 9分類カード（メイン表示）── */
 .ingr-detail-intro{font-size:.78rem;color:var(--muted);line-height:1.75;margin-bottom:.9rem;padding:0 .2rem}
@@ -274,7 +280,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .ftr-name{font-family:var(--serif);font-size:1.1rem;font-weight:300;color:var(--char);letter-spacing:.04em;margin-bottom:.15rem}
 .ftr-salon{font-size:.72rem;letter-spacing:.08em;color:var(--gold);margin-bottom:.7rem}
 .ftr-rsv-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:var(--char);color:var(--gold-l);text-decoration:none;border:1px solid var(--gold);border-radius:var(--r);padding:.95rem 1.8rem;font-size:1rem;font-weight:500;letter-spacing:.06em;transition:all .2s;-webkit-tap-highlight-color:transparent;margin-top:.4rem}
-@media (max-width:480px){.ftr-rsv-btn{width:100%;padding:1rem 1.4rem}}
+@media (max-width:480px){.ftr-rsv-btn{width:100%;padding:1rem}.ftr-profile{padding:1rem;gap:.9rem}}/* 文字の幅を確保して「ご予約・ご相談は／LINEから」で折れるように（アイコン分・2026-10-06） */
 @media (hover:hover) and (pointer:fine){.ftr-rsv-btn:hover{background:var(--gold-d);color:var(--cream)}}
 .ftr-note{font-size:.82rem;color:var(--muted);line-height:1.8;white-space:pre-line}
 /* ── 静的フッター（Amazonアソシエイト審査用：クローラーがJSなしで確認できる商品リンク一覧） ── */
@@ -1567,16 +1573,21 @@ function buildDiagnosisRecord(ans,typeKey){
 }
 
 const {createElement:h,useRef,useEffect,useState}=React;
+// Lucide 0.468 の icons はパスカルケース（"user-check"→"UserCheck"）で中身は図形データ。toSvg() は無いので createElement で描く（2026-10-05）
+// 色は枠の文字色で渡す（SVGの stroke は currentColor のまま。var(--gold) がどのブラウザでも効くように）
 function Icon({name,size=16,color}){
   const ref=useRef(null);
   useEffect(()=>{
     if(ref.current&&window.lucide){
       ref.current.innerHTML="";
-      const s=lucide.icons[name]?.toSvg({width:size,height:size,color:color||"currentColor"});
-      if(s) ref.current.innerHTML=s;
+      const node=lucide.icons[name.replace(/(^|-)(\w)/g,(_,__,c)=>c.toUpperCase())];
+      if(node){
+        const [tag,attrs,children]=node;
+        ref.current.appendChild(lucide.createElement([tag,{...attrs,width:size,height:size},children]));
+      }
     }
-  },[name,size,color]);
-  return h("span",{ref,style:{display:"inline-flex",alignItems:"center"}});
+  },[name,size]);
+  return h("span",{ref,style:{display:"inline-flex",alignItems:"center",color}});
 }
 
 // リンク先がセット販売のとき、商品名の下に中身を出す（単品のつもりで買う人を出さない・2026-10-05）
@@ -2548,7 +2559,7 @@ function App(){
           h("p",{className:"ftr-profile-label"},"カットやカラーの時間こそ、髪のお悩みを解く一番のチャンス。施術しながら、あなたに本当に合うケアを一緒に見つけていきましょう。"),
           h("p",{className:"ftr-name"},"橋元 リョウイチ"),
           h("p",{className:"ftr-salon"},"Freelance Hair Stylist"),
-          h("a",{className:"ftr-rsv-btn",href:RESERVE_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"calendar-check",size:17,color:"var(--gold-l)"}),h("span",null,"ご予約・ご相談はLINEから"))
+          h("a",{className:"ftr-rsv-btn",href:RESERVE_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"calendar-check",size:17,color:"var(--gold-l)"}),h("span",null,...["ご予約・","ご相談は","LINEから"].map(t=>h("span",{key:t,style:{display:"inline-block"}},t))))
         )
       ),
       h("p",{className:"ftr-note"},"Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。\nこのサイトは楽天アフィリエイトプログラムにも参加しており、掲載リンクから商品を購入された場合、紹介料を受け取る場合があります。\n診断結果はあくまで参考情報です。頭皮の症状が続く場合は皮膚科を受診してください。")
