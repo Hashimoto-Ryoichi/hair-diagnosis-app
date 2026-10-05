@@ -69,6 +69,9 @@ for(const tk in M.TYPES) for(const p of M.TYPES[tk].products){
   if(!seen.has(p.name)) seen.set(p.name,{name:p.name,amz:p.amz||null,rak:p.rakUrl||null,
     img:p.img_url||null,desc:p.desc||"",note:p.note||"",types:[]});
   seen.get(p.name).types.push(tk);
+  // 「一緒に使うトリートメント」（p.pair）のリンクも点検する（2026-10-06）
+  if(p.pair&&!seen.has(p.pair.name)) seen.set(p.pair.name,{name:p.pair.name,amz:p.pair.amz||null,rak:p.pair.rakUrl||null,
+    img:null,desc:"",note:"",types:["pair:"+tk]});
 }
 process.stdout.write(JSON.stringify([...seen.values()]));
 """
