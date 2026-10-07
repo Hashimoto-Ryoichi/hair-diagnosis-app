@@ -22,15 +22,8 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <script>document.documentElement.classList.add('js')</script>
-<script type="text/javascript">
-// 本番のアドレスで開いたときだけ計測する（手元の確認用の表示を混ぜない）
-if (/(^|\.)hashimoto-ryoichi\.com$/.test(location.hostname))
-(function(c,l,a,r,i,t,y){
-c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-})(window, document, "clarity", "script", "ypcp765n4v");
-</script>
+<!-- 計測（Clarity・GA4）。中身と本番だけで動かす仕組みは /measure.js -->
+<script src="/measure.js"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -556,8 +549,8 @@ footer a{color:var(--gold-l)}
   window.addEventListener('mouseup', function(){ if (!down) return; down = false; strip.classList.remove('drag'); });
   strip.addEventListener('click', function(e){ if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
 
-  /* 計測：押されたボタンを名前つきでClarityに記録する */
-  function track(name){ try { if (window.clarity) window.clarity('event', name); } catch (e) {} }
+  /* 計測：押されたボタンを名前つきで記録する（送り先は /measure.js＝Clarity と GA4） */
+  function track(name){ if (window.hrTrack) window.hrTrack(name); }
   document.querySelectorAll('a[data-track]').forEach(function(a){
     a.addEventListener('click', function(){ track(a.getAttribute('data-track')); });
   });

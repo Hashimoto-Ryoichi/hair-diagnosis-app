@@ -2,8 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://cloudflareinsights.com; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://static.cloudflareinsights.com https://*.clarity.ms https://c.bing.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://cloudflareinsights.com https://*.clarity.ms https://c.bing.com https://www.googletagmanager.com https://*.google-analytics.com https://*.google.com; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests;">
 <meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- 計測（Clarity・GA4）。中身と本番だけで動かす仕組みは /measure.js -->
+<script src="/measure.js"></script>
 <meta name="msvalidate.01" content="0AF9136DC9330856E05F8378AF812489">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>シャンプー診断｜髪質に合うヘアケアを11問で無料診断｜Hair Identity by Ryoichi Hashimoto</title>
@@ -452,12 +454,11 @@ body.hide-static-ftr .static-ftr{display:none}
 <div id="root"></div>
 <script type="text/babel">
 const ASSOC_ID="hairidentit0b-22";
-// Vercel Analytics カスタムイベント送信。商品カードは App の外で描画するのでモジュール直下に置く。
-// ⚠️ 2026-09-13 時点、本番・旧URLとも window.va が存在せず、この関数は何も送っていない（no-op）。
-//    Vercel Analytics が有効化されていないため。クリック計測が必要なら別途仕組みを決めること。
-//    ページビューは Cloudflare Web Analytics 側で計測する（CSPで beacon を許可済み）。
-function vaEvent(name,data){
-  try{if(typeof window!=="undefined"&&typeof window.va==="function"){window.va("event",{name,...(data||{})});}}catch(e){}
+// 計測：診断の進み具合・押されたボタンを名前つきで送る（送り先は /measure.js の hrTrack＝Clarity と GA4）。
+// 商品カードは App の外で描画するのでモジュール直下に置く。本番のアドレス以外では何も送らない。
+// ページビューは GA4 と Cloudflare Web Analytics の両方で計測する。
+function trackEvent(name,data){
+  try{if(typeof window!=="undefined"&&typeof window.hrTrack==="function"){window.hrTrack(name,data);}}catch(e){}
 }
 const RESERVE_URL="https://lin.ee/tazRvbX";
 
@@ -1624,8 +1625,8 @@ function renderProdCard(p,key,isTopPick){
         p.season&&h("p",{className:"prod-season"},h(Icon,{name:"snowflake",size:11,color:"#1a8fc4"}),h("span",{style:{marginLeft:".3rem"}},p.season)),
         p.note&&h("p",{className:"prod-note"},h(Icon,{name:"info",size:11,color:"var(--gold)"}),h("span",{style:{marginLeft:".3rem"}},p.note)),
         h("div",{className:"prod-links"},
-          p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>vaEvent("shop_click",{store:"amazon",product:p.name,asin:p.amz})},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
-          p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>vaEvent("shop_click",{store:"rakuten",product:p.name})},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
+          p.amz&&h("a",{className:"prod-link amz",href:`https://www.amazon.co.jp/dp/${p.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>trackEvent("shop_click",{store:"amazon",product:p.name,asin:p.amz})},h(Icon,{name:"shopping-cart",size:12,color:"#111"}),h("span",{style:{marginLeft:".3rem"}},"Amazon")),
+          p.rakUrl&&h("a",{className:"prod-link rak",href:p.rakUrl,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>trackEvent("shop_click",{store:"rakuten",product:p.name})},h(Icon,{name:"shopping-bag",size:12,color:"#fff"}),h("span",{style:{marginLeft:".3rem"}},"楽天で見る"))
         ),
         // セットが無い商品に、同じシリーズのトリートメント（コンディショナー）を1行で添える（2026-10-06）
         // p.pair={name,kind,amz,rakUrl}。amz は静的商品一覧にも載せる（check-affiliate の1:1検査の対象）
@@ -1633,8 +1634,8 @@ function renderProdCard(p,key,isTopPick){
           h("p",{className:"prod-pair-head"},`＋一緒に使う${p.pair.kind||"トリートメント"}`),
           h("p",{className:"prod-pair-name"},p.pair.name),
           h("p",{className:"prod-pair-links"},
-            p.pair.amz&&h("a",{className:"prod-pair-link",href:`https://www.amazon.co.jp/dp/${p.pair.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>vaEvent("shop_click",{store:"amazon",product:p.pair.name,asin:p.pair.amz,pair_of:p.name})},"Amazonで見る ›"),
-            p.pair.rakUrl&&h("a",{className:"prod-pair-link",href:p.pair.rakUrl,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>vaEvent("shop_click",{store:"rakuten",product:p.pair.name,pair_of:p.name})},"楽天で見る ›")
+            p.pair.amz&&h("a",{className:"prod-pair-link",href:`https://www.amazon.co.jp/dp/${p.pair.amz}?tag=${ASSOC_ID}`,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>trackEvent("shop_click",{store:"amazon",product:p.pair.name,asin:p.pair.amz,pair_of:p.name})},"Amazonで見る ›"),
+            p.pair.rakUrl&&h("a",{className:"prod-pair-link",href:p.pair.rakUrl,target:"_blank",rel:"nofollow sponsored noopener",onClick:()=>trackEvent("shop_click",{store:"rakuten",product:p.pair.name,pair_of:p.name})},"楽天で見る ›")
           )
         )
       )
@@ -2091,7 +2092,6 @@ function App(){
   // 完走率=diag_complete÷diag_start、離脱箇所=q_reach(q:N)の減り方で把握。
   // 商品到達率=products_view÷diag_complete、購買導線=shop_click÷products_view。
   const maxQReachedRef=useRef(-1);
-  function vaTrack(name,data){return vaEvent(name,data);}
   // 診断実行＋透明化レコード構築＋ログ保存を一括
   function runDiagnosisFull(ans){
     const tk=diagnose(ans);
@@ -2099,7 +2099,7 @@ function App(){
     setTypeKey(tk);
     setDiagRecord(rec);
     saveLog(rec);
-    vaTrack("diag_complete",{type:tk});
+    trackEvent("diag_complete",{type:tk});
     return tk;
   }
   // 進行中タイマー（遷移用 setTimeout）を集約管理。途中で「戻る」「ヘッダーから再開」が押されたらキャンセル
@@ -2135,7 +2135,7 @@ function App(){
   useEffect(()=>{
     if(step==="quiz"&&curQ>maxQReachedRef.current){
       maxQReachedRef.current=curQ;
-      vaTrack("q_reach",{q:curQ+1});
+      trackEvent("q_reach",{q:curQ+1});
     }
   },[step,curQ]);
   // 再開モーダル表示時に「再開する」ボタンへ自動フォーカス（アクセシビリティ）
@@ -2146,7 +2146,7 @@ function App(){
     else{document.body.style.overflow='';}
     return ()=>{document.body.style.overflow='';};
   },[resumeModal]);
-  function startQuiz(){clearAllTimers();setStep("quiz");setCurQ(0);setAnswers({});maxQReachedRef.current=-1;vaTrack("diag_start");}
+  function startQuiz(){clearAllTimers();setStep("quiz");setCurQ(0);setAnswers({});maxQReachedRef.current=-1;trackEvent("diag_start");}
   function selectOpt(k){
     const q=QUESTIONS[curQ];
     const na={...answers,[q.id]:k};
@@ -2259,7 +2259,7 @@ function App(){
     setResumeModal(false);
     setStep("quiz");
     maxQReachedRef.current=-1;
-    vaTrack("diag_start");
+    trackEvent("diag_start");
   }
   function confirmMulti(qid){
     const na={...answers};
@@ -2424,7 +2424,7 @@ function App(){
           if(!top) return null;
           return h("div",{style:{marginTop:"2rem"}},renderProdCard(top,"top_0",true));
         })(),
-        h("button",{className:"btn-primary btn-primary-lg",onClick:()=>{vaTrack("products_view",{type:typeKey});setStep("products");}},h("span",null,"おすすめのシャンプーを見る ↗")),
+        h("button",{className:"btn-primary btn-primary-lg",onClick:()=>{trackEvent("products_view",{type:typeKey});setStep("products");}},h("span",null,"おすすめのシャンプーを見る ↗")),
         h("button",{className:"btn-ghost",onClick:retry},"もう一度診断する")
       ),
       step==="products"&&td&&h("div",{className:"fade"},
@@ -2528,7 +2528,7 @@ function App(){
             h("p",{className:"consult-bar-ttl"},"どれを選べばいいか迷ったら"),
             h("p",{className:"consult-bar-sub"},"カットやカラーをしながら、あなたの髪を直接見てご提案します。")
           ),
-          h("a",{className:"consult-bar-btn",href:RESERVE_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"サロンで相談する"))
+          h("a",{className:"consult-bar-btn",href:RESERVE_URL,target:"_blank",rel:"noopener noreferrer",onClick:()=>trackEvent("shampoo_line_bar",{type:typeKey})},h(Icon,{name:"message-circle",size:13,color:"#fff"}),h("span",{style:{marginLeft:".35rem"}},"サロンで相談する"))
         ),
         h(SurfactantChart,{typeKey,answers}),
         // ── トステア解説（結果画面から移動）──
@@ -2574,10 +2574,11 @@ function App(){
           h("p",{className:"ftr-profile-label"},"カットやカラーの時間こそ、髪のお悩みを解く一番のチャンス。施術しながら、あなたに本当に合うケアを一緒に見つけていきましょう。"),
           h("p",{className:"ftr-name"},"橋元 リョウイチ"),
           h("p",{className:"ftr-salon"},"Freelance Hair Stylist"),
-          h("a",{className:"ftr-rsv-btn",href:RESERVE_URL,target:"_blank",rel:"noopener noreferrer"},h(Icon,{name:"calendar-check",size:17,color:"var(--gold-l)"}),h("span",null,...["ご予約・","ご相談は","LINEから"].map(t=>h("span",{key:t,style:{display:"inline-block"}},t))))
+          h("a",{className:"ftr-rsv-btn",href:RESERVE_URL,target:"_blank",rel:"noopener noreferrer",onClick:()=>trackEvent("shampoo_line_footer")},h(Icon,{name:"calendar-check",size:17,color:"var(--gold-l)"}),h("span",null,...["ご予約・","ご相談は","LINEから"].map(t=>h("span",{key:t,style:{display:"inline-block"}},t))))
         )
       ),
-      h("p",{className:"ftr-note"},"Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。\nこのサイトは楽天アフィリエイトプログラムにも参加しており、掲載リンクから商品を購入された場合、紹介料を受け取る場合があります。\n診断結果はあくまで参考情報です。頭皮の症状が続く場合は皮膚科を受診してください。")
+      h("p",{className:"ftr-note"},"Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。\nこのサイトは楽天アフィリエイトプログラムにも参加しており、掲載リンクから商品を購入された場合、紹介料を受け取る場合があります。\n診断結果はあくまで参考情報です。頭皮の症状が続く場合は皮膚科を受診してください。"),
+      h("p",{className:"ftr-note"},h("a",{href:"/privacy/",style:{color:"inherit"}},"プライバシーポリシー"))
     )
   );
 }
