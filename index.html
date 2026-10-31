@@ -92,9 +92,22 @@ section.alt{background:var(--beige)}
 .mark{color:var(--gold-d);font-weight:400;background:linear-gradient(transparent 68%,rgba(217,195,160,.45) 68%)}
 p+p{margin-top:1.2em}
 
-.worry{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.worry div{background:var(--card);border-top:2px solid var(--gold);padding:26px 22px 24px;font-size:14.5px;line-height:1.9;color:var(--brown)}
-.worry b{display:block;font-family:var(--en);font-weight:300;font-size:34px;color:var(--gold);line-height:1;margin-bottom:12px}
+.sl{margin:-12px 0 26px;font-size:14px;line-height:2}
+/* こんな髪の方へ：いまの悩み→目指せる仕上がり */
+.fh{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.fh>div{background:var(--card);border:1px solid var(--line)}
+.fh img{aspect-ratio:3/4;object-fit:cover;width:100%}
+.fh .t{padding:18px 20px 22px}
+.fh .w{font-size:13px;color:var(--muted);line-height:1.8}
+.fh .a{font-family:var(--serif);font-weight:600;color:var(--brown);font-size:16px;line-height:1.7;margin-top:8px;letter-spacing:.03em}
+.fh .a::before{content:"→";color:var(--gold);margin-right:8px}
+.fh .a small{display:block;font-family:var(--sans);font-weight:300;font-size:11.5px;color:var(--muted);letter-spacing:0}
+/* 担当：3つのお約束 */
+.pr3{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:56px}
+.pr3 li{background:var(--card);border-top:2px solid var(--gold);padding:24px 22px 22px}
+.pr3 b{display:block;font-family:var(--en);font-weight:300;font-size:30px;color:var(--gold);line-height:1;margin-bottom:12px}
+.pr3 h3{font-family:var(--serif);font-weight:600;color:var(--brown);font-size:17px;line-height:1.6;letter-spacing:.04em;margin-bottom:8px}
+.pr3 p{font-size:13.5px;line-height:1.95}
 
 .ph-scale{margin:34px 0 10px}
 .ph-scale .bar{height:12px;border-radius:6px;background:linear-gradient(90deg,#F1E6D3,#DCC3A0 30%,#C9A77A 45%,#A7896A 65%,#6E5A48);position:relative}
@@ -141,8 +154,11 @@ p+p{margin-top:1.2em}
 .strip .im{overflow:hidden}
 .strip img{aspect-ratio:3/4;object-fit:cover;width:100%;transition:transform .8s var(--ease);-webkit-user-drag:none;user-select:none}
 .strip figure:hover img{transform:scale(1.04)}
+.sf{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.sf button{font:inherit;font-size:13px;letter-spacing:.06em;color:var(--gold-d);background:transparent;border:1px solid var(--gold-l);border-radius:999px;padding:5px 15px;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.sf button.on{background:var(--gold);border-color:var(--gold);color:#fff}
 .strip figcaption{font-size:12.5px;margin-top:10px;color:var(--brown);line-height:1.6}
-.strip figcaption span{display:block;font-family:var(--en);font-size:11px;color:var(--gold);letter-spacing:.16em}
+.strip figcaption span:first-child{display:block;font-family:var(--en);font-size:11px;color:var(--gold);letter-spacing:.16em}
 .swbar{display:flex;align-items:center;gap:16px;margin-top:6px}
 .swbar .prog{flex:1;height:1px;background:var(--line);position:relative}
 .swbar .prog i{position:absolute;left:0;top:-1px;height:3px;width:20%;background:var(--gold)}
@@ -170,12 +186,8 @@ p+p{margin-top:1.2em}
 .media .y{font-family:var(--en);font-size:19px;color:var(--gold-d);line-height:1.3}
 .media small{display:block;font-size:12px;color:var(--muted)}
 .media li>span:last-child{word-break:auto-phrase}
-/* 担当：はじまり（ヒストリー） */
-.origin{margin:24px 0 28px;padding:24px 0 6px;border-top:1px solid var(--gold)}
-.origin .eyebrow{font-size:12px}
-.origin h3{font-family:var(--serif);font-weight:600;color:var(--brown);font-size:19px;line-height:1.75;letter-spacing:.06em;margin:10px 0 14px}
-.origin p{font-size:14.5px;line-height:2.05;color:var(--brown);word-break:auto-phrase}
-.origin .sig{font-family:var(--serif);font-weight:500;color:var(--gold-d);letter-spacing:.12em;margin-top:20px}
+/* 担当：はじまり（2行） */
+.origin2{margin-top:18px;padding-left:16px;border-left:2px solid var(--gold);font-family:var(--serif);font-weight:500;color:var(--brown);font-size:15px;line-height:1.95;word-break:auto-phrase}
 .me-cta{margin-top:30px}
 .ctan{margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.9}
 
@@ -256,7 +268,10 @@ footer a{color:var(--gold-l)}
   .mband ul{gap:8px}
   .mband li a,.mband li:first-child a{border:1px solid rgba(217,195,160,.55);border-radius:999px;padding:4px 13px;font-size:12.5px;white-space:nowrap}
   section{padding:70px 0}
-  .worry,.menus,.plist,.info{grid-template-columns:1fr}
+  .fh,.pr3,.menus,.plist,.info{grid-template-columns:1fr}
+  .fh>div{display:grid;grid-template-columns:38% 1fr;align-items:center}
+  .fh .t{padding:14px 16px}
+  .fh .a{font-size:15px}
   .strip figure{flex-basis:62%}
   .swbar button{display:none}
   .me{grid-template-columns:1fr;gap:34px}
@@ -282,9 +297,9 @@ footer a{color:var(--gold-l)}
   <div class="in">
     <div class="eyebrow">Index</div>
     <ul>
+      <li><a href="#style" data-nav="style">なりたい髪型から探す<span>Style</span></a></li>
       <li><a href="#stylist" data-nav="stylist">担当について<span>Stylist</span></a></li>
       <li><a href="#menu" data-nav="menu">メニュー・料金<span>Menu</span></a></li>
-      <li><a href="#style" data-nav="style">スタイル<span>Style</span></a></li>
       <li><a href="#faq" data-nav="faq">よくいただくご質問<span>Q&amp;A</span></a></li>
       <li><a href="#info" data-nav="info">基本情報・アクセス<span>Information</span></a></li>
     </ul>
@@ -302,13 +317,13 @@ footer a{color:var(--gold-l)}
         <span class="who fu">橋元リョウイチ｜原宿の美容師</span>
         <span class="tag rv" id="h1">きれいには、<br>理由がある。</span>
       </h1>
-      <p class="lead fu">うねり・広がり・まとまらない髪を、<br>髪質のせいにせず、構造から整えます。</p>
+      <p class="lead fu">その髪型、あなたの髪でもできるか。<br>まずは写真で聞いてください。</p>
       <p class="name fu">GO TODAY SHAiRE SALON 原宿本店／美容師歴20年以上</p>
       <div class="btns fu">
         <a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_hero">髪の写真を1枚、LINEで送る</a>
-        <a class="btn ghost" href="#menu" data-track="hero_menu">メニューを見る</a>
+        <a class="btn ghost" href="#style" data-track="hero_style">なりたい髪型から探す</a>
       </div>
-      <p class="ctan fu">できるかどうか、正直にお答えします。ご予約もLINEから承っています。</p>
+      <p class="ctan fu">なりたい髪型の写真もあれば、一緒にどうぞ。できるかどうか、正直にお答えします。ご予約もLINEから承っています。</p>
     </div>
   </div>
   <div class="ph">
@@ -338,54 +353,79 @@ footer a{color:var(--gold-l)}
   </div>
 </nav>
 
-<section>
+<section id="style">
   <div class="wrap">
-    <div class="sh" data-sv="worry"><div class="eyebrow">01 Worry</div><h2 class="rv">こんなお悩み、ありませんか</h2></div>
-    <div class="worry">
-      <div class="fu"><b>01</b>雨の日や湿気で、髪が広がる</div>
-      <div class="fu"><b>02</b>縮毛矯正をしても、すぐうねってくる</div>
-      <div class="fu"><b>03</b>カラーをくり返して、手触りがごわつく</div>
+    <div class="sh" data-sv="style"><div class="eyebrow">01 Style</div><h2 class="rv">なりたい髪型から、探す。</h2></div>
+    <p class="sl fu">ホットペッパービューティーに載せてきたスタイル509点のうち、271点がショート。30代〜50代の方に向けたショート・ボブが中心です。</p>
+    <div class="sf fu" role="group" aria-label="髪型でしぼりこむ">
+      <button type="button" class="on" data-f="all" aria-pressed="true">すべて</button>
+      <button type="button" data-f="short" aria-pressed="false">ショート</button>
+      <button type="button" data-f="bob" aria-pressed="false">ボブ</button>
+      <button type="button" data-f="kuse" aria-pressed="false">くせ毛を活かす</button>
+      <button type="button" data-f="straight" aria-pressed="false">縮毛矯正</button>
+    </div>
+    <div class="fu">
+      <div class="strip" id="strip" data-track="style_swipe">
+        <figure data-c="short"><div class="im"><img src="/img/top/style-045.jpg" width="480" height="640" alt="若く見えるショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>若く見えるショート</figcaption></figure>
+        <figure data-c="short kuse"><div class="im"><img src="/img/top/style-002.jpg" width="480" height="640" alt="縮毛矯正なしでまとまる、くせ毛ショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>CURL</span>縮毛矯正なしでまとまる、<span class="nw">くせ毛ショート</span></figcaption></figure>
+        <figure data-c="bob straight"><div class="im"><img src="/img/top/style-239.jpg" width="480" height="640" alt="縮毛矯正で朝が楽な質感ボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>STRAIGHT</span>縮毛矯正で<span class="nw">朝が楽な質感ボブ</span></figcaption></figure>
+        <figure data-c="short"><div class="im"><img src="/img/top/style-010.jpg" width="480" height="640" alt="襟足すっきりショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>襟足すっきりショート</figcaption></figure>
+        <figure data-c="bob"><div class="im"><img src="/img/top/style-033.jpg" width="480" height="640" alt="シースルーバングの外ハネボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>BOB</span>シースルーバングの外ハネボブ</figcaption></figure>
+        <figure data-c="short kuse"><div class="im"><img src="/img/top/style-470.jpg" width="480" height="640" alt="くせ毛を活かす、丸みショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>CURL</span>くせ毛を活かす、<span class="nw">丸みショート</span></figcaption></figure>
+        <figure data-c="straight"><div class="im"><img src="/img/top/style-295.jpg" width="480" height="640" alt="顔まわりの縮毛矯正で、小顔に見えるミディアムのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>STRAIGHT</span>顔まわりの縮毛矯正で、<span class="nw">小顔に見えるミディアム</span></figcaption></figure>
+        <figure data-c="bob"><div class="im"><img src="/img/top/style-214.jpg" width="480" height="640" alt="セミウェットのフェミニンボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>BOB</span>セミウェットのフェミニンボブ</figcaption></figure>
+        <figure data-c="short"><div class="im"><img src="/img/top/style-056.jpg" width="480" height="640" alt="透明感のあるショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>COLOR</span>透明感のあるショート</figcaption></figure>
+        <figure data-c="bob"><div class="im"><img src="/img/top/style-034.jpg" width="480" height="640" alt="ラフカールの質感ボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>BOB</span>ラフカールの質感ボブ</figcaption></figure>
+        <figure data-c="bob straight"><div class="im"><img src="/img/top/style-245.jpg" width="480" height="640" alt="縮毛矯正で朝が楽な、前髪ありボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>STRAIGHT</span>縮毛矯正で朝が楽な、<span class="nw">前髪ありボブ</span></figcaption></figure>
+        <figure data-c="short"><div class="im"><img src="/img/top/style-126.jpg" width="480" height="640" alt="前髪長めの大人ショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>前髪長めの大人ショート</figcaption></figure>
+        <figure data-c="bob"><div class="im"><img src="/img/top/style-160.jpg" width="480" height="640" alt="丸みのあるミニマムボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>BOB</span>丸みのあるミニマムボブ</figcaption></figure>
+        <figure data-c="short"><div class="im"><img src="/img/top/style-130.jpg" width="480" height="640" alt="ツヤの出るショートボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>ツヤの出るショートボブ</figcaption></figure>
+        <figure data-c="straight"><div class="im"><img src="/img/top/style-338.jpg" width="480" height="640" alt="縮毛矯正×ナノピコの艶ストレートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>STRAIGHT</span>縮毛矯正×ナノピコの<span class="nw">艶ストレート</span></figcaption></figure>
+      </div>
+      <div class="swbar">
+        <span class="hint">SWIPE</span>
+        <div class="prog"><i id="prog"></i></div>
+        <button type="button" id="prev" aria-label="前へ">←</button>
+        <button type="button" id="next" aria-label="次へ">→</button>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="alt">
+<section class="alt" id="forhair">
   <div class="wrap">
-    <div class="sh" data-sv="reason"><div class="eyebrow">02 Reason</div><h2 class="rv">まとまらないのには、<br>理由があります</h2></div>
-    <p class="fu">うねりや広がりは、髪質のせいだけでなく、構造で決まります。髪は弱酸性（pH4.5〜5.5）の状態でいちばん安定しますが、カラーやパーマ、縮毛矯正のあとの髪は、そこから離れたままになっていることが少なくありません。</p>
-    <div class="ph-scale fu" aria-hidden="true">
-      <div class="bar"><div class="band"></div><div class="mk">カラー・矯正のあと</div></div>
-      <div class="lbl"><span>酸性</span><b>pH4.5〜5.5 ＝ いちばん安定</b><span>アルカリ性</span></div>
-      <div class="note">※イメージ図です</div>
+    <div class="sh" data-sv="worry"><div class="eyebrow">02 For You</div><h2 class="rv">こんな髪の方へ</h2></div>
+    <p class="sl fu">いまの髪のお悩みと、目指せる仕上がりの例です。</p>
+    <div class="fh">
+      <div class="fu"><img src="/img/top/style-002.jpg" width="480" height="640" alt="縮毛矯正なしでまとまる、くせ毛ショートのスタイル写真" loading="lazy"><div class="t"><p class="w">湿気で広がる・くせが強い</p><p class="a">縮毛矯正なしでも、<span class="nw">まとまるショートに</span></p></div></div>
+      <div class="fu"><img src="/img/top/style-239.jpg" width="480" height="640" alt="縮毛矯正で朝が楽な質感ボブのスタイル写真" loading="lazy"><div class="t"><p class="w">縮毛矯正が、<span class="nw">ピンと不自然になる</span></p><p class="a">丸みの残る、<span class="nw">朝が楽なボブに</span></p></div></div>
+      <div class="fu"><img src="/img/top/style-338.jpg" width="480" height="640" alt="縮毛矯正とナノピコトリートメントの艶ストレートのスタイル写真" loading="lazy"><div class="t"><p class="w">カラーをくり返して、<span class="nw">手触りがごわつく</span></p><p class="a"><span class="nw">ツヤの出る</span><span class="nw">ストレートに</span><small>縮毛矯正×<span class="nw">ナノピコトリートメント</span></small></p></div></div>
     </div>
-    <p class="fu">だから私は、<span class="mark">成分・pH・薬剤の設計・髪の内部構造</span>から考えます。まず髪を安定する状態に戻してから、必要なものを重ねる。そうすると「なぜあなたの髪はそうなるのか」「なぜこの方法なら変わるのか」を、言葉で説明できます。説明できるということは、ご自宅で再現できるということです。</p>
+    <p class="note fu">※写真は仕上がりの例です。髪質・くせ・これまでの施術で変わるため、できるかどうかは、いまの髪の写真を見てお答えします。</p>
   </div>
 </section>
 
 <section id="stylist">
   <div class="wrap">
-    <div class="sh" data-sv="stylist"><div class="eyebrow">03 Stylist</div><h2 class="rv">担当します</h2></div>
+    <div class="sh" data-sv="stylist"><div class="eyebrow">03 Stylist</div><h2 class="rv">担当するのは、<br>こんな美容師です</h2></div>
+    <ol class="pr3">
+      <li class="fu"><b>01</b><h3>できるかどうか、先に正直に</h3><p>写真の髪型と同じにならないときは、<span class="nw">その理由と、</span><span class="nw">近づける方法を</span><span class="nw">先にお伝えします。</span></p></li>
+      <li class="fu"><b>02</b><h3>仕上がりの理由を、お話しします</h3><p>なぜこの長さで、なぜこの薬剤なのか。<span class="nw">理由と一緒に、</span><span class="nw">ご自宅でのお手入れの仕方も</span><span class="nw">お伝えします。</span></p></li>
+      <li class="fu"><b>03</b><h3>ご来店前に、準備しておきます</h3><p>カウンセリングシートで髪の状態を伺い、<span class="nw">合う薬剤を</span>用意してお待ちします。当日の時間を、仕上がりの相談に使えます。</p></li>
+    </ol>
     <div class="me">
       <div class="pic fu"><img src="/ryoichi-hashimoto.jpg" width="900" height="1190" alt="美容師 橋元リョウイチ（東京・原宿）" loading="lazy"></div>
       <div class="fu">
         <div class="nm">橋元リョウイチ</div>
         <div class="en">はしもと りょういち ／ Ryoichi Hashimoto</div>
-        <div class="origin">
-          <div class="eyebrow">Origin ／ はじまり</div>
-          <h3>はじまりは、<br>答えられなかった一つの質問。</h3>
-          <p>アシスタントになったばかりの頃、お客様に髪のことを尋ねられ、何も答えられなかった。<span class="nw">その日から</span>、技術と同じだけ、理由を学びはじめた。</p>
-          <p>東京に出るために、友人の遠洋漁業の船で<span class="nw">1か月</span>働いた。2005年、原宿の美容室へ。それから21年、施術のひとつひとつに理由を持ち、言葉にしてお客様へ手渡してきた。</p>
-          <p>2026年、独立。長く通ってくださる方の一言で、原宿に席を構えた。</p>
-          <p class="sig">きれいには、理由がある。</p>
-        </div>
+        <p class="origin2">新人の頃、<span class="nw">お客様の質問に</span><span class="nw">答えられなかったことが、</span><span class="nw">はじまりです。</span>それから20年以上、<span class="nw">仕上がりの理由を</span><span class="nw">言葉にして</span><span class="nw">お渡ししています。</span></p>
         <div class="txt">
           <p>東京・原宿のフリーランス美容師です。GO TODAY SHAiRE SALON 原宿本店で、カウンセリングから仕上げまで一人で担当しています。</p>
-          <p>「なぜそうなるのか」を必ずお伝えします。ご来店前にカウンセリングシートで髪の状態を伺い、その方に合う薬剤を準備してからお待ちしています。当日にお話を聞いてから決めるのではなく、先に設計しておく進め方です。</p>
-          <p>その考え方を形にしたのが、成分や薬剤の仕組みを解説している<a href="https://note.com/hassihair" class="mark">noteの記事</a>と、11問の<a href="/shampoo/" class="mark">シャンプー診断「Hair Identity」</a>です。サロンの中だけで完結させず、外に出しています。</p>
+          <p>成分や薬剤の仕組みを解説している<a href="https://note.com/hassihair" class="mark">noteの記事</a>と、11問の<a href="/shampoo/" class="mark">シャンプー診断「Hair Identity」</a>も作っています。ご来店の前に、ご自分の髪を知る手がかりにしてください。</p>
         </div>
         <ul class="facts">
           <li>美容師歴20年以上／東京・原宿</li>
-          <li>GO TODAY SHAiRE SALON 原宿本店（JR原宿駅 竹下口 徒歩1分）</li>
+          <li>GO TODAY SHAiRE SALON 原宿本店<span class="nw">（JR原宿駅 竹下口 徒歩1分）</span></li>
           <li>シャンプー診断「Hair Identity」開発</li>
         </ul>
         <div class="media">
@@ -404,9 +444,22 @@ footer a{color:var(--gold-l)}
   </div>
 </section>
 
-<section id="menu" class="alt">
+<section class="alt" id="reason">
   <div class="wrap">
-    <div class="sh" data-sv="menu"><div class="eyebrow">04 Menu</div><h2 class="rv">メニュー</h2></div>
+    <div class="sh" data-sv="reason"><div class="eyebrow">04 Reason</div><h2 class="rv">仕上がりが、<br>家でも続く理由</h2></div>
+    <p class="fu">サロンでは整うのに、家ではまとまらない。うねりや広がりは、髪質のせいだけでなく、構造で決まります。髪は弱酸性（pH4.5〜5.5）の状態でいちばん安定しますが、カラーやパーマ、縮毛矯正のあとの髪は、そこから離れたままになっていることが少なくありません。</p>
+    <div class="ph-scale fu" aria-hidden="true">
+      <div class="bar"><div class="band"></div><div class="mk">カラー・矯正のあと</div></div>
+      <div class="lbl"><span>酸性</span><b>pH4.5〜5.5 ＝ いちばん安定</b><span>アルカリ性</span></div>
+      <div class="note">※イメージ図です</div>
+    </div>
+    <p class="fu">そこで施術では、<span class="mark">成分・pH・薬剤の設計・髪の内部構造</span>から考えて、まず髪を安定する状態に戻してから、必要なものを重ねます。「なぜあなたの髪はそうなるのか」「なぜこの方法なら変わるのか」をお伝えするので、ご自宅でも再現しやすくなります。</p>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="wrap">
+    <div class="sh" data-sv="menu"><div class="eyebrow">05 Menu</div><h2 class="rv">メニュー</h2></div>
     <div class="pick fu">RECOMMEND ／ おすすめ</div>
     <div class="menus">
       <a class="mc fu" href="/nanopico/" data-track="menu_nanopico">
@@ -463,36 +516,11 @@ footer a{color:var(--gold-l)}
   </div>
 </section>
 
-<section id="style">
-  <div class="wrap">
-    <div class="sh" data-sv="style"><div class="eyebrow">05 Style</div><h2 class="rv">スタイル</h2></div>
-    <div class="fu">
-      <div class="strip" id="strip" data-track="style_swipe">
-        <figure><div class="im"><img src="/img/top/style-045.jpg" width="480" height="640" alt="襟足すっきりショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>襟足すっきりショート</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-010.jpg" width="480" height="640" alt="大人のハンサムショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>大人のハンサムショート</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-056.jpg" width="480" height="640" alt="透明感のあるショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>COLOR</span>透明感のあるショート</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-033.jpg" width="480" height="640" alt="やわらかい外ハネボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>BOB</span>やわらかい外ハネボブ</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-126.jpg" width="480" height="640" alt="前髪長めのショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>前髪長めのショート</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-130.jpg" width="480" height="640" alt="ツヤの出るショートボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>ツヤの出るショートボブ</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-214.jpg" width="480" height="640" alt="丸みのある大人ボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>BOB</span>丸みのある大人ボブ</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-470.jpg" width="480" height="640" alt="くせを活かすショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>くせを活かすショート</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-239.jpg" width="480" height="640" alt="縮毛矯正で朝が楽なボブのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>STRAIGHT</span>縮毛矯正で朝が楽なボブ</figcaption></figure>
-        <figure><div class="im"><img src="/img/top/style-338.jpg" width="480" height="640" alt="縮毛矯正とナノピコトリートメントのストレートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>STRAIGHT</span>縮毛矯正×ナノピコ</figcaption></figure>
-      </div>
-      <div class="swbar">
-        <span class="hint">SWIPE</span>
-        <div class="prog"><i id="prog"></i></div>
-        <button type="button" id="prev" aria-label="前へ">←</button>
-        <button type="button" id="next" aria-label="次へ">→</button>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section id="faq" class="alt">
   <div class="wrap">
     <div class="sh" data-sv="faq"><div class="eyebrow">06 Q&amp;A</div><h2 class="rv">よくいただくご質問</h2></div>
     <ul class="faq">
+      <li class="fu"><div class="q">写真の髪型と、同じにできますか</div><div class="a">髪質やくせ、骨格によって、同じにならないこともあります。そのときは、近づける方法と、写真と変わる部分を先にお伝えします。なりたい髪型の写真といまの髪の写真をLINEで送っていただければ、ご来店前にお答えできます。</div></li>
       <li class="fu"><div class="q">原宿で、うねりや広がりを相談できる美容師を探しています</div><div class="a">原宿でフリーランス美容師として施術しています。うねり・広がり・まとまらないというご相談を多くいただきます。まず原因が乾燥なのか、くせなのか、過去の施術の履歴なのかを分けてから、方法を決めます。</div></li>
       <li class="fu"><div class="q">縮毛矯正は髪が傷みますか</div><div class="a">ケースによります。薬剤の強さと放置時間、そして今の髪の状態の組み合わせで結果が変わるので、「縮毛矯正だから傷む」とは言い切れません。強くかけすぎない設計にすることと、履歴を把握しておくことが大事です。</div></li>
       <li class="fu"><div class="q">自分に合うシャンプーが分かりません</div><div class="a">無料のシャンプー診断「Hair Identity」を作っています。11問に答えると、髪質・頭皮・年齢による変化から11タイプに分類し、合う洗浄成分の方向性をご提案します。サロンに来ていただかなくても使えます。</div></li>
@@ -575,7 +603,7 @@ footer a{color:var(--gold-l)}
   });
 
   /* 同じ並びのカードは少しずつずらして浮かべる */
-  document.querySelectorAll('.worry,.menus,.faq,.plist').forEach(function(g){
+  document.querySelectorAll('.fh,.pr3,.menus,.faq,.plist').forEach(function(g){
     Array.prototype.forEach.call(g.querySelectorAll('.fu'), function(el, i){ el.style.transitionDelay = (i * 0.12) + 's'; });
   });
 
@@ -606,6 +634,18 @@ footer a{color:var(--gold-l)}
   function step(d){ var f = strip.querySelector('figure'); strip.scrollBy({ left: d * (f.offsetWidth + 14), behavior: reduce ? 'auto' : 'smooth' }); }
   document.getElementById('prev').addEventListener('click', function(){ step(-1); });
   document.getElementById('next').addEventListener('click', function(){ step(1); });
+
+  /* スタイル写真の絞り込み（ショート・ボブ・くせ毛・縮毛矯正）。押された絞り込みは style_filter_○○ で記録 */
+  var figs = strip.querySelectorAll('figure'), fbs = document.querySelectorAll('.sf button');
+  fbs.forEach(function(b){
+    b.addEventListener('click', function(){
+      var f = b.getAttribute('data-f');
+      fbs.forEach(function(x){ var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+      figs.forEach(function(fg){ fg.hidden = f !== 'all' && (' ' + fg.getAttribute('data-c') + ' ').indexOf(' ' + f + ' ') < 0; });
+      strip.scrollLeft = 0; upd();
+      track('style_filter_' + f);
+    });
+  });
   var down = false, sx = 0, sl = 0, moved = false;
   strip.addEventListener('mousedown', function(e){ down = true; moved = false; sx = e.pageX; sl = strip.scrollLeft; strip.classList.add('drag'); });
   window.addEventListener('mousemove', function(e){ if (!down) return; var dx = e.pageX - sx; if (Math.abs(dx) > 4) moved = true; strip.scrollLeft = sl - dx; });
@@ -705,6 +745,11 @@ footer a{color:var(--gold-l)}
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "写真の髪型と、同じにできますか",
+      "acceptedAnswer": { "@type": "Answer", "text": "髪質やくせ、骨格によって、同じにならないこともあります。その場合は、近づける方法と、写真と変わる部分を先に伝えます。なりたい髪型の写真と今の髪の写真をLINEで送れば、来店前に答えてもらえます。" }
+    },
     {
       "@type": "Question",
       "name": "原宿で、うねりや広がりを相談できる美容師を探しています",
