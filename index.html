@@ -152,6 +152,7 @@ p+p{margin-top:1.2em}
 
 /* 担当 */
 .me{display:grid;grid-template-columns:250px 1fr;gap:46px;align-items:start}
+.me>*{min-width:0}
 .me .pic{position:relative}
 .me .pic::before{content:"";position:absolute;left:16px;top:16px;right:-16px;bottom:-16px;background:var(--sand)}
 .me .pic img{position:relative}
@@ -168,6 +169,37 @@ p+p{margin-top:1.2em}
 .media li:last-child{border-bottom:none}
 .media .y{font-family:var(--en);font-size:19px;color:var(--gold-d);line-height:1.3}
 .media small{display:block;font-size:12px;color:var(--muted)}
+.media li>span:last-child{word-break:auto-phrase}
+/* 担当：はじまり（ヒストリー） */
+.origin{margin:24px 0 28px;padding:24px 0 6px;border-top:1px solid var(--gold)}
+.origin .eyebrow{font-size:12px}
+.origin h3{font-family:var(--serif);font-weight:600;color:var(--brown);font-size:19px;line-height:1.75;letter-spacing:.06em;margin:10px 0 14px}
+.origin p{font-size:14.5px;line-height:2.05;color:var(--brown);word-break:auto-phrase}
+.origin .sig{font-family:var(--serif);font-weight:500;color:var(--gold-d);letter-spacing:.12em;margin-top:20px}
+.me-cta{margin-top:30px}
+.ctan{margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.9}
+
+/* ページ内メニュー（右上のボタン→全画面の目次） */
+.navbtn{position:fixed;top:14px;right:14px;z-index:61;width:52px;height:52px;border:1px solid var(--line);border-radius:50%;background:rgba(247,242,235,.92);backdrop-filter:blur(6px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;color:var(--gold-d)}
+.navbtn .bars{position:relative;width:20px;height:9px}
+.navbtn .bars i{position:absolute;left:0;width:100%;height:1px;background:var(--gold-d);transition:transform .3s var(--ease),top .3s var(--ease),opacity .2s}
+.navbtn .bars i:nth-child(1){top:0}
+.navbtn .bars i:nth-child(2){top:4px}
+.navbtn .bars i:nth-child(3){top:8px}
+.navbtn .lbl{font-family:var(--en);font-size:9.5px;letter-spacing:.22em;line-height:1;padding-left:.22em}
+.navbtn[aria-expanded="true"] .bars i:nth-child(1){top:4px;transform:rotate(45deg)}
+.navbtn[aria-expanded="true"] .bars i:nth-child(2){opacity:0}
+.navbtn[aria-expanded="true"] .bars i:nth-child(3){top:4px;transform:rotate(-45deg)}
+.navp{position:fixed;inset:0;z-index:60;background:var(--base);overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s}
+.navp.open{opacity:1;visibility:visible;transition:opacity .35s var(--ease),visibility 0s}
+.navp .in{max-width:520px;margin:0 auto;padding:92px 28px 60px}
+.navp ul{list-style:none;margin-top:14px;border-top:1px solid var(--gold)}
+.navp li a{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:18px 4px;border-bottom:1px solid var(--line);font-family:var(--serif);font-weight:600;color:var(--brown);font-size:17px;letter-spacing:.08em;transition:color .2s}
+.navp li a:hover{color:var(--gold-d)}
+.navp li a span{font-family:var(--en);font-weight:400;font-size:12px;letter-spacing:.24em;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+.navp .btn{margin-top:30px;width:100%;justify-content:center}
+.navp .sig{margin-top:36px;text-align:center;font-family:var(--serif);color:var(--gold-d);letter-spacing:.12em;font-size:15px}
+.navp .shop{margin-top:4px;text-align:center;font-size:12px;color:var(--muted)}
 
 /* よくある質問 */
 .faq li{list-style:none;padding:22px 0;border-bottom:1px solid var(--line)}
@@ -229,6 +261,7 @@ footer a{color:var(--gold-l)}
   .swbar button{display:none}
   .me{grid-template-columns:1fr;gap:34px}
   .me .pic{max-width:230px}
+  .me-cta .btn{width:100%;justify-content:center}
   .meta li{flex-direction:column;gap:2px}
   .meta .k{flex:none}
   .sticky .t{display:none}
@@ -238,10 +271,28 @@ footer a{color:var(--gold-l)}
   .js .rv .ch,.js .fu{opacity:1!important;left:0!important;transform:none!important;transition:none!important}
   .slides img{transition:none!important;transform:none!important}
   .scroll i::after{animation:none}
+  .navp,.navbtn .bars i{transition:none!important}
 }
 </style>
 </head>
 <body>
+
+<button class="navbtn" id="navbtn" type="button" aria-controls="nav" aria-expanded="false" aria-label="メニューを開く"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="lbl" aria-hidden="true">MENU</span></button>
+<nav class="navp" id="nav" aria-label="ページ内のメニュー">
+  <div class="in">
+    <div class="eyebrow">Index</div>
+    <ul>
+      <li><a href="#stylist" data-nav="stylist">担当について<span>Stylist</span></a></li>
+      <li><a href="#menu" data-nav="menu">メニュー・料金<span>Menu</span></a></li>
+      <li><a href="#style" data-nav="style">スタイル<span>Style</span></a></li>
+      <li><a href="#faq" data-nav="faq">よくいただくご質問<span>Q&amp;A</span></a></li>
+      <li><a href="#info" data-nav="info">基本情報・アクセス<span>Information</span></a></li>
+    </ul>
+    <a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_nav">髪の写真を1枚、LINEで送る</a>
+    <p class="sig">きれいには、理由がある。</p>
+    <p class="shop">橋元リョウイチ ／ GO TODAY SHAiRE SALON 原宿本店</p>
+  </div>
+</nav>
 
 <header class="hero">
   <div class="copy">
@@ -254,9 +305,10 @@ footer a{color:var(--gold-l)}
       <p class="lead fu">うねり・広がり・まとまらない髪を、<br>髪質のせいにせず、構造から整えます。</p>
       <p class="name fu">GO TODAY SHAiRE SALON 原宿本店／美容師歴20年以上</p>
       <div class="btns fu">
-        <a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_hero">LINEで相談・予約する<span class="ln">LINE</span></a>
+        <a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_hero">髪の写真を1枚、LINEで送る</a>
         <a class="btn ghost" href="#menu" data-track="hero_menu">メニューを見る</a>
       </div>
+      <p class="ctan fu">できるかどうか、正直にお答えします。ご予約もLINEから承っています。</p>
     </div>
   </div>
   <div class="ph">
@@ -288,7 +340,7 @@ footer a{color:var(--gold-l)}
 
 <section>
   <div class="wrap">
-    <div class="sh"><div class="eyebrow">01 Worry</div><h2 class="rv">こんなお悩み、ありませんか</h2></div>
+    <div class="sh" data-sv="worry"><div class="eyebrow">01 Worry</div><h2 class="rv">こんなお悩み、ありませんか</h2></div>
     <div class="worry">
       <div class="fu"><b>01</b>雨の日や湿気で、髪が広がる</div>
       <div class="fu"><b>02</b>縮毛矯正をしても、すぐうねってくる</div>
@@ -299,7 +351,7 @@ footer a{color:var(--gold-l)}
 
 <section class="alt">
   <div class="wrap">
-    <div class="sh"><div class="eyebrow">02 Reason</div><h2 class="rv">まとまらないのには、<br>理由があります</h2></div>
+    <div class="sh" data-sv="reason"><div class="eyebrow">02 Reason</div><h2 class="rv">まとまらないのには、<br>理由があります</h2></div>
     <p class="fu">うねりや広がりは、髪質のせいだけでなく、構造で決まります。髪は弱酸性（pH4.5〜5.5）の状態でいちばん安定しますが、カラーやパーマ、縮毛矯正のあとの髪は、そこから離れたままになっていることが少なくありません。</p>
     <div class="ph-scale fu" aria-hidden="true">
       <div class="bar"><div class="band"></div><div class="mk">カラー・矯正のあと</div></div>
@@ -310,9 +362,51 @@ footer a{color:var(--gold-l)}
   </div>
 </section>
 
-<section id="menu">
+<section id="stylist">
   <div class="wrap">
-    <div class="sh"><div class="eyebrow">03 Menu</div><h2 class="rv">メニュー</h2></div>
+    <div class="sh" data-sv="stylist"><div class="eyebrow">03 Stylist</div><h2 class="rv">担当します</h2></div>
+    <div class="me">
+      <div class="pic fu"><img src="/ryoichi-hashimoto.jpg" width="900" height="1190" alt="美容師 橋元リョウイチ（東京・原宿）" loading="lazy"></div>
+      <div class="fu">
+        <div class="nm">橋元リョウイチ</div>
+        <div class="en">はしもと りょういち ／ Ryoichi Hashimoto</div>
+        <div class="origin">
+          <div class="eyebrow">Origin ／ はじまり</div>
+          <h3>はじまりは、<br>答えられなかった一つの質問。</h3>
+          <p>アシスタントになったばかりの頃、お客様に髪のことを尋ねられ、何も答えられなかった。<span class="nw">その日から</span>、技術と同じだけ、理由を学びはじめた。</p>
+          <p>東京に出るために、友人の遠洋漁業の船で<span class="nw">1か月</span>働いた。2005年、原宿の美容室へ。それから21年、施術のひとつひとつに理由を持ち、言葉にしてお客様へ手渡してきた。</p>
+          <p>2026年、独立。長く通ってくださる方の一言で、原宿に席を構えた。</p>
+          <p class="sig">きれいには、理由がある。</p>
+        </div>
+        <div class="txt">
+          <p>東京・原宿のフリーランス美容師です。GO TODAY SHAiRE SALON 原宿本店で、カウンセリングから仕上げまで一人で担当しています。</p>
+          <p>「なぜそうなるのか」を必ずお伝えします。ご来店前にカウンセリングシートで髪の状態を伺い、その方に合う薬剤を準備してからお待ちしています。当日にお話を聞いてから決めるのではなく、先に設計しておく進め方です。</p>
+          <p>その考え方を形にしたのが、成分や薬剤の仕組みを解説している<a href="https://note.com/hassihair" class="mark">noteの記事</a>と、11問の<a href="/shampoo/" class="mark">シャンプー診断「Hair Identity」</a>です。サロンの中だけで完結させず、外に出しています。</p>
+        </div>
+        <ul class="facts">
+          <li>美容師歴20年以上／東京・原宿</li>
+          <li>GO TODAY SHAiRE SALON 原宿本店（JR原宿駅 竹下口 徒歩1分）</li>
+          <li>シャンプー診断「Hair Identity」開発</li>
+        </ul>
+        <div class="media">
+          <div class="eyebrow">History ／ 歩み</div>
+          <ul>
+            <li><span class="y">2005</span><span>原宿の美容室 VIRGO（ウィルゴ）<small>2026年8月まで在籍</small></span></li>
+            <li><span class="y">2009</span><span>日本テレビ「行列のできる法律相談所」出演<small>出演者からの紹介で、約4分</small></span></li>
+            <li><span class="y">2015</span><span>TBS「その差って何ですか？」出演<small>美容師としてコメント</small></span></li>
+            <li><span class="y">2019</span><span>ホットペッパービューティー冊子にスタイル掲載<small>約6万点の中から入選（入選率 約0.4%）</small></span></li>
+            <li><span class="y">2026</span><span>独立。GO TODAY SHAiRE SALON 原宿本店<small>フリーランス美容師として</small></span></li>
+          </ul>
+        </div>
+        <div class="me-cta"><a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_stylist">髪の写真を1枚、LINEで送る</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="menu" class="alt">
+  <div class="wrap">
+    <div class="sh" data-sv="menu"><div class="eyebrow">04 Menu</div><h2 class="rv">メニュー</h2></div>
     <div class="pick fu">RECOMMEND ／ おすすめ</div>
     <div class="menus">
       <a class="mc fu" href="/nanopico/" data-track="menu_nanopico">
@@ -369,9 +463,9 @@ footer a{color:var(--gold-l)}
   </div>
 </section>
 
-<section class="alt">
+<section id="style">
   <div class="wrap">
-    <div class="sh"><div class="eyebrow">04 Style</div><h2 class="rv">スタイル</h2></div>
+    <div class="sh" data-sv="style"><div class="eyebrow">05 Style</div><h2 class="rv">スタイル</h2></div>
     <div class="fu">
       <div class="strip" id="strip" data-track="style_swipe">
         <figure><div class="im"><img src="/img/top/style-045.jpg" width="480" height="640" alt="襟足すっきりショートのスタイル写真" loading="lazy" draggable="false"></div><figcaption><span>SHORT</span>襟足すっきりショート</figcaption></figure>
@@ -395,40 +489,9 @@ footer a{color:var(--gold-l)}
   </div>
 </section>
 
-<section>
+<section id="faq" class="alt">
   <div class="wrap">
-    <div class="sh"><div class="eyebrow">05 Stylist</div><h2 class="rv">担当します</h2></div>
-    <div class="me">
-      <div class="pic fu"><img src="/ryoichi-hashimoto.jpg" width="900" height="1190" alt="美容師 橋元リョウイチ（東京・原宿）" loading="lazy"></div>
-      <div class="fu">
-        <div class="nm">橋元リョウイチ</div>
-        <div class="en">はしもと りょういち ／ Ryoichi Hashimoto</div>
-        <div class="txt">
-          <p>東京・原宿のフリーランス美容師です。GO TODAY SHAiRE SALON 原宿本店で、カウンセリングから仕上げまで一人で担当しています。</p>
-          <p>「なぜそうなるのか」を必ずお伝えします。ご来店前にカウンセリングシートで髪の状態を伺い、その方に合う薬剤を準備してからお待ちしています。当日にお話を聞いてから決めるのではなく、先に設計しておく進め方です。</p>
-          <p>その考え方を形にしたのが、成分や薬剤の仕組みを解説している<a href="https://note.com/hassihair" class="mark">noteの記事</a>と、11問の<a href="/shampoo/" class="mark">シャンプー診断「Hair Identity」</a>です。サロンの中だけで完結させず、外に出しています。</p>
-        </div>
-        <ul class="facts">
-          <li>美容師歴20年以上／東京・原宿</li>
-          <li>GO TODAY SHAiRE SALON 原宿本店（JR原宿駅 竹下口 徒歩1分）</li>
-          <li>シャンプー診断「Hair Identity」開発</li>
-        </ul>
-        <div class="media">
-          <div class="eyebrow">Media ／ メディア・掲載</div>
-          <ul>
-            <li><span class="y">2009</span><span>日本テレビ「行列のできる法律相談所」出演<small>出演者からの紹介で、約4分</small></span></li>
-            <li><span class="y">2015</span><span>TBS「その差って何ですか？」出演<small>美容師としてコメント</small></span></li>
-            <li><span class="y">2019</span><span>ホットペッパービューティー冊子にスタイル掲載<small>約6万点の中から入選（入選率 約0.4%）</small></span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="alt">
-  <div class="wrap">
-    <div class="sh"><div class="eyebrow">06 Q&amp;A</div><h2 class="rv">よくいただくご質問</h2></div>
+    <div class="sh" data-sv="faq"><div class="eyebrow">06 Q&amp;A</div><h2 class="rv">よくいただくご質問</h2></div>
     <ul class="faq">
       <li class="fu"><div class="q">原宿で、うねりや広がりを相談できる美容師を探しています</div><div class="a">原宿でフリーランス美容師として施術しています。うねり・広がり・まとまらないというご相談を多くいただきます。まず原因が乾燥なのか、くせなのか、過去の施術の履歴なのかを分けてから、方法を決めます。</div></li>
       <li class="fu"><div class="q">縮毛矯正は髪が傷みますか</div><div class="a">ケースによります。薬剤の強さと放置時間、そして今の髪の状態の組み合わせで結果が変わるので、「縮毛矯正だから傷む」とは言い切れません。強くかけすぎない設計にすることと、履歴を把握しておくことが大事です。</div></li>
@@ -440,9 +503,9 @@ footer a{color:var(--gold-l)}
   </div>
 </section>
 
-<section>
+<section id="info">
   <div class="wrap">
-    <div class="sh"><div class="eyebrow">07 Information</div><h2 class="rv">基本情報</h2></div>
+    <div class="sh" data-sv="info"><div class="eyebrow">07 Information</div><h2 class="rv">基本情報</h2></div>
     <div class="info">
       <ul class="meta fu">
         <li><span class="k">名前</span><span class="v">橋元リョウイチ（はしもと りょういち）</span></li>
@@ -467,12 +530,12 @@ footer a{color:var(--gold-l)}
   </div>
 </section>
 
-<div class="last">
+<div class="last" id="contact">
   <div class="wrap">
-    <div class="eyebrow">08 Contact</div>
+    <div class="eyebrow" data-sv="contact">08 Contact</div>
     <h2 class="rv">まずは写真を1枚、LINEで。</h2>
-    <p class="fu">できるかどうか、正直にお答えします。</p>
-    <div class="btns fu"><a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_last">LINEで相談・予約する<span class="ln">LINE</span></a></div>
+    <p class="fu">できるかどうか、正直にお答えします。ご予約もLINEから承っています。</p>
+    <div class="btns fu"><a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_last">髪の写真を1枚、LINEで送る</a></div>
   </div>
 </div>
 
@@ -485,7 +548,7 @@ footer a{color:var(--gold-l)}
 
 <div class="sticky">
   <div class="t"><b>HARAJUKU</b>橋元リョウイチ ／ ご予約・ご相談はLINEから</div>
-  <a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_sticky">LINEで相談する<span class="ln">LINE</span></a>
+  <a class="btn gold" href="https://lin.ee/tazRvbX" data-track="line_sticky">髪の写真を1枚、LINEで送る</a>
 </div>
 
 <script>
@@ -557,6 +620,28 @@ footer a{color:var(--gold-l)}
   document.querySelectorAll('.mband a').forEach(function(a){
     a.addEventListener('click', function(){ track('menu_band'); });
   });
+
+  /* 計測：どの見出しまで読まれたか（見出しが画面の上7割に入ったら1回だけ view_○○ を送る） */
+  if ('IntersectionObserver' in window) {
+    var ioSv = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting) { track('view_' + e.target.getAttribute('data-sv')); ioSv.unobserve(e.target); } }); }, { rootMargin: '0px 0px -30% 0px' });
+    document.querySelectorAll('[data-sv]').forEach(function(e){ ioSv.observe(e); });
+  }
+
+  /* 右上のメニュー：開くと全画面の目次。押された項目は nav_○○ で記録 */
+  var nb = document.getElementById('navbtn'), np = document.getElementById('nav');
+  function setNav(open){
+    np.classList.toggle('open', open);
+    nb.setAttribute('aria-expanded', open ? 'true' : 'false');
+    nb.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
+    nb.querySelector('.lbl').textContent = open ? 'CLOSE' : 'MENU';
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    if (open) np.querySelector('a').focus({ preventScroll: true });
+  }
+  nb.addEventListener('click', function(){ var open = !np.classList.contains('open'); setNav(open); if (open) track('nav_open'); });
+  np.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ var k = a.getAttribute('data-nav'); if (k) track('nav_' + k); setNav(false); });
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && np.classList.contains('open')) { setNav(false); nb.focus(); } });
 })();
 </script>
 
