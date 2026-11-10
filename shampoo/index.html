@@ -199,7 +199,7 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 .prod-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.3rem}
 .prod-card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem;margin-bottom:.7rem;position:relative}
 .prod-card.top-pick{border:2px solid var(--gold)}
-.prod-top-badge{position:absolute;top:-.6rem;left:.8rem;background:var(--gold);color:#fff;font-size:.58rem;letter-spacing:.12em;padding:.2rem .6rem;border-radius:10px;text-transform:uppercase}
+.prod-top-badge{position:absolute;top:-.6rem;left:.8rem;background:var(--gold);color:#fff;font-size:.7rem;line-height:1.5;letter-spacing:.12em;padding:.15rem .6rem;border-radius:10px;text-transform:uppercase}
 .prod-card-inner{display:flex;gap:1rem;align-items:flex-start}
 .prod-img-wrap{flex-shrink:0;width:72px;height:72px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--ivory);display:flex;align-items:center;justify-content:center}
 .prod-img{width:100%;height:100%;object-fit:contain}
@@ -225,6 +225,19 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 @media (hover:hover) and (pointer:fine){.prod-link.amz:hover{background:#D4934C;border-color:#D4934C}}
 .prod-link.rak{background:#8A6843;border-color:#8A6843;color:#F8F5F0}
 @media (hover:hover) and (pointer:fine){.prod-link.rak:hover{background:#6E5436;border-color:#6E5436}}
+/* スマホ幅の商品カード（2026-11-11）：写真と商品名を上段に、説明・注意書き・ボタンは下段で横幅いっぱいに。
+   .prod-info を display:contents にして中身をカードのグリッドへ並べ直すだけ（DOMは変えない＝600px以上は元の横並びのまま） */
+@media (max-width:599px){
+.prod-card-inner{display:grid;grid-template-columns:72px minmax(0,1fr);gap:0 .85rem;align-items:start}
+.prod-info{display:contents}
+.prod-info>*{grid-column:1 / -1;min-width:0}
+.prod-info>.prod-name{grid-column:2;grid-row:1;align-self:center;margin-bottom:0}
+.prod-info>.prod-set{justify-self:start}
+.prod-img-wrap{grid-column:1;grid-row:1;margin-bottom:.7rem}
+.prod-links{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+.prod-link{justify-content:center;min-height:46px;padding:.5rem .6rem}
+.prod-link:only-child{grid-column:1 / -1}
+}
 .consult-bar{background:var(--char);color:var(--cream);border-radius:var(--r);padding:1.3rem 1.2rem;margin:1.8rem 0;display:flex;align-items:center;gap:1rem}
 .consult-bar-txt{flex:1}
 .consult-bar-ttl{font-family:var(--serif);font-size:1rem;font-weight:300;margin-bottom:.2rem}
@@ -469,8 +482,10 @@ const QUESTIONS=[
   {id:"q4",cat:"毛量",text:"髪の毛量はどのくらいですか？",opts:[{k:"less",l:"A",t:"少ない"},{k:"vol_normal",l:"B",t:"普通"},{k:"more",l:"C",t:"多い"}]},
   {id:"q6",cat:"くせ毛",text:"くせ毛の強さはどのくらいですか？",opts:[{k:"none",l:"A",t:"ほぼない"},{k:"some",l:"B",t:"少しある"},{k:"strong",l:"C",t:"強い"}]},
   {id:"q7",cat:"薬剤",text:"直近１年以内で髪に何か施術されましたか？（複数回答可）",opts:[{k:"none",l:"A",t:"なし（1年以内に薬剤処理していない）"},{k:"color",l:"B",t:"カラー・ハイライト"},{k:"perm",l:"C",t:"パーマ・デジタルパーマ"},{k:"bleach",l:"D",t:"全体ブリーチ・インナーカラー"},{k:"straight",l:"E",t:"縮毛矯正・ストレートパーマ"}]},
-  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？（複数回答可）",multi:true,opts:[{k:"stable",l:"A",t:"まだ大きな変化は感じない"},{k:"birth",l:"B",t:"出産を機に髪が変化したと感じる"},{k:"young",l:"C",t:"20代から少しずつ"},{k:"early",l:"D",t:"30代後半〜40代から少しずつ"},{k:"clear",l:"E",t:"50代から実感"},{k:"strong",l:"F",t:"60代以降で強く実感"}]},
-  {id:"q9",cat:"熱器具・セット剤",text:"毎日の乾かし方・仕上げについて、当てはまるものを教えてください（複数回答可）",multi:true,opts:[{k:"refa",l:"A",t:"リファ",grp:"熱器具（ドライヤー・アイロン）"},{k:"bio",l:"B",t:"ヘアビューロン",grp:"熱器具（ドライヤー・アイロン）"},{k:"repro",l:"C",t:"レプロナイザー",grp:"熱器具（ドライヤー・アイロン）"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）",grp:"熱器具（ドライヤー・アイロン）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン",grp:"熱器具（ドライヤー・アイロン）"},{k:"stylers",l:"F",t:"ワックス・バーム・ハードスプレーをほぼ毎日使う",grp:"スタイリング剤"},{k:"none",l:"G",t:"使わない",grp:""}]},
+  // q5（表示はQ7）：時期を選ぶとすぐ次へ進む。「出産を機に」だけは足し算できるので一番上に置き、先に選んでもらう（2026-11-11）。
+  // 並びと見出し（grp）は表示だけ。k は変えていない＝診断の計算は同じ
+  {id:"q5",cat:"髪悩み歴",text:"髪の変化を感じ始めたのは、いつ頃・どんなタイミングでしたか？",multi:true,opts:[{k:"birth",l:"A",t:"出産を機に髪が変化したと感じる",grp:"当てはまる方は、先にこちら"},{k:"stable",l:"B",t:"まだ大きな変化は感じない",grp:"感じ始めた時期（選ぶと次へ進みます）"},{k:"young",l:"C",t:"20代から少しずつ",grp:"感じ始めた時期（選ぶと次へ進みます）"},{k:"early",l:"D",t:"30代後半〜40代から少しずつ",grp:"感じ始めた時期（選ぶと次へ進みます）"},{k:"clear",l:"E",t:"50代から実感",grp:"感じ始めた時期（選ぶと次へ進みます）"},{k:"strong",l:"F",t:"60代以降で強く実感",grp:"感じ始めた時期（選ぶと次へ進みます）"}]},
+  {id:"q9",cat:"熱器具・セット剤",text:"毎日の乾かし方・仕上げについて、当てはまるものを教えてください（複数回答可）",multi:true,opts:[{k:"refa",l:"A",t:"リファ",grp:"熱器具（ドライヤー・アイロン）"},{k:"bio",l:"B",t:"ヘアビューロン",grp:"熱器具（ドライヤー・アイロン）"},{k:"repro",l:"C",t:"レプロナイザー",grp:"熱器具（ドライヤー・アイロン）"},{k:"nanoe",l:"D",t:"ナノイー（パナソニック）",grp:"熱器具（ドライヤー・アイロン）"},{k:"other",l:"E",t:"その他のドライヤー・アイロン",grp:"熱器具（ドライヤー・アイロン）"},{k:"stylers",l:"F",t:"ワックス・バーム・ハードスプレーをほぼ毎日使う",grp:"スタイリング剤"},{k:"none",l:"G",t:"どれも使わない（熱器具・スタイリング剤とも）",grp:"どれも当てはまらない方"}]},
   {id:"q8",cat:"ダメージ",text:"今の髪の状態はどれに当てはまりますか？（複数回答可）",opts:[{k:"gloss",l:"A",t:"ツヤあり・まとまる"},{k:"dry",l:"B",t:"パサつく"},{k:"split",l:"C",t:"枝毛・きしむ"},{k:"frizz",l:"D",t:"チリつき・まとまらない"},{k:"spread",l:"E",t:"広がる・うねる"},{k:"flat",l:"F",t:"ぺたんとしてボリュームが出ない"}]},
   {id:"q10",cat:"仕上がり",text:"なりたい髪質はどれですか？（複数回答可）",opts:[{k:"moist",l:"A",t:"しっとり"},{k:"smooth",l:"B",t:"サラサラ"},{k:"gloss",l:"C",t:"ツヤツヤ"},{k:"volume",l:"D",t:"ボリュームアップ"},{k:"vdown",l:"E",t:"ボリュームダウン（落ち着かせたい）"}]},
   {id:"q11",cat:"悩み",text:"特に気になるお悩みはどれですか？（複数回答可）",multi:true,opts:[{k:"dry",l:"A",t:"パサつき"},{k:"repair",l:"B",t:"ダメージ修復"},{k:"wave",l:"C",t:"うねり・広がり"},{k:"volume",l:"D",t:"ボリュームが欲しい"},{k:"oily",l:"E",t:"ベタつき"},{k:"aging",l:"F",t:"エイジング（ハリ・コシ・ボリューム不足）"},{k:"gray",l:"G",t:"白髪が気になる"},{k:"none",l:"H",t:"特にない"}]},
@@ -801,14 +816,16 @@ const TYPES={
     products:[
       {name:"ミノン 全身シャンプー しっとりタイプ",scent:"微香性",forWhom:"頭皮が敏感で、低刺激なシャンプーをお探しの方",desc:"アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。",note:"髪に使うとキシキシしやすい場合があります。コンディショナー必須。ミディアム以上には不向きです。",top:true,otc:true,amz:"B00N0C0B9U",rakUrl:rak1("272f92155ee4457fdcc005d40ecb26cf"),img_url:"https://m.media-amazon.com/images/P/B00N0C0B9U.09._SL200_.jpg"},
       {name:"NOV ヘアシャンプー DS",scent:"無香料",forWhom:"皮膚科推奨レベルの低刺激処方を求める方",desc:"敏感肌ブランドNOVの化粧品シャンプー。アミノ酸系・ベタイン系・タウリン系の3つを組み合わせた低刺激処方。無香料・無着色。",pair:{name:"ノブ ヘアコンディショナー D",kind:"コンディショナー",amz:"B00BTDZIXG"},note:"Amazonはシャンプー単品（250ml）のページです。",top:false,otc:false,amz:"B00BTDV3FS",rakUrl:null,img_url:"https://m.media-amazon.com/images/P/B00BTDV3FS.09._SL200_.jpg"},
-      {name:"コラージュフルフル ネクスト シャンプー",scent:"無香料",forWhom:"ヘルメット・帽子で頭皮が蒸れやすい方、かゆみや繰り返すフケが気になる方",desc:"持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩配合で、フケ・かゆみの原因菌の繁殖を防ぐ。",set:{amazon:"シャンプー＋リンス"},note:"Amazonはシャンプー＋リンス（うるおいなめらかタイプ・各200mL）のセット、楽天はシャンプー単品（うるおいなめらか400mL）のページです。すっきりさらさらタイプもあります。",secondaryOnly:true,top:false,otc:true,amz:"B07ZTDHFTP",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532eb60f.8dafe5f6.532eb617.4f160360/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fenetroom%2F7337284%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51sqgQoIH5L._AC_SL200_.jpg"},
+      // 2026-11-11 Amazonが在庫切れ（11/1・11/10・11/11に確認）のため、Amazonボタンを外して楽天だけにしている。
+      // 在庫が戻ったら：amz を ASIN「B07ZTDHFTP」に戻し、note を「Amazonはシャンプー＋リンス（うるおいなめらかタイプ・各200mL）のセット、楽天はシャンプー単品（うるおいなめらか400mL）のページです。すっきりさらさらタイプもあります。」に戻し、静的商品一覧にも1行足す
+      {name:"コラージュフルフル ネクスト シャンプー",scent:"無香料",forWhom:"ヘルメット・帽子で頭皮が蒸れやすい方、かゆみや繰り返すフケが気になる方",desc:"持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩配合で、フケ・かゆみの原因菌の繁殖を防ぐ。",set:{amazon:"シャンプー＋リンス"},note:"リンク先は楽天のシャンプー単品（うるおいなめらか400mL）のページです。すっきりさらさらタイプもあります。",secondaryOnly:true,top:false,otc:true,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532eb60f.8dafe5f6.532eb617.4f160360/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fenetroom%2F7337284%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51sqgQoIH5L._AC_SL200_.jpg"},
       {name:"コラージュフルフルプラス シャンプー すっきり",scent:"無香料",forWhom:"フケ・かゆみが続いているけれど、洗浄力の強いシャンプーは頭皮にしみる方",desc:"持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩・ピロクトンオラミン・グリチルリチン酸2Kの有効成分3種でフケ・かゆみを防ぐ。洗浄成分はアミノ酸系とベタイン系で、硫酸系は使っていません。",note:"「すっきり」と「うるおい」の2タイプ、本体200mLとつめかえ340mLがあります。Amazonは「すっきり」200mL単品、楽天は200mLとつめかえの選択ページです。地肌の乾燥やつっぱりが強い方は「うるおい」の方が穏やかです。",top:false,otc:true,amz:"B0H24QPMVF",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/578a2aa0.49073a44.578a2aa1.2357f805/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fpycno%2F10133-012%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjgweDgwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",img_url:"https://m.media-amazon.com/images/I/61-DOKRzILL._AC_SL200_.jpg"},
       {name:"キュレル シャンプー",scent:"無香料",forWhom:"フケ・かゆみが気になる、乾燥性敏感肌の方",desc:"花王の医薬部外品シャンプー。グリチルリチン酸ジカリウム配合でフケ・かゆみを防ぐ。セラミドを守りながら洗う処方で、赤ちゃんから大人まで使える。弱酸性・無香料・無着色。",set:{amazon:"シャンプー＋コンディショナー"},note:"Amazonはシャンプー＋コンディショナーのセット、楽天はシャンプー単品（ポンプ420ml）のページです。洗浄成分はラウレス硫酸Naがベースで、洗浄力はしっかりめ。乾燥性のフケが強い方は、よりマイルドなミノンを優先してください。",top:false,otc:true,amz:"B0777B5D9M",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/532e9808.56d1a4c2.532e980a.fb0409e3/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fyayoi-cosme%2Fkao276070%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0777B5D9M.09._SL200_.jpg"}
     ]},
   oil_reset_short:{badge:"Hair Type — OR",title:"Oil Reset",sub:"脂性頭皮 × ショート",
     advice:["脂性頭皮の方は皮脂分泌が多く、頭皮の毛穴が詰まりやすい状態です。洗浄力のしっかりしたシャンプーで、頭皮を清潔に保つことが第一優先です。","シャンプーは1回目で汚れを落とし、2回目で泡立てるダブル洗いが効果的。すすぎを特に丁寧に行い、シャンプーの残留をゼロにしましょう。","ショートヘアは頭皮への影響が直接出やすいため、ドライヤーでしっかり乾かすことが大切。半乾きで寝ると雑菌が増えてニオイの原因になります。","シャンプーで皮脂の分泌量そのものが減るわけではありません。洗い方とすすぎで、頭皮に残った皮脂を落としきるのがケアの役割です。ベタつきが強い日が続くときは皮膚科にご相談ください。","※ 詳しくは担当の美容師さんに相談しながら、ご自身の頭皮状態に合ったケアを確認してみてください。"],
     products:[
-      {name:"h&s スカルプ シャンプー",scent:"リフレッシュリリー",forWhom:"夕方になると頭皮の匂いやベタつきが気になる方",desc:"ピロクトンオラミン配合でマラセチア菌を抑制。脂性頭皮専用、洗浄力強め。",pair:{name:"深体験ヘッドスパ by h&s リフレッシュ×さらつや トリートメント",kind:"トリートメント",amz:"B0CJP4BYQN"},note:"リンク先はリフレッシュ（さらつや）435gのページです。",top:true,otc:true,amz:"B0CJP1C9TC",rakUrl:null,img_url:"https://m.media-amazon.com/images/I/21pIkO+rY7L._AC_SL200_.jpg"},
+      {name:"h&s スカルプ シャンプー",scent:"リフレッシュリリー",forWhom:"夕方になると頭皮の匂いやベタつきが気になる方",desc:"ピロクトンオラミン配合でマラセチア菌を抑制。脂性頭皮専用、洗浄力強め。",set:{rakuten:"シャンプー＋トリートメント"},pair:{name:"深体験ヘッドスパ by h&s リフレッシュ×さらつや トリートメント",kind:"トリートメント",amz:"B0CJP4BYQN"},note:"Amazonはシャンプー単品（リフレッシュ×さらつや 435g）、楽天はシャンプー＋トリートメント（リフレッシュ×さらつや 各435g）のセットのページです。",top:true,otc:true,amz:"B0CJP1C9TC",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/595b9d40.6160191c.595b9d41.b2a0485a/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsn-mart%2Fsnfaee82537c%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/21pIkO+rY7L._AC_SL200_.jpg"},
       {name:"デオコ スカルプケアシャンプー",scent:"スウィートフローラル",forWhom:"頭皮の臭いが気になりはじめた方",desc:"頭皮のニオイ・ベタつきが気になる方向けのスカルプケア。",set:{amazon:"シャンプー＋コンディショナー"},note:"Amazonはシャンプー＋コンディショナーの本体セット、楽天はシャンプー単品（450ml）のページです。",top:false,otc:false,amz:"B0F4X96WXY",rakUrl:rak1("ec66d0987e9db2681148d12f1972c99a"),img_url:"https://m.media-amazon.com/images/I/61sMN2WKiRL._AC_SL200_.jpg"},
       {name:"WELLP（ウェルプ）薬用スムースシャンプー",scent:"レモングラス＆スズラン",forWhom:"脂性だけど髪のダメージも気になる方",desc:"マイルドなベタイン・タウリン系を主体に、しっかり洗浄成分も配合した医薬部外品スカルプケア。脂性頭皮のフケ・かゆみ予防に。",set:{amazon:"シャンプー＋トリートメント"},note:"Amazonはトリートメントとのセットページ、楽天はシャンプー単体のページです。",top:false,otc:true,amz:"B0DJ1CY24Q",rakUrl:rak1("d17ec847309d51e390b10db5bd9381bb"),img_url:"https://r.r10s.jp/g/gran_img/ap/PFF/5IK/HXZ/9MT/566fa3d9688c45329c1072dbedb6b0d7.jpg?_ex=200x200"},
       {name:"サンコール ミントベル マリンブルーシャンプー",scent:"マリン＆ペパーミント",forWhom:"ひんやり爽快な洗い上がりで頭皮をリフレッシュしたい方",desc:"サンコールの定番ひんやり系シャンプー。天然メントールがスーッと効く爽快な使用感が特徴。タウリン・アミノ酸・ベタイン系3種洗浄で汗・皮脂をやさしくリセット。",pair:{name:"ミントベル クールスパ コンディショナー",kind:"コンディショナー",amz:"B0F4CZH3J8"},note:"250ml・550ml・700mlがあります。リンク先でお選びください。",season:"夏限定の頭皮クール体験。汗ばむ季節の頭皮ケアに、天然メントールでひんやり爽快な洗い上がり。",summerOnly:true,gentleBottom:true,top:false,amz:"B0F268NFQ5",rakUrl:null,img_url:"https://m.media-amazon.com/images/I/51wkEOLYF+L._AC_SL200_.jpg"}]},
@@ -870,7 +887,9 @@ const TYPES={
       {name:"コスメデコルテ AQ リペア エッセンスシャンプー（KOSE）",scent:"フレッシュフローラルムスキー",forWhom:"乾燥やパサつきが気になり、うるおいとツヤを重視した上質なケアをしたい方",desc:"KOSEのプレステージブランドが2025年10月に出した「塗る美容液99%」シャンプー。泡立て不要のエッセンスベースで、一般的な洗浄剤を使わない超マイルドなクリーム洗浄。ハチミツ・コメ発酵液・シラカンバ樹液などの保湿成分で、しっとり重めのツヤ仕上がり。洗浄力はごく穏やかなので、皮脂が多い方・軽い仕上がりが好きな方には不向きです。",note:"泡立たない美容液タイプです。250g・800g・付けかえ用があります。リンク先でお選びください。",heavyMoisture:true,noSurf:true,top:false,amz:"B0FZ42R733",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55d3fa72.66c32f6b.55d3fa73.9762dc3a/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fsunnydaystoku%2F497171037920-3%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/5121x5lu5nL._AC_SL200_.jpg"},
       {name:"RAFRA（ラフラ）アロマセラムシャンプー モイスト",scent:"ヒーリングオレンジ（天然精油）",forWhom:"乾燥・パサつきが気になり、しっとりまとまるツヤ髪と癒される香りを求める方",desc:"美容液成分81%・天然由来成分97%のアロマセラムライン。ラウロイルメチルアラニンNa（アミノ酸系）×ベタイン系だけのマイルド洗浄（サルフェート・シリコーンフリー）に、ケラチン・コラーゲン・シルクのPPT3種を上位配合。熱補修のγ-ドコサラクトン＋3種のセラミド＋18-MEAも入り、しっとりうるおうツヤ仕上がり。天然精油100%のオレンジの香り。",set:{amazon:"シャンプー＋トリートメント"},note:"Amazonは公式のシャンプー＋トリートメントのセット、楽天はシャンプー単品（400ml）のページです。",top:false,amz:"B0GS4Y47TF",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5402bed3.9db1c36d.5402bed4.b6521a25/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcosmecomonline%2F1000224719%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51Jfk+c+L8L._AC_SL200_.jpg"},
       {name:"THE PUBLIC ORGANIC ディープリーエンブレイス スムースモイスト 精油シャンプー",scent:"センシュアルフローラル（イランイラン×シダーウッド・9種の精油）",forWhom:"健康な髪をやさしく洗いながら、精油の香りで一日の終わりをリセットしたい方",desc:"@cosmeベストコスメアワード2026上半期・新作ベスト受賞。ザ パブリック オーガニックが2025年7月に出したプレミアムライン。ココイルメチルタウリンNa（タウリン系）×コカミドプロピルベタイン（ベタイン系）×デシルグルコシド（グルコシド系）のマイルド洗浄に、マルラオイル・アルガンオイル・シアバターなどの保湿油を配合。サルフェート・シリコーンフリー。精油の香りが強めなので、香りに敏感な方・精油アレルギーのある方はご注意ください。",set:{amazon:"シャンプー＋トリートメント",rakuten:"シャンプー＋トリートメント"},note:"Amazon・楽天ともシャンプー＋トリートメントの本体セット（各400mL）です。",top:false,amz:"B0FHPDCK81",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55f0f758.10439a8a.55f0f759.5484755a/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcolours-tokyo%2Ftp_de_sptr_bottle%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51Mzv-U6LUL._AC_SL200_.jpg"},
-      {name:"THERATIS（セラティス）ion ナイトチャージ シャンプー",scent:"ネロリウッドアロマ",forWhom:"健康な髪のパサつきを、重くせずに整えたい方",desc:"&honeyのヴィークレアが2026年7月に出したイオン導入発想の新ライン。洗浄はラウロイルメチルアラニンNa（アミノ酸系）×ラウラミドプロピルベタイン（ベタイン系）×ラウレス-4カルボン酸Na（カルボン酸系）で、硫酸系もオレフィン系も使わないマイルド設計。そこにPPT系の洗浄成分（ラウロイル加水分解シルクNa・ココイル加水分解コラーゲンK・ココイル加水分解ケラチンK）を3種重ね、洗いながら補うつくりです。アセチルテトラペプチド-3・パルミトイルジペプチド-52のペプチド2種にケラチン・加水分解ヒアルロン酸・レブリン酸を配合。油剤をほとんど使わずグリセリンも後半なので、しっとりというより軽く仕上がります。シリコーン不使用。",pair:{name:"THERATIS ion ナイトチャージ トリートメント",kind:"トリートメント",amz:"B0H8YYK79H"},note:"Amazonはシャンプー単品435mL、楽天は公式店のシャンプー＆トリートメントのボトルセットのページです。詰め替えもあります。",top:false,amz:"B0H8Z4J6G7",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55d0666b.4ace649d.55d0666c.14ffb508/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fvicrea-shop%2Ftheratis-ion001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/61Obtwi+bwL._AC_SL200_.jpg"}]},
+      // 2026-11-11 Amazonがシャンプー・トリートメントとも在庫切れ（11/1・11/10・11/11に確認）のため、Amazonボタンと「一緒に使うトリートメント」を外して楽天（セット）だけにしている。
+      // 在庫が戻ったら：amz を ASIN「B0H8Z4J6G7」に、pair を {name:"THERATIS ion ナイトチャージ トリートメント",kind:"トリートメント"} ＋ ASIN「B0H8YYK79H」に戻し、note を「Amazonはシャンプー単品435mL、楽天は公式店のシャンプー＆トリートメントのボトルセットのページです。詰め替えもあります。」に戻し、静的商品一覧にも2行足す
+      {name:"THERATIS（セラティス）ion ナイトチャージ シャンプー",scent:"ネロリウッドアロマ",forWhom:"健康な髪のパサつきを、重くせずに整えたい方",desc:"&honeyのヴィークレアが2026年7月に出したイオン導入発想の新ライン。洗浄はラウロイルメチルアラニンNa（アミノ酸系）×ラウラミドプロピルベタイン（ベタイン系）×ラウレス-4カルボン酸Na（カルボン酸系）で、硫酸系もオレフィン系も使わないマイルド設計。そこにPPT系の洗浄成分（ラウロイル加水分解シルクNa・ココイル加水分解コラーゲンK・ココイル加水分解ケラチンK）を3種重ね、洗いながら補うつくりです。アセチルテトラペプチド-3・パルミトイルジペプチド-52のペプチド2種にケラチン・加水分解ヒアルロン酸・レブリン酸を配合。油剤をほとんど使わずグリセリンも後半なので、しっとりというより軽く仕上がります。シリコーン不使用。",note:"リンク先は楽天の公式店で、シャンプー＆トリートメントのボトルセットのページです。詰め替えもあります。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55d0666b.4ace649d.55d0666c.14ffb508/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fvicrea-shop%2Ftheratis-ion001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/61Obtwi+bwL._AC_SL200_.jpg"}]},
   bare_skin:{badge:"Hair Type — BS",title:"Bare Skin",sub:"乾燥・混合 × カラー × 軽ダメージ",
     advice:["カラーによる軽いダメージがある髪は、カラーの色持ちを良くしながら補修できるシャンプーがベストです。カラーシャンプーや低刺激アミノ酸系を選びましょう。","洗髪は毎日行っても問題ありませんが、お湯の温度は38〜40℃に。熱すぎるお湯はカラーの退色を早め、頭皮の乾燥にもつながります。","週1回の集中トリートメントで補修成分を補うのが効果的。市販品でも十分ですが、美容室でのトリートメントと組み合わせると持続性がアップします。","シャンプーでカラーの退色を完全に止めることはできません。お湯の温度と洗浄力を抑えて、色持ちを少しでも延ばすのがケアの役割です。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のカラーダメージに合ったケアを確認してみてください。"],
     products:[
@@ -2126,6 +2145,17 @@ function App(){
   const prog=step==="quiz"?((curQ+1)/totalQ*100):step==="result"||step==="products"?100:0;
   useEffect(()=>{const bar=document.getElementById("pbar");bar.style.width=prog+"%";bar.setAttribute("aria-valuenow",Math.round(prog));},[prog]);
   useEffect(()=>{window.scrollTo({top:0,behavior:"instant"});},[step]);
+  // 質問が切り替わったとき、質問の先頭（進み具合の点）が画面より上に隠れていたら、そこまで戻す（2026-11-11）。
+  // 縦が短い画面で前の質問の下のほうを押して進むと、次の質問文が上に隠れたまま始まっていたため。
+  // 先頭が見えているときは動かさない（縦が長い画面では今まで通り）。
+  const dotsRef=useRef(null);
+  useEffect(()=>{
+    if(step!=="quiz") return;
+    const el=dotsRef.current;
+    if(!el) return;
+    const top=el.getBoundingClientRect().top;
+    if(top<0) window.scrollTo({top:Math.max(0,window.scrollY+top-16),behavior:"instant"});
+  },[curQ]);
   // 静的フッター（アソシエイト開示文言＋商品一覧）は、Amazonリンクが実際にある画面だけに出す。
   // トップ・質問11問・分析中では邪魔になるだけなので隠す（HTML上は常に存在＝クローラーには見える）。
   useEffect(()=>{
@@ -2350,7 +2380,7 @@ function App(){
         )
       ),
       step==="quiz"&&h("div",null,
-        h("div",{className:"dots"},QUESTIONS.map((_,i)=>h("div",{key:i,className:"dot"+(i===curQ?" active":i<curQ?" done":"")}))),
+        h("div",{className:"dots",ref:dotsRef},QUESTIONS.map((_,i)=>h("div",{key:i,className:"dot"+(i===curQ?" active":i<curQ?" done":"")}))),
         h("div",{className:"fade",key:curQ},
           h("p",{className:"q-cat"},QUESTIONS[curQ].cat),
           h("p",{className:"q-num"},`Q${String(curQ+1).padStart(2,"0")} / ${String(totalQ).padStart(2,"0")}`),
@@ -2379,7 +2409,7 @@ function App(){
               h("span",{style:{flex:1}},opt.t,opt.d&&h("span",{className:"opt-desc"},opt.d)),
               order>0&&h("span",{style:{marginLeft:"auto",fontSize:"1.15rem",color:"var(--gold)",fontWeight:500,lineHeight:1}},circled[order-1]||`${order}`)
             );
-            if(qid==="q9"&&opt.grp!==undefined){
+            if((qid==="q9"||qid==="q5")&&opt.grp!==undefined){
               const prevGrp=optIdx>0?QUESTIONS[curQ].opts[optIdx-1].grp:null;
               if(opt.grp!==prevGrp){
                 const label=opt.grp?h("div",{className:"opt-group"},opt.grp):h("div",{className:"opt-group-spacer"});
@@ -2395,7 +2425,7 @@ function App(){
             onClick:()=>confirmMulti(QUESTIONS[curQ].id)
           },"次へ →")
         ),
-        h("button",{className:"btn-ghost",onClick:goBack},"← 前の質問に戻る")
+        h("button",{className:"btn-ghost",onClick:goBack},curQ===0?"← トップに戻る":"← 前の質問に戻る")
       ),
       step==="loading"&&h("div",{className:"loading"},h("div",{className:"spin"}),h("p",{className:"loading-txt"},"髪質を分析しています…")),
       step==="result"&&td&&h("div",{className:"fade"},
@@ -2587,12 +2617,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <footer id="amazon-product-list" class="static-ftr">
 <p class="ftr-note">Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。</p>
 <details class="static-ftr-details" open>
-<summary>掲載商品一覧（Amazon取扱・54商品）</summary>
+<summary>掲載商品一覧（Amazon取扱・52商品）</summary>
 <p class="ftr-note">Hair Identityの診断で提案しているシャンプーの一覧です。各商品の選定理由・成分解析は診断結果ページでご覧いただけます。</p>
 <ul class="static-ftr-list">
 <li><a href="https://www.amazon.co.jp/dp/B00N0C0B9U?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">ミノン 全身シャンプー しっとりタイプ</a>｜アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。</li>
 <li><a href="https://www.amazon.co.jp/dp/B00BTDV3FS?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">NOV ヘアシャンプー DS</a>｜敏感肌ブランドNOVの化粧品シャンプー。アミノ酸系・ベタイン系・タウリン系の3つを組み合わせた低刺激処方。無香料・無着色。</li>
-<li><a href="https://www.amazon.co.jp/dp/B07ZTDHFTP?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">コラージュフルフル ネクスト シャンプー</a>｜持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩配合で、フケ・かゆみの原因菌の繁殖を防ぐ。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0H24QPMVF?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">コラージュフルフルプラス シャンプー すっきり</a>｜持田ヘルスケアの薬用シャンプー。ミコナゾール硝酸塩・ピロクトンオラミン・グリチルリチン酸2Kの有効成分3種でフケ・かゆみを防ぐ。洗浄成分はアミノ酸系とベタイン系で、硫酸系は使っていません。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0HJQ58JSV?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">cocone（ココネ）クレイクリームシャンプー ストレート</a>｜泡立たないクリームタイプのシャンプー。γ-ドコサラクトン・アミノエチルチオコハク酸ジアンモニウム・4種のケラチンを配合し、ドライヤーの熱に反応してうねりをケアする。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0777B5D9M?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">キュレル シャンプー</a>｜花王の医薬部外品シャンプー。グリチルリチン酸ジカリウム配合でフケ・かゆみを防ぐ。セラミドを守りながら洗う処方で、赤ちゃんから大人まで使える。弱酸性・無香料・無着色。</li>
@@ -2626,7 +2655,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <li><a href="https://www.amazon.co.jp/dp/B0FZ42R733?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">コスメデコルテ AQ リペア エッセンスシャンプー（KOSE）</a>｜KOSEのプレステージブランドが2025年10月に出した「塗る美容液99%」シャンプー。泡立て不要のエッセンスベースで、一般的な洗浄剤を使わない超マイルドなクリーム洗浄。ハチミツ・コメ発酵液・シラカンバ樹液などの保湿成分で、しっとり重めのツヤ仕上がり。洗浄力はごく穏やかなので、皮脂が多い方・軽い仕上がりが好きな方には不向きです。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0GS4Y47TF?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">RAFRA（ラフラ）アロマセラムシャンプー モイスト</a>｜美容液成分81%・天然由来成分97%のアロマセラムライン。ラウロイルメチルアラニンNa（アミノ酸系）×ベタイン系だけのマイルド洗浄（サルフェート・シリコーンフリー）に、ケラチン・コラーゲン・シルクのPPT3種を上位配合。熱補修のγ-ドコサラクトン＋3種のセラミド＋18-MEAも入り、しっとりうるおうツヤ仕上がり。天然精油100%のオレンジの香り。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0FHPDCK81?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">THE PUBLIC ORGANIC ディープリーエンブレイス スムースモイスト 精油シャンプー</a>｜@cosmeベストコスメアワード2026上半期・新作ベスト受賞。ザ パブリック オーガニックが2025年7月に出したプレミアムライン。ココイルメチルタウリンNa（タウリン系）×コカミドプロピルベタイン（ベタイン系）×デシルグルコシド（グルコシド系）のマイルド洗浄に、マルラオイル・アルガンオイル・シアバターなどの保湿油を配合。サルフェート・シリコーンフリー。精油の香りが強めなので、香りに敏感な方・精油アレルギーのある方はご注意ください。</li>
-<li><a href="https://www.amazon.co.jp/dp/B0H8Z4J6G7?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">THERATIS（セラティス）ion ナイトチャージ シャンプー</a>｜&honeyのヴィークレアが2026年7月に出したイオン導入発想の新ライン。ラウロイルメチルアラニンNa（アミノ酸系）×ラウラミドプロピルベタイン（ベタイン系）×ラウレス-4カルボン酸Na（カルボン酸系）に、PPT系の洗浄成分3種を重ねた硫酸系・オレフィン系フリーの処方。ペプチドとケラチンで補修しつつ、油剤に頼らないので軽く仕上がる。シリコーン不使用。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0CGJ5M9PC?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">BOTANIST ボタニカルシャンプー ダメージケア</a>｜ボタニカル成分配合。傷んだ髪をなめらかに整え、しなやかな質感へ。サルフェートフリー処方。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0C8928QDQ?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">スティーブンノル モイスチュアコントロール シャンプー</a>｜サロン発の保湿・補修ライン。乾燥・パサつきをなめらかに整える。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0DSFQNXR9?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">花王 THE ANSWER（ジアンサー）スーパーラメラシャンプー</a>｜@cosmeベストコスメアワード2025 上半期新作 総合大賞（ヘアケア品では史上初）／日経優秀製品・サービス賞2025 トレンド部門賞。花王100年の研究から生まれた次世代ライン。低刺激アミノ酸系×ラメラ技術で補修成分を約12倍配合。</li>
@@ -2645,7 +2673,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <li><a href="https://www.amazon.co.jp/dp/B09S6NLBDC?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">スカルプD ボーテ 薬用スカルプシャンプー ボリューム</a>｜アンファーの女性用薬用スカルプシャンプー（医薬部外品）。有効成分ピロクトンオラミン＋グリチルリチン酸2Kが頭皮環境を整え、洗浄はアミノ酸系＋ベタイン系のマイルド処方。豆乳発酵液と浸透補修成分ペリセア、ハリコシ成分セラキュートＶを配合し、ノンシリコンで根元からふんわり立ち上げる。</li>
 <li><a href="https://www.amazon.co.jp/dp/B07ZB81Q8J?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">haru kurokamiスカルプ シャンプー</a>｜100%天然由来・アミノ酸系（ココイルグルタミン酸TEA主体）のオールインワンシャンプー。リンス・コンディショナー不要の1本で、キャピキシル・ヘマチン・加水分解シルクが頭皮と髪を整えてハリ・コシをサポート。ノンシリコンで根元から軽やかに仕上がる。</li>
 </ul>
-<p class="ftr-note">シャンプーと一緒に使うトリートメント・コンディショナー（Amazon取扱・11商品）</p>
+<p class="ftr-note">シャンプーと一緒に使うトリートメント・コンディショナー（Amazon取扱・10商品）</p>
 <ul class="static-ftr-list">
 <li><a href="https://www.amazon.co.jp/dp/B00BTDZIXG?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">ノブ ヘアコンディショナー D</a>｜「NOV ヘアシャンプー DS」と一緒に使うコンディショナー</li>
 <li><a href="https://www.amazon.co.jp/dp/B0FGVFBNRH?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">MEMEME モイストブーストトリートメント</a>｜「MEMEME（ミーミーミー）モイストブースト シャンプー」と一緒に使うトリートメント</li>
@@ -2657,7 +2685,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <li><a href="https://www.amazon.co.jp/dp/B0BLT7NY2M?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">UNOVE ディープダメージトリートメントEX</a>｜「UNOVE（アノブ）ディープダメージリペア シャンプー」と一緒に使うトリートメント</li>
 <li><a href="https://www.amazon.co.jp/dp/B0GWJ2FNRL?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">アユーラ ウェルバイタル トリートメント</a>｜「アユーラ ウェルバイタル シャンプー（AYURA）」と一緒に使うトリートメント</li>
 <li><a href="https://www.amazon.co.jp/dp/B0DH7XY419?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">セグレタ コンディショナー 根元からふんわり</a>｜「セグレタ シャンプー 根元からふんわり」と一緒に使うコンディショナー</li>
-<li><a href="https://www.amazon.co.jp/dp/B0H8YYK79H?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">THERATIS ion ナイトチャージ トリートメント</a>｜「THERATIS（セラティス）ion ナイトチャージ シャンプー」と一緒に使うトリートメント</li>
 </ul>
 </details>
 </footer>
