@@ -599,7 +599,9 @@ const MATCH_TAGS=[
   {key:"IONICO",           tags:{q11:["repair"],q10:["moist"],q7:["color","bleach"],q8:["dry","split"]}},
   {key:"PRORY",            tags:{q11:["aging","gray"],q5:["clear","strong"],q10:["moist"],q8:["dry"]}},
   {key:"ボーテシャンプー",    tags:{q11:["aging","gray","volume"],q5:["clear","strong"],q10:["moist","volume"],q8:["dry"]}},
-  {key:"MEMEME",           tags:{q7:["color","none"],q8:["dry","gloss"],q10:["moist","gloss"]}},
+  {key:"モイストブースト",     tags:{q7:["color","none"],q8:["dry","gloss"],q10:["moist","gloss"]}},
+  {key:"スムースブースト",     tags:{q10:["smooth"]}},
+  {key:"リュクスリペア",       tags:{q11:["repair"],q8:["dry","split"]}},
   {key:"AQ リペア スムース",  tags:{q6:["some","strong"],q10:["smooth","moist","vdown"],q8:["frizz","spread"]}},
   {key:"AQ リペア エッセンス", tags:{q10:["moist","gloss"],q11:["dry"],q1:["dry"]}},
   {key:"RAFRA", tags:{q10:["moist","gloss"],q11:["dry"],q8:["dry"]}},
@@ -659,7 +661,11 @@ const ING_PROFILES=[
   {key:"ジアンサー",w:2.5,m:4,o:3,r:4,f:"repair",fl:5},
   {key:"エッセンシャル",w:2.5,m:4,o:3,r:3,f:"moisture",fl:3.5},
   {key:"IONICO",w:3,m:3.5,o:3,r:4,f:"repair",fl:4.5},
-  {key:"MEMEME",w:2.5,m:4,o:3,r:3.5,f:"gloss",fl:3.5},
+  {key:"モイストブースト",w:2.5,m:4,o:3,r:3.5,f:"gloss",fl:3.5},
+  // 2026-11-11 追加。スムースブースト＝モイストブーストと同じ洗浄・補修の骨格で、グリセリンが後ろ（14番目→21番目）＝軽い仕上がり
+  {key:"スムースブースト",w:2.5,m:4,o:2.5,r:3.5,f:"light",fl:3.5},
+  // 2026-11-11 追加。&honey Rich＝アミノ酸系×ベタイン×タウリンのマイルド洗浄＋トステア・レブリン酸・γ-ドコサラクトン・ケラチン（SN repair級の補修）
+  {key:"リュクスリペア",w:2.5,m:4,o:3,r:4.5,f:"repair",fl:4.5},
   {key:"イオ クレンジング",w:2,m:4.5,o:2.5,r:1.5,f:"dryscalp",fl:4},
   {key:"マッサージ美容クリーム",w:1.5,m:3.5,o:4.5,r:2,f:"aging",fl:4.5},
   {key:"PRORY",w:2.5,m:4,o:3,r:4,f:"aging",fl:4.5},
@@ -844,7 +850,9 @@ const TYPES={
       {name:"アリミノ エクラリティ フォーブリーチ シャンプー",scent:"アイリス＆ペアー",forWhom:"ブリーチや繰り返しのカラーで傷んだ髪を、淡いカラーデザインを保ちながらケアしたい方",desc:"アリミノが2025年秋に立ち上げたサロン発の新ブランド『エクラリティ』のダメージヘア用ライン。毛髪最表面の脂質18-MEAに着目したダイヤボンドMEA技術で、洗うたびに傷つきにくいツヤ髪へ導く設計。（クロロフィリン／銅）複合体（ヘマチン類似）も配合。ただし主洗浄はオレフィン系＋アミノ酸系＋ベタイン系で、ブリーチ毛向けとしては洗浄力しっかりめのため、細い髪・敏感な頭皮の方はご注意ください。",pair:{name:"エクラリティ トリートメント フォーブリーチ",kind:"トリートメント",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55f0f2d0.bc2d7a0f.55f0f2d1.623874d2/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fretailer%2Fecla-0011%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9"},note:"楽天のみの取り扱いです（アリミノ正規取扱店・シャンプー単品250ml）。サロン専売系のため取り扱い店舗が限られます。",top:true,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55f0f2d0.bc2d7a0f.55f0f2d1.623874d2/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fretailer%2Fecla-0009%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://thumbnail.image.rakuten.co.jp/@0_mall/retailer/cabinet/10426085/12315370/ecla-0009.jpg?_ex=200x200"},
       {name:"UNOVE（アノブ）ディープダメージリペア シャンプー",scent:"シトラス＆ハーブ（調香）",forWhom:"太い・パサつく・広がる髪で、しっとりまとまりが欲しい方",desc:"韓国発ヘアケアブランド。31種のタンパク質・アミノ酸＋5種の植物オイル配合で、ダメージ部に集中補修。シルクのようななめらかな仕上がり。洗浄力は強めなので、細い髪・敏感な頭皮の方はご注意ください。",pair:{name:"UNOVE ディープダメージトリートメントEX",kind:"トリートメント",amz:"B0BLT7NY2M"},set:{rakuten:"シャンプー＋トリートメント"},note:"Amazonはシャンプー単品（500g）、楽天はシャンプー＋ディープダメージトリートメントEXのセットのページです。",top:false,amz:"B0CB1SG31Z",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/536fc132.0199f1e7.536fc133.e4e6f2ef/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fflytoyou%2F1097936315%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/P/B0CB1SG31Z.09._SL200_.jpg"},
       {name:"Re:KERATIN（リケラチン）リバーシ リペア シャンプー",scent:"ベルガモットリュクス",forWhom:"ダメージ補修はしたいけれど、重くならずサラッと軽く仕上げたい方",desc:"&honeyのヴィークレアが2026年4月に発売したケラチン特化の新ブランド。PPT系洗浄成分（ココイル加水分解ケラチンK）を配合2番目に高配合し、4種のケラチン＋シスチン・シルクアミノ酸で洗いながら補修。アミノ酸系×タウリン系×ベタイン系のマイルド洗浄で、オイル・シリコーンに頼らないさらっと軽い仕上がり。",set:{rakuten:"シャンプー＋トリートメント"},note:"楽天のみの取り扱いです（公式店）。「シャンプートリートメントセット」を選んでください。",top:false,amz:null,rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55d0666b.4ace649d.55d0666c.14ffb508/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fvicrea-shop%2Frekeratin_sp1_tr1%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/61iO43OeodL._AC_SL200_.jpg"},
-      {name:"ReFa（リファ）ミルクプロテインシャンプー ロイヤル",scent:"ホワイトアンバーミルクティー",forWhom:"ブリーチ・縮毛矯正などのハイダメージで、しっとりまとまる仕上がりを求める方",desc:"美容機器で知られるReFa（MTG）のヘアケア最高峰ライン。LDK 2026年1月号「2000円以上部門ベストバイ」。アミノ酸系（アラニン）×ベタイン系にオレフィン系を合わせたしっかりめの洗浄で、ラクトフェリン・加水分解乳タンパクなどのミルク由来成分＋ケラチン・シルク等のPPT＋熱補修成分γ-ドコサラクトンがハイダメージを補修。しっとり重めの仕上がり。洗浄力はやや強めなので、細い髪・敏感な頭皮の方はご注意ください。",set:{amazon:"シャンプー＋トリートメント",rakuten:"シャンプー＋トリートメント"},note:"Amazon・楽天ともMTG公式店のシャンプー＋トリートメントのセットです。楽天は洗い流さないトリートメント付きの3点セットも選べます。",heavyMoisture:true,top:false,amz:"B0FMR58PD2",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55cf47a3.76c41bd3.55cf47a4.5c6ade1f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmtgec-beauty%2F4033620102%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/61gw0ub8toL._AC_SL200_.jpg"}
+      {name:"ReFa（リファ）ミルクプロテインシャンプー ロイヤル",scent:"ホワイトアンバーミルクティー",forWhom:"ブリーチ・縮毛矯正などのハイダメージで、しっとりまとまる仕上がりを求める方",desc:"美容機器で知られるReFa（MTG）のヘアケア最高峰ライン。LDK 2026年1月号「2000円以上部門ベストバイ」。アミノ酸系（アラニン）×ベタイン系にオレフィン系を合わせたしっかりめの洗浄で、ラクトフェリン・加水分解乳タンパクなどのミルク由来成分＋ケラチン・シルク等のPPT＋熱補修成分γ-ドコサラクトンがハイダメージを補修。しっとり重めの仕上がり。洗浄力はやや強めなので、細い髪・敏感な頭皮の方はご注意ください。",set:{amazon:"シャンプー＋トリートメント",rakuten:"シャンプー＋トリートメント"},note:"Amazon・楽天ともMTG公式店のシャンプー＋トリートメントのセットです。楽天は洗い流さないトリートメント付きの3点セットも選べます。",heavyMoisture:true,top:false,amz:"B0FMR58PD2",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55cf47a3.76c41bd3.55cf47a4.5c6ade1f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmtgec-beauty%2F4033620102%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/61gw0ub8toL._AC_SL200_.jpg"},
+      // 2026-11-11 追加（10/20のプレゼン→橋元さん採用）。全成分はAmazon商品ページの「原材料・成分」と公式楽天店で確認（同じ内容）
+      {name:"&honey Rich（アンドハニー リッチ）リュクスリペア シャンプー1.0",scent:"ジューシーペアーハニー",forWhom:"ブリーチ毛で頭皮が乾燥しやすく、やさしく洗いながら補修したい方",desc:"&honeyのヴィークレアのダメージケアライン。洗浄はアミノ酸系（ココイルアラニンNa）×ベタイン系×タウリン系に、PPT系の洗浄成分（ココイル加水分解ケラチンK）を重ねたマイルド設計。補修成分はアミノエチルチオコハク酸ジアンモニウム・レブリン酸・γ-ドコサラクトンに、加水分解ケラチン・コラーゲン・シルク。ハチミツ・ローヤルゼリー・ヒアルロン酸Naなどの保湿成分も配合。シリコーン不使用。",pair:{name:"&honey Rich リュクスリペア ヘアトリートメント2.0",kind:"トリートメント",amz:"B0HBPB5BYN"},note:"Amazonはシャンプー単品（440mL）のページです。楽天は公式店のページで、「シャンプー」を選んでください（同じページで、トリートメントとのセットも選べます）。",top:false,amz:"B0HBPP55NN",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/55d0666b.4ace649d.55d0666c.14ffb508/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fvicrea-shop%2Fhoney-rich001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/31Km+xjHCmL._AC_SL200_.jpg"}
     ]},
   curl_repair:{badge:"Hair Type — CR",title:"Curl Repair",sub:"くせ毛 × 薬剤ダメージ",
     advice:["パーマや縮毛矯正は、髪の結合を薬剤で切って組み直す施術です。そこにもともとのくせが重なるため、日によって広がり方が変わりやすい状態です。","トステア（アミノエチルチオコハク酸ジアンモニウム）やγ-ドコサラクトンなど、ドライヤーの熱に反応して働く補修成分が入ったものを選ぶと、乾かすたびに扱いやすさが積み上がります。","濡れたまま放置するとうねりが出ます。根元から乾かし、7割乾いたら冷風で締めるとまとまります。自然乾燥は避けてください。","シャンプーでくせ毛がストレートになることはありません。うねりを出にくくして扱いやすくするのがケアの役割です。まっすぐにしたい場合は縮毛矯正という選択になります。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせとダメージの状態に合ったケアを確認してみてください。"],
@@ -860,7 +868,10 @@ const TYPES={
     products:[
       {name:"Straine（ストレイン）ストレートシャンプー BASIC",scent:"ホワイトブロッサム",forWhom:"縮毛矯正・ブリーチでダメージが蓄積し、広がりが気になる方",desc:"トステア（アミノエチルチオコハク酸ジアンモニウム）配合。広がり・ダメージが気になる方向けで、きしみを抑えしなやかで扱いやすい質感へ。",set:{amazon:"シャンプー＋トリートメント",rakuten:"シャンプー＋トリートメント"},note:"Amazonはシャンプー＋トリートメントのセット（ヘアオイルのお試し付き）です。楽天はSOFTと同じページなので「ベーシック」を選んでください。",curlAvoid:true,tostera:true,top:true,amz:"B0GRTT6FB4",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a013.0031cfdb.5308a014.024aa4cd/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fstraine-onlineshop%2Fss-r037%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/71PPhw9Oe6L._AC_SL200_.jpg"},
       {name:"セラムイン シャンプー＆トリートメント",scent:"フルーティフローラル（ペアー＆ライチ）",forWhom:"内部からしっかり補修したい、パサつきが深刻な方",desc:"トステア＋PPT成分でダメージを内部から補修。",set:{amazon:"シャンプー＋トリートメント",rakuten:"シャンプー＋トリートメント"},note:"シャンプー単体ではなくセット販売です。",tostera:true,top:false,amz:"B0F4QGL5FD",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308a393.473adf3a.5308a394.cc01164b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdr365%2Fph0004v01%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://image.rakuten.co.jp/dr365/cabinet/item/ph0004v01_1.jpg?_ex=200x200"},
-      {name:"ululis（ウルリス）プレミアム ウォーターコンク ブラックセラム シャンプー",scent:"ブラックフルール（黒ばらのような落ち着いたフローラル）",forWhom:"地肌は乾きやすいのに、髪はブリーチやカラーでしっかり傷んでいる方",desc:"ウルリスの上位ライン。洗浄はラウロイルメチルアラニンNa（アミノ酸系）×ココイルメチルタウリンNa×ベタイン系2種で、サルフェートもオレフィンも使わないマイルド設計。そこにPPT系の洗浄成分（加水分解シルク・ケラチン・コラーゲン）が重なり、洗いながら補うつくりです。トステア（アミノエチルチオコハク酸ジアンモニウム）を上位配合し、DNA-Na・3種のセラミド・クオタニウム-33・コレステロール／レシチンがCMCまわりを整えます。公式の「ブラックセラム水」は黒米発酵液・黒豆ペプチド（加水分解ダイズエキス）・ブラックパール（加水分解コンキオリンタンパク）。シリコーン不使用。",set:{amazon:"シャンプー＋トリートメント",rakuten:"シャンプー＋トリートメント"},note:"Amazonはシャンプー340mL＋トリートメント335gのセット、楽天は同じ組み合わせのボトルセットのページです。詰め替えもあります。",tostera:true,top:false,amz:"B0GPRF1T56",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5623b11c.a48ebd96.5623b11d.f08c4dc0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fh2o-0902-shop%2Ful-bs-0102%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51wKcO2dRqL._AC_SL200_.jpg"}
+      {name:"ululis（ウルリス）プレミアム ウォーターコンク ブラックセラム シャンプー",scent:"ブラックフルール（黒ばらのような落ち着いたフローラル）",forWhom:"地肌は乾きやすいのに、髪はブリーチやカラーでしっかり傷んでいる方",desc:"ウルリスの上位ライン。洗浄はラウロイルメチルアラニンNa（アミノ酸系）×ココイルメチルタウリンNa×ベタイン系2種で、サルフェートもオレフィンも使わないマイルド設計。そこにPPT系の洗浄成分（加水分解シルク・ケラチン・コラーゲン）が重なり、洗いながら補うつくりです。トステア（アミノエチルチオコハク酸ジアンモニウム）を上位配合し、DNA-Na・3種のセラミド・クオタニウム-33・コレステロール／レシチンがCMCまわりを整えます。公式の「ブラックセラム水」は黒米発酵液・黒豆ペプチド（加水分解ダイズエキス）・ブラックパール（加水分解コンキオリンタンパク）。シリコーン不使用。",set:{amazon:"シャンプー＋トリートメント",rakuten:"シャンプー＋トリートメント"},note:"Amazonはシャンプー340mL＋トリートメント335gのセット、楽天は同じ組み合わせのボトルセットのページです。詰め替えもあります。",tostera:true,top:false,amz:"B0GPRF1T56",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5623b11c.a48ebd96.5623b11d.f08c4dc0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fh2o-0902-shop%2Ful-bs-0102%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51wKcO2dRqL._AC_SL200_.jpg"},
+      // 2026-11-11 追加（10/20のプレゼン→橋元さん採用）。全成分はAmazon商品ページの「原材料・成分」と花王公式で確認。
+      // 頭皮がベタつく人（Q1=oily）には洗浄力が足りないので出さない（q1Allow）。外すと、ベタつく人の約2割でも1位になる
+      {name:"MEMEME（ミーミーミー）スムースブースト シャンプー",scent:"ロゼスパークリング×アンバー",forWhom:"縮毛矯正・パーマ後の髪を、重くせずサラサラに仕上げたい方",desc:"花王MEMEMEの軽い仕上がりのライン。洗浄はタウリン系（ココイルメチルタウリンNa）×アミノ酸系（ラウロイルメチルアラニンNa）×ベタイン系で、硫酸系を使わないマイルド設計。加水分解ケラチン・シルク・コンキオリン・コラーゲンとγ-ドコサラクトンを配合。同じMEMEMEのモイストブーストよりグリセリンが後ろの配合順で、しっとりというよりサラッと軽く仕上がります。ノンシリコーン処方。",set:{rakuten:"シャンプー＋トリートメント＋アウトバス1点"},pair:{name:"MEMEME スムースブーストトリートメント",kind:"トリートメント",amz:"B0GMG9XPJK"},note:"Amazonはシャンプー単品（ポンプ400ml）、楽天は公式店の3点セット（シャンプー＋トリートメント＋アウトバス1点）のページです。アウトバスは3種類から選べます。",q1Allow:["dry","normal","mix"],top:false,amz:"B0GMD56RMH",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fmememe-19%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/31+UILnLVxL._AC_SL200_.jpg"}
     ]},
   smooth_wave:{badge:"Hair Type — SW",title:"Smooth Wave",sub:"くせ毛 × 軽〜中ダメージ",
     advice:["くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。","シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。","ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。","シャンプーでくせ毛がストレートになることはありません。うねりを出にくくして扱いやすくするのがケアの役割です。まっすぐにしたい場合は縮毛矯正という選択になります。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。"],
@@ -1669,7 +1680,7 @@ function renderProdCard(p,key,isTopPick){
 const SURFACTANT_DETAIL=[
   {key:"betaine",cat:"ベタイン系",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
     types:["repair_mode","smooth_wave","skin_alert","vital_aging","volume_grace","bare_skin","aqua_sensitive"],
-    products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","PREMIUM LABO","MEMEME","AQ リペア スムース","UNOVE","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","ReFa","アユーラ","Re:KERATIN","＆be","RAFRA","エクラリティ","ディープリーエンブレイス","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA"],
+    products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","PREMIUM LABO","MEMEME","AQ リペア スムース","UNOVE","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","ReFa","アユーラ","Re:KERATIN","＆be","RAFRA","エクラリティ","ディープリーエンブレイス","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA","リュクスリペア"],
     groups:[
       {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
       {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
@@ -1677,7 +1688,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"amino",cat:"アミノ酸系",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","volume_grace"],
-    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","BOTANIST","プロリー","PREMIUM LABO","MEMEME","イオ クレンジング","ミントベル","&PAIR","NOV ヘアシャンプー","KERAGENIC","ReFa","Re:KERATIN","RAFRA","haru","エクラリティ","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA"],
+    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","BOTANIST","プロリー","PREMIUM LABO","MEMEME","イオ クレンジング","ミントベル","&PAIR","NOV ヘアシャンプー","KERAGENIC","ReFa","Re:KERATIN","RAFRA","haru","エクラリティ","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA","リュクスリペア"],
     groups:[
       {sub:"グルタミン酸系",items:["ココイルグルタミン酸Na","ココイルグルタミン酸TEA","ココイルグルタミン酸K","ラウロイルグルタミン酸Na","ラウロイルグルタミン酸TEA"]},
       {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
@@ -1685,7 +1696,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"taurine",cat:"タウリン系",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging"],
-    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","AQ リペア スムース","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","アユーラ","Re:KERATIN","＆be","ディープリーエンブレイス","ululis","ケラリス","RINGS","シーズナルケア","ikue","SIL.KAURA"],
+    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","AQ リペア スムース","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","アユーラ","Re:KERATIN","＆be","ディープリーエンブレイス","ululis","ケラリス","RINGS","シーズナルケア","ikue","SIL.KAURA","リュクスリペア"],
     groups:[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
     ]},
@@ -2617,7 +2628,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <footer id="amazon-product-list" class="static-ftr">
 <p class="ftr-note">Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。</p>
 <details class="static-ftr-details" open>
-<summary>掲載商品一覧（Amazon取扱・52商品）</summary>
+<summary>掲載商品一覧（Amazon取扱・54商品）</summary>
 <p class="ftr-note">Hair Identityの診断で提案しているシャンプーの一覧です。各商品の選定理由・成分解析は診断結果ページでご覧いただけます。</p>
 <ul class="static-ftr-list">
 <li><a href="https://www.amazon.co.jp/dp/B00N0C0B9U?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">ミノン 全身シャンプー しっとりタイプ</a>｜アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。</li>
@@ -2672,8 +2683,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <li><a href="https://www.amazon.co.jp/dp/B0DYNQGH43?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">KUNDAL エアリーボリューム ヒアルロンシャンプー</a>｜韓国発KUNDALのボリュームケアライン。スルホコハク酸系＋ベタイン系のマイルド洗浄で、ノンシリコンの軽い仕上がり。8種のヒアルロン酸と海藻エキスが頭皮と髪にうるおいを与え、根元からエアリーな髪へ。</li>
 <li><a href="https://www.amazon.co.jp/dp/B09S6NLBDC?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">スカルプD ボーテ 薬用スカルプシャンプー ボリューム</a>｜アンファーの女性用薬用スカルプシャンプー（医薬部外品）。有効成分ピロクトンオラミン＋グリチルリチン酸2Kが頭皮環境を整え、洗浄はアミノ酸系＋ベタイン系のマイルド処方。豆乳発酵液と浸透補修成分ペリセア、ハリコシ成分セラキュートＶを配合し、ノンシリコンで根元からふんわり立ち上げる。</li>
 <li><a href="https://www.amazon.co.jp/dp/B07ZB81Q8J?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">haru kurokamiスカルプ シャンプー</a>｜100%天然由来・アミノ酸系（ココイルグルタミン酸TEA主体）のオールインワンシャンプー。リンス・コンディショナー不要の1本で、キャピキシル・ヘマチン・加水分解シルクが頭皮と髪を整えてハリ・コシをサポート。ノンシリコンで根元から軽やかに仕上がる。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0HBPP55NN?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">&honey Rich（アンドハニー リッチ）リュクスリペア シャンプー1.0</a>｜&honeyのヴィークレアのダメージケアライン。洗浄はアミノ酸系（ココイルアラニンNa）×ベタイン系×タウリン系に、PPT系の洗浄成分（ココイル加水分解ケラチンK）を重ねたマイルド設計。補修成分はアミノエチルチオコハク酸ジアンモニウム・レブリン酸・γ-ドコサラクトンに、加水分解ケラチン・コラーゲン・シルク。ハチミツ・ローヤルゼリー・ヒアルロン酸Naなどの保湿成分も配合。シリコーン不使用。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GMD56RMH?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">MEMEME（ミーミーミー）スムースブースト シャンプー</a>｜花王MEMEMEの軽い仕上がりのライン。洗浄はタウリン系（ココイルメチルタウリンNa）×アミノ酸系（ラウロイルメチルアラニンNa）×ベタイン系で、硫酸系を使わないマイルド設計。加水分解ケラチン・シルク・コンキオリン・コラーゲンとγ-ドコサラクトンを配合。同じMEMEMEのモイストブーストよりグリセリンが後ろの配合順で、しっとりというよりサラッと軽く仕上がります。ノンシリコーン処方。</li>
 </ul>
-<p class="ftr-note">シャンプーと一緒に使うトリートメント・コンディショナー（Amazon取扱・10商品）</p>
+<p class="ftr-note">シャンプーと一緒に使うトリートメント・コンディショナー（Amazon取扱・12商品）</p>
 <ul class="static-ftr-list">
 <li><a href="https://www.amazon.co.jp/dp/B00BTDZIXG?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">ノブ ヘアコンディショナー D</a>｜「NOV ヘアシャンプー DS」と一緒に使うコンディショナー</li>
 <li><a href="https://www.amazon.co.jp/dp/B0FGVFBNRH?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">MEMEME モイストブーストトリートメント</a>｜「MEMEME（ミーミーミー）モイストブースト シャンプー」と一緒に使うトリートメント</li>
@@ -2685,6 +2698,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <li><a href="https://www.amazon.co.jp/dp/B0BLT7NY2M?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">UNOVE ディープダメージトリートメントEX</a>｜「UNOVE（アノブ）ディープダメージリペア シャンプー」と一緒に使うトリートメント</li>
 <li><a href="https://www.amazon.co.jp/dp/B0GWJ2FNRL?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">アユーラ ウェルバイタル トリートメント</a>｜「アユーラ ウェルバイタル シャンプー（AYURA）」と一緒に使うトリートメント</li>
 <li><a href="https://www.amazon.co.jp/dp/B0DH7XY419?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">セグレタ コンディショナー 根元からふんわり</a>｜「セグレタ シャンプー 根元からふんわり」と一緒に使うコンディショナー</li>
+<li><a href="https://www.amazon.co.jp/dp/B0HBPB5BYN?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">&honey Rich リュクスリペア ヘアトリートメント2.0</a>｜「&honey Rich（アンドハニー リッチ）リュクスリペア シャンプー1.0」と一緒に使うトリートメント</li>
+<li><a href="https://www.amazon.co.jp/dp/B0GMG9XPJK?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">MEMEME スムースブーストトリートメント</a>｜「MEMEME（ミーミーミー）スムースブースト シャンプー」と一緒に使うトリートメント</li>
 </ul>
 </details>
 </footer>
