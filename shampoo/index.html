@@ -601,6 +601,8 @@ const MATCH_TAGS=[
   {key:"ボーテシャンプー",    tags:{q11:["aging","gray","volume"],q5:["clear","strong"],q10:["moist","volume"],q8:["dry"]}},
   {key:"モイストブースト",     tags:{q7:["color","none"],q8:["dry","gloss"],q10:["moist","gloss"]}},
   {key:"スムースブースト",     tags:{q10:["smooth"]}},
+  {key:"シルクショット",       tags:{q10:["smooth"],q3:["thin"]}},
+  {key:"リポルム",            tags:{q11:["wave"],q8:["spread","frizz"]}},
   {key:"リュクスリペア",       tags:{q11:["repair"],q8:["dry","split"]}},
   {key:"AQ リペア スムース",  tags:{q6:["some","strong"],q10:["smooth","moist","vdown"],q8:["frizz","spread"]}},
   {key:"AQ リペア エッセンス", tags:{q10:["moist","gloss"],q11:["dry"],q1:["dry"]}},
@@ -664,6 +666,10 @@ const ING_PROFILES=[
   {key:"モイストブースト",w:2.5,m:4,o:3,r:3.5,f:"gloss",fl:3.5},
   // 2026-11-11 追加。スムースブースト＝モイストブーストと同じ洗浄・補修の骨格で、グリセリンが後ろ（14番目→21番目）＝軽い仕上がり
   {key:"スムースブースト",w:2.5,m:4,o:2.5,r:3.5,f:"light",fl:3.5},
+  // 2026-11-20 追加。Amprem シルクショット＝ベタイン×β-アラニン（アミノ酸系）×ラウレス-4カルボン酸Na×タウリンの超マイルド洗浄。シルク水が2番目・PPT洗浄成分（ラウロイル加水分解シルクNa）5番目・トステア15番目。グリセリンは終盤・シリコーン/オイル少なめ＝軽い
+  {key:"シルクショット",w:2,m:4.5,o:2,r:3.5,f:"light",fl:3.5},
+  // 2026-11-20 追加。plus eau リポルム＝ココイルアラニンNa×ベタイン×ココイルグルタミン酸TEAのアミノ酸主体洗浄。グリセリン4番目・カチオン3種・アルガン/バオバブ油＝中程度のしっとり。トステア8番目・ジマレイン酸・レブリン酸＝うねりケア、ケラチン・セラミド5種・ヘマチンで補修
+  {key:"リポルム",w:2,m:4.5,o:3,r:4.5,f:"curl",fl:4.5},
   // 2026-11-11 追加。&honey Rich＝アミノ酸系×ベタイン×タウリンのマイルド洗浄＋トステア・レブリン酸・γ-ドコサラクトン・ケラチン（SN repair級の補修）
   {key:"リュクスリペア",w:2.5,m:4,o:3,r:4.5,f:"repair",fl:4.5},
   {key:"イオ クレンジング",w:2,m:4.5,o:2.5,r:1.5,f:"dryscalp",fl:4},
@@ -871,7 +877,11 @@ const TYPES={
       {name:"ululis（ウルリス）プレミアム ウォーターコンク ブラックセラム シャンプー",scent:"ブラックフルール（黒ばらのような落ち着いたフローラル）",forWhom:"地肌は乾きやすいのに、髪はブリーチやカラーでしっかり傷んでいる方",desc:"ウルリスの上位ライン。洗浄はラウロイルメチルアラニンNa（アミノ酸系）×ココイルメチルタウリンNa×ベタイン系2種で、サルフェートもオレフィンも使わないマイルド設計。そこにPPT系の洗浄成分（加水分解シルク・ケラチン・コラーゲン）が重なり、洗いながら補うつくりです。トステア（アミノエチルチオコハク酸ジアンモニウム）を上位配合し、DNA-Na・3種のセラミド・クオタニウム-33・コレステロール／レシチンがCMCまわりを整えます。公式の「ブラックセラム水」は黒米発酵液・黒豆ペプチド（加水分解ダイズエキス）・ブラックパール（加水分解コンキオリンタンパク）。シリコーン不使用。",set:{amazon:"シャンプー＋トリートメント",rakuten:"シャンプー＋トリートメント"},note:"Amazonはシャンプー340mL＋トリートメント335gのセット、楽天は同じ組み合わせのボトルセットのページです。詰め替えもあります。",tostera:true,top:false,amz:"B0GPRF1T56",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5623b11c.a48ebd96.5623b11d.f08c4dc0/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fh2o-0902-shop%2Ful-bs-0102%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjQwMHg0MDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MCwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/51wKcO2dRqL._AC_SL200_.jpg"},
       // 2026-11-11 追加（10/20のプレゼン→橋元さん採用）。全成分はAmazon商品ページの「原材料・成分」と花王公式で確認。
       // 頭皮がベタつく人（Q1=oily）には洗浄力が足りないので出さない（q1Allow）。外すと、ベタつく人の約2割でも1位になる
-      {name:"MEMEME（ミーミーミー）スムースブースト シャンプー",scent:"ロゼスパークリング×アンバー",forWhom:"縮毛矯正・パーマ後の髪を、重くせずサラサラに仕上げたい方",desc:"花王MEMEMEの軽い仕上がりのライン。洗浄はタウリン系（ココイルメチルタウリンNa）×アミノ酸系（ラウロイルメチルアラニンNa）×ベタイン系で、硫酸系を使わないマイルド設計。加水分解ケラチン・シルク・コンキオリン・コラーゲンとγ-ドコサラクトンを配合。同じMEMEMEのモイストブーストよりグリセリンが後ろの配合順で、しっとりというよりサラッと軽く仕上がります。ノンシリコーン処方。",set:{rakuten:"シャンプー＋トリートメント＋アウトバス1点"},pair:{name:"MEMEME スムースブーストトリートメント",kind:"トリートメント",amz:"B0GMG9XPJK"},note:"Amazonはシャンプー単品（ポンプ400ml）、楽天は公式店の3点セット（シャンプー＋トリートメント＋アウトバス1点）のページです。アウトバスは3種類から選べます。",q1Allow:["dry","normal","mix"],top:false,amz:"B0GMD56RMH",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fmememe-19%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/31+UILnLVxL._AC_SL200_.jpg"}
+      {name:"MEMEME（ミーミーミー）スムースブースト シャンプー",scent:"ロゼスパークリング×アンバー",forWhom:"縮毛矯正・パーマ後の髪を、重くせずサラサラに仕上げたい方",desc:"花王MEMEMEの軽い仕上がりのライン。洗浄はタウリン系（ココイルメチルタウリンNa）×アミノ酸系（ラウロイルメチルアラニンNa）×ベタイン系で、硫酸系を使わないマイルド設計。加水分解ケラチン・シルク・コンキオリン・コラーゲンとγ-ドコサラクトンを配合。同じMEMEMEのモイストブーストよりグリセリンが後ろの配合順で、しっとりというよりサラッと軽く仕上がります。ノンシリコーン処方。",set:{rakuten:"シャンプー＋トリートメント＋アウトバス1点"},pair:{name:"MEMEME スムースブーストトリートメント",kind:"トリートメント",amz:"B0GMG9XPJK"},note:"Amazonはシャンプー単品（ポンプ400ml）、楽天は公式店の3点セット（シャンプー＋トリートメント＋アウトバス1点）のページです。アウトバスは3種類から選べます。",q1Allow:["dry","normal","mix"],top:false,amz:"B0GMD56RMH",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5308df92.155ceec0.5308df93.0bd0bb24/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkao-haircare%2Fmememe-19%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/31+UILnLVxL._AC_SL200_.jpg"},
+      // 2026-11-20 追加（11/20のプレゼン→橋元さん採用）。全成分はAmprem公式（amprem.jp/products/silkshot-shtr/）で確認。Amazon B0HBPXD8W3（シャンプー単品420mL・Amazon.co.jp販売）は11/20に実ページで確認（橋元さん「これまで通り作成して」）。頭皮がベタつく人（Q1=oily）には洗浄力が足りないので出さない（q1Allow・MEMEMEと同じ扱い）
+      {name:"Amprem（アンプレム）シルクショット シャンプー",scent:"イノセントマグノリア",forWhom:"縮毛矯正やパーマのあとの髪を、絡まず軽いさらさらに仕上げたい方",desc:"BOTANISTのI-neが2026年8月に立ち上げたブランドの、さらさら仕上げのライン。洗浄はベタイン系（コカミドプロピルベタイン）×アミノ酸系（ラウロイルヒドロキシエチル-β-アラニンNa）×カルボン酸系（ラウレス-4カルボン酸Na）×タウリン系で、硫酸系・オレフィン系は使わないマイルド設計。水の一部をシルク水に置き換え、PPT系の洗浄成分（ラウロイル加水分解シルクNa）と加水分解シルクで洗いながら手触りを整えます。トステア（アミノエチルチオコハク酸ジアンモニウム）・メドウフォーム-δ-ラクトン・アミノ酸9種も配合。シリコーン不使用で、軽い仕上がりです。",note:"Amazonはシャンプー単品（420mL）のページです。楽天はケラチンショットと同じページなので、「【シルク】イノセントマグノリア」と「シャンプー単品」を選んでください（トリートメントも欲しい方は「シャンプー/トリートメント2点」）。",q1Allow:["dry","normal","mix"],tostera:true,top:false,amz:"B0HBPXD8W3",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/5333ffb3.3bcd4241.5333ffb4.7307902b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fkobe-beauty-labo%2Fapm001%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/41nZPVMVD5L._AC_SL200_.jpg"},
+      // 2026-11-20 追加（11/20のプレゼン→橋元さん採用）。全成分はplus eau公式（pluseau.jp/product/lyporm/）で確認。Amazon B0HFRVHX8S（シャンプー単品450ml・Amazon.co.jp販売）は11/20に実ページで確認。Q1=oilyには出さない（q1Allow）
+      {name:"plus eau（プリュスオー）リポルム シャンプー",scent:"ホワイトフローラル＆ペアー",forWhom:"縮毛矯正をしていても、湿気でうねる・広がるのが気になる方",desc:"plus eauのうねりケアのライン。洗浄はアミノ酸系（ココイルアラニンNa・ココイルグルタミン酸TEA）×ベタイン系で、硫酸系・オレフィン系は使わないマイルド設計。うねりに着目した成分としてトステア（アミノエチルチオコハク酸ジアンモニウム）・ジマレイン酸プロピレンジアンモニウム・レブリン酸を配合し、シルク・ケラチン（羊毛・カシミヤヤギ）・メドウフォーム-δ-ラクトン・ヘマチン・5種のセラミドで補修します。グリセリンが前のほうにあり、しっとりまとまる仕上がり。シャンプーはシリコーン不使用。",set:{rakuten:"シャンプー＋トリートメント"},note:"Amazonはシャンプー単品（450ml）のページです。楽天は公式店のシャンプー＋トリートメント（各450ml）のセットのページです。メロウ・メルティ・リポアと同じページなので「リポルム」を選んでください。",q1Allow:["dry","normal","mix"],tostera:true,top:false,amz:"B0HFRVHX8S",rakUrl:"https://hb.afl.rakuten.co.jp/ichiba/59bf0dc1.2b621957.59bf0dc2.bfc227bb/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Femikuru%2F4582300063658_set%2F&link_type=hybrid_url&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJoeWJyaWRfdXJsIiwic2l6ZSI6IjI0MHgyNDAiLCJuYW0iOjEsIm5hbXAiOiJyaWdodCIsImNvbSI6MSwiY29tcCI6ImRvd24iLCJwcmljZSI6MSwiYm9yIjoxLCJjb2wiOjEsImJidG4iOjEsInByb2QiOjAsImFtcCI6ZmFsc2V9",img_url:"https://m.media-amazon.com/images/I/214n6i41giL._AC_SL200_.jpg"}
     ]},
   smooth_wave:{badge:"Hair Type — SW",title:"Smooth Wave",sub:"くせ毛 × 軽〜中ダメージ",
     advice:["くせ毛は髪の断面が楕円形で、水分を均一に吸収できないため乾燥するとうねりが強くなります。保湿ケアがうねり抑制の基本です。","シャンプー後は半乾きのまま放置しないこと。タオルドライ後すぐにアウトバストリートメント（流さないミルク・クリーム）をつけてドライヤーをかけましょう。","ドライヤーは根元から毛先に向かって風を当てると、キューティクルが整いうねりが落ち着きます。仕上げにクールモードで引き締めると持続性アップ。","シャンプーでくせ毛がストレートになることはありません。うねりを出にくくして扱いやすくするのがケアの役割です。まっすぐにしたい場合は縮毛矯正という選択になります。","※ 詳しくは担当の美容師さんに相談しながら、ご自身のくせの強さに合ったケアを確認してみてください。"],
@@ -1680,7 +1690,7 @@ function renderProdCard(p,key,isTopPick){
 const SURFACTANT_DETAIL=[
   {key:"betaine",cat:"ベタイン系",rank:1,desc:"最もマイルド。低刺激で補助洗浄成分として優秀",
     types:["repair_mode","smooth_wave","skin_alert","vital_aging","volume_grace","bare_skin","aqua_sensitive"],
-    products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","PREMIUM LABO","MEMEME","AQ リペア スムース","UNOVE","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","ReFa","アユーラ","Re:KERATIN","＆be","RAFRA","エクラリティ","ディープリーエンブレイス","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA","リュクスリペア"],
+    products:["ストレイン","SN repair","セラムイン","セグレタ","BOTANIST","IONICO","プロリー","PREMIUM LABO","MEMEME","AQ リペア スムース","UNOVE","アデノバイタル","イオ クレンジング","ミントベル","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","ReFa","アユーラ","Re:KERATIN","＆be","RAFRA","エクラリティ","ディープリーエンブレイス","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA","リュクスリペア","シルクショット","リポルム"],
     groups:[
       {sub:"ベタイン型",items:["コカミドプロピルベタイン","ラウラミドプロピルベタイン","ラウリルベタイン","ラウリルヒドロキシスルホベタイン","ラウリルヒドロキシスルタイン"]},
       {sub:"アミノ酸両性型",items:["ココアンホ酢酸Na","ラウロアンホ酢酸Na","ココアンホプロピオン酸Na"]},
@@ -1688,7 +1698,7 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"amino",cat:"アミノ酸系",rank:2,desc:"マイルドで保湿力あり。サロン専売〜中価格帯に多い",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","volume_grace"],
-    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","BOTANIST","プロリー","PREMIUM LABO","MEMEME","イオ クレンジング","ミントベル","&PAIR","NOV ヘアシャンプー","KERAGENIC","ReFa","Re:KERATIN","RAFRA","haru","エクラリティ","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA","リュクスリペア"],
+    products:["ジュレーム","ジアンサー","ストレイン","セラムイン","BOTANIST","プロリー","PREMIUM LABO","MEMEME","イオ クレンジング","ミントベル","&PAIR","NOV ヘアシャンプー","KERAGENIC","ReFa","Re:KERATIN","RAFRA","haru","エクラリティ","ululis","ケラリス","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA","リュクスリペア","シルクショット","リポルム"],
     groups:[
       {sub:"グルタミン酸系",items:["ココイルグルタミン酸Na","ココイルグルタミン酸TEA","ココイルグルタミン酸K","ラウロイルグルタミン酸Na","ラウロイルグルタミン酸TEA"]},
       {sub:"アラニン系",items:["ラウロイルメチルアラニンNa","ラウロイルメチルアラニンTEA","ココイルメチルアラニンNa"]},
@@ -1696,13 +1706,13 @@ const SURFACTANT_DETAIL=[
     ]},
   {key:"taurine",cat:"タウリン系",rank:2,desc:"アミノ酸系並みにマイルドで起泡力も良好",
     types:["aqua_sensitive","bare_skin","repair_mode","smooth_wave","skin_alert","vital_aging"],
-    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","AQ リペア スムース","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","アユーラ","Re:KERATIN","＆be","ディープリーエンブレイス","ululis","ケラリス","RINGS","シーズナルケア","ikue","SIL.KAURA","リュクスリペア"],
+    products:["ジュレーム","エッセンシャル プレミアム","ジアンサー","ストレイン","セラムイン","MEMEME","AQ リペア スムース","イオ クレンジング","ミントベル","ウヌボレストレート","カウブランド","&PAIR","メルト","アルジェラン","NOV ヘアシャンプー","KERAGENIC","アユーラ","Re:KERATIN","＆be","ディープリーエンブレイス","ululis","ケラリス","RINGS","シーズナルケア","ikue","SIL.KAURA","リュクスリペア","シルクショット"],
     groups:[
       {sub:"タウリン系",items:["ココイルメチルタウリンNa","ラウロイルメチルタウリンNa","ミリストイルメチルタウリンNa","パルミトイルメチルタウリンNa","ココイルメチルタウリンMg"]},
     ]},
   {key:"acid",cat:"その他のマイルド系",rank:2,desc:"弱酸性で頭皮に近く、低刺激な補助系",
     types:["bare_skin","aqua_sensitive","smooth_wave","volume_grace","repair_mode"],
-    products:["MEMEME","カウブランド","&PAIR","メルト","KUNDAL","エクラリティ","ululis","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA"],
+    products:["MEMEME","カウブランド","&PAIR","メルト","KUNDAL","エクラリティ","ululis","RINGS","セラティス","シーズナルケア","ikue","SIL.KAURA","シルクショット","リポルム"],
     groups:[
       {sub:"カルボン酸系",items:["ラウレス-4カルボン酸Na","ラウレス-5カルボン酸Na","ラウレス-6カルボン酸Na","ラウレス-11カルボン酸Na"]},
       {sub:"スルホコハク酸系",items:["スルホコハク酸ラウレス2Na","スルホコハク酸(C12-14)パレス-2Na","スルホコハク酸ラウリル2Na"]},
@@ -2630,7 +2640,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <footer id="amazon-product-list" class="static-ftr">
 <p class="ftr-note">Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。</p>
 <details class="static-ftr-details" open>
-<summary>掲載商品一覧（Amazon取扱・57商品）</summary>
+<summary>掲載商品一覧（Amazon取扱・59商品）</summary>
 <p class="ftr-note">Hair Identityの診断で提案しているシャンプーの一覧です。各商品の選定理由・成分解析は診断結果ページでご覧いただけます。</p>
 <ul class="static-ftr-list">
 <li><a href="https://www.amazon.co.jp/dp/B00N0C0B9U?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">ミノン 全身シャンプー しっとりタイプ</a>｜アミノ酸系・低刺激。敏感肌・乾燥肌に配慮した全身用シャンプー。</li>
@@ -2690,6 +2700,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 <li><a href="https://www.amazon.co.jp/dp/B0H359GHSF?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">RINGS（リングス）モイストリペア シャンプー</a>｜アミノ酸系×タウリン系×ベタイン系の洗浄。トステア×レブリン酸のうねりケアに、ケラチンなどのPPT7種とセラミド5種を重ねた補修処方。シリコーン不使用。</li>
 <li><a href="https://www.amazon.co.jp/dp/B095HG3WV2?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">コスメデコルテ AQ リペア スムース シャンプー（KOSE）</a>｜KOSEのプレステージブランド。オレフィン系×ベタイン系×タウリン系のバランス洗浄。白樺水・ホワイトムクナエキス配合で頭皮と髪をなめらかに整える。</li>
 <li><a href="https://www.amazon.co.jp/dp/B0H261XDHF?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">PREMIUM LABO ボーテシャンプー</a>｜安井友梨プロデュース。アミノ酸系＋ベタイン系の低刺激処方に、カチオン化ケラチンと熱補修成分γ-ドコサラクトンを配合。ノンシリコンで根元からふんわり。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0HBPXD8W3?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">Amprem（アンプレム）シルクショット シャンプー</a>｜ベタイン系×アミノ酸系×カルボン酸系×タウリン系のマイルド洗浄。シルク水・ラウロイル加水分解シルクNa・トステア配合のさらさら仕上げ。シリコーン不使用。</li>
+<li><a href="https://www.amazon.co.jp/dp/B0HFRVHX8S?tag=hairidentit0b-22" target="_blank" rel="nofollow sponsored noopener">plus eau（プリュスオー）リポルム シャンプー</a>｜アミノ酸系×ベタイン系のマイルド洗浄。トステア・ジマレイン酸プロピレンジアンモニウム・レブリン酸配合のうねりケア。セラミド5種・ヘマチンで補修。</li>
 </ul>
 <p class="ftr-note">シャンプーと一緒に使うトリートメント・コンディショナー（Amazon取扱・14商品）</p>
 <ul class="static-ftr-list">
