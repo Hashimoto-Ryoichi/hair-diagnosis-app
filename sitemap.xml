@@ -2,20 +2,88 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://hashimoto-ryoichi.com/</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://hashimoto-ryoichi.com/shampoo/</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://hashimoto-ryoichi.com/nanopico/</loc>
-    <lastmod>2026-11-20</lastmod>
+    <lastmod>2026-11-28</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- TYPE-PAGES:START（scripts/build-seo-pages.js が書き出す） -->
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/skin-alert/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/oil-reset-short/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/oil-reset-long/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/repair-mode/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/curl-repair/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/silk-restore/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/smooth-wave/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/aqua-sensitive/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/bare-skin/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/vital-aging/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hashimoto-ryoichi.com/shampoo/type/volume-grace/</loc>
+    <lastmod>2026-11-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <!-- TYPE-PAGES:END -->
 </urlset>

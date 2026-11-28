@@ -105,7 +105,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.2/babel.min.js" integrity="sha384-dqDn4UOhYWNxmtwnMX6yC3WtZZ6Li8rF6rLB7cu0i/R7btvb+p+kObgEHto7VsJK" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" integrity="sha384-uTYyvsSSUZeaPhb5RbKlQa0zY/WpX/QHfvg2mczXyBQOpkWPEDy9lczyp+w7SKXu" crossorigin="anonymous"></script>
 
 <!-- Vercel Analytics -->
@@ -303,6 +302,27 @@ body::before{content:"";position:fixed;inset:0;background-image:url("data:image/
 @media (max-width:480px){.ftr-rsv-btn{width:100%;padding:1rem}.ftr-profile{padding:1rem;gap:.9rem}}/* 文字の幅を確保して「ご予約・ご相談は／LINEから」で折れるように（アイコン分・2026-10-06） */
 @media (hover:hover) and (pointer:fine){.ftr-rsv-btn:hover{background:var(--gold-d);color:var(--cream)}}
 .ftr-note{font-size:.82rem;color:var(--muted);line-height:1.8;white-space:pre-line}
+/* ── 「シャンプー診断について」（JSなしで読める説明。中身は scripts/build-seo-pages.js が書き出す） ── */
+.seo-about{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:2.6rem 1.5rem 2rem;border-top:1px solid var(--border);color:var(--char2);line-height:1.9;font-size:.92rem}
+body.hide-about .seo-about{display:none}
+.seo-about h2{font-family:var(--sans);font-size:1.12rem;font-weight:500;color:var(--char);letter-spacing:.04em;margin:2.4rem 0 .9rem;padding-left:.7rem;border-left:2px solid var(--gold)}
+.seo-about h2:first-child{margin-top:0}
+.seo-about h3{font-size:.95rem;font-weight:500;color:var(--char);margin:1.3rem 0 .35rem}
+.seo-about p{margin:0 0 .8rem}
+.seo-about a{color:var(--gold-d)}
+.seo-list{margin:.2rem 0 1rem;padding-left:1.2em}
+.seo-list li{margin:.25rem 0}
+.seo-list b{font-weight:500;color:var(--char)}
+.seo-types{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:.6rem;margin:.4rem 0 .6rem}
+@media (min-width:560px){.seo-types{grid-template-columns:repeat(3,1fr)}}
+.seo-types a{display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;background:rgba(255,255,255,.55);border:1px solid var(--border);border-radius:var(--r);padding:.7rem .5rem .8rem;height:100%;-webkit-tap-highlight-color:transparent}
+@media (hover:hover) and (pointer:fine){.seo-types a:hover{border-color:var(--gold-l)}}
+.seo-types img{width:64%;max-width:110px;aspect-ratio:896/1200;height:auto;object-fit:contain;margin-bottom:.4rem}
+.seo-types .t{font-family:var(--serif);font-size:1.05rem;color:var(--char);line-height:1.2}
+.seo-types .s{font-size:.72rem;color:var(--muted);line-height:1.5;margin-top:.25rem}
+.seo-faq h3::before{content:"Q. ";color:var(--gold);font-family:var(--serif)}
+.seo-note{font-size:.8rem;color:var(--muted)}
+.seo-back{display:inline-block;margin-top:1.4rem;font-size:.85rem}
 /* ── 静的フッター（Amazonアソシエイト審査用：クローラーがJSなしで確認できる商品リンク一覧） ── */
 .static-ftr{max-width:680px;margin:0 auto;padding:1.4rem 1.5rem 2.6rem;border-top:1px solid var(--border)}
 /* Amazonリンクが実在する画面（result／products）以外では隠す。既定は表示なので、JSを実行しない
@@ -464,8 +484,10 @@ body.hide-static-ftr .static-ftr{display:none}
 </head>
 <body>
 <div id="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:0%"></div>
-<div id="root"></div>
-<script type="text/babel">
+<!-- #root の中身は、JavaScriptが動くまでの仮の見出し（Googleが最初に読む文字）。Reactが描画すると同じ見た目の本物に置き換わる -->
+<div id="root"><header class="hdr"><p class="hdr-eye">Hair Care Diagnosis</p><h1 class="hdr-h1"><span class="hdr-h1-ja">シャンプー診断</span> Hair Identity</h1></header></div>
+<!-- 2026-11-28 @babel/standalone をやめた。この中はJSXを使わない普通のJavaScript（h()＝React.createElement）なので、変換なしでそのまま動く。JSX（<div>…）を書き足すと動かなくなるので書かないこと -->
+<script>
 const ASSOC_ID="hairidentit0b-22";
 // 計測：診断の進み具合・押されたボタンを名前つきで送る（送り先は /measure.js の hrTrack＝Clarity と GA4）。
 // 商品カードは App の外で描画するのでモジュール直下に置く。本番のアドレス以外では何も送らない。
@@ -1464,7 +1486,8 @@ function buildTrace(ans,typeKey){
 }
 
 // 除外タイプの理由
-const ALL_TYPE_KEYS=["skin_alert","oil_reset_short","oil_reset_long","repair_mode","smooth_wave","aqua_sensitive","bare_skin","vital_aging","volume_grace"];
+// 2026-11-28 curl_repair・silk_restore（2026-09-16にRepair Modeから分けた2タイプ）が抜けていたのを足した。タイプを増やしたらここにも足すこと
+const ALL_TYPE_KEYS=["skin_alert","oil_reset_short","oil_reset_long","repair_mode","curl_repair","silk_restore","smooth_wave","aqua_sensitive","bare_skin","vital_aging","volume_grace"];
 
 function explainExcluded(ans,selectedTypeKey){
   const q7arr=Array.isArray(ans.q7)?ans.q7:[ans.q7||"none"];
@@ -1480,10 +1503,20 @@ function explainExcluded(ans,selectedTypeKey){
     else if(t==="oil_reset_short") r=((ans.q1==="oily"||q11arr.includes("oily"))&&normLen(ans.q2)==="short")?"":"脂性ショート条件に該当せず";
     else if(t==="oil_reset_long") r=((ans.q1==="oily"||q11arr.includes("oily"))&&normLen(ans.q2)!=="short")?"":"脂性ミディアム以上条件に該当せず";
     else if(t==="repair_mode"){
-      const strongChem=q7arr.some(v=>["bleach","straight","perm"].includes(v));
+      // 縮毛矯正・パーマは2026-09-16から Curl Repair／Silk Restore に振るため、ここではブリーチだけを強い薬剤として見る
+      const strongChem=q7arr.includes("bleach");
       const colorSerious=q7arr.includes("color")&&q8arr.some(v=>v==="split"||v==="frizz");
       const selfRepair=q11arr.includes("repair")&&q8arr.some(v=>["split","frizz","spread"].includes(v));
-      r=(strongChem||colorSerious||selfRepair)?"":"ハイダメージ薬剤・深刻ダメージサインの該当なし";
+      r=(strongChem||colorSerious||selfRepair)?"":"ブリーチ・深刻ダメージサインの該当なし";
+    }
+    else if(t==="curl_repair"||t==="silk_restore"){
+      // diagnose(): ブリーチなし×（縮毛矯正 or パーマ）で、くせ毛あり→Curl Repair／くせ毛なし→Silk Restore
+      const permOrStraight=q7arr.includes("straight")||q7arr.includes("perm");
+      const kuse=ans.q6==="some"||ans.q6==="strong";
+      if(!permOrStraight) r="1年以内の縮毛矯正・パーマなし";
+      else if(q7arr.includes("bleach")) r="ブリーチありはRepair Mode優先";
+      else if(t==="curl_repair") r=kuse?"":"くせ毛なし（直毛×薬剤ダメージはSilk Restore）";
+      else r=kuse?"くせ毛あり（くせ毛×薬剤ダメージはCurl Repair）":"";
     }
     else if(t==="smooth_wave") r=(ans.q6==="some"||ans.q6==="strong"||q11arr.includes("wave")||q8arr.includes("spread")||q10arr.includes("vdown")||q5arr.includes("birth")||ans.q3==="thick"||ans.q4==="more")?"":"くせ毛・うねり・広がり・太毛/多毛等の該当なし";
     else if(t==="aqua_sensitive"){
@@ -1491,7 +1524,7 @@ function explainExcluded(ans,selectedTypeKey){
       else if(normLen(ans.q2)!=="short"&&q8arr.includes("dry")) r="1年以内の薬剤処理なしでも、ミディアム以上の長さは毛先に過去の既染部が残る可能性あり（新生毛と判断できるのはショートのみ）";
       else r="";
     }
-    else if(t==="bare_skin") r=(q7arr.includes("color")||q7arr.includes("none")||q7arr.includes("bleach"))?"":"強薬剤（パーマ・縮毛矯正）はRepair Mode優先";
+    else if(t==="bare_skin") r=(q7arr.includes("color")||q7arr.includes("none")||q7arr.includes("bleach"))?"":"強薬剤（パーマ・縮毛矯正）はCurl Repair／Silk Restore優先";
     else if(t==="vital_aging") r=(q5arr.includes("strong")||q5arr.includes("clear")||q11arr[0]==="aging"||q11arr[0]==="gray")?"":"エイジングサイン（主訴のエイジング/白髪・50代以降の実感）なし";
     else if(t==="volume_grace") r=(q10arr.includes("volume")||q11arr.includes("volume")||((q11arr[0]==="aging"||q11arr[0]==="gray"||((q11arr.includes("aging")||q11arr.includes("gray"))&&(q5arr.includes("clear")||q5arr.includes("strong"))))&&(ans.q3==="thin"||ans.q4==="less")))?"":"「ボリュームが欲しい」回答・細毛×エイジング条件に該当せず";
     if(r) reasons.push({type:t,name:(TYPES[t]&&TYPES[t].title)||t,reason:r});
@@ -2181,6 +2214,8 @@ function App(){
   // トップ・質問11問・分析中では邪魔になるだけなので隠す（HTML上は常に存在＝クローラーには見える）。
   useEffect(()=>{
     document.body.classList.toggle("hide-static-ftr",!(step==="result"||step==="products"));
+    // 「シャンプー診断について」（下の静的な説明）は最初の画面だけに出す。質問中・結果では邪魔になるので隠す
+    document.body.classList.toggle("hide-about",step!=="intro");
   },[step]);
   // 質問到達を計測（最大到達問のみ＝「戻る」での二重計上を防ぐ）
   useEffect(()=>{
@@ -2388,7 +2423,7 @@ function App(){
           h("p",{className:"intro-msg-quote"},"「シャンプー、何がおすすめですか？」"),
           h("p",{className:"intro-msg-body"},"サロンで毎日のように受ける質問でした。膨大な数のシャンプーから、本当に合う一本を選び切れない歯がゆさが、ずっとありました。"),
           h("p",{className:"intro-msg-body"},"水の次に多く含まれる「界面活性剤」と、近年進化する補修成分。この組み合わせが、髪と頭皮への影響を大きく左右します。"),
-          h("p",{className:"intro-msg-body"},"このアプリは、シャンプー選びをAIと一緒に見直すために作りました。あなたの最適解へ導きます。")
+          h("p",{className:"intro-msg-body"},"このアプリは、シャンプー選びを成分から見直すために作りました。あなたの最適解へ導きます。")
         ),
         h("div",{className:"profile-top"},
           h("div",{className:"profile-top-photo"},
@@ -2637,6 +2672,113 @@ function App(){
 }
 ReactDOM.createRoot(document.getElementById("root")).render(h(App));
 </script>
+<!-- SEO-ABOUT:START（ここから下の END までは scripts/build-seo-pages.js が書き出す。直接直さず、スクリプトを直して `node scripts/build-seo-pages.js` を実行する） -->
+<section id="about" class="seo-about" aria-label="シャンプー診断について">
+<h2>シャンプー診断でわかること</h2>
+<p>11の質問に答えると、髪と頭皮の状態から、あなたに合うシャンプーの選び方がわかります。無料・登録不要で、所要時間は約2〜3分です。</p>
+<ul class="seo-list">
+<li><b>髪と頭皮のタイプ</b>：11のタイプのうち、どれにあたるか</li>
+<li><b>回答のまとめ</b>：答えから見えた、今の髪と頭皮の状態</li>
+<li><b>ケアのポイント</b>：洗い方・乾かし方など、毎日のケアの考え方</li>
+<li><b>合うシャンプー</b>：答えに合う順に並べた候補（Amazon・楽天で見られます）</li>
+</ul>
+<h2>11のタイプ</h2>
+<p>タイプ名を押すと、そのタイプのケアのポイントと、候補になるシャンプーが見られます。</p>
+<ul class="seo-types">
+<li><a href="/shampoo/type/skin-alert/"><img src="/char-skin-alert.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Skin Alert</span><span class="s">頭皮に炎症サインあり</span></a></li>
+<li><a href="/shampoo/type/oil-reset-short/"><img src="/char-oil-reset-short.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Oil Reset</span><span class="s">脂性頭皮 × ショート</span></a></li>
+<li><a href="/shampoo/type/oil-reset-long/"><img src="/char-oil-reset-long.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Oil Reset</span><span class="s">脂性頭皮 × ミディアム〜ロング</span></a></li>
+<li><a href="/shampoo/type/repair-mode/"><img src="/char-repair-mode.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Repair Mode</span><span class="s">ブリーチによるハイダメージ</span></a></li>
+<li><a href="/shampoo/type/curl-repair/"><img src="/char-curl-repair.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Curl Repair</span><span class="s">くせ毛 × 薬剤ダメージ</span></a></li>
+<li><a href="/shampoo/type/silk-restore/"><img src="/char-silk-restore.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Silk Restore</span><span class="s">直毛 × 薬剤ダメージ</span></a></li>
+<li><a href="/shampoo/type/smooth-wave/"><img src="/char-smooth-wave.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Smooth Wave</span><span class="s">くせ毛 × 軽〜中ダメージ</span></a></li>
+<li><a href="/shampoo/type/aqua-sensitive/"><img src="/char-aqua-sensitive.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Aqua Sensitive</span><span class="s">乾燥・バージン毛・健康な髪</span></a></li>
+<li><a href="/shampoo/type/bare-skin/"><img src="/char-bare-skin.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Bare Skin</span><span class="s">乾燥・混合 × カラー × 軽ダメージ</span></a></li>
+<li><a href="/shampoo/type/vital-aging/"><img src="/char-vital-aging.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Vital Aging</span><span class="s">ハリ・コシ・ボリューム不足が気になる髪</span></a></li>
+<li><a href="/shampoo/type/volume-grace/"><img src="/char-volume-grace.webp" alt="" width="896" height="1200" loading="lazy" decoding="async"><span class="t">Volume Grace</span><span class="s">細毛・少毛量・ボリュームケアが必要な髪</span></a></li>
+</ul>
+<h2>診断のしくみ</h2>
+<p>シャンプーの中身で、水の次に多いのが洗浄成分（界面活性剤）です。同じ「アミノ酸系」と書かれていても、ほかの洗浄成分との組み合わせや補修成分で、洗い上がりは大きく変わります。</p>
+<p>この診断では、載せているシャンプー1本ずつの全成分（配合の順番）を確かめ、洗浄力・低刺激性・しっとり度・補修力・特化の強さの5つの軸で点数を付けています。11問の答えから「今の髪に合う目標」を決め、その目標に近い順に並べます。同じタイプでも、しっとりさせたいか、サラサラにしたいかで1位は入れ替わります。</p>
+<p>頭皮が乾燥しやすい人や赤みがある人には、洗浄力の強いシャンプーが上に来ないようにしています。</p>
+<h2>よくある質問</h2>
+<div class="seo-faq">
+<h3>シャンプー診断は無料ですか？登録は必要ですか？</h3>
+<p>無料です。会員登録やメールアドレスの入力もいりません。11問に答えると、その場で結果が出ます。所要時間は約2〜3分です。</p>
+<h3>売りたい商品が上に出るのではないですか？</h3>
+<p>並び順は、11問の答えと、商品ごとの全成分から付けた点数で決まります。Amazon・楽天のリンクから購入されると紹介料が入る仕組みはありますが、紹介料は点数に入っていません。また、どの答えでも1位にならない商品は載せない方針にしています。</p>
+<h3>AIが診断しているのですか？</h3>
+<p>診断の画面でAIは動いていません。答えからタイプと順位を出すのは、美容師の接客経験をもとに決めたルールと点数です。AIは、商品の成分を調べる下読みや、ルールに食い違いがないかの点検に使っています。</p>
+<h3>ブリーチ毛・くせ毛・白髪でも使えますか？</h3>
+<p>使えます。ブリーチ、縮毛矯正・パーマ、くせ毛、カラー、年齢によるハリ・コシの変化、細毛・ボリュームの悩みなどを、それぞれ別のタイプとして考えます。白髪やエイジングの悩みも、質問の中で答えられます。</p>
+<h3>頭皮に赤みや湿疹があるときはどうすればいいですか？</h3>
+<p>赤みや湿疹があるときは、シャンプーを選ぶ前に皮膚科の受診をおすすめします。シャンプーは薬ではないので、症状そのものを治すことはできません。診断では、頭皮への刺激を減らす方向のシャンプーをご提案します。</p>
+<h3>診断のあと、美容師に相談できますか？</h3>
+<p>できます。東京・原宿（明治神宮前）のGO TODAY SHAiRE SALON 原宿本店で、橋元リョウイチが担当しています。ご相談・ご予約はLINEで受け付けています。</p>
+</div>
+<p><a href="https://lin.ee/tazRvbX" target="_blank" rel="noopener noreferrer" onclick="window.hrTrack&amp;&amp;window.hrTrack('shampoo_line_about')">LINEで相談する</a></p>
+<h2>作った人</h2>
+<p>橋元リョウイチ｜東京・原宿のフリーランス美容師（GO TODAY SHAiRE SALON 原宿本店）。美容師歴20年以上。サロンで毎日のように受けてきた「シャンプー、何がおすすめですか？」という質問に、成分と髪の構造から答えるために、この診断を作りました。</p>
+<p><a href="/">橋元リョウイチのプロフィール</a></p>
+<p><a href="#" class="seo-back">↑ 上に戻って、診断をはじめる</a></p>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "シャンプー診断は無料ですか？登録は必要ですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "無料です。会員登録やメールアドレスの入力もいりません。11問に答えると、その場で結果が出ます。所要時間は約2〜3分です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "売りたい商品が上に出るのではないですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "並び順は、11問の答えと、商品ごとの全成分から付けた点数で決まります。Amazon・楽天のリンクから購入されると紹介料が入る仕組みはありますが、紹介料は点数に入っていません。また、どの答えでも1位にならない商品は載せない方針にしています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "AIが診断しているのですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "診断の画面でAIは動いていません。答えからタイプと順位を出すのは、美容師の接客経験をもとに決めたルールと点数です。AIは、商品の成分を調べる下読みや、ルールに食い違いがないかの点検に使っています。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "ブリーチ毛・くせ毛・白髪でも使えますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "使えます。ブリーチ、縮毛矯正・パーマ、くせ毛、カラー、年齢によるハリ・コシの変化、細毛・ボリュームの悩みなどを、それぞれ別のタイプとして考えます。白髪やエイジングの悩みも、質問の中で答えられます。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "頭皮に赤みや湿疹があるときはどうすればいいですか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "赤みや湿疹があるときは、シャンプーを選ぶ前に皮膚科の受診をおすすめします。シャンプーは薬ではないので、症状そのものを治すことはできません。診断では、頭皮への刺激を減らす方向のシャンプーをご提案します。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "診断のあと、美容師に相談できますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "できます。東京・原宿（明治神宮前）のGO TODAY SHAiRE SALON 原宿本店で、橋元リョウイチが担当しています。ご相談・ご予約はLINEで受け付けています。"
+      }
+    }
+  ]
+}
+</script>
+</section>
+<!-- SEO-ABOUT:END -->
 <footer id="amazon-product-list" class="static-ftr">
 <p class="ftr-note">Amazonのアソシエイトとして、Hair Identity（橋元リョウイチ）は適格販売により収入を得ています。</p>
 <details class="static-ftr-details" open>

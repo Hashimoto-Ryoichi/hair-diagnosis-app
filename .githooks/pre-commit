@@ -25,8 +25,14 @@ if git diff --cached --name-only | grep -q '^shampoo/index\.html$'; then
     exit 1
   fi
 fi
-# 参照ドキュメントの腐り検査（廃止IDのベタ書き・index.htmlのコピーを検出）
 root=$(git rev-parse --show-toplevel)
+# 検索向けページ（/shampoo/ の説明・11タイプのページ・sitemap）が、アプリの TYPES と食い違っていないか（2026-11-28）
+# タイプ名・説明・商品を変えたのに書き出し直していないと、ここで止まる → node scripts/build-seo-pages.js
+if ! node "$root/scripts/build-seo-pages.js" --check; then
+  echo "✗ pre-commit: 検索向けページが古いままです。コミットを中止しました。" >&2
+  exit 1
+fi
+# 参照ドキュメントの腐り検査（廃止IDのベタ書き・index.htmlのコピーを検出）
 if ! "$root/.githooks/check-docs.sh"; then
   echo "✗ pre-commit: ドキュメント検査に失敗。コミットを中止しました。" >&2
   exit 1
